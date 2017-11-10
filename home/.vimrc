@@ -23,7 +23,9 @@ filetype plugin indent on    " required
 
 set showmode
 set number
-set ts=4
+set tabstop=4
+set shiftwidth=4
+set expandtab
 set ai
 syntax on
 set t_Co=256
@@ -42,7 +44,8 @@ map <F5>  :w<cr>:! ./assemble.sh main<CR>
 
 call one#highlight('Normal', '494b53', 'ffffff', '')
 "match StatusLine '\%>80v.\+\|\s\+$/'
+au BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>80v.\+', -1)
 
-highlight OverLength ctermbg=lightgray
-match OverLength /\%>80v.\+/
+"highlight OverLength ctermbg=lightgray
+"match OverLength /\%>80v.\+/
 
