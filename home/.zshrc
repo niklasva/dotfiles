@@ -46,6 +46,9 @@ PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
 # Alias för gameboy debugger bgb
 alias bgb='wine ~/bgb/bgb.exe'
 
+
+alias screen='/usr/local/bin/screen'
+
 # Alias för frotz (och zork)
 alias frotz='./frotz/frotz'
 alias zork='frotz ~/frotz/spel/zork1.z5'
