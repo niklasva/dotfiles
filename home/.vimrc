@@ -48,4 +48,3 @@ au BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>80v.\+', -1)
 
 "highlight OverLength ctermbg=lightgray
 "match OverLength /\%>80v.\+/
-

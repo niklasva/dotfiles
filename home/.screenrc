@@ -1,0 +1,4 @@
+hardstatus alwayslastline
+hardstatus string '%{= wk}%-w%{+bu}%{= kW}%n %t%{= wk}%+w %=%c'
+startup_message off
+termcapinfo xterm ti@:te@
