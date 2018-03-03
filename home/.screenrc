@@ -1,4 +1,5 @@
 hardstatus alwayslastline
-hardstatus string '%{= wk}%-w%{+bu}%{= kW}%n %t%{= wk}%+w %=%c'
+hardstatus string '%{= wK} %-w%{+bu}%{= KW} %n %t %{= wK}%+w'
 startup_message off
 termcapinfo xterm ti@:te@
+vbell off
