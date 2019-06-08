@@ -1,0 +1,13 @@
+# Starta VPN (BSD/OSX)
+vpn()
+{
+  if [ "$1" == "start" ]; then
+    echo "Connecting to $VPN"
+      scutil --nc start "$VPN" 
+  else
+    echo "Disconnecting from $VPN"
+      scutil --nc stop "$VPN"
+      fi
+}
+
+
