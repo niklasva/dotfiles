@@ -1,3 +1,5 @@
+#!/bin/sh
+
 # Starta VPN (BSD/OSX)
 vpn()
 {
@@ -10,4 +12,8 @@ vpn()
       fi
 }
 
-
+mail()
+{
+  ICLOUD_LOGIN="$(sudo security find-generic-password -s icloud-mutt -w)"
+  mutt "$@"
+}
