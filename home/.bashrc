@@ -16,9 +16,11 @@ export VPN="IMI VPN"
 alias ls='ls -hN --color=auto --group-directories-first'
 alias grep='grep --color=auto'
 alias chunk='chunkwm & skhd &'
-alias unchunk='pkill chunkwm & pkill skhd &'
+alias undwm='pkill yabai skhd &'
 alias vimrc='vi ~/.vimrc' 
 alias bashrc='vi ~/.bashrc' 
+alias dwm='yabai > /dev/null 2>&1 & skhd > /dev/null 2>&1 &'
+
 
 ### CMDS ###
 source ~/.scripts

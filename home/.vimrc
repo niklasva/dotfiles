@@ -26,7 +26,7 @@ map QQ :q!<CR>     " shift-qq: Stäng snabbt, fråga ej.
 map W :w<CR>       " shift-w:  Spara snabbt, fråga ej.
 map WQ :wq!<CR>    " shift-wq: Spara och stäng snabbt, fråga ej.
 map U <C-r>        " shift-u:  Redo
-
+map <F5> :! ./build.sh aph 0.2.0<CR>
 
 " Netrw browser-inställningar
 let g:netrw_banner = 0
