@@ -7,6 +7,8 @@ highlight   LineNr ctermfg=1
 set showmode
 set number
 
+set shortmess=I " Stänger av splash
+
 " Tabba med 4 spaces.
 set tabstop=4
 set softtabstop=0

@@ -4,6 +4,8 @@
 <dict>
 	<key>currentthemeuid</key>
 	<string>theme.bundled.osx</string>
+	<key>darkthemeuid</key>
+	<string>theme.fileimport.93CD3A36-CA47-47C5-B572-0902D49CFC32</string>
 	<key>lightthemeuid</key>
 	<string>theme.fileimport.72213E7C-0374-42FA-BDDA-E35731B58618</string>
 </dict>
