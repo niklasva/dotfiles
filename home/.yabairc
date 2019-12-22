@@ -13,12 +13,12 @@ yabai -m config status_bar_clock_icon        
 
 # global settings
 yabai -m config mouse_follows_focus          off
-yabai -m config focus_follows_mouse          off
+yabai -m config focus_follows_mouse          on 
 yabai -m config window_topmost               off
 yabai -m config window_opacity               off
 yabai -m config window_shadow                off
 yabai -m config window_border                on
-yabai -m config window_border_width          2
+yabai -m config window_border_width          1
 yabai -m config active_window_border_color   0xff24aaf2
 yabai -m config normal_window_border_color   0xff505050
 yabai -m config insert_window_border_color   0xffd75f5f
@@ -36,6 +36,6 @@ yabai -m config top_padding                  20
 yabai -m config bottom_padding               20
 yabai -m config left_padding                 20
 yabai -m config right_padding                20
-yabai -m config window_gap                   10
+yabai -m config window_gap                   5
 
 echo "yabai configuration loaded.."
