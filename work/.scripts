@@ -81,7 +81,7 @@ moverun()
 {
 	echo "Flyttar runfiler till ~/runlib/"
 	mv *.run ~/runlib/
-	chmod 777 ~/runlib/*.run
+	chmod 777 ~/runlib/*
 	echo "Filer i runbiblioteket:"
 	ls ~/runlib/
 }
@@ -92,31 +92,12 @@ clearrun()
 	rm ~/runlib/*.run
 }
 
-searchall()
+cpmod()
 {
-if [ -z "$1" ]; then
-        echo This script is called with ${FUNCNAME[0]}  "searchstring"
-        return 1
-elif [ -z "$MENUID" ]; then
-	echo Please enter an enviroment, for example chengrw
-	return 1
-fi
-
-readonly folder=/opt/ess/ehda/ZZZ/$MENUID/MASTER/menuidrel/NORMAL/src
-readonly xfolder=/opt/ess/ehda/ZZZ/$MENUID/MASTER/menuidrel/stdrel/NORMAL/src
-
-
-for pname in $(ls $folder)
-do
-        if grep -q $1 $folder/$pname; then
-                echo $MENUID: $pname
-        fi
-done
-
-for pname in $(ls $xfolder)
-do
-        if grep -q $1 $xfolder/$pname; then
-                echo STD: $pname
+	cp "$1" "$2"
+	if [ "$#" -ne 3 ]; then
+		chmod 777 $2/$1
+	else
+		chmod $3 $2/$1
 	fi
-done
 }

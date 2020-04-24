@@ -1,6 +1,15 @@
-hardstatus alwayslastline
+#term "screen-256color"
+term "screen"
+
+#hardstatus alwayslastline
 #hardstatus string '%{= kW} %W %{= Wk} %n %t %{= kW} '
-hardstatus string '%{= Kw} %-w%{+bu}%{= wk} %n %t %{= Kw}%+w'
-startup_message off
+
+hardstatus alwaysfirstline
+hardstatus string '%{= Wk} %-w%{+bu}%{= BW} %n %t %{= Wk}%+w'
+
+termcapinfo xterm* 'is=\E[r\E[m\E[2J\E[H\E[?7h\E[?1;4;6l'
 termcapinfo xterm ti@:te@
+
+startup_message off
 vbell off
+
