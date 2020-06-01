@@ -1,4 +1,12 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =2
-let g:netrw_dirhist_1='/Users/niklas/github/dotfiles/home/.vim'
-let g:netrw_dirhist_2='/Users/niklas/github/dotfiles/home'
+let g:netrw_dirhistcnt =7
+let g:netrw_dirhist_7='/home/niva'
+let g:netrw_dirhist_6='/home/niva/tst/.vscode'
+let g:netrw_dirhist_5='/home/niva/tst'
+let g:netrw_dirhist_4='/home/niva'
+let g:netrw_dirhist_3='/home/niva/TRIM'
+let g:netrw_dirhist_2='/home/niva'
+let g:netrw_dirhist_1='/home/niva/.tmpdir'
+let g:netrw_dirhist_0='/home/niva'
+let g:netrw_dirhist_9='/home/niva/.tmpdir'
+let g:netrw_dirhist_8='/home/niva'

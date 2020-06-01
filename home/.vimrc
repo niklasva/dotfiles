@@ -1,64 +1,139 @@
+"
+" File:               /home/niva/.vimrc
+" Author:             Niklas VÂgstedt <niva@im.se>
+" Date:               2017-10-09
+" Last Modified Date: 2020-02-19 07:46
+" Last Modified By:   Niklas VÂgstedt <niva@im.se>
+"
+"*******************************************************************************
+"
+" V‰lkommen till niklas feta .vimrc
+" Det h‰nder v‰ldigt mycket i den h‰r filen.
+" Vissa inst‰llningar kr‰ver att diverse plugins ‰r installerade
+"     lightline.vim
+"     nerdtree
+"     niva
+" SÂ l‰nge man har dessa plugins i sin .vim skall vimrc:n gÂ att Âteranv‰nda.
+"
+"*******************************************************************************
+set term=xterm
 set nocompatible
+filetype on
+syntax on
 
-filetype    off
-syntax      on
-highlight   LineNr ctermfg=1
-
-set showmode
+let mapleader = ","
 set number
-
-colorscheme industry
-
-" St√§ng av splash
+set t_Co=88
+set mouse=a
 set shortmess=I
+set autoindent
+set ignorecase
 
-" Tabba med 4 spaces.
-set tabstop=4
+" 1 col marginal
+"set foldcolumn=2
+
+" Tabba enbart med spaces
+set tabstop=2
 set softtabstop=0
 set expandtab
-set shiftwidth=4
+set shiftwidth=2
 set smarttab
 
-" Automatisk indentering
-set ai
-set ic
+" LÂt aldrig markˆren nÂ fˆrsta eller sista raden vid scrollning
+set scrolloff=1
 
-" G√∂r hela mappstrukturen s√∂kbar med find
-set path+=**
-set wildignore+=**/target/**
+" Sˆkning
+set incsearch
+set hlsearch
+"nnoremap <silent> <esc> :noh<CR><esc>
 
-" Tangentmappningar
-map Q :q!          " shift-q:  St√§ng snabbt. Fr√•ga.
-map QQ :q!<CR>     " shift-qq: St√§ng snabbt, fr√•ga ej.
-map W :w<CR>       " shift-w:  Spara snabbt, fr√•ga ej.
-map WQ :wq!<CR>    " shift-wq: Spara och st√§ng snabbt, fr√•ga ej.
-map U <C-r>        " shift-u:  Redo
-nnoremap <C-Tab> :bn<CR>
-nnoremap <C-S-Tab> :bp<CR>
+" Visa trailing spaces
+set list
+set listchars=tab:?\ ,trail:∑,nbsp:∑
 
+" jk = esc i insert mode
+inoremap jk <Esc>
 
-" Netrw browser-inst√§llningar
+iabbrev sdcm /* ----- ===SDCM_CHECKIN_STAMP=== ->>>> *//* <<<<- ===SDCM_CHECKIN_STAMP=== ----- */
+iabbrev sdcma /* ----- ===SDCM_CHECKIN_STAMP=== ->>>> */
+iabbrev sdcmb /* <<<<- ===SDCM_CHECKIN_STAMP=== ----- */
+
+" Gˆr hela mappstrukturen sˆkbar med find
+"set path+=**
+"set wildignore+=**/target/**
+
+" Netrw browser-inst‰llningar
 let g:netrw_banner = 0
 let g:netrw_liststyle = 3
 let g:netrw_browse_split = 0
 let g:netrw_altv = 1
 let g:netrw_winsize = 25
-" map <C-e> :Lexplore<CR>
+"map <C-e> :Lexplore<CR>
 
 " NERDTree
 autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
+"autocmd vimenter * NERDTree
+"autocmd VimEnter * wincmd p
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-map <C-e> :NERDTreeToggle<CR>
+let NERDTreeMinimalUI = 1
+let g:NERDTreeDirArrowExpandable = '+'
+let g:NERDTreeDirArrowCollapsible = '-'
+nnoremap <silent> <C-e> :NERDTreeToggle<CR>
 
 " Lightline
 set laststatus=2
 set noshowmode
+let g:lightline = { 'colorscheme': '16color' }
 
-" Plugins
-call plug#begin('~/.vim/plugged')
-Plug 'scrooloose/nerdtree'
-Plug 'itchyny/lightline.vim'
-Plug 'tpope/vim-surround'
-Plug 'vim-scripts/CycleColor'
-call plug#end()
+" TRIM
+nnoremap <silent> <leader>ew "zyiw :Ewn <C-r>z.trg<CR><C-w><C-_>
+
+" Anpassade f‰rger
+autocmd Colorscheme * highlight FoldColumn ctermfg=none ctermbg=none
+colorscheme default
+highlight Visual cterm=NONE ctermbg=8 ctermfg=7
+highlight MatchParen cterm=bold ctermbg=yellow ctermfg=red
+highlight Function ctermfg=yellow
+highlight Search cterm=none ctermfg=red ctermbg=black
+"highlight LineNr cterm=none ctermfg=0
+
+" Tangentmappningar
+" Inaktivera piltangenter
+cnoremap <Down> <Nop>
+cnoremap <Left> <Nop>
+cnoremap <Right> <Nop>
+cnoremap <Up> <Nop>
+"inoremap <Down> <Nop>
+inoremap <Left> <Nop>
+inoremap <Right> <Nop>
+"inoremap <Up> <Nop>
+nnoremap <Down> <Nop>
+nnoremap <Left> <Nop>
+nnoremap <Right> <Nop>
+nnoremap <Up> <Nop>
+vnoremap <Down> <Nop>
+vnoremap <Left> <Nop>
+vnoremap <Right> <Nop>
+vnoremap <Up> <Nop>
+
+" Inaktivera Q
+noremap Q <Nop>
+
+" Mappa U till redo
+nnoremap U <C-r>
+
+nnoremap LN :set relativenumber!<CR>
+nnoremap tty :term<CR>
+" Diffa med ,n och ;N
+nnoremap ;N [c
+nnoremap ,n ]c
+
+" Autocompletion
+set completeopt=longest,menuone
+inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+noremap <expr> <C-n> pumvisible() ? '<C-n>' : '<C-n><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
+inoremap <expr> <M-,> pumvisible() ? '<C-n>' : '<C-x><C-o><C-n><C-p><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
+
+
+packloadall
+silent! helptags ALL

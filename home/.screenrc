@@ -1,5 +1,22 @@
-hardstatus alwayslastline
-hardstatus string '%{= wK} %-w%{+bu}%{= KW} %n %t %{= wK}%+w'
-startup_message off
+# hardstatus alwayslastline
+# startup_message off
+# termcapinfo xterm ti@:te@
+# vbell off
+
+
+term "xterm"
+
+#hardstatus alwayslastline
+#hardstatus string '%{= kW} %W %{= Wk} %n %t %{= kW} '
+
+hardstatus alwaysfirstline
+"caption string " "
+rendition so =00
+# hardstatus string '%{= wk} %-w%{+bu}%{= kw} %n %t %{= wk}%+w'
+# hardstatus string '%{= kw} %-w%{+bu}%{= wk} %n %t %{= kw}%+w%=%D %d %M %c'
+hardstatus string '%{= kw}%-w%{= kR}%{+bu}%n%{= kw} %t%{= kw}%+w%=%D %d %M %c'
+termcapinfo xterm* 'is=\E[r\E[m\E[2J\E[H\E[?7h\E[?1;4;6l'
 termcapinfo xterm ti@:te@
+
+startup_message off
 vbell off

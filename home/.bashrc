@@ -4,13 +4,16 @@
 # Lägg coreutils i PATH för GNU-versioner av program i OSX
 export PATH="$(brew --prefix coreutils)/libexec/gnubin:/usr/local/bin:$PATH"
 # Förhindra java från att dyka upp i dock
-export JAVA_TOOL_OPTIONS="-Dapple.awt.UIElement=true"
+#export JAVA_TOOL_OPTIONS="-Dapple.awt.UIElement=true"
+export TF_NOTELEMETRY=true
 
 # Infinite history
 export HISTSIZE=""
 export PS1='$(whoami)@$(hostname):\w \[\e[0;31m\]$\[\e[m\] '
 export LANG="sv_SE.UTF-8"
 export VPN="IMI VPN"
+
+eval `dircolors -b $HOME/.dircolors`
 
 ### ALIAS ###
 alias ls='ls -hN --color=auto --group-directories-first'
