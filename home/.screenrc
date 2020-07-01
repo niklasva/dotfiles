@@ -9,12 +9,14 @@ term "xterm"
 #hardstatus alwayslastline
 #hardstatus string '%{= kW} %W %{= Wk} %n %t %{= kW} '
 
-hardstatus alwaysfirstline
+#hardstatus alwaysfirstline
+hardstatus alwayslastline
 "caption string " "
 rendition so =00
 # hardstatus string '%{= wk} %-w%{+bu}%{= kw} %n %t %{= wk}%+w'
 # hardstatus string '%{= kw} %-w%{+bu}%{= wk} %n %t %{= kw}%+w%=%D %d %M %c'
-hardstatus string '%{= kw}%-w%{= kR}%{+bu}%n%{= kw} %t%{= kw}%+w%=%D %d %M %c'
+#hardstatus string '%{= kw}%-w%{= kR}%{+bu}%n%{= kw} %t%{= kw}%+w%=%D %d %M %c'
+hardstatus string '%{= kw}%-w%{= kR}%{+bu}%n%{= kw} %t%{= kw}%+w%='
 termcapinfo xterm* 'is=\E[r\E[m\E[2J\E[H\E[?7h\E[?1;4;6l'
 termcapinfo xterm ti@:te@
 
