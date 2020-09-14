@@ -1,0 +1,13 @@
+foreground: ctermfg=none ctermbg=none
+background: ctermfg=none ctermbg=none
+selection:  
+line:
+red:
+comment:
+orange:
+yellow:
+green:
+aqua:
+blue:
+purple:
+window: white

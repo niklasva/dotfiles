@@ -4,10 +4,10 @@
 vpn()
 {
   if [ "$1" == "start" ]; then
-    echo "Connecting to $VPN"
-      scutil --nc start "$VPN" 
+    echo -e "Connecting to \033[0;31m$VPN\033[0m..."
+      scutil --nc start "$VPN"
   else
-    echo "Disconnecting from $VPN"
+    echo -e "Disconnecting from \033[0;31m$VPN\033[0m..."
       scutil --nc stop "$VPN"
       fi
 }
