@@ -1,22 +1,5 @@
-"
-" File:               /home/niva/.vimrc
-" Author:             Niklas Vågstedt <niva@im.se>
-" Date:               2017-10-09
-" Last Modified Date: 2020-02-19 07:46
-" Last Modified By:   Niklas Vågstedt <niva@im.se>
-"
-"*******************************************************************************
-"
-" Välkommen till niklas feta .vimrc
-" Det händer väldigt mycket i den här filen.
-" Vissa inställningar kräver att diverse plugins är installerade
-"     lightline.vim
-"     nerdtree
-"     niva
-" Så länge man har dessa plugins i sin .vim skall vimrc:n gå att återanvända.
-"
-"*******************************************************************************
 "********* Plugins *********
+
 if empty(glob('~/.vim/autoload/plug.vim'))
   silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
     \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
@@ -30,7 +13,9 @@ Plug 'adelarsq/vim-matchit'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'chriskempson/base16-vim'
 Plug 'daviesjamie/vim-base16-lightline'
+"Plug 'psliwka/vim-smoothie'
 call plug#end()
+
 "*********************************************
 
 set term=xterm
@@ -40,7 +25,7 @@ syntax on
 
 let mapleader = ","
 set number
-set t_Co=88
+set t_Co=256
 set mouse=a
 set shortmess=I
 set autoindent
@@ -121,10 +106,10 @@ endif
 
 " Tangentmappningar
 " Inaktivera piltangenter
-cnoremap <Down> <Nop>
-cnoremap <Left> <Nop>
-cnoremap <Right> <Nop>
-cnoremap <Up> <Nop>
+"cnoremap <Down> <Nop>
+"cnoremap <Left> <Nop>
+"cnoremap <Right> <Nop>
+"cnoremap <Up> <Nop>
 "inoremap <Down> <Nop>
 inoremap <Left> <Nop>
 inoremap <Right> <Nop>
@@ -150,10 +135,24 @@ nnoremap tty :term<CR>
 nnoremap ;N [c
 nnoremap ,n ]c
 
+inoremap {<CR> {<CR>}<Esc>ko<tab>
+inoremap [<CR> [<CR>]<Esc>ko<tab>
+inoremap (<CR> (<CR>)<Esc>ko<tab>
+
 " Autocompletion
 set completeopt=longest,menuone
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 noremap <expr> <C-n> pumvisible() ? '<C-n>' : '<C-n><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
 inoremap <expr> <M-,> pumvisible() ? '<C-n>' : '<C-x><C-o><C-n><C-p><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
 
+
+set notermguicolors
+
+set cursorline
+highlight CursorLine gui=none cterm=none ctermbg=none
+highlight CursorLineNr gui=none cterm=none ctermfg=none ctermbg=none
+highlight Normal ctermbg=none
+highlight LineNr ctermbg=none
+
+autocmd bufenter hi CursorLineNr cterm=none
 

@@ -1,9 +1,30 @@
 . /opt/ess/etc/profile_std
-. /home/niva/.scripts
+. /home/josv/.scripts   # läs in svantes skript
+. /home/niva/.scripts   # läs in mina skript (och skriv över dubletter)
 
 export TERM=xterm
 
-export PS1='$(whoami)@$(hostname):$MENUID:$(pwd) \[\e[0;31m\]$\[\e[m\] '
+function get_menuid
+{
+  if [ "$SUBSYSTEM" == "HOD" ] ;
+    then
+      echo ${MENUID,,}w
+    else
+      echo ${SUBSYSTEM,,}
+  fi
+}
+
+C_DEF="\[\e[m\]"
+C_RED="\[\e[0;31m\]"
+C_GREEN="\[\e[0;32m\]"
+C_ORANGE="\[\e[0;33m\]"
+C_BLUE="\[\e[0;34m\]"
+C_PURPLE="\[\e[0;35m\]"
+C_CYAN="\[\e[0;36m\]"
+C_WHITE="\[\e[0;37m\]"
+N_JOBS='`[ \j -gt 0 ] && echo " (\j)"`'
+
+export PS1="$C_ORANGE\u$C_DEF@\h$C_RED:$C_BLUE\$(get_menuid)$C_RED:$C_GREEN\w $C_RED\$$C_DEF$C_PURPLE$N_JOBS$C_DEF "
 
 export VISUAL=vim
 export EDITOR="$VISUAL"
@@ -14,9 +35,7 @@ export HISTFILESIZE=
 export HISTSIZE=
 export HISTTIMEFORMAT="[%F %T] "
 export HISTFILE=~/.bash_eternal_history
-export MANDIR=/home/niva/.bin/man|$MANDIR
-
-PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
+export PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
 
 if [ -d "$HOME/.bin" ] ; then
   PATH="$HOME/.bin:$PATH"
@@ -39,9 +58,11 @@ alias vi=vim
 alias cd..='cd ..'
 alias dunnet='emacs -batch -l dunnet'
 alias ltr='ls -ltr'
-alias bashrc='vim ~/.bashrc'
+alias bashrc='vim ~/.bashrc; source ~/.bashrc'
 alias screenrc='vim ~/.screenrc'
 alias vimrc='vim ~/.vimrc'
+alias la='ls -a'
+alias ll='ls -l'
 
 alias sfquery_comp='sfquery -l TEST1 nnnnynnn'
 alias sfquery_relnotes='sfquery -l TEST1 nnnnnyyy'
@@ -49,16 +70,8 @@ alias sfquery_package='cd /opt/ess/ehda/HOD/APH/TEST1/package'
 alias aphpath='sfmisc -path'
 alias aphput='cd /opt/ess/ehda/HOD/APH/TEST1/src'
 
-#"if [ -z "$STY" ];
-#then
-#  screen -dR;
-#else
-#  TERM="xterm"
-#fi
+BASH_SESSION_ID=1
+.  ~/.bash_dirs
+load_dirs
 
-# Base16 Shell
-BASE16_SHELL="$HOME/.config/base16-shell/"
-[ -n "$PS1" ] && \
-  [ -s "$BASE16_SHELL/profile_helper.sh" ] && \
-  eval "$("$BASE16_SHELL/profile_helper.sh")"
-
+cheaphw
