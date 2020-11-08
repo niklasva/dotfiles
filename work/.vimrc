@@ -31,6 +31,14 @@ set shortmess=I
 set autoindent
 set ignorecase
 
+set autoread
+set wildmenu
+set report=0
+set hidden
+set showcmd
+set splitright
+set splitbelow
+
 " 1 col marginal
 "set foldcolumn=2
 
@@ -99,10 +107,6 @@ nnoremap <silent> <leader>ew "zyiw :Ewn <C-r>z.trg<CR><C-w><C-_>
 "highlight Search cterm=none ctermfg=red ctermbg=black
 "highlight LineNr cterm=none ctermfg=none
 
-if filereadable(expand("~/.vimrc_background"))
-  let base16colorspace=256
-  source ~/.vimrc_background
-endif
 
 " Tangentmappningar
 " Inaktivera piltangenter
@@ -145,14 +149,22 @@ inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 noremap <expr> <C-n> pumvisible() ? '<C-n>' : '<C-n><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
 inoremap <expr> <M-,> pumvisible() ? '<C-n>' : '<C-x><C-o><C-n><C-p><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
 
+if filereadable(expand("~/.vimrc_background"))
+  let base16colorspace=256
+  source ~/.vimrc_background
+endif
 
 set notermguicolors
 
-set cursorline
-highlight CursorLine gui=none cterm=none ctermbg=none
-highlight CursorLineNr gui=none cterm=none ctermfg=none ctermbg=none
-highlight Normal ctermbg=none
-highlight LineNr ctermbg=none
+set background=dark
+
+set cul
+set culopt=screenline
 
 autocmd bufenter hi CursorLineNr cterm=none
+autocmd BufRead */notes* set tabstop=4 | set shiftwidth=4
+
+" Markdown
+" Det finns anpassningar i ~/.vim/syntax/markdown.vim f√r anteckningar.
+set conceallevel=2
 

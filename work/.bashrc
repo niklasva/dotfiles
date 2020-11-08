@@ -1,8 +1,8 @@
+export TERM=xterm
 . /opt/ess/etc/profile_std
 . /home/josv/.scripts   # läs in svantes skript
 . /home/niva/.scripts   # läs in mina skript (och skriv över dubletter)
 
-export TERM=xterm
 
 function get_menuid
 {
@@ -41,6 +41,8 @@ if [ -d "$HOME/.bin" ] ; then
   PATH="$HOME/.bin:$PATH"
 fi
 
+export notes="$HOME/notes"
+
 set -o vi
 bind -m vi-insert "\C-l":clear-screen
 bind -m vi-insert "^?":backward-delete-char
@@ -70,8 +72,16 @@ alias sfquery_package='cd /opt/ess/ehda/HOD/APH/TEST1/package'
 alias aphpath='sfmisc -path'
 alias aphput='cd /opt/ess/ehda/HOD/APH/TEST1/src'
 
+alias nivagen='ehdagen -w -dLOG4T_LOG_LEVEL=LOG4T_ALL '
+
+alias notes='vim $notes'
+
 BASH_SESSION_ID=1
 .  ~/.bash_dirs
 load_dirs
+
+mesg y
+
+/home/niva/.motd/motd.sh
 
 cheaphw
