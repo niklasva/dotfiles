@@ -2,7 +2,9 @@
 
 ### EXPORT ###
 # Lägg coreutils i PATH för GNU-versioner av program i OSX
-export PATH="$(brew --prefix coreutils)/libexec/gnubin:/usr/local/bin:$PATH"
+#export PATH="$(brew --prefix coreutils)/libexec/gnubin:/usr/local/bin:$PATH"
+export PATH="~/.bin:/usr/local/opt/coreutils/libexec/gnubin:/usr/local/bin:$PATH"
+
 # Förhindra java från att dyka upp i dock
 #export JAVA_TOOL_OPTIONS="-Dapple.awt.UIElement=true"
 export TF_NOTELEMETRY=true
@@ -23,7 +25,8 @@ alias undwm='pkill yabai skhd &'
 alias vimrc='vi ~/.vimrc' 
 alias bashrc='vi ~/.bashrc' 
 alias dwm='yabai > /dev/null 2>&1 & skhd > /dev/null 2>&1 &'
-
+alias cocot="cocot -p iso8859-1"
+alias luit="luit -encoding iso88591"
 
 ### CMDS ###
 source ~/.scripts
@@ -46,3 +49,11 @@ C_WHITE="\[\e[0;37m\]"
 N_JOBS='`[ \j -gt 0 ] && echo " (\j)"`'
 
 export PS1="$C_ORANGE\u$C_DEF@\h$C_RED:$C_GREEN\w $C_RED\$$C_DEF$C_PURPLE$N_JOBS$C_DEF "
+
+
+export pkg=brew
+
+### JAVA SKIT FAN ###
+export CATALINA_HOME="/Users/niklas/.catalina"
+export JAVA_HOME=$(/usr/libexec/java_home)
+
