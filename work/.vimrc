@@ -6,14 +6,20 @@ if empty(glob('~/.vim/autoload/plug.vim'))
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
-
 call plug#begin('~/.vim/plugged')
-Plug 'itchyny/lightline.vim'
+"Plug 'itchyny/lightline.vim'
 Plug 'adelarsq/vim-matchit'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'chriskempson/base16-vim'
 Plug 'daviesjamie/vim-base16-lightline'
+Plug 'preservim/nerdtree'
+Plug 'airblade/vim-gitgutter'
+"Plug 'junegunn/goyo.vim'
 "Plug 'psliwka/vim-smoothie'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'thaerkh/vim-workspace'
+Plug 'tpope/vim-fugitive'
 call plug#end()
 
 "*********************************************
@@ -95,6 +101,11 @@ set laststatus=2
 set noshowmode
 let g:lightline = { 'colorscheme': 'base16' }
 
+" Airline
+let g:airline_theme='base16'
+let g:airline#extensions#tabline#enabled = 1           " enable airline tabline
+let g:airline#extensions#tabline#show_close_button = 0 " remove 'X' at the end of the tabline
+
 " TRIM
 nnoremap <silent> <leader>ew "zyiw :Ewn <C-r>z.trg<CR><C-w><C-_>
 
@@ -157,14 +168,33 @@ endif
 set notermguicolors
 
 set background=dark
-
 set cul
 set culopt=screenline
 
+"hi LineNr ctermbg=none
 autocmd bufenter hi CursorLineNr cterm=none
 autocmd BufRead */notes* set tabstop=4 | set shiftwidth=4
+autocmd BufRead */notes* nnoremap <silent> <SPACE> :call Check_mark()<CR>
+autocmd BufRead */tmpaaab* set syntax=config
+
 
 " Markdown
-" Det finns anpassningar i ~/.vim/syntax/markdown.vim fÃr anteckningar.
+" Det finns anpassningar i ~/.vim/syntax/markdown.vim för anteckningar.
 set conceallevel=2
 
+
+function! g:Check_mark()
+  if getline('.') =~ '\[\ \]'
+    .s/\[\ \]/\[x\]/g
+  elseif getline('.') =~ '\[x\]'
+    .s/\[x\]/\[\ \]/g
+  endif
+endfunction
+
+fun! TrimWhitespace()
+    let l:save = winsaveview()
+    keeppatterns %s/\s\+$//e
+    call winrestview(l:save)
+endfun
+
+nnoremap <silent> <leader>ws :call TrimWhitespace()<CR>
