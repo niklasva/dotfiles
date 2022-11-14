@@ -15,6 +15,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'vim-autoformat/vim-autoformat'
+Plug 'Yazeed1s/oh-lucy.nvim'
 
 if has('nvim')
     Plug 'lewis6991/gitsigns.nvim'
@@ -22,10 +23,8 @@ if has('nvim')
     Plug 'nvim-telescope/telescope.nvim'
     Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' }
     Plug 'nvim-telescope/telescope-ui-select.nvim'
-
     Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
     Plug 'windwp/nvim-autopairs'
-
     " LSP
     Plug 'Asheq/close-buffers.vim'
     Plug 'hrsh7th/cmp-buffer'
@@ -52,33 +51,33 @@ colorscheme base16-base
 set autoindent
 set autoread
 set background=dark
+set cmdheight=1
 set cursorlineopt=screenline
 set expandtab
+set foldcolumn=0
 set hidden
 set hlsearch
 set ignorecase
 set incsearch
+set laststatus=3
 set listchars=trail:%
+set mouse=a
 set nocompatible
 set notermguicolors
 set nowrap
 set number
-set showcmd
-set smarttab
-set splitbelow
-set splitright
-set undofile
-set cmdheight=1
-set foldcolumn=0
-set laststatus=3
-set mouse=a
-"set report=0
+set report=0
 set shiftwidth=4
 set shortmess+=c
+set showcmd
+set smarttab
 set softtabstop=0
+set splitbelow
+set splitright
 set t_Co=256
 set tabstop=4
 set undodir=~/.vimundo/
+set undofile
 set updatetime=300
 
 let mapleader = " "
@@ -89,7 +88,7 @@ nnoremap <silent> <leader>nonum     :set nonumber<CR>
 nnoremap <silent> <leader>num       :set number<CR>
 nnoremap <silent> <leader>ws        :call TrimWhitespace()<CR>
 nnoremap <silent> <leader>x         :bd<CR>
-nnoremap <silent> € $
+nnoremap <silent> €                 $
 nnoremap Q <Nop>
 nnoremap U <C-r>
 
@@ -112,8 +111,8 @@ autocmd FileType c,cpp setlocal equalprg=clang-format
 
 hi DiagnosticSignError      ctermbg=none ctermfg=160 cterm=bold
 hi DiagnosticSignWarn       ctermbg=none ctermfg=178 cterm=italic
-hi DiagnosticUnderlineError ctermbg=none
-hi DiagnosticUnderlineWarn  ctermbg=none
+"hi DiagnosticUnderlineError ctermbg=none ctermfg=160
+"hi DiagnosticUnderlineWarn  ctermbg=none ctermfg=178
 hi Error                    ctermbg=none ctermfg=21  cterm=underline
 hi FloatBorder              ctermbg=none
 hi GitGutterAdd             ctermbg=none ctermfg=143

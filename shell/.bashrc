@@ -65,7 +65,7 @@ C_CYAN="\[\e[0;36m\]"
 C_WHITE="\[\e[0;37m\]"
 N_JOBS='`[ \j -gt 0 ] && echo " (\j)"`'
 export PROMPT_DIRTRIM=2
-export PS1="$C_BLUE\u$C_DEF@dev$C_RED:$C_GREEN\w $C_RED\$$C_DEF$C_PURPLE$N_JOBS$C_DEF "
+export PS1="$C_BLUE\u$C_DEF@\h$C_RED:$C_GREEN\w $C_RED\$$C_DEF$C_PURPLE$N_JOBS$C_DEF "
 
 nas()
 {

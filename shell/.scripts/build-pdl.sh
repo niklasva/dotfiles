@@ -33,15 +33,7 @@ else
     exit 1
 fi
 
-if nrfjprog --program nrf52-application.hex --sectorerase; then
-    echo $'OK\n'
-else
-    echo $'\e[30;41m' FAIL $'\e[0m\n'
-    cd $PWD
-    exit 1
-fi
-
-if nrfjprog --reset; then
+if nrfjprog --program nrf52-application.hex -r --sectorerase; then
     echo $'OK\n'
 else
     echo $'\e[30;41m' FAIL $'\e[0m\n'
