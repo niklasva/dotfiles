@@ -32,10 +32,12 @@ alias chunk='chunkwm & skhd &'
 alias cocot="cocot -p iso8859-1"
 alias dwm='yabai > /dev/null 2>&1 & skhd > /dev/null 2>&1 &'
 alias git-tf="~/dev/github/git-tf/git-tf"
-alias grep='grep --color=auto'
+alias grep="grep --color=always"
+alias less="less -r"
 alias ls='gls -hN --color=auto --group-directories-first $LS_HIDE_ARGS'
 alias lsa='gls -hN --color=auto --group-directories-first'
 alias luit="luit -encoding iso88591"
+alias more="more -r"
 alias newsboat="newsboat -q"
 alias rss="newsboat"
 alias ts="ts '[%Y-%m-%d %H:%M:%S]'"
