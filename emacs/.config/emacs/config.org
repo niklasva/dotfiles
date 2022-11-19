@@ -1,13 +1,13 @@
 #+TITLE: config.org
-#+PROPERTY: header-args :tangle "~/.config/emacs/config.el"
+#+PROPERTY: header - args: tangle "~/.config/emacs/config.el"
 
 * Pre-init
 #+STARTUP: overview
 ** Startup garbage collection
 
 #+begin_src emacs-lisp
-(setq gc-cons-threshold most-positive-fixnum)
-(add-hook 'emacs-startup-hook (lambda () (setq gc-cons-threshold (expt 2 23))))
+  (setq gc-cons-threshold most-positive-fixnum)
+  (add-hook 'emacs-startup-hook (lambda () (setq gc-cons-threshold (expt 2 23))))
 #+end_src
 
 ** Remember window
@@ -45,10 +45,10 @@
       (when (file-readable-p frameg-file)
         (load-file frameg-file))))
 
-  ; Special work to do ONLY when there is a window system being used
+                                          ; Special work to do ONLY when there is a window system being used
   (if window-system (progn
-        (add-hook 'after-init-hook 'load-frameg)
-        (add-hook 'kill-emacs-hook 'save-frameg)))
+                      (add-hook 'after-init-hook 'load-frameg)
+                      (add-hook 'kill-emacs-hook 'save-frameg)))
 #+end_src
 
 * Package management
@@ -67,7 +67,7 @@
 ** Installing use-package
 
 #+begin_src emacs-lisp
-;; Initialize use-package on non-Linux platforms
+  ;; Initialize use-package on non-Linux platforms
   (unless (package-installed-p 'use-package)
     (package-install 'use-package))
 
@@ -84,10 +84,8 @@
                 c-default-style "linux"
                 c-basic-offset 4
                 evil-auto-indent nil
-
                 indent-tabs-mode nil
-                indent-line-function 'insert-tab
-                show-trailing-whitespace t)
+                indent-line-function 'insert-tab)
 
   (column-number-mode)
 
@@ -143,9 +141,11 @@ Prevent emacs from contaminating system clipboard.
 
 #+begin_src emacs-lisp
   (use-package doom-themes :ensure t)
+  (use-package sublime-themes :ensure t)
+  (use-package leuven-theme)
 
   (setq custom-safe-themes t)
-  (load-theme 'doom-tomorrow-night t)
+  (load-theme 'modus-operandi t)
 #+end_src
 
 ** GUI settings
@@ -179,6 +179,12 @@ Prevent accidental close.
 #+end_src
 
 ** Mode line
+
+#+begin_src emacs-lisp
+  (use-package mood-line
+    :ensure t
+    :init (mood-line-mode))
+#+end_src
 
 Save colors for later use.
 #+begin_src emacs-lisp
@@ -233,30 +239,7 @@ Save colors for later use.
 #+end_src
 
 #+Begin_src emacs-lisp
-
   (setq inhibit-compacting-font-caches t)
-  (use-package doom-modeline
-    :ensure t
-    :init (doom-modeline-mode 1)
-
-    (custom-set-variables
-     '(package-selected-packages '(evil doom-modeline ivy command-log-mode use-package)))
-    (custom-set-faces)
-
-    (custom-set-faces
-     '(doom-modeline ((t (:font "Iosevka Light" :height 0.9))))
-     '(doom-modeline-inactive ((t (:font "Iosevka Light" :height 0.9)))))
-
-    (setq evil-normal-state-tag "NORMAL"
-          evil-insert-state-tag "INSERT"
-          evil-visual-state-tag "VISUAL"
-          evil-replace-state-tag "REPLACE"
-          evil-operator-state-tag "OPERATOR")
-
-    (setq doom-modeline-icon nil
-          doom-modeline-height 1))
-
-
 #+end_src
 
 ** Font
@@ -266,13 +249,13 @@ Only use variable-pitch if explicitly called.
 #+begin_src emacs-lisp
   (defun variable-pitch-on ()
     (interactive)
-    (set-face-attribute 'variable-pitch nil :font "CMU Serif 16" :inherit 'default))
+    (set-face-attribute 'variable-pitch nil :font "CMU Serif 14" :inherit 'default))
 #+end_src
 
 #+begin_src emacs-lisp
-  (set-face-attribute 'default nil        :font "Mononoki 16")
-  (set-face-attribute 'fixed-pitch nil    :font "Mononoki 16" :height 1.0)
-  (set-face-attribute 'variable-pitch nil :font "Mononoki 16" :height 1.0)
+  (set-face-attribute 'default nil        :font "Mononoki 14")
+  (set-face-attribute 'fixed-pitch nil    :font "Mononoki 14" :height 1.0)
+  (set-face-attribute 'variable-pitch nil :font "Mononoki 14" :height 1.0)
 
   (when (eq (nth 3 (assq 'geometry (car (display-monitor-attributes-list)))) 3840)
     (set-face-attribute 'default nil :font "Mononoki 18"))
@@ -280,7 +263,7 @@ Only use variable-pitch if explicitly called.
   (setq doom-themes-enable-bold t
         doom-themes-enable-italic t)
 
-  (variable-pitch-on)
+                                          ;(variable-pitch-on)
 #+end_src
 
 ** Dashboard
@@ -288,8 +271,8 @@ Only use variable-pitch if explicitly called.
   (use-package dashboard
     :init
     :config
-    (setq dashboard-banner-logo-title "Emacs"
-          dashboard-startup-banner 4
+    (setq ;dashboard-banner-logo-title "Emacs"
+          ;dashboard-startup-banner 4
           dashboard-set-navigator t
           dashboard-set-footer nil
           dashboard-items '((bookmarks . 5) (recents  . 6))
@@ -320,10 +303,8 @@ Only use variable-pitch if explicitly called.
     (setq centaur-tabs-set-bar 'under)
     (setq x-underline-at-descent-line t)
 
-
-
     :config
-    (centaur-tabs-mode t)
+    ;(centaur-tabs-mode t)
     (centaur-tabs-headline-match)
 
     :bind
@@ -378,17 +359,17 @@ Only use variable-pitch if explicitly called.
 ** Evil mode
 
 #+begin_src emacs-lisp
-    (use-package evil
-      :init
-      (setq evil-want-integration t
-            evil-want-keybinding nil
-            evil-vsplit-window-right t
-            evil-split-window-below t
-            evil-want-C-u-scroll t
-            evil-undo-system 'undo-redo)
+  (use-package evil
+    :init
+    (setq evil-want-integration t
+          evil-want-keybinding nil
+          evil-vsplit-window-right t
+          evil-split-window-below t
+          evil-want-C-u-scroll t
+          evil-undo-system 'undo-redo)
 
-      (evil-mode)
-  )
+    (evil-mode)
+    )
 
 #+end_src
 
@@ -398,7 +379,7 @@ Only use variable-pitch if explicitly called.
   (use-package evil-collection
     :after evil
     :config
-    (setq evil-collection-mode-list '(dashboard dired ibuffer))
+    ;(setq evil-collection-mode-list '(dashboard dired ibuffer))
     (evil-collection-init))
   (use-package evil-tutor)
 
@@ -416,7 +397,7 @@ Only use variable-pitch if explicitly called.
   (global-set-key (kbd "C--") 'text-scale-decrease)
   (global-set-key (kbd "C-=") 'text-scale-set)
 
-  ;(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+                                          ;(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
   (global-set-key (kbd "§") 'evil-invert-char)
 
   (define-key evil-normal-state-map (kbd "U") 'evil-redo)
@@ -429,6 +410,9 @@ Only use variable-pitch if explicitly called.
   (define-key evil-normal-state-map (kbd "C-w -") 'evil-window-split)
   (define-key evil-normal-state-map (kbd "C-w |") 'evil-window-vsplit)
   (define-key evil-normal-state-map (kbd "C-w SPC") 'transpose-frame)
+  (define-key evil-normal-state-map (kbd "SPC h") 'evil-window-left)
+  (define-key evil-normal-state-map (kbd "SPC b") 'ivy-switch-buffer)
+
 
 
   (evil-define-key 'treemacs treemacs-mode-map (kbd "C-a C-x")    #'evil-delete-buffer)
@@ -515,37 +499,54 @@ simpleclip-mode radically simplifies clipboard handling: the system clipboard an
 ** ivy + counsel
 
 #+begin_src emacs-lisp
-   (use-package counsel
-     :after ivy
-     :config (counsel-mode))
+  (use-package counsel
+    :after ivy
+    :config (counsel-mode))
 
-   (use-package ivy
-     :defer 0.1
-     :diminish
-     :bind
-     (("C-c C-r" . ivy-resume)
-      ("C-x B" . ivy-switch-buffer-other-window))
-     :custom
-     (setq ivy-count-format "(%d/%d) ")
-     (setq ivy-use-virtual-buffers t)
-     (setq enable-recursive-minibuffers t)
-     :config
-     (ivy-mode))
+  (use-package ivy
+    :defer 0.1
+    :diminish
+    :bind
+    (("C-c C-r" . ivy-resume)
+     ("C-x B" . ivy-switch-buffer-other-window))
+    :custom
+    (setq ivy-count-format "(%d/%d) ")
+    (setq ivy-use-virtual-buffers t)
+    (setq enable-recursive-minibuffers t)
+    :config
+    (ivy-mode))
 
-   (use-package ivy-rich
-     :after ivy
-     :custom
-     (ivy-virtual-abbreviate 'full
-                             ivy-rich-switch-buffer-align-virtual-buffer t
-                             ivy-rich-path-style 'abbrev)
-     :config
-     (ivy-set-display-transformer 'ivy-switch-buffer
-                                  'ivy-rich-switch-buffer-transformer)
-     (ivy-rich-mode 1)) ;; this gets us descriptions in M-x.
-   (use-package swiper
-     :after ivy
-     :bind (("C-s" . swiper)
-            ("C-r" . swiper)))
+  (use-package ivy-rich
+    :after ivy
+    :custom
+    (ivy-virtual-abbreviate 'full
+                            ivy-rich-switch-buffer-align-virtual-buffer t
+                            ivy-rich-path-style 'abbrev)
+    :config
+    (ivy-set-display-transformer 'ivy-switch-buffer
+                                 'ivy-rich-switch-buffer-transformer)
+    (ivy-rich-mode 1)) ;; this gets us descriptions in M-x.
+  (use-package swiper
+    :after ivy
+    :bind (("C-s" . swiper)
+           ("C-r" . swiper)))
+#+end_src
+
+** vertico
+
+#+begin_src emacs-lisp
+  ;(use-package vertico
+  ;  :ensure t
+  ;  :bind (:map vertico-map
+  ;              ("C-j" . vertico-next)
+  ;              ("C-k" . vertico-previous)
+  ;              ("C-f" . vertico-exit)
+  ;              :map minibuffer-local-map
+  ;              ("M-h" . backward-kill-word))
+  ;  :custom
+  ;  (vertico-cycle t)
+  ;  :init
+  ;  (vertico-mode))
 #+end_src
 
 ** m-x
@@ -563,43 +564,10 @@ simpleclip-mode radically simplifies clipboard handling: the system clipboard an
 #+end_src
 
 * File management
-** Treemacs
-#+begin_src emacs-lisp
-  (use-package treemacs
-    :ensure t
-    :config
-    (progn
-      (setq treemacs-text-scale 0.1
-            treemacs-width 30
-            treemacs-show-hidden-files nil
-            treemacs-indentation-string "  "
-            treemacs-no-png-images t)
-      ))
-
-  (use-package treemacs-evil
-    :after (treemacs evil)
-    :ensure t)
-
-  (use-package treemacs-magit
-    :after (treemacs magit)
-    :ensure t)
-
-  (use-package treemacs-persp
-    :after (treemacs persp-mode)
-    :ensure t
-    :config (treemacs-set-scope-type 'Perspectives))
-
-  (use-package treemacs-tab-bar
-    :after (treemacs)
-    :ensure t
-    :config (treemacs-set-scope-type 'Tabs))
-
-#+end_src
-
 ** Dired
 
 #+begin_src emacs-lisp
-;  (use-package all-the-icons-dired)
+                                          ;  (use-package all-the-icons-dired)
   (use-package dired-open)
   (use-package peep-dired)
 
@@ -620,13 +588,13 @@ simpleclip-mode radically simplifies clipboard handling: the system clipboard an
 ** Projectile
 
 #+begin_src emacs-lisp
-(use-package projectile
-  :ensure t
-  :init
-  (projectile-mode +1)
-  :bind (:map projectile-mode-map
-              ("s-p" . projectile-command-map)
-              ("C-c p" . projectile-command-map)))
+  (use-package projectile
+    :ensure t
+    :init
+    (projectile-mode +1)
+    :bind (:map projectile-mode-map
+                ("s-p" . projectile-command-map)
+                ("C-c p" . projectile-command-map)))
 
 #+end_src
 
@@ -657,8 +625,8 @@ simpleclip-mode radically simplifies clipboard handling: the system clipboard an
 #+end_src
 
 ** Other
-Always follow symlinks
 
+Always follow symlinks
 #+begin_src emacs-lisp
   (setq vc-follow-symlinks t)
 #+end_src
@@ -673,7 +641,6 @@ Always follow symlinks
 #+end_src
 
 *** Font
-
 *** TeX style
 #+begin_src emacs-lisp
   (defun org-tex-style()
@@ -737,22 +704,22 @@ Always follow symlinks
     (variable-pitch-mode nil)
     (setq evil-auto-indent nil)
     (require 'org-inlinetask)
-    (org-tex-style)
+                                          ;(org-tex-style)
     )
 #+end_src
 
 *** Column width
 
 #+begin_src emacs-lisp
-  (defun org-mode-visual-fill ()
-    (setq visual-fill-column-width 80
-          visual-fill-column-center-text t
-          visual-fill-column-extra-text-width '(0 . 5)
-          )
-    (visual-fill-column-mode 1))
+                                          ;(defun org-mode-visual-fill ()
+                                          ;  (setq visual-fill-column-width 80
+                                          ;        visual-fill-column-center-text t
+                                          ;        visual-fill-column-extra-text-width '(0 . 5)
+                                          ;        )
+                                          ;  (visual-fill-column-mode 1))
 
-  (use-package visual-fill-column
-    :hook (org-mode . org-mode-visual-fill))
+                                          ;(use-package visual-fill-column
+                                          ;  :hook (org-mode . org-mode-visual-fill))
 #+end_src
 
 *** org-tempo
@@ -779,14 +746,6 @@ Always follow symlinks
   (defadvice ansi-term (after advice-term-line-mode activate)
     (term-char-mode))
 
-  (defun namespace/show-trailing-whitespace ()
-    (setq-local show-trailing-whitespace nil))
-
-  (dolist (hook '(term-mode-hook))
-    (add-hook hook 'namespace/show-trailing-whitespace))
-
-  (dolist (hook '(dashboard-mode-hook))
-    (add-hook hook 'namespace/show-trailing-whitespace))
 
   (general-create-definer
     ninrod--term-mode
@@ -822,21 +781,21 @@ Always follow symlinks
 ** ENV
 Get path from shell
 #+begin_src emacs-lisp
-(defun set-exec-path-from-shell-PATH ()
-  "Set up Emacs' `exec-path' and PATH environment variable to match
-that used by the user's shell.
+  (defun set-exec-path-from-shell-PATH ()
+    "Set up Emacs' `exec-path' and PATH environment variable to match
+  that used by the user's shell.
 
-This is particularly useful under Mac OS X and macOS, where GUI
-apps are not started from a shell."
-  (interactive)
-  (let ((path-from-shell (replace-regexp-in-string
-			  "[ \t\n]*$" "" (shell-command-to-string
-					  "$SHELL --login -c 'echo $PATH'"
-						    ))))
-    (setenv "PATH" path-from-shell)
-    (setq exec-path (split-string path-from-shell path-separator))))
+  This is particularly useful under Mac OS X and macOS, where GUI
+  apps are not started from a shell."
+    (interactive)
+    (let ((path-from-shell (replace-regexp-in-string
+                            "[ \t\n]*$" "" (shell-command-to-string
+                                            "$SHELL --login -c 'echo $PATH'"
+                                            ))))
+      (setenv "PATH" path-from-shell)
+      (setq exec-path (split-string path-from-shell path-separator))))
 
-(set-exec-path-from-shell-PATH)
+  (set-exec-path-from-shell-PATH)
 #+end_src
 
 * Performance
@@ -874,10 +833,7 @@ apps are not started from a shell."
 
   ;; When idle for 15sec run the GC no matter what.
   (defvar k-gc-timer
-    (run-with-idle-timer 15 t
-                         (lambda ()
-                           (message "Garbage Collector has run for %.06fsec"
-                                    (k-time (garbage-collect))))))
+    (run-with-idle-timer 300 t (lambda () (garbage-collect))))
 
 #+end_src
 
@@ -893,6 +849,88 @@ apps are not started from a shell."
 #+end_src
 
 * Tools
+** LSP
+
+#+begin_src emacs-lisp
+  (setq lsp-clients-clangd-args '("-j=8" "-background-index" "-log=error" "--clang-tidy" "--query-driver=/Applications/ARM/**/*"))
+  (setq use-dialog-box nil)
+  (setq use-system-tooltips nil)
+
+  ;; lsp
+
+  (use-package lsp-mode
+    :ensure t :hook ((c-mode . lsp)
+
+                     (c++-mode . lsp)
+                     (lsp-mode . lsp-enable-which-key-integration))
+    :commands lsp
+    :config
+    (setq lsp-headerline-breadcrumb-enable nil)
+    (setq lsp-keymap-prefix "C-c l")
+    (setq lsp-signature-auto-activate nil)
+    (setq lsp-enable-symbol-highlighting nil)
+    (setq lsp-file-watch-threshold 15000)
+    (setq lsp-enable-links nil)
+    (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
+    )
+  (setq lsp-eldoc-enable-hover nil)
+
+  (setq max-mini-window-height 2
+        eldoc-echo-area-use-multiline-p nil)
+
+  (use-package lsp-ivy
+
+
+    :ensure t
+    :commands lsp-ivy-workspace-symbol)
+
+  (use-package lsp-treemacs
+    :ensure t
+    :commands lsp-treemacs-errors-list)
+
+  ;; company
+  (use-package company
+    :ensure t
+    :bind ("M-/" . company-complete-common-or-cycle) ;; overwritten by flyspell
+    :init (add-hook 'after-init-hook 'global-company-mode)
+    :config
+    (setq company-show-numbers            t
+          company-minimum-prefix-length   1
+          company-idle-delay              0.3
+          company-backends
+          '((company-files          ; files & directory
+             company-keywords       ; keywords
+             company-capf           ; what is this?
+             company-yasnippet)
+            (company-abbrev company-dabbrev))))
+
+  (use-package lsp-ui
+    :ensure t
+    :config
+    (setq lsp-ui-doc-show-with-cursor t
+          lsp-ui-doc-position 'at-point
+          lsp-ui-doc-delay 1
+          lsp-ui-sideline-enable nil
+          ))
+
+  (use-package company-box
+    :ensure t
+    :after company
+    :hook (company-mode . company-box-mode))
+
+  ;; flycheck
+  (use-package flycheck
+    :ensure t
+    :init (global-flycheck-mode)
+    :config
+    (setq flycheck-display-errors-function
+          #'flycheck-display-error-messages-unless-error-list))
+
+  (use-package tree-sitter)
+  (use-package tree-sitter-langs)
+  (global-tree-sitter-mode)
+  #+end_src
+
 ** clang-format
 #+begin_src emacs-lisp
   (use-package clang-format
@@ -900,7 +938,25 @@ apps are not started from a shell."
     :init
     (global-set-key (kbd "C-c i") 'clang-format-region)
     (global-set-key (kbd "C-c u") 'clang-format-buffer)
-    (setq clang-format-style "file"))
+    (setq clang-format-style "file")
+
+    (defun clang-format-save-hook-for-this-buffer ()
+      "Create a buffer local save hook."
+      (add-hook 'before-save-hook
+                (lambda ()
+                  (when (locate-dominating-file "." ".clang-format")
+                    (clang-format-buffer))
+                  ;; Continue to save.
+                  nil)
+                nil
+                ;; Buffer local hook.
+                t)))
+
+    ;; Run this for each mode you want to use the hook.
+    (add-hook 'c-mode-hook (lambda () (clang-format-save-hook-for-this-buffer)))
+    (add-hook 'c++-mode-hook (lambda () (clang-format-save-hook-for-this-buffer)))
+    (add-hook 'glsl-mode-hook (lambda () (clang-format-save-hook-for-this-buffer)))
+
 #+end_src
 ** Documentation
 *** Mermaid
@@ -908,76 +964,5 @@ apps are not started from a shell."
   (use-package mermaid-mode)
 #+end_src
 
-* LSP
 
 
-#+begin_src emacs-lisp
-
-;; lsp
-(use-package lsp-mode
-  :ensure t
-  :hook ((c-mode . lsp)
-	 (c++-mode . lsp)
-         (lsp-mode . lsp-enable-which-key-integration))
-  :commands lsp
-  :config
-  (setq lsp-keymap-prefix "C-c l")
-  (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
-  (setq lsp-file-watch-threshold 15000))
-
- (use-package lsp-ui
-   :ensure t
-   :commands (lsp-ui-mode)
-   :config
-   (setq lsp-ui-doc-enable nil)
-   (setq lsp-ui-doc-delay 0.5)
-   (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
-   (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references)
-   )
-
- (use-package lsp-ivy
-   :ensure t
-   :commands lsp-ivy-workspace-symbol)
-
- (use-package lsp-treemacs
-   :ensure t
-   :commands lsp-treemacs-errors-list)
-
- ;; company
- (use-package company
-   :ensure t
-   :bind ("M-/" . company-complete-common-or-cycle) ;; overwritten by flyspell
-   :init (add-hook 'after-init-hook 'global-company-mode)
-   :config
-   (setq company-show-numbers            t
- 	company-minimum-prefix-length   1
- 	company-idle-delay              0.5
- 	company-backends
- 	'((company-files          ; files & directory
- 	   company-keywords       ; keywords
- 	   company-capf           ; what is this?
- 	   company-yasnippet)
- 	  (company-abbrev company-dabbrev))))
-
- (use-package company-box
-   :ensure t
-   :after company
-   :hook (company-mode . company-box-mode))
-
- ;; flycheck
- (use-package flycheck
-   :ensure t
-   :init (global-flycheck-mode)
-   :config
-   (setq flycheck-display-errors-function
- 	#'flycheck-display-error-messages-unless-error-list)
-
-   (setq flycheck-indication-mode nil))
-
- (use-package flycheck-pos-tip
-   :ensure t
-   :after flycheck
-   :config
-   (flycheck-pos-tip-mode))
-
-#+end_src
