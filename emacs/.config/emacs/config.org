@@ -79,13 +79,16 @@
 * Text edit settings
 
 #+Begin_src emacs-lisp
-  (setq-default indent-tabs-mode nil
-                tab-width 4
-                c-default-style "linux"
-                c-basic-offset 4
-                evil-auto-indent nil
-                indent-tabs-mode nil
-                indent-line-function 'insert-tab)
+  (setq-default
+   c-basic-offset 4
+   c-default-style "linux"
+   create-lockfiles nil
+   evil-auto-indent nil
+   indent-line-function 'insert-tab
+   indent-tabs-mode nil
+   indent-tabs-mode nil
+   tab-width 4
+   )
 
   (column-number-mode)
 
@@ -136,6 +139,10 @@ Prevent emacs from contaminating system clipboard.
   (setq x-select-enable-primary nil)
 #+end_src
 
+#+begin_src emacs-lisp
+(pixel-scroll-precision-mode)
+#+end_src
+
 * Customization
 ** Theme
 
@@ -145,7 +152,7 @@ Prevent emacs from contaminating system clipboard.
   (use-package leuven-theme)
 
   (setq custom-safe-themes t)
-  (load-theme 'modus-operandi t)
+  (load-theme 'doom-ayu-dark t)
 #+end_src
 
 ** GUI settings
@@ -272,10 +279,10 @@ Only use variable-pitch if explicitly called.
     :init
     :config
     (setq ;dashboard-banner-logo-title "Emacs"
-          ;dashboard-startup-banner 4
+          dashboard-startup-banner 4
           dashboard-set-navigator t
           dashboard-set-footer nil
-          dashboard-items '((bookmarks . 5) (recents  . 6))
+          dashboard-items '((bookmarks . 5) (recents  . 6) (projects . 3))
           dashboard-center-content t
           dashboard-filter-agenda-entry 'dashboard-no-filter-agenda)
     (dashboard-setup-startup-hook)
@@ -532,23 +539,6 @@ simpleclip-mode radically simplifies clipboard handling: the system clipboard an
            ("C-r" . swiper)))
 #+end_src
 
-** vertico
-
-#+begin_src emacs-lisp
-  ;(use-package vertico
-  ;  :ensure t
-  ;  :bind (:map vertico-map
-  ;              ("C-j" . vertico-next)
-  ;              ("C-k" . vertico-previous)
-  ;              ("C-f" . vertico-exit)
-  ;              :map minibuffer-local-map
-  ;              ("M-h" . backward-kill-word))
-  ;  :custom
-  ;  (vertico-cycle t)
-  ;  :init
-  ;  (vertico-mode))
-#+end_src
-
 ** m-x
 
 #+begin_src emacs-lisp
@@ -563,6 +553,30 @@ simpleclip-mode radically simplifies clipboard handling: the system clipboard an
   (set-default 'tramp-default-method "plink")
 #+end_src
 
+** crux
+
+#+begin_src emacs-lisp
+  (use-package crux
+    :ensure t)
+
+#+end_src
+
+** Vertico
+
+#+begin_src emacs-lisp
+  (use-package vertico
+    :init
+    (vertico-mode))
+
+  (use-package savehist
+    :init
+    (savehist-mode))
+
+  (use-package vertico-posframe
+    :init
+    (vertico-posframe-mode))
+  #+end_src
+
 * File management
 ** Dired
 
@@ -570,6 +584,7 @@ simpleclip-mode radically simplifies clipboard handling: the system clipboard an
                                           ;  (use-package all-the-icons-dired)
   (use-package dired-open)
   (use-package peep-dired)
+  (use-package dired-single)
 
   (nvmap :states '(normal visual) :keymaps 'override :prefix "SPC"
     "d d" '(dired :which-key "Open dired")
@@ -590,11 +605,27 @@ simpleclip-mode radically simplifies clipboard handling: the system clipboard an
 #+begin_src emacs-lisp
   (use-package projectile
     :ensure t
-    :init
+    :init (setq projectile-enable-caching t)
+    :config
+    (add-to-list 'projectile-globally-ignored-directories ".cache")
+    (add-to-list 'projectile-globally-ignored-directories ".DS_Store")
+    (add-to-list 'projectile-globally-ignored-directories ".vscode")
     (projectile-mode +1)
-    :bind (:map projectile-mode-map
-                ("s-p" . projectile-command-map)
-                ("C-c p" . projectile-command-map)))
+    (projectile-global-mode 1)
+    (setq
+     projectile-globally-ignored-file-suffixes '(".elc" ".pyc" ".o" ".swp" ".so" ".a")
+     projectile-globally-ignored-files '("TAGS" "tags" ".DS_Store")
+     projectile-ignored-projects `("~/.pyenv/")
+     projectile-mode-line-function #'(lambda () (format " [%s]" (projectile-project-name)))
+     projectile-enable-caching t
+     projectile-indexing-method 'native
+     projectile-file-exists-remote-cache-expire nil)
+    (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
+
+
+  :bind (:map projectile-mode-map
+              ("s-p" . projectile-command-map)
+              ("C-c p" . projectile-command-map)))
 
 #+end_src
 
@@ -856,8 +887,6 @@ Get path from shell
   (setq use-dialog-box nil)
   (setq use-system-tooltips nil)
 
-  ;; lsp
-
   (use-package lsp-mode
     :ensure t :hook ((c-mode . lsp)
 
@@ -926,9 +955,16 @@ Get path from shell
     (setq flycheck-display-errors-function
           #'flycheck-display-error-messages-unless-error-list))
 
-  (use-package tree-sitter)
-  (use-package tree-sitter-langs)
-  (global-tree-sitter-mode)
+  (use-package tree-sitter
+    :ensure t
+    :config
+    (global-tree-sitter-mode)
+    (tree-sitter-hl-mode))
+
+  (use-package tree-sitter-langs
+    :ensure t
+    :after tree-sitter)
+
   #+end_src
 
 ** clang-format
@@ -963,6 +999,3 @@ Get path from shell
 #+begin_src emacs-lisp
   (use-package mermaid-mode)
 #+end_src
-
-
-
