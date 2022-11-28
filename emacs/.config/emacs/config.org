@@ -139,10 +139,6 @@ Prevent emacs from contaminating system clipboard.
   (setq x-select-enable-primary nil)
 #+end_src
 
-#+begin_src emacs-lisp
-(pixel-scroll-precision-mode)
-#+end_src
-
 * Customization
 ** Theme
 
@@ -417,8 +413,8 @@ Only use variable-pitch if explicitly called.
   (define-key evil-normal-state-map (kbd "C-w -") 'evil-window-split)
   (define-key evil-normal-state-map (kbd "C-w |") 'evil-window-vsplit)
   (define-key evil-normal-state-map (kbd "C-w SPC") 'transpose-frame)
-  (define-key evil-normal-state-map (kbd "SPC h") 'evil-window-left)
   (define-key evil-normal-state-map (kbd "SPC b") 'ivy-switch-buffer)
+  (define-key evil-normal-state-map (kbd "SPC h p") 'ff-find-other-file)
 
 
 
@@ -577,6 +573,13 @@ simpleclip-mode radically simplifies clipboard handling: the system clipboard an
     (vertico-posframe-mode))
   #+end_src
 
+** Helm
+
+#+begin_src emacs-lisp
+  (use-package helm
+    :ensure t)
+#+end_src
+
 * File management
 ** Dired
 
@@ -620,7 +623,7 @@ simpleclip-mode radically simplifies clipboard handling: the system clipboard an
      projectile-enable-caching t
      projectile-indexing-method 'native
      projectile-file-exists-remote-cache-expire nil)
-    (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
+    (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
 
 
   :bind (:map projectile-mode-map
@@ -835,6 +838,7 @@ Get path from shell
 #+begin_src emacs-lisp
 
   (defun compile-config ()
+    (interactive)
     (org-babel-tangle-file
      (expand-file-name "config.org" user-emacs-directory)
      (expand-file-name "config.el" user-emacs-directory))
@@ -958,8 +962,8 @@ Get path from shell
   (use-package tree-sitter
     :ensure t
     :config
-    (global-tree-sitter-mode)
-    (tree-sitter-hl-mode))
+    (global-tree-sitter-mode))
+  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
 
   (use-package tree-sitter-langs
     :ensure t
