@@ -307,15 +307,12 @@ Only use variable-pitch if explicitly called.
     (setq x-underline-at-descent-line t)
 
     :config
-    ;(centaur-tabs-mode t)
+    (centaur-tabs-mode t)
     (centaur-tabs-headline-match)
 
     :bind
     ("C-<tab>" . centaur-tabs-forward)
     ("C-S-<tab>" . centaur-tabs-backward))
-
-
-
 
   (defun centaur-tabs-buffer-groups ()
     "`centaur-tabs-buffer-groups' control buffers' group rules.
@@ -519,6 +516,26 @@ simpleclip-mode radically simplifies clipboard handling: the system clipboard an
     :config
     (ivy-mode))
 
+  (use-package ivy-posframe)
+  ;; Different command can use different display function.
+  (setq ivy-posframe-display-functions-alist
+        '((swiper          . ivy-posframe-display-at-point)
+          (complete-symbol . ivy-posframe-display-at-point)
+          (counsel-M-x     . ivy-posframe-display)
+          (t               . ivy-posframe-display)))
+
+  (setq ivy-posframe-height-alist '((swiper . 20)
+                                    (t      . 20)))
+
+  (setq ivy-posframe-parameters
+        '((left-fringe . 12)
+          (right-fringe . 12)
+          (top-frame . 12)
+          (bottom-frame . 12)
+          ))
+
+  (ivy-posframe-mode 1)
+
   (use-package ivy-rich
     :after ivy
     :custom
@@ -526,9 +543,13 @@ simpleclip-mode radically simplifies clipboard handling: the system clipboard an
                             ivy-rich-switch-buffer-align-virtual-buffer t
                             ivy-rich-path-style 'abbrev)
     :config
+    (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
     (ivy-set-display-transformer 'ivy-switch-buffer
                                  'ivy-rich-switch-buffer-transformer)
-    (ivy-rich-mode 1)) ;; this gets us descriptions in M-x.
+
+    (ivy-rich-mode 0)
+    (ivy-rich-mode 1)
+    )
   (use-package swiper
     :after ivy
     :bind (("C-s" . swiper)
@@ -912,8 +933,6 @@ Get path from shell
         eldoc-echo-area-use-multiline-p nil)
 
   (use-package lsp-ivy
-
-
     :ensure t
     :commands lsp-ivy-workspace-symbol)
 
