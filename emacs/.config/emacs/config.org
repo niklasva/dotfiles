@@ -120,6 +120,19 @@
         (kill-buffer "*Messages*")))
   (add-hook 'after-change-major-mode-hook 'remove-messages-buffer)
 
+
+  ;; Prepend space to buffer name to hide it
+  (defun hide-clangd-buffers ()
+    (interactive)
+    (setq-default message-log-max nil)
+    (if (get-buffer "*clangd*")
+        (with-current-buffer "*clangd*"
+          (rename-buffer " *clangd*")))
+    (if (get-buffer "*clangd::stderr*")
+        (with-current-buffer "*clangd::stderr*"
+          (rename-buffer " *clangd::stderr*"))))
+  (add-hook 'after-change-major-mode-hook 'hide-clangd-buffers)
+
   ;; Don't show *Buffer list* when opening multiple files at the same time.
   (setq inhibit-startup-buffer-menu t)
 
@@ -141,6 +154,24 @@ Prevent emacs from contaminating system clipboard.
 
 * Customization
 ** Theme
+
+#+begin_src emacs-lisp
+  (defun ap/load-doom-theme (theme)
+    "Disable active themes and load a Doom theme."
+    (interactive (list (intern (completing-read "Theme: "
+                                                (->> (custom-available-themes)
+                                                     (-map #'symbol-name)
+                                                     (--select (string-prefix-p "doom-" it)))))))
+    (ap/switch-theme theme))
+
+  (defun ap/switch-theme (theme)
+    "Disable active themes and load THEME."
+    (interactive (list (intern (completing-read "Theme: "
+                                                (->> (custom-available-themes)
+                                                     (-map #'symbol-name))))))
+    (mapc #'disable-theme custom-enabled-themes)
+    (load-theme theme 'no-confirm))
+#+end_src
 
 #+begin_src emacs-lisp
   (use-package doom-themes :ensure t)
@@ -307,8 +338,8 @@ Only use variable-pitch if explicitly called.
     (setq x-underline-at-descent-line t)
 
     :config
-    (centaur-tabs-mode t)
-    (centaur-tabs-headline-match)
+    ;(centaur-tabs-mode t)
+    ;(centaur-tabs-headline-match)
 
     :bind
     ("C-<tab>" . centaur-tabs-forward)
@@ -397,7 +428,6 @@ Only use variable-pitch if explicitly called.
   (global-set-key (kbd "C--") 'text-scale-decrease)
   (global-set-key (kbd "C-=") 'text-scale-set)
 
-                                          ;(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
   (global-set-key (kbd "§") 'evil-invert-char)
 
   (define-key evil-normal-state-map (kbd "U") 'evil-redo)
@@ -413,14 +443,11 @@ Only use variable-pitch if explicitly called.
   (define-key evil-normal-state-map (kbd "SPC b") 'ivy-switch-buffer)
   (define-key evil-normal-state-map (kbd "SPC h p") 'ff-find-other-file)
 
-
-
   (evil-define-key 'treemacs treemacs-mode-map (kbd "C-a C-x")    #'evil-delete-buffer)
   (evil-define-key 'treemacs treemacs-mode-map (kbd "C-a C-e")    #'evil-delete-buffer)
   (evil-define-key 'treemacs treemacs-mode-map (kbd "z a")        #'treemacs-RET-action)
   (evil-define-key 'treemacs treemacs-mode-map (kbd "S-h")        #'treemacs-root-up)
   (evil-define-key 'treemacs treemacs-mode-map (kbd "S-l")        #'treemacs-root-down)
-
 
   (defvar dashboard-mode-map
     (let ((map (make-sparse-keymap)))
@@ -513,8 +540,10 @@ simpleclip-mode radically simplifies clipboard handling: the system clipboard an
     (setq ivy-count-format "(%d/%d) ")
     (setq ivy-use-virtual-buffers t)
     (setq enable-recursive-minibuffers t)
+
     :config
     (ivy-mode))
+
 
   (use-package ivy-posframe)
   ;; Different command can use different display function.
@@ -527,33 +556,52 @@ simpleclip-mode radically simplifies clipboard handling: the system clipboard an
   (setq ivy-posframe-height-alist '((swiper . 20)
                                     (t      . 20)))
 
+  ;(defun ivy-posframe-get-size ()
+  ;  (list
+  ;   :width ivy-posframe-width
+  ;   :min-width 100
+  ;   :max-width 100
+  ;   ))
+
   (setq ivy-posframe-parameters
         '((left-fringe . 12)
           (right-fringe . 12)
-          (top-frame . 12)
-          (bottom-frame . 12)
+          (top-fringe . 12)
+          (bottom-fringe . 12)
           ))
 
   (ivy-posframe-mode 1)
 
   (use-package ivy-rich
     :after ivy
-    :custom
-    (ivy-virtual-abbreviate 'full
-                            ivy-rich-switch-buffer-align-virtual-buffer t
-                            ivy-rich-path-style 'abbrev)
     :config
-    (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
-    (ivy-set-display-transformer 'ivy-switch-buffer
-                                 'ivy-rich-switch-buffer-transformer)
+    (ivy-rich-modify-columns
+     'counsel-M-x
+     '((counsel-M-x-transformer (:width 40))
+       (ivy-rich-counsel-function-docstring (:width 80))))
 
-    (ivy-rich-mode 0)
-    (ivy-rich-mode 1)
     )
+
+  (ivy-rich-mode 1)
+
   (use-package swiper
     :after ivy
     :bind (("C-s" . swiper)
            ("C-r" . swiper)))
+
+  (use-package prescient
+    :after ivy
+    )
+  (use-package ivy-prescient
+    :after prescient
+    :config
+    (prescient-persist-mode 1)
+    (ivy-prescient-mode 1)
+    )
+
+  (add-to-list 'ivy-sort-functions-alist
+               '(ivy-switch-buffer . ivy-string<))
+
 #+end_src
 
 ** m-x
@@ -634,10 +682,11 @@ simpleclip-mode radically simplifies clipboard handling: the system clipboard an
     (add-to-list 'projectile-globally-ignored-directories ".cache")
     (add-to-list 'projectile-globally-ignored-directories ".DS_Store")
     (add-to-list 'projectile-globally-ignored-directories ".vscode")
+    (add-to-list 'projectile-globally-ignored-directories "BUILD")
     (projectile-mode +1)
     (projectile-global-mode 1)
     (setq
-     projectile-globally-ignored-file-suffixes '(".elc" ".pyc" ".o" ".swp" ".so" ".a")
+     projectile-globally-ignored-file-suffixes '(".elc" ".pyc" ".o" ".swp" ".so" ".a" ".d" ".ld")
      projectile-globally-ignored-files '("TAGS" "tags" ".DS_Store")
      projectile-ignored-projects `("~/.pyenv/")
      projectile-mode-line-function #'(lambda () (format " [%s]" (projectile-project-name)))
