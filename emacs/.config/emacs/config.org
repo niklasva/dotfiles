@@ -122,7 +122,7 @@
 
 
   ;; Prepend space to buffer name to hide it
-  (defun hide-clangd-buffers ()
+  (defun hide-lsp-buffers ()
     (interactive)
     (setq-default message-log-max nil)
     (if (get-buffer "*clangd*")
@@ -130,8 +130,14 @@
           (rename-buffer " *clangd*")))
     (if (get-buffer "*clangd::stderr*")
         (with-current-buffer "*clangd::stderr*"
-          (rename-buffer " *clangd::stderr*"))))
-  (add-hook 'after-change-major-mode-hook 'hide-clangd-buffers)
+          (rename-buffer " *clangd::stderr*")))
+    (if (get-buffer "*pyright*")
+        (with-current-buffer "*pyright*"
+          (rename-buffer " *pyright*")))
+    (if (get-buffer "*pyright::stderr*")
+        (with-current-buffer "*pyright::stderr*"
+          (rename-buffer " *pyright::stderr*"))))
+  (add-hook 'after-change-major-mode-hook 'hide-lsp-buffers)
 
   ;; Don't show *Buffer list* when opening multiple files at the same time.
   (setq inhibit-startup-buffer-menu t)
@@ -165,7 +171,7 @@ Prevent emacs from contaminating system clipboard.
     (ap/switch-theme theme))
 
   (defun ap/switch-theme (theme)
-    "Disable active themes and load THEME."
+    "DisaBle active themes and load THEME."
     (interactive (list (intern (completing-read "Theme: "
                                                 (->> (custom-available-themes)
                                                      (-map #'symbol-name))))))
@@ -174,12 +180,14 @@ Prevent emacs from contaminating system clipboard.
 #+end_src
 
 #+begin_src emacs-lisp
+  (use-package helm-themes :ensure t)
   (use-package doom-themes :ensure t)
   (use-package sublime-themes :ensure t)
-  (use-package leuven-theme)
+  (use-package leuven-theme :ensure t)
+  (use-package color-theme-modern :ensure t)
 
   (setq custom-safe-themes t)
-  (load-theme 'doom-ayu-dark t)
+  (load-theme 'brin t)
 #+end_src
 
 ** GUI settings
@@ -324,65 +332,65 @@ Only use variable-pitch if explicitly called.
 ** Centaur Tabs
 
 #+begin_src emacs-lisp
-  (use-package powerline)
-  (use-package centaur-tabs
-    :demand
+  ; (use-package powerline)
+  ; (use-package centaur-tabs
+  ;   :demand
 
-    :init
-    (setq ns-use-srgb-colorspace nil)
-    (setq centaur-tabs-plain-icons t)
-    (setq centaur-tabs-set-icons t)
-    (setq centaur-tabs-set-modified-marker t)
-    (setq centaur-tabs-style "box")
-    (setq centaur-tabs-set-bar 'under)
-    (setq x-underline-at-descent-line t)
+  ;   :init
+  ;   (setq ns-use-srgb-colorspace nil)
+  ;   (setq centaur-tabs-plain-icons t)
+  ;   (setq centaur-tabs-set-icons t)
+  ;   (setq centaur-tabs-set-modified-marker t)
+  ;   (setq centaur-tabs-style "box")
+  ;   (setq centaur-tabs-set-bar 'under)
+  ;   (setq x-underline-at-descent-line t)
 
-    :config
-    ;(centaur-tabs-mode t)
-    ;(centaur-tabs-headline-match)
+  ;   :config
+  ;   ;(centaur-tabs-mode t)
+  ;   ;(centaur-tabs-headline-match)
 
-    :bind
-    ("C-<tab>" . centaur-tabs-forward)
-    ("C-S-<tab>" . centaur-tabs-backward))
+  ;   :bind
+  ;   ("C-<tab>" . centaur-tabs-forward)
+  ;   ("C-S-<tab>" . centaur-tabs-backward))
 
-  (defun centaur-tabs-buffer-groups ()
-    "`centaur-tabs-buffer-groups' control buffers' group rules.
+  ; (defun centaur-tabs-buffer-groups ()
+  ;   "`centaur-tabs-buffer-groups' control buffers' group rules.
 
-                          Group centaur-tabs with mode if buffer is derived from `eshell-mode' `emacs-lisp-mode' `dired-mode' `org-mode' `magit-mode'.
-                          All buffer name start with * will group to \"Emacs\".
-                          Other buffer group by `centaur-tabs-get-group-name' with project name."
-    (list
-     (cond
-      ((or (string-match ".*" (substring (buffer-name) 0 1))
-           (memq major-mode '(magit-process-mode
-                              magit-status-mode
-                              magit-diff-mode
-                              magit-log-mode
-                              magit-file-mode
-                              magit-blob-mode
-                              magit-blame-mode
-                              )))
-       "Emacs")
-      ((derived-mode-p 'prog-mode)
-       "Editing")
-      ((derived-mode-p 'dired-mode)
-       "Dired")
-      ((memq major-mode '(helpful-mode
-                          help-mode))
-       "Help")
-      ((memq major-mode '(org-mode
-                          org-agenda-clockreport-mode
-                          org-src-mode
-                          org-agenda-mode
-                          org-beamer-mode
-                          org-indent-mode
-                          org-bullets-mode
-                          org-cdlatex-mode
-                          org-agenda-log-mode
-                          diary-mode))
-       "OrgMode")
-      (t
-       (centaur-tabs-get-group-name (current-buffer))))))
+  ;                         Group centaur-tabs with mode if buffer is derived from `eshell-mode' `emacs-lisp-mode' `dired-mode' `org-mode' `magit-mode'.
+  ;                         All buffer name start with * will group to \"Emacs\".
+  ;                         Other buffer group by `centaur-tabs-get-group-name' with project name."
+  ;   (list
+  ;    (cond
+  ;     ((or (string-match ".*" (substring (buffer-name) 0 1))
+  ;          (memq major-mode '(magit-process-mode
+  ;                             magit-status-mode
+  ;                             magit-diff-mode
+  ;                             magit-log-mode
+  ;                             magit-file-mode
+  ;                             magit-blob-mode
+  ;                             magit-blame-mode
+  ;                             )))
+  ;      "Emacs")
+  ;     ((derived-mode-p 'prog-mode)
+  ;      "Editing")
+  ;     ((derived-mode-p 'dired-mode)
+  ;      "Dired")
+  ;     ((memq major-mode '(helpful-mode
+  ;                         help-mode))
+  ;      "Help")
+  ;     ((memq major-mode '(org-mode
+  ;                         org-agenda-clockreport-mode
+  ;                         org-src-mode
+  ;                         org-agenda-mode
+  ;                         org-beamer-mode
+  ;                         org-indent-mode
+  ;                         org-bullets-mode
+  ;                         org-cdlatex-mode
+  ;                         org-agenda-log-mode
+  ;                         diary-mode))
+  ;      "OrgMode")
+  ;     (t
+  ;      (centaur-tabs-get-group-name (current-buffer))))))
 
 #+end_src
 
@@ -556,12 +564,12 @@ simpleclip-mode radically simplifies clipboard handling: the system clipboard an
   (setq ivy-posframe-height-alist '((swiper . 20)
                                     (t      . 20)))
 
-  ;(defun ivy-posframe-get-size ()
-  ;  (list
-  ;   :width ivy-posframe-width
-  ;   :min-width 100
-  ;   :max-width 100
-  ;   ))
+  (defun ivy-posframe-get-size ()
+    (list
+     :width ivy-posframe-width
+     :min-width 100
+     :max-width 180
+     ))
 
   (setq ivy-posframe-parameters
         '((left-fringe . 12)
@@ -602,6 +610,7 @@ simpleclip-mode radically simplifies clipboard handling: the system clipboard an
   (add-to-list 'ivy-sort-functions-alist
                '(ivy-switch-buffer . ivy-string<))
 
+  (use-package ripgrep)
 #+end_src
 
 ** m-x
@@ -641,13 +650,6 @@ simpleclip-mode radically simplifies clipboard handling: the system clipboard an
     :init
     (vertico-posframe-mode))
   #+end_src
-
-** Helm
-
-#+begin_src emacs-lisp
-  (use-package helm
-    :ensure t)
-#+end_src
 
 * File management
 ** Dired
@@ -957,14 +959,16 @@ Get path from shell
 ** LSP
 
 #+begin_src emacs-lisp
+  (use-package lsp-pyright :ensure t)
+
   (setq lsp-clients-clangd-args '("-j=8" "-background-index" "-log=error" "--clang-tidy" "--query-driver=/Applications/ARM/**/*"))
   (setq use-dialog-box nil)
   (setq use-system-tooltips nil)
 
   (use-package lsp-mode
     :ensure t :hook ((c-mode . lsp)
-
                      (c++-mode . lsp)
+                     (python-mode . lsp)
                      (lsp-mode . lsp-enable-which-key-integration))
     :commands lsp
     :config
@@ -1008,10 +1012,11 @@ Get path from shell
   (use-package lsp-ui
     :ensure t
     :config
-    (setq lsp-ui-doc-show-with-cursor t
-          lsp-ui-doc-position 'at-point
-          lsp-ui-doc-delay 1
-          lsp-ui-sideline-enable nil
+    (setq lsp-ui-doc-show-with-cursor nil
+          lsp-ui-doc-show-with-mouse nil
+          lsp-ui-doc-position 'bottom
+          lsp-ui-doc-delay 0.1
+          lsp-ui-sideline-enable t
           ))
 
   (use-package company-box
@@ -1025,7 +1030,8 @@ Get path from shell
     :init (global-flycheck-mode)
     :config
     (setq flycheck-display-errors-function
-          #'flycheck-display-error-messages-unless-error-list))
+          #'flycheck-display-error-messages-unless-error-list
+          flycheck-display-errors-delay 0.0))
 
   (use-package tree-sitter
     :ensure t

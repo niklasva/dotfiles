@@ -10,6 +10,7 @@ export HOMEBREW_NO_ENV_HINTS=1
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 export LDFLAGS="-L/opt/homebrew/opt/llvm/lib"
+export MANPAGER=most
 export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
 export MANPATH="/usr/local/share/man:$MANPATH"
 export PATH="~/.bin:/opt/homebrew/opt/coreutils/libexec/gnubin:$PATH"
