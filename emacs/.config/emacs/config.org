@@ -13,55 +13,53 @@
 ** Remember window
 
 #+begin_src emacs-lisp
-  ;; Custom functions/hooks for persisting/loading frame geometry upon save/load
-  (defun save-frameg ()
-    "Gets the current frame's geometry and saves to ~/.emacs.frameg."
-    (let ((frameg-font (frame-parameter (selected-frame) 'font))
-          (frameg-left (frame-parameter (selected-frame) 'left))
-          (frameg-top (frame-parameter (selected-frame) 'top))
-          (frameg-width (frame-parameter (selected-frame) 'width))
-          (frameg-height (frame-parameter (selected-frame) 'height))
-          (frameg-file (expand-file-name "~/.emacs.frameg")))
-      (with-temp-buffer
-        ;; Turn off backup for this file
-        (make-local-variable 'make-backup-files)
-        (setq make-backup-files nil)
-        (insert
-         ";;; This file stores the previous emacs frame's geometry.\n"
-         ";;; Last generated " (current-time-string) ".\n"
-         "(setq initial-frame-alist\n"
-         ;; " '((font . \"" frameg-font "\")\n"
-         " '("
-         (format " (top . %d)\n" (max frameg-top 0))
-         (format " (left . %d)\n" (max frameg-left 0))
-         (format " (width . %d)\n" (max frameg-width 0))
-         (format " (height . %d)))\n" (max frameg-height 0)))
-        (when (file-writable-p frameg-file)
-          (write-file frameg-file)))))
+ ; ;; Custom functions/hooks for persisting/loading frame geometry upon save/load
+ ; (defun save-frameg ()
+ ;   "Gets the current frame's geometry and saves to ~/.emacs.frameg."
+ ;   (let ((frameg-font (frame-parameter (selected-frame) 'font))
+ ;         (frameg-left (frame-parameter (selected-frame) 'left))
+ ;         (frameg-top (frame-parameter (selected-frame) 'top))
+ ;         (frameg-width (frame-parameter (selected-frame) 'width))
+ ;         (frameg-height (frame-parameter (selected-frame) 'height))
+ ;         (frameg-file (expand-file-name "~/.emacs.frameg")))
+ ;     (with-temp-buffer
+ ;       ;; Turn off backup for this file
+ ;       (make-local-variable 'make-backup-files)
+ ;       (setq make-backup-files nil)
+ ;       (insert
+ ;        ";;; This file stores the previous emacs frame's geometry.\n"
+ ;        ";;; Last generated " (current-time-string) ".\n"
+ ;        "(setq initial-frame-alist\n"
+ ;        ;; " '((font . \"" frameg-font "\")\n"
+ ;        " '("
+ ;        (format " (top . %d)\n" (max frameg-top 0))
+ ;        (format " (left . %d)\n" (max frameg-left 0))
+ ;        (format " (width . %d)\n" (max frameg-width 0))
+ ;        (format " (height . %d)))\n" (max frameg-height 0)))
+ ;       (when (file-writable-p frameg-file)
+ ;         (write-file frameg-file)))))
 
-  (defun load-frameg ()
-    "Loads ~/.emacs.frameg which should load the previous frame's geometry."
-    (let ((frameg-file (expand-file-name "~/.emacs.frameg")))
-      (when (file-readable-p frameg-file)
-        (load-file frameg-file))))
+ ; (defun load-frameg ()
+ ;   "Loads ~/.emacs.frameg which should load the previous frame's geometry."
+ ;   (let ((frameg-file (expand-file-name "~/.emacs.frameg")))
+ ;     (when (file-readable-p frameg-file)
+ ;       (load-file frameg-file))))
 
-                                          ; Special work to do ONLY when there is a window system being used
-  (if window-system (progn
-                      (add-hook 'after-init-hook 'load-frameg)
-                      (add-hook 'kill-emacs-hook 'save-frameg)))
+ ;                                         ; Special work to do ONLY when there is a window system being used
+ ; (if window-system (progn
+ ;                     (add-hook 'after-init-hook 'load-frameg)
+ ;                     (add-hook 'kill-emacs-hook 'save-frameg)))
 #+end_src
 
 * Package management
 ** Setup package.el to work with melpa.
-
 #+begin_src emacs-lisp
   (require 'package)
   (setq package-archives '(("melpa" . "https://melpa.org/packages/")
                            ("org" . "https://orgmode.org/elpa/")
                            ("elpa" . "https://elpa.gnu.org/packages/")))
   (package-initialize)
-  (unless package-archive-contents
-    (package-refresh-contents))
+  (unless package-archive-contents (package-refresh-contents))
 #+end_src
 
 ** Installing use-package
@@ -70,11 +68,9 @@
   ;; Initialize use-package on non-Linux platforms
   (unless (package-installed-p 'use-package)
     (package-install 'use-package))
-
   (require 'use-package)
   (setq use-package-always-ensure t)
-
-#+end_src
+  #+end_src
 
 * Text edit settings
 
@@ -162,6 +158,13 @@ Prevent emacs from contaminating system clipboard.
 ** Theme
 
 #+begin_src emacs-lisp
+  (defun fix-window-divider-color ()
+    (interactive)
+    (set-face-foreground 'window-divider (face-attribute 'default :background))
+    (set-face-foreground 'window-divider-first-pixel (face-attribute 'default :background))
+    (set-face-foreground 'window-divider-last-pixel (face-attribute 'default :background))
+    )
+
   (defun ap/load-doom-theme (theme)
     "Disable active themes and load a Doom theme."
     (interactive (list (intern (completing-read "Theme: "
@@ -176,24 +179,35 @@ Prevent emacs from contaminating system clipboard.
                                                 (->> (custom-available-themes)
                                                      (-map #'symbol-name))))))
     (mapc #'disable-theme custom-enabled-themes)
-    (load-theme theme 'no-confirm))
+    (fix-window-divider-color)
+    (load-theme theme 'no-confirm)
+    (fix-window-divider-color)
+    )
 #+end_src
 
 #+begin_src emacs-lisp
-  (use-package helm-themes :ensure t)
-  (use-package doom-themes :ensure t)
-  (use-package sublime-themes :ensure t)
-  (use-package leuven-theme :ensure t)
-  (use-package color-theme-modern :ensure t)
+
+  (use-package helm-themes :ensure nil)
+  (use-package sublime-themes :ensure nil)
+  (use-package leuven-theme :ensure nil)
+  (use-package color-theme-modern :ensure nil)
+  (use-package nano-theme :defer t)
+
+  (use-package doom-themes
+    :ensure nil
+    :custom (setq doom-themes-enable-bold nil
+                  doom-themes-enable-italic nil))
 
   (setq custom-safe-themes t)
-  (load-theme 'brin t)
-#+end_src
+
+  (setq nano-fonts-use t)
+  (load-theme 'doom-nord-aurora t)
+
+  #+end_src
 
 ** GUI settings
 
 #+begin_src emacs-lisp
-  (setq frame-title-format '("" "%b"))
 
   (setq inhibit-startup-message t
         inhibit-startup-echo-area-message t)
@@ -202,7 +216,7 @@ Prevent emacs from contaminating system clipboard.
   (tool-bar-mode -1)
   (tooltip-mode -1)
   (menu-bar-mode 1)
-  (set-fringe-mode 10)
+  (set-fringe-mode 1)
 
   (global-visual-line-mode t)
 
@@ -214,18 +228,53 @@ Prevent accidental close.
   (setq confirm-kill-emacs 'y-or-n-p)
 #+end_src
 
+** Window properties
 #+begin_src emacs-lisp
-  (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
-  (add-to-list 'default-frame-alist '(ns-appearance . dark))
+  (setq default-frame-alist
+        (append (list
+                 '(min-height . 1)
+                 '(height     . 45)
+                 '(min-width  . 1)
+                 '(width      . 81)
+                 '(vertical-scroll-bars . nil)
+                 '(internal-border-width . 24)
+                 '(left-fringe    . 1)
+                 '(right-fringe   . 1)
+                 '(tool-bar-lines . 0)
+                 '(menu-bar-lines . 0)
+                 '(ns-transparent-titlebar . t)
+                 '(ns-appearance . dark)
+                 '(undecorated-round . t))))
+
+  (setq window-divider-default-right-width 32)
+  (setq window-divider-default-bottom-width 4)
+  ;(setq window-divider-default-places 'right-only)
+  (setq window-divider-default-places t)
+
+  (setq ns-use-thin-smoothing t
+        ns-use-proxy-icon nil
+        ns-use-mwheel-momentum t
+        ns-use-mwheel-acceleration t
+        frame-title-format "\n")
+
+
+  ;; Vertical window divider
+
+  (window-divider-mode 1)
+
+  (fix-window-divider-color)
   (setq frame-resize-pixelwise t)
 #+end_src
 
 ** Mode line
 
 #+begin_src emacs-lisp
-  (use-package mood-line
+  (use-package nano-modeline
     :ensure t
-    :init (mood-line-mode))
+    :init (nano-modeline-mode))
+                                          ;(use-package mood-line
+                                          ;:ensure t
+                                          ;:init (mood-line-mode))
 #+end_src
 
 Save colors for later use.
@@ -295,17 +344,28 @@ Only use variable-pitch if explicitly called.
 #+end_src
 
 #+begin_src emacs-lisp
-  (set-face-attribute 'default nil        :font "Mononoki 14")
-  (set-face-attribute 'fixed-pitch nil    :font "Mononoki 14" :height 1.0)
+  (set-face-attribute 'default nil        :font "Mononoki 14" :weight 'unspecified)
+  (set-face-attribute 'fixed-pitch nil    :font "Mononoki 14" :weight 'unspecified :height 1.0)
   (set-face-attribute 'variable-pitch nil :font "Mononoki 14" :height 1.0)
 
   (when (eq (nth 3 (assq 'geometry (car (display-monitor-attributes-list)))) 3840)
     (set-face-attribute 'default nil :font "Mononoki 18"))
 
-  (setq doom-themes-enable-bold t
-        doom-themes-enable-italic t)
 
-                                          ;(variable-pitch-on)
+(defun remap-faces-default-attributes ()
+   (let ((family (face-attribute 'default :family))
+         (height (face-attribute 'default :height)))
+     (mapcar (lambda (face)
+              (face-remap-add-relative
+               face :family family :weight 'unspecified :height height))
+          (face-list))))
+
+(when (display-graphic-p)
+   (add-hook 'minibuffer-setup-hook 'remap-faces-default-attributes)
+   (add-hook 'change-major-mode-after-body-hook 'remap-faces-default-attributes))
+
+
+
 #+end_src
 
 ** Dashboard
@@ -394,6 +454,21 @@ Only use variable-pitch if explicitly called.
 
 #+end_src
 
+** Compile into bottom window
+
+#+begin_src emacs-lisp
+  (setq display-buffer-alist
+        `((,(rx bos
+                (| (literal "*compilation")
+                   (literal "*shell")
+                   (literal "*eshell")
+                   (literal "*Compile-Log")))
+           display-buffer-in-direction
+           (window . t)
+           (direction . below)              ;`below' (window) or `bottom' (of frame)
+           (window-height . 0.33)
+           )))
+#+end_src
 * Controls
 ** Evil mode
 
@@ -453,9 +528,6 @@ Only use variable-pitch if explicitly called.
 
   (evil-define-key 'treemacs treemacs-mode-map (kbd "C-a C-x")    #'evil-delete-buffer)
   (evil-define-key 'treemacs treemacs-mode-map (kbd "C-a C-e")    #'evil-delete-buffer)
-  (evil-define-key 'treemacs treemacs-mode-map (kbd "z a")        #'treemacs-RET-action)
-  (evil-define-key 'treemacs treemacs-mode-map (kbd "S-h")        #'treemacs-root-up)
-  (evil-define-key 'treemacs treemacs-mode-map (kbd "S-l")        #'treemacs-root-down)
 
   (defvar dashboard-mode-map
     (let ((map (make-sparse-keymap)))
@@ -520,6 +592,7 @@ simpleclip-mode radically simplifies clipboard handling: the system clipboard an
     "m I"   '(org-toggle-inline-images :which-key "Org toggle inline imager")
     "m T"   '(org-todo-list :which-key "Org todo list")
     "o a"   '(org-agenda :which-key "Org agenda")
+    "conf"  '((lambda () (interactive) (find-file "~/.config/emacs/config.org")) :which-key "Open config.org")
     )
 #+end_src
 
@@ -651,6 +724,39 @@ simpleclip-mode radically simplifies clipboard handling: the system clipboard an
     (vertico-posframe-mode))
   #+end_src
 
+** Treemacs
+
+#+begin_src emacs-lisp
+  (use-package treemacs
+    :ensure t
+
+    :defer t
+
+    :init
+    (with-eval-after-load 'winum
+      (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
+
+    :config
+    (setq treemacs-no-png-images t)
+    (setq treemacs-is-never-other-window t)
+
+    :bind
+    (:map global-map
+          ("M-0"       . treemacs-select-window)
+          ("C-x t 1"   . treemacs-delete-other-windows)
+          ("C-x t t"   . treemacs)
+          ("C-x t d"   . treemacs-select-directory)
+          ("C-x t B"   . treemacs-bookmark)
+          ("C-x t C-t" . treemacs-find-file)
+          ("C-x t M-t" . treemacs-find-tag)))
+
+  (use-package treemacs-projectile
+    :after (treemacs projectile)
+    :ensure t)
+
+
+#+end_src
+
 * File management
 ** Dired
 
@@ -737,6 +843,10 @@ Always follow symlinks
   (setq vc-follow-symlinks t)
 #+end_src
 
+* Magit
+#+begin_src emacs-lisp
+  (use-package magit)
+#+end_src
 * Org-mode
 ** Org-mode appearance
 *** Mixed-pitch
@@ -905,6 +1015,21 @@ Get path from shell
 #+end_src
 
 * Performance
+** GCMH
+#+begin_src emacs-lisp
+  (use-package gcmh
+    :demand
+    :hook
+    (focus-out-hook . gcmh-idle-garbage-collect)
+
+    :custom
+    (gcmh-idle-delay 10)
+    (gcmh-high-cons-threshold 104857600)
+
+    :config
+    (gcmh-mode +1))
+
+  #+end_src
 ** Byte compile on exit
 
 #+begin_src emacs-lisp
@@ -919,7 +1044,7 @@ Get path from shell
      (expand-file-name "config.el" user-emacs-directory)
      (expand-file-name "config.elc" user-emacs-directory)))
 
-  (add-hook 'kill-emacs-hook 'compile-config)
+  ;(add-hook 'kill-emacs-hook 'compile-config)
 
   (add-to-list 'org-babel-default-header-args
                '(:noweb . "yes"))
@@ -950,6 +1075,11 @@ Get path from shell
 #+begin_src emacs-lisp
   (use-package git-gutter
     :ensure t
+    :config
+    (custom-set-variables
+     '(git-gutter:modified-sign "┊") ;; two space
+     '(git-gutter:added-sign "┊")    ;; multiple character is OK
+     '(git-gutter:deleted-sign "┊"))
     :init
     (global-git-gutter-mode +1))
 
@@ -968,8 +1098,12 @@ Get path from shell
   (use-package lsp-mode
     :ensure t :hook ((c-mode . lsp)
                      (c++-mode . lsp)
+                     (c-ts-mode . lsp)
+                     (c++-ts-mode . lsp)
                      (python-mode . lsp)
-                     (lsp-mode . lsp-enable-which-key-integration))
+                     (python-ts-mode . lsp)
+                     (lsp-mode . lsp-enable-which-key-integration)
+                     )
     :commands lsp
     :config
     (setq lsp-headerline-breadcrumb-enable nil)
@@ -988,10 +1122,6 @@ Get path from shell
   (use-package lsp-ivy
     :ensure t
     :commands lsp-ivy-workspace-symbol)
-
-  (use-package lsp-treemacs
-    :ensure t
-    :commands lsp-treemacs-errors-list)
 
   ;; company
   (use-package company
@@ -1033,17 +1163,26 @@ Get path from shell
           #'flycheck-display-error-messages-unless-error-list
           flycheck-display-errors-delay 0.0))
 
-  (use-package tree-sitter
-    :ensure t
-    :config
-    (global-tree-sitter-mode))
-  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
+#+end_src
 
-  (use-package tree-sitter-langs
-    :ensure t
-    :after tree-sitter)
+** Tree-sitter
 
-  #+end_src
+#+begin_src emacs-lisp
+  (add-to-list 'treesit-extra-load-path "/Users/niklas/dev/git/github/tree-sitter/tree-sitter-module/dist")
+  (setq-default treesit-font-lock-level 4)
+  (push '(c-mode . c-ts-mode) major-mode-remap-alist)
+  (push '(c++-mode . c++-ts-mode) major-mode-remap-alist)
+  (push '(css-mode . css-ts-mode) major-mode-remap-alist)
+  (push '(js-mode . javascript-ts-mode) major-mode-remap-alist)
+  (push '(js-json-mode . json-ts-mode) major-mode-remap-alist)
+  (push '(python-mode . python-ts-mode) major-mode-remap-alist)
+
+
+  (set-face-attribute 'font-lock-preprocessor-face nil
+                      :weight (face-attribute 'default :weight)
+                      :slant (face-attribute 'default :slant) :inherit 'default)
+
+#+end_src
 
 ** clang-format
 #+begin_src emacs-lisp
@@ -1069,6 +1208,8 @@ Get path from shell
     ;; Run this for each mode you want to use the hook.
     (add-hook 'c-mode-hook (lambda () (clang-format-save-hook-for-this-buffer)))
     (add-hook 'c++-mode-hook (lambda () (clang-format-save-hook-for-this-buffer)))
+    (add-hook 'c-ts-mode-hook (lambda () (clang-format-save-hook-for-this-buffer)))
+    (add-hook 'c++-ts-mode-hook (lambda () (clang-format-save-hook-for-this-buffer)))
     (add-hook 'glsl-mode-hook (lambda () (clang-format-save-hook-for-this-buffer)))
 
 #+end_src
