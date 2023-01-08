@@ -22,6 +22,10 @@ export PATH="/usr/local/bin:/Users/niklas/Library/Python/3.8/bin:$PATH"
 export PATH="/usr/local/opt/qt@5/bin:$PATH"
 export PATH="~/.bin/mipsel-none-elf/bin:$PATH"
 export PATH="~/.go/bin:/Users/niklas/.cargo/bin:$PATH"
+
+export VITASDK=/usr/local/vitasdk
+export PATH=$VITASDK/bin:$PATH
+
 export PKG_CONFIG_PATH="/usr/local/opt/qt@5/lib/pkgconfig"
 export PYTHONPATH=/opt/homebrew/lib/python3.9/site-packages:/Users/niklas/Library/Python/3.8/lib/python/site-packages:$PYTHONPATH
 source /opt/homebrew/etc/bash_completion.d/git-prompt.sh
