@@ -39,16 +39,26 @@
  ;       (when (file-writable-p frameg-file)
  ;         (write-file frameg-file)))))
 
+; !CHANGE!
  ; (defun load-frameg ()
  ;   "Loads ~/.emacs.frameg which should load the previous frame's geometry."
  ;   (let ((frameg-file (expand-file-name "~/.emacs.frameg")))
  ;     (when (file-readable-p frameg-file)
  ;       (load-file frameg-file))))
-
+;
  ;                                         ; Special work to do ONLY when there is a window system being used
  ; (if window-system (progn
  ;                     (add-hook 'after-init-hook 'load-frameg)
  ;                     (add-hook 'kill-emacs-hook 'save-frameg)))
+;
+ ; (if (daemonp)
+ ;     (add-hook 'after-make-frame-functions
+ ;               (lambda (frame)
+ ;                 (select-frame frame)
+ ;                 (load-frameg)
+ ;                 ))
+ ;   (load-frameg))
+
 #+end_src
 
 * Package management
@@ -73,7 +83,7 @@
   #+end_src
 
 * Text edit settings
-
+** Defaults
 #+Begin_src emacs-lisp
   (setq-default
    c-basic-offset 4
@@ -88,8 +98,6 @@
 
   (column-number-mode)
 
-  (use-package transpose-frame)
-
   ;; Enable line numbers for some modes
   (dolist (mode '(text-mode-hook
                   prog-mode-hook
@@ -98,22 +106,35 @@
 
   ;; Override some modes which derive from the above
   (dolist (mode '(org-mode-hook))
+
     (add-hook mode (lambda () (display-line-numbers-mode 0))))
+  ;; Show only one active window when opening multiple files at the same time.
+  (add-hook 'window-setup-hook 'delete-other-windows)
 
+  (fset 'yes-or-no-p 'y-or-n-p)
+
+  ;; Always move cursor to help window
+  (setq help-window-select t)
+#+end_src
+
+** Hide buffers
+#+Begin_src emacs-lisp
   ;; Removes *scratch* from buffer after the mode has been set.
-  (defun remove-scratch-buffer ()
-    (if (get-buffer "*scratch*")
-        (kill-buffer "*scratch*")))
+;  (defun remove-scratch-buffer ()
+;    (setq-default message-log-max nil)
+;    (if (get-buffer "*scratch*")
+;        (with-current-buffer "*scratch*"
+;          (rename-buffer " *scratch*"))))
+;  (add-hook 'after-change-major-mode-hook 'remove-scratch-buffer)
 
-  (add-hook 'after-change-major-mode-hook 'remove-scratch-buffer)
-
-  (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
+  ;(setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
 
   ;; Removes *messages* from the buffer.
   (defun remove-messages-buffer ()
     (setq-default message-log-max nil)
     (if (get-buffer "*Messages*")
-        (kill-buffer "*Messages*")))
+        (with-current-buffer "*Messages*"
+          (rename-buffer " *Messages*"))))
   (add-hook 'after-change-major-mode-hook 'remove-messages-buffer)
 
 
@@ -137,22 +158,23 @@
 
   ;; Don't show *Buffer list* when opening multiple files at the same time.
   (setq inhibit-startup-buffer-menu t)
-
-  ;; Show only one active window when opening multiple files at the same time.
-  (add-hook 'window-setup-hook 'delete-other-windows)
-
-  (fset 'yes-or-no-p 'y-or-n-p)
-
-  ;; Always move cursor to help window
-  (setq help-window-select t)
-
 #+end_src
 
+** Clipboard
 Prevent emacs from contaminating system clipboard.
 #+begin_src emacs-lisp
   (setq x-select-enable-clipboard nil)
   (setq x-select-enable-primary nil)
 #+end_src
+
+** Aggressive indent
+
+#+begin_src emacs-lisp
+  (use-package aggressive-indent
+    :ensure t
+    :config
+    (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode))
+    #+end_src
 
 * Customization
 ** Theme
@@ -202,7 +224,7 @@ Prevent emacs from contaminating system clipboard.
 #+begin_src emacs-lisp
   (setq custom-safe-themes t)
   (setq nano-fonts-use t)
-  (load-theme 'doom-nord-aurora t)
+  (load-theme 'modus-operandi t)
 
   (defun niva/disable-bold-font-lock ()
     "Disable bold font-faces"
@@ -403,16 +425,34 @@ Only use variable-pitch if explicitly called.
 #+end_src
 
 #+begin_src emacs-lisp
-  (set-face-attribute 'default nil        :font "Roboto Mono 13" :weight 'unspecified)
-  ;(set-face-attribute 'fixed-pitch nil    :font "SF Mono 13" :weight 'unspecified :height 1.0)
-  (set-face-attribute 'fixed-pitch nil    :inherit 'default)
-  (set-face-attribute 'variable-pitch nil :font "Roboto Mono 13" :height 1.0)
-  ;(set-face-attribute 'variable-pitch nil :inherit 'default)
+  (defun set-fonts()
+    (set-face-attribute 'default nil        :font "Roboto Mono 13")
+    (set-face-attribute 'fixed-pitch nil    :font "Roboto Mono 13" :height 1.0)
+    (set-face-attribute 'variable-pitch nil :font "Roboto Mono 13" :height 1.0))
 
   ;(when (eq (nth 3 (assq 'geometry (car (display-monitor-attributes-list)))) 3840)
   ;  (set-face-attribute 'default nil :font "Mononoki 18"))
 
+(defun remap-faces-default-attributes ()
+   (let ((family (face-attribute 'default :family))
+         (height (face-attribute 'default :height)))
+     (mapcar (lambda (face)
+              (face-remap-add-relative
+               face :family family :weight 'unspecified :height height))
+          (face-list))))
 
+  (if (daemonp)
+      (add-hook 'after-make-frame-functions
+                (lambda (frame)
+                  (select-frame frame)
+                  (set-fonts)
+                  ))
+    (set-fonts))
+
+;!CHANGE
+(when (display-graphic-p)
+   (add-hook 'minibuffer-setup-hook 'remap-faces-default-attributes)
+      (add-hook 'change-major-mode-after-body-hook 'remap-faces-default-attributes))
 
 
   (use-package hide-mode-line)
@@ -424,22 +464,28 @@ Only use variable-pitch if explicitly called.
   (use-package dashboard
   :ensure t
   :defer t
-    :init 
+    :init
     (dashboard-setup-startup-hook)
     :config
-    (setq ;dashboard-banner-logo-title "Emacs"
-     dashboard-startup-banner 4
+    (setq
+     dashboard-startup-banner nil
+     dashboard-set-init-info nil
+     dashboard-banner-logo-title (concat "\n\n   Welcome to GNU Emacs " emacs-version
+"\n\n\nFind file               (SPC .)"
+"\nSwitch buffers          (SPC b)"
+"\nFind recent files       (SPC p e)"
+"\nEval region             (SPC e r)")
+
      dashboard-set-navigator t
      dashboard-set-footer nil
-     dashboard-items '((bookmarks . 5)
-                       (recents  . 6)
-                       (projects . 3))
+     dashboard-items '((bookmarks . 5) (projects . 3) (recents . 5))
      dashboard-center-content t
      dashboard-filter-agenda-entry 'dashboard-no-filter-agenda)
-
     )
+(set-face-attribute 'dashboard-text-banner nil :inherit 'default :height 0.1 :font "PT Mono 8")
 
-                                          (global-unset-key [tab])
+
+                                        (global-unset-key [tab])
                                           (global-unset-key (kbd "C-e"))
                                           (set-face-attribute 'dashboard-items-face nil :inherit 'default)
                                           (set-face-attribute 'dashboard-heading-face nil :inherit 'default)
@@ -477,7 +523,7 @@ Only use variable-pitch if explicitly called.
 
     (evil-mode)
     )
-
+  (use-package transpose-frame)
 #+end_src
 
 *** Evil collection
@@ -568,16 +614,23 @@ simpleclip-mode radically simplifies clipboard handling: the system clipboard an
   (simpleclip-mode 1)
 #+end_src
 
-** general
+** which-key
 
 #+begin_src emacs-lisp
+  (use-package which-key
+    :ensure t
+    :config
+                                          ;(setq which-key-idle-delay 0.01)
+                                          ;(setq which-key-idle-secondary-delay 0.01)
+    (which-key-mode))
+
   (nvmap :keymaps 'override :prefix "SPC"
     "SPC"   '(counsel-M-x :which-key "M-x")
     "c c"   '(compile :which-key "Compile")
     "c C"   '(recompile :which-key "Recompile")
     "h r r" '((lambda () (interactive) (load-file "~/.emacs.d/init.el")) :which-key "Reload emacs config")
-    "t t"   '(toggle-truncate-lines :which-key "Toggle truncate lines"))
-  (nvmap :keymaps 'override :prefix "SPC"
+    "t t"   '(toggle-truncate-lines :which-key "Toggle truncate lines")
+
     "m *"   '(org-ctrl-c-star :which-key "Org-ctrl-c-star")
     "m +"   '(org-ctrl-c-minus :which-key "Org-ctrl-c-minus")
     "m ."   '(counsel-org-goto :which-key "Counsel org goto")
@@ -593,16 +646,15 @@ simpleclip-mode radically simplifies clipboard handling: the system clipboard an
     "m I"   '(org-toggle-inline-images :which-key "Org toggle inline imager")
     "m T"   '(org-todo-list :which-key "Org todo list")
     "o a"   '(org-agenda :which-key "Org agenda")
+    "b"     '(ivy-switch-buffer :which-key "ivy-switch-buffer")
+    "h p"   '(ff-find-other-file :which-key "ff-find-other-file")
+
+    "p e"   '(projectile-recentf :which-key "projectile-recentf")
+    "e r"   'eval-region :which-key "eval-region")
     "conf"  '((lambda () (interactive) (find-file "~/.config/emacs/config.org")) :which-key "Open config.org")
     )
 #+end_src
 
-** which key
-
-#+begin_src emacs-lisp
-  (use-package which-key
-    :ensure t)
-  (which-key-mode)
 #+end_src
 
 ** ivy + counsel
@@ -652,16 +704,16 @@ simpleclip-mode radically simplifies clipboard handling: the system clipboard an
           (bottom-fringe . 12)
           ))
 
-  (ivy-posframe-mode 1)
+                                          ;(ivy-posframe-mode 1)
 
   (use-package ivy-rich
     :after ivy
     :config
-    (ivy-rich-modify-columns
-     'counsel-M-x
-     '((counsel-M-x-transformer (:width 40))
-       (ivy-rich-counsel-function-docstring (:width 80))))
-
+                                          ;(ivy-rich-modify-columns
+                                          ;'counsel-M-x
+                                          ;'((counsel-M-x-transformer (:width 40))
+                                          ;(ivy-rich-counsel-function-docstring (:width 80))))
+                                          ;
     )
 
   (ivy-rich-mode 1)
@@ -954,6 +1006,14 @@ Always follow symlinks
   (add-to-list 'org-structure-template-alist '("cpp" . "src cpp"))
 #+end_src
 
+* Org-roam
+#+begin_src emacs-lisp
+  (use-package org-roam
+    :ensure t)
+  (setq org-roam-directory (file-truename "~/Documents/Org/Roam"))
+  (org-roam-db-autosync-mode)
+
+#+end_src
 * Term mode
 
 #+begin_src emacs-lisp
@@ -1045,7 +1105,8 @@ Get path from shell
      (expand-file-name "config.el" user-emacs-directory)
      (expand-file-name "config.elc" user-emacs-directory)))
 
-  ;(add-hook 'kill-emacs-hook 'compile-config)
+; Enable if not using emacs daemon
+;(add-hook 'kill-emacs-hook 'compile-config)
 
   (add-to-list 'org-babel-default-header-args
                '(:noweb . "yes"))
@@ -1191,6 +1252,7 @@ Get path from shell
 
 ** clang-format
 #+begin_src emacs-lisp
+
   (use-package clang-format
     :ensure t
     :init
@@ -1222,4 +1284,7 @@ Get path from shell
 *** Mermaid
 #+begin_src emacs-lisp
   (use-package mermaid-mode)
+    (use-package vterm
+     :ensure t)
+
 #+end_src
