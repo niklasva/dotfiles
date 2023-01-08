@@ -39,6 +39,7 @@
  ;       (when (file-writable-p frameg-file)
  ;         (write-file frameg-file)))))
 
+; !CHANGE!
  ; (defun load-frameg ()
  ;   "Loads ~/.emacs.frameg which should load the previous frame's geometry."
  ;   (let ((frameg-file (expand-file-name "~/.emacs.frameg")))
@@ -119,14 +120,14 @@
 ** Hide buffers
 #+Begin_src emacs-lisp
   ;; Removes *scratch* from buffer after the mode has been set.
-  ;(defun remove-scratch-buffer ()
-  ;  (setq-default message-log-max nil)
-  ;  (if (get-buffer "*scratch*")
-  ;      (with-current-buffer "*scratch*"
-  ;        (rename-buffer " *scratch*"))))
-  ;(add-hook 'after-change-major-mode-hook 'remove-scratch-buffer)
+;  (defun remove-scratch-buffer ()
+;    (setq-default message-log-max nil)
+;    (if (get-buffer "*scratch*")
+;        (with-current-buffer "*scratch*"
+;          (rename-buffer " *scratch*"))))
+;  (add-hook 'after-change-major-mode-hook 'remove-scratch-buffer)
 
-  (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
+(setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
 
   ;; Removes *messages* from the buffer.
   (defun remove-messages-buffer ()
@@ -171,42 +172,13 @@ Prevent emacs from contaminating system clipboard.
 #+begin_src emacs-lisp
   (use-package aggressive-indent
     :ensure t
-    :config 
+    :config
     (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode))
     #+end_src
 
 * Customization
 ** Theme
-
-#+begin_src emacs-lisp
-  (defun fix-window-divider-color ()
-    (interactive)
-    (set-face-foreground 'window-divider (face-attribute 'default :background))
-    (set-face-foreground 'window-divider-first-pixel (face-attribute 'default :background))
-    (set-face-foreground 'window-divider-last-pixel (face-attribute 'default :background))
-    )
-
-  (defun ap/load-doom-theme (theme)
-    "Disable active themes and load a Doom theme."
-    (interactive (list (intern (completing-read "Theme: "
-                                                (->> (custom-available-themes)
-                                                     (-map #'symbol-name)
-                                                     (--select (string-prefix-p "doom-" it)))))))
-    (ap/switch-theme theme))
-
-  (defun ap/switch-theme (theme)
-    "DisaBle active themes and load THEME."
-    (interactive (list (intern (completing-read "Theme: "
-                                                (->> (custom-available-themes)
-                                                     (-map #'symbol-name))))))
-    (mapc #'disable-theme custom-enabled-themes)
-    (fix-window-divider-color)
-    (load-theme theme 'no-confirm)
-    )
-#+end_src
-
-#+begin_src emacs-lisp
-
+*** Theme packages
   (use-package helm-themes :ensure nil)
   (use-package sublime-themes :ensure nil)
   (use-package leuven-theme :ensure nil)
@@ -217,13 +189,53 @@ Prevent emacs from contaminating system clipboard.
     :ensure nil
     :custom (setq doom-themes-enable-bold nil
                   doom-themes-enable-italic nil))
+*** Modus
+#+begin_src emacs-lisp
+  (setq modus-themes-fringes 'subtle)
+  (setq modus-themes-mode-line (quote (borderless accented 0.9)))
+  (setq modus-themes-hl-line (quote (accented)))
+  (setq modus-themes-tabs-accented t)
+#+end_src
+*** Window divider fix
+#+begin_src emacs-lisp
+  (defun niva/fix-window-divider-color ()
+    "Correct window divider after switching theme"
+     (interactive)
+     (set-face-foreground 'window-divider (face-attribute 'default :background))
+     (set-face-foreground 'window-divider-first-pixel (face-attribute 'default :background))
+     (set-face-foreground 'window-divider-last-pixel (face-attribute 'default :background)))
+#+end_src
 
+*** Theme switcher
+#+begin_src emacs-lisp
+  (defun niva/switch-theme (theme)
+    "Disable theme and switch"
+    (interactive (list (intern (completing-read "Theme: "
+                                                (->> (custom-available-themes)
+                                                     (-map #'symbol-name))))))
+    (mapc #'disable-theme custom-enabled-themes)
+    (load-theme theme 'no-confirm)
+    (niva/fix-window-divider-color)
+    )
+#+end_src
+
+
+*** Load theme
+#+begin_src emacs-lisp
   (setq custom-safe-themes t)
-
   (setq nano-fonts-use t)
-  (load-theme 'doom-nord-aurora t)
+  (load-theme 'modus-operandi t)
 
-  #+end_src
+  (defun niva/disable-bold-font-lock ()
+    "Disable bold font-faces"
+    (interactive)
+      (mapc (lambda (face)
+              (when face
+                (set-face-bold-p face nil)))
+            (face-list)))
+
+    (niva/disable-bold-font-lock)
+#+end_src
 
 ** GUI settings
 
@@ -240,15 +252,11 @@ Prevent emacs from contaminating system clipboard.
 
   (global-visual-line-mode t)
 
+  (setq-default left-fringe-width  2)
+  (setq-default right-fringe-width 2)
+
 #+end_src
 
-Prevent accidental close.
-
-#+begin_src emacs-lisp
-  (setq confirm-kill-emacs 'y-or-n-p)
-#+end_src
-
-** Window properties
 #+begin_src emacs-lisp
   (setq default-frame-alist
         (append (list
@@ -257,18 +265,18 @@ Prevent accidental close.
                  '(min-width  . 1)
                  '(width      . 81)
                  '(vertical-scroll-bars . nil)
-                 '(internal-border-width . 24)
-                 '(left-fringe    . 1)
-                 '(right-fringe   . 1)
+                 '(internal-border-width . 16)
+                 '(left-fringe    . 3)
+                 '(right-fringe   . 3)
                  '(tool-bar-lines . 0)
-                 '(menu-bar-lines . 0)
                  '(ns-transparent-titlebar . t)
                  '(ns-appearance . dark)
-                 '(undecorated-round . t))))
+                 '(undecorated-round . t)
+                 )))
 
-  (setq window-divider-default-right-width 32)
-  (setq window-divider-default-bottom-width 4)
-  ;(setq window-divider-default-places 'right-only)
+                                          ;(setq window-divider-default-right-width 32)
+                                          ;(setq window-divider-default-bottom-width 4)
+                                          ;(setq window-divider-default-places 'right-only)
   (setq window-divider-default-places t)
 
   (setq ns-use-thin-smoothing t
@@ -282,19 +290,72 @@ Prevent accidental close.
 
   (window-divider-mode 1)
 
-  (fix-window-divider-color)
+  (niva/fix-window-divider-color)
   (setq frame-resize-pixelwise t)
+
+  (global-hl-line-mode)
+
+  (blink-cursor-mode -1)
+
+  (setq tab-bar-show t
+        tab-bar-auto-width-max '(120 . 20)
+        tab-bar-border 0
+        tab-bar-close-button-show nil
+        ;tab-bar-close-last-tab-choice 'tab-bar-mode-disable
+        tab-bar-close-tab-select 'recent
+        tab-bar-new-button-show nil
+        ;tab-bar-new-tab-choice "*dashboard*"
+        tab-bar-new-tab-to 'right
+        tab-bar-position t
+        tab-bar-tab-name-function 'tab-bar-tab-name-current
+        )
+
+  (set-face-attribute 'tab-bar nil
+   :box nil
+   :background (face-attribute 'default :background)
+  )
+
+  (set-face-attribute 'tab-bar-tab nil
+   :box nil
+   :background (face-attribute 'default :background)
+   :foreground (face-attribute 'font-lock-keyword-face :foreground)
+  )
+
+  (set-face-attribute 'tab-bar-tab-inactive nil
+   :box nil
+   :background (face-attribute 'default :background)
+   :foreground (face-attribute 'font-lock-comment-face :foreground)
+  )
+
+  ;(set-face-attribute 'tab-bar nil :box nil :background (face-attribute 'default :background))
+  ;(set-face-attribute 'tab-bar-tab nil :box nil :background (face-attribute 'default :background))
+  ;(set-face-attribute 'tab-bar-tab-inactive nil :box nil :background (face-attribute 'default :background))
+
+  (tab-bar-mode 1)
+
 #+end_src
+
+
+Prevent accidental close.
+
+#+begin_src emacs-lisp
+  (setq confirm-kill-emacs 'y-or-n-p)
+#+end_src
+
 
 ** Mode line
 
 #+begin_src emacs-lisp
   (use-package nano-modeline
-    :ensure t
-    :init (nano-modeline-mode))
-                                          ;(use-package mood-line
-                                          ;:ensure t
-                                          ;:init (mood-line-mode))
+    :config
+    (nano-modeline-mode))
+                                          ;  (use-package mood-line
+                                          ;    :config
+                                          ;    (setq-default mood-line-glyph-alist mood-line-glyphs-ascii)
+                                          ;    (mood-line-mode))
+
+                                          ;(setq-default header-line-format mode-line-format)
+                                          ;(setq-default mode-line-format nil)
 #+end_src
 
 Save colors for later use.
@@ -358,18 +419,19 @@ Save colors for later use.
 Only use variable-pitch if explicitly called.
 
 #+begin_src emacs-lisp
-  (defun variable-pitch-on ()
+  (defun niva/variable-pitch-on ()
     (interactive)
     (set-face-attribute 'variable-pitch nil :font "CMU Serif 14" :inherit 'default))
 #+end_src
 
 #+begin_src emacs-lisp
+  (defun set-fonts()
+    (set-face-attribute 'default nil        :font "Roboto Mono 13")
+    (set-face-attribute 'fixed-pitch nil    :font "Roboto Mono 13" :height 1.0)
+    (set-face-attribute 'variable-pitch nil :font "Roboto Mono 13" :height 1.0))
 
-  (add-to-list 'default-frame-alist '(font . "Iosevka Light 16"))
-  (defun set-fonts() 
-    (set-face-attribute 'default nil        :font "Iosevka Light 16")
-    (set-face-attribute 'fixed-pitch nil    :font "Iosevka Light 16" :height 1.0)
-    (set-face-attribute 'variable-pitch nil :font "Iosevka Light 16" :height 1.0))
+  ;(when (eq (nth 3 (assq 'geometry (car (display-monitor-attributes-list)))) 3840)
+  ;  (set-face-attribute 'default nil :font "Mononoki 18"))
 
 (defun remap-faces-default-attributes ()
    (let ((family (face-attribute 'default :family))
@@ -378,108 +440,57 @@ Only use variable-pitch if explicitly called.
               (face-remap-add-relative
                face :family family :weight 'unspecified :height height))
           (face-list))))
-          
+
   (if (daemonp)
       (add-hook 'after-make-frame-functions
                 (lambda (frame)
                   (select-frame frame)
                   (set-fonts)
+                  (niva/fix-window-divider-color)
                   ))
     (set-fonts))
 
+;!CHANGE
 (when (display-graphic-p)
    (add-hook 'minibuffer-setup-hook 'remap-faces-default-attributes)
       (add-hook 'change-major-mode-after-body-hook 'remap-faces-default-attributes))
 
 
+  (use-package hide-mode-line)
 
 #+end_src
 
 ** Dashboard
 #+begin_src emacs-lisp
   (use-package dashboard
+  :ensure t
+  :defer t
     :init
+    (dashboard-setup-startup-hook)
     :config
     (setq
-     dashboard-startup-banner 4
-     dashboard-set-init-info nil 
-     dashboard-banner-logo-title (message (substring (emacs-version) 0 14))
+     dashboard-startup-banner nil
+     dashboard-set-init-info nil
+     dashboard-banner-logo-title (concat "\n\n   Welcome to GNU Emacs " emacs-version
+"\n\n\nFind file               (SPC .)"
+"\nSwitch buffers          (SPC b)"
+"\nFind recent files       (SPC p e)"
+"\nEval region             (SPC e r)")
+
      dashboard-set-navigator t
      dashboard-set-footer nil
-     dashboard-items '((bookmarks . 5) (recents  . 6) (projects . 3))
+     dashboard-items '((bookmarks . 5) (projects . 3) (recents . 5))
      dashboard-center-content t
      dashboard-filter-agenda-entry 'dashboard-no-filter-agenda)
-    (dashboard-setup-startup-hook)
+    )
+(set-face-attribute 'dashboard-text-banner nil :inherit 'default :height 0.1 :font "PT Mono 8")
 
-    (global-unset-key [tab])
-    (global-unset-key (kbd "C-e")))
 
-  (set-face-attribute 'dashboard-items-face nil :inherit 'default)
-  (set-face-attribute 'dashboard-heading-face nil :inherit 'default)
-#+end_src
+                                        (global-unset-key [tab])
+                                          (global-unset-key (kbd "C-e"))
+                                          (set-face-attribute 'dashboard-items-face nil :inherit 'default)
+                                          (set-face-attribute 'dashboard-heading-face nil :inherit 'default)
 
-** Centaur Tabs
-
-#+begin_src emacs-lisp
-  ; (use-package powerline)
-  ; (use-package centaur-tabs
-  ;   :demand
-
-  ;   :init
-  ;   (setq ns-use-srgb-colorspace nil)
-  ;   (setq centaur-tabs-plain-icons t)
-  ;   (setq centaur-tabs-set-icons t)
-  ;   (setq centaur-tabs-set-modified-marker t)
-  ;   (setq centaur-tabs-style "box")
-  ;   (setq centaur-tabs-set-bar 'under)
-  ;   (setq x-underline-at-descent-line t)
-
-  ;   :config
-  ;   ;(centaur-tabs-mode t)
-  ;   ;(centaur-tabs-headline-match)
-
-  ;   :bind
-  ;   ("C-<tab>" . centaur-tabs-forward)
-  ;   ("C-S-<tab>" . centaur-tabs-backward))
-
-  ; (defun centaur-tabs-buffer-groups ()
-  ;   "`centaur-tabs-buffer-groups' control buffers' group rules.
-
-  ;                         Group centaur-tabs with mode if buffer is derived from `eshell-mode' `emacs-lisp-mode' `dired-mode' `org-mode' `magit-mode'.
-  ;                         All buffer name start with * will group to \"Emacs\".
-  ;                         Other buffer group by `centaur-tabs-get-group-name' with project name."
-  ;   (list
-  ;    (cond
-  ;     ((or (string-match ".*" (substring (buffer-name) 0 1))
-  ;          (memq major-mode '(magit-process-mode
-  ;                             magit-status-mode
-  ;                             magit-diff-mode
-  ;                             magit-log-mode
-  ;                             magit-file-mode
-  ;                             magit-blob-mode
-  ;                             magit-blame-mode
-  ;                             )))
-  ;      "Emacs")
-  ;     ((derived-mode-p 'prog-mode)
-  ;      "Editing")
-  ;     ((derived-mode-p 'dired-mode)
-  ;      "Dired")
-  ;     ((memq major-mode '(helpful-mode
-  ;                         help-mode))
-  ;      "Help")
-  ;     ((memq major-mode '(org-mode
-  ;                         org-agenda-clockreport-mode
-  ;                         org-src-mode
-  ;                         org-agenda-mode
-  ;                         org-beamer-mode
-  ;                         org-indent-mode
-  ;                         org-bullets-mode
-  ;                         org-cdlatex-mode
-  ;                         org-agenda-log-mode
-  ;                         diary-mode))
-  ;      "OrgMode")
-  ;     (t
-  ;      (centaur-tabs-get-group-name (current-buffer))))))
 
 #+end_src
 
@@ -540,9 +551,11 @@ Only use variable-pitch if explicitly called.
   (global-set-key (kbd "C--") 'text-scale-decrease)
   (global-set-key (kbd "C-=") 'text-scale-set)
 
-  (global-set-key (kbd "§") 'evil-invert-char)
+  (global-set-key (kbd "C-j") nil)
+  (global-set-key (kbd "C-k") nil)
 
-  (global-set-key (kbd "s-q") 'evil-invert-char)
+
+  (global-set-key (kbd "§") 'evil-invert-char)
 
   (define-key evil-normal-state-map (kbd "U") 'evil-redo)
 
@@ -555,8 +568,16 @@ Only use variable-pitch if explicitly called.
   (define-key evil-normal-state-map (kbd "C-w |") 'evil-window-vsplit)
   (define-key evil-normal-state-map (kbd "C-w SPC") 'transpose-frame)
 
+  (define-key evil-normal-state-map (kbd "C-w n") 'tab-next)
+  (define-key evil-normal-state-map (kbd "C-w c") 'tab-new)
+
+  (define-key evil-normal-state-map (kbd "SPC b") 'ivy-switch-buffer)
+  (define-key evil-normal-state-map (kbd "SPC h p") 'ff-find-other-file)
+
   (evil-define-key 'treemacs treemacs-mode-map (kbd "C-a C-x")    #'evil-delete-buffer)
   (evil-define-key 'treemacs treemacs-mode-map (kbd "C-a C-e")    #'evil-delete-buffer)
+
+  (global-set-key (kbd "s-q") 'save-buffers-kill-terminal)
 
   (defvar dashboard-mode-map
     (let ((map (make-sparse-keymap)))
@@ -630,6 +651,9 @@ simpleclip-mode radically simplifies clipboard handling: the system clipboard an
     "o a"   '(org-agenda :which-key "Org agenda")
     "b"     '(ivy-switch-buffer :which-key "ivy-switch-buffer")
     "h p"   '(ff-find-other-file :which-key "ff-find-other-file")
+
+    "p e"   '(projectile-recentf :which-key "projectile-recentf")
+    "e r"   'eval-region :which-key "eval-region")
     "conf"  '((lambda () (interactive) (find-file "~/.config/emacs/config.org")) :which-key "Open config.org")
     )
 #+end_src
@@ -799,7 +823,7 @@ simpleclip-mode radically simplifies clipboard handling: the system clipboard an
   (use-package dired-single)
 
   (nvmap :states '(normal visual) :keymaps 'override :prefix "SPC"
-    "d d" '(dired :which-key "Open dired")
+    "d d" '(dired-single-magic-buffer :which-key "Open dired")
     "d j" '(dired-jump :which-key "Dired jump to current")
     "d p" '(peep-dired :which-key "Peep-dired"))
 
@@ -883,15 +907,15 @@ Always follow symlinks
 ** Org-mode appearance
 *** Mixed-pitch
 #+begin_src emacs-lisp
-  (use-package mixed-pitch
-    :hook
-    (text-mode . mixed-pitch-mode))
+  ;(use-package mixed-pitch
+  ;  :hook
+  ;  (text-mode . mixed-pitch-mode))
 #+end_src
 
 *** Font
 *** TeX style
 #+begin_src emacs-lisp
-  (defun org-tex-style()
+  (defun niva/org-tex-style()
     (interactive)
     (setq org-hidden-keywords '(title))
 
@@ -989,7 +1013,6 @@ Always follow symlinks
 #+begin_src emacs-lisp
   (use-package org-roam
     :ensure t)
-  ;(make-directory "~/Documents/Org/Roam")
   (setq org-roam-directory (file-truename "~/Documents/Org/Roam"))
   (org-roam-db-autosync-mode)
 
@@ -1093,7 +1116,7 @@ Get path from shell
 
 #+end_src
 
-** Tweak garbage collection
+*{* Tweak garbage collection
 #+begin_src emacs-lisp
 
   (defmacro k-time (&rest body)
@@ -1115,7 +1138,7 @@ Get path from shell
 ** Git gutter
 
 #+begin_src emacs-lisp
-  (use-package git-gutter
+  (use-package git-gutter-fringe
     :ensure t
     :config
     (custom-set-variables
@@ -1124,6 +1147,9 @@ Get path from shell
      '(git-gutter:deleted-sign "┊"))
     :init
     (global-git-gutter-mode +1))
+
+                                          ; (use-package git-gutter
+
 
 #+end_src
 
@@ -1184,12 +1210,13 @@ Get path from shell
   (use-package lsp-ui
     :ensure t
     :config
-    (setq lsp-ui-doc-show-with-cursor nil
+    (setq lsp-ui-doc-show-with-cursor t
           lsp-ui-doc-show-with-mouse nil
-          lsp-ui-doc-position 'bottom
-          lsp-ui-doc-delay 0.1
+          lsp-ui-doc-position 'at-point
+          lsp-ui-doc-delay 4
           lsp-ui-sideline-enable t
-          ))
+          )
+    )
 
   (use-package company-box
     :ensure t
