@@ -39,7 +39,6 @@
  ;       (when (file-writable-p frameg-file)
  ;         (write-file frameg-file)))))
 
-; !CHANGE!
  ; (defun load-frameg ()
  ;   "Loads ~/.emacs.frameg which should load the previous frame's geometry."
  ;   (let ((frameg-file (expand-file-name "~/.emacs.frameg")))
@@ -120,14 +119,14 @@
 ** Hide buffers
 #+Begin_src emacs-lisp
   ;; Removes *scratch* from buffer after the mode has been set.
-;  (defun remove-scratch-buffer ()
-;    (setq-default message-log-max nil)
-;    (if (get-buffer "*scratch*")
-;        (with-current-buffer "*scratch*"
-;          (rename-buffer " *scratch*"))))
-;  (add-hook 'after-change-major-mode-hook 'remove-scratch-buffer)
+  ;(defun remove-scratch-buffer ()
+  ;  (setq-default message-log-max nil)
+  ;  (if (get-buffer "*scratch*")
+  ;      (with-current-buffer "*scratch*"
+  ;        (rename-buffer " *scratch*"))))
+  ;(add-hook 'after-change-major-mode-hook 'remove-scratch-buffer)
 
-  ;(setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
+  (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
 
   ;; Removes *messages* from the buffer.
   (defun remove-messages-buffer ()
@@ -367,34 +366,32 @@ Only use variable-pitch if explicitly called.
 
 #+begin_src emacs-lisp
 
-;!CHANGE
   (add-to-list 'default-frame-alist '(font . "Iosevka Light 16"))
   (defun set-fonts() 
     (set-face-attribute 'default nil        :font "Iosevka Light 16")
     (set-face-attribute 'fixed-pitch nil    :font "Iosevka Light 16" :height 1.0)
     (set-face-attribute 'variable-pitch nil :font "Iosevka Light 16" :height 1.0))
 
-;!CHANGE
-(defun remap-faces-default-attributes ()
-   (let ((family (face-attribute 'default :family))
-         (height (face-attribute 'default :height)))
-     (mapcar (lambda (face)
-              (face-remap-add-relative
-               face :family family :weight 'unspecified :height height))
-          (face-list))))
-          
+  (defun remap-faces-default-attributes ()
+    (let ((family (face-attribute 'default :family))
+          (height (face-attribute 'default :height)))
+      (mapcar (lambda (face)
+                (face-remap-add-relative
+                 face :family family :weight 'unspecified :height height))
+              (face-list))))
+
   (if (daemonp)
       (add-hook 'after-make-frame-functions
                 (lambda (frame)
                   (select-frame frame)
                   (set-fonts)
+                  (fix-window-divider-color)
                   ))
     (set-fonts))
 
-;!CHANGE
-(when (display-graphic-p)
-   (add-hook 'minibuffer-setup-hook 'remap-faces-default-attributes)
-      (add-hook 'change-major-mode-after-body-hook 'remap-faces-default-attributes))
+  (when (display-graphic-p)
+    (add-hook 'minibuffer-setup-hook 'remap-faces-default-attributes)
+    (add-hook 'change-major-mode-after-body-hook 'remap-faces-default-attributes))
 
 
 
@@ -547,6 +544,11 @@ Only use variable-pitch if explicitly called.
 
   (global-set-key (kbd "§") 'evil-invert-char)
 
+  (global-set-key (kbd "s-q") 'save-buffers-kill-terminal)
+
+
+  
+
   (define-key evil-normal-state-map (kbd "U") 'evil-redo)
 
   (define-key evil-normal-state-map (kbd "C-a C-e") 'treemacs-select-window)
@@ -633,7 +635,6 @@ simpleclip-mode radically simplifies clipboard handling: the system clipboard an
     "o a"   '(org-agenda :which-key "Org agenda")
     "b"     '(ivy-switch-buffer :which-key "ivy-switch-buffer")
     "h p"   '(ff-find-other-file :which-key "ff-find-other-file")
-    ;!CHANGE
     "conf"  '((lambda () (interactive) (find-file "~/.config/emacs/config.org")) :which-key "Open config.org")
     )
 #+end_src
