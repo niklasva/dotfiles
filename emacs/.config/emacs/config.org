@@ -39,7 +39,6 @@
  ;       (when (file-writable-p frameg-file)
  ;         (write-file frameg-file)))))
 
-; !CHANGE!
  ; (defun load-frameg ()
  ;   "Loads ~/.emacs.frameg which should load the previous frame's geometry."
  ;   (let ((frameg-file (expand-file-name "~/.emacs.frameg")))
@@ -297,40 +296,38 @@ Prevent emacs from contaminating system clipboard.
 
   (blink-cursor-mode -1)
 
-  (setq tab-bar-show t
-        tab-bar-auto-width-max '(120 . 20)
-        tab-bar-border 0
-        tab-bar-close-button-show nil
-        ;tab-bar-close-last-tab-choice 'tab-bar-mode-disable
-        tab-bar-close-tab-select 'recent
-        tab-bar-new-button-show nil
-        ;tab-bar-new-tab-choice "*dashboard*"
-        tab-bar-new-tab-to 'right
-        tab-bar-position t
-        tab-bar-tab-name-function 'tab-bar-tab-name-current
-        )
+  (defun niva/tab-bar-config ()
+    (setq tab-bar-show t
+          tab-bar-auto-width-max '(120 . 20)
+          tab-bar-border 0
+          tab-bar-close-button-show nil
+                                          ;tab-bar-close-last-tab-choice 'tab-bar-mode-disable
+          tab-bar-close-tab-select 'recent
+          tab-bar-new-button-show nil
+                                          ;tab-bar-new-tab-choice "*dashboard*"
+          tab-bar-new-tab-to 'right
+          tab-bar-position t
+          tab-bar-tab-name-function 'tab-bar-tab-name-current
+          )
 
-  (set-face-attribute 'tab-bar nil
-   :box nil
-   :background (face-attribute 'default :background)
-  )
+    (set-face-attribute 'tab-bar nil
+                        :box nil
+                        :background (face-attribute 'default :background)
+                        )
 
-  (set-face-attribute 'tab-bar-tab nil
-   :box nil
-   :background (face-attribute 'default :background)
-   :foreground (face-attribute 'font-lock-keyword-face :foreground)
-  )
+    (set-face-attribute 'tab-bar-tab nil
+                        :box nil
+                        :background (face-attribute 'default :background)
+                        :foreground (face-attribute 'font-lock-keyword-face :foreground)
+                        )
 
-  (set-face-attribute 'tab-bar-tab-inactive nil
-   :box nil
-   :background (face-attribute 'default :background)
-   :foreground (face-attribute 'font-lock-comment-face :foreground)
-  )
-
-  ;(set-face-attribute 'tab-bar nil :box nil :background (face-attribute 'default :background))
-  ;(set-face-attribute 'tab-bar-tab nil :box nil :background (face-attribute 'default :background))
-  ;(set-face-attribute 'tab-bar-tab-inactive nil :box nil :background (face-attribute 'default :background))
-
+    (set-face-attribute 'tab-bar-tab-inactive nil
+                        :box nil
+                        :background (face-attribute 'default :background)
+                        :foreground (face-attribute 'font-lock-comment-face :foreground)
+                        )
+    )
+  (niva/tab-bar-config)
   (tab-bar-mode 1)
 
 #+end_src
@@ -430,16 +427,16 @@ Only use variable-pitch if explicitly called.
     (set-face-attribute 'fixed-pitch nil    :font "Roboto Mono 13" :height 1.0)
     (set-face-attribute 'variable-pitch nil :font "Roboto Mono 13" :height 1.0))
 
-  ;(when (eq (nth 3 (assq 'geometry (car (display-monitor-attributes-list)))) 3840)
-  ;  (set-face-attribute 'default nil :font "Mononoki 18"))
+                                          ;(when (eq (nth 3 (assq 'geometry (car (display-monitor-attributes-list)))) 3840)
+                                          ;  (set-face-attribute 'default nil :font "Mononoki 18"))
 
-(defun remap-faces-default-attributes ()
-   (let ((family (face-attribute 'default :family))
-         (height (face-attribute 'default :height)))
-     (mapcar (lambda (face)
-              (face-remap-add-relative
-               face :family family :weight 'unspecified :height height))
-          (face-list))))
+  (defun remap-faces-default-attributes ()
+    (let ((family (face-attribute 'default :family))
+          (height (face-attribute 'default :height)))
+      (mapcar (lambda (face)
+                (face-remap-add-relative
+                 face :family family :weight 'unspecified :height height))
+              (face-list))))
 
   (if (daemonp)
       (add-hook 'after-make-frame-functions
@@ -447,13 +444,14 @@ Only use variable-pitch if explicitly called.
                   (select-frame frame)
                   (set-fonts)
                   (niva/fix-window-divider-color)
+                  (niva/tab-bar-config)
+
                   ))
     (set-fonts))
 
-;!CHANGE
-(when (display-graphic-p)
-   (add-hook 'minibuffer-setup-hook 'remap-faces-default-attributes)
-      (add-hook 'change-major-mode-after-body-hook 'remap-faces-default-attributes))
+  (when (display-graphic-p)
+    (add-hook 'minibuffer-setup-hook 'remap-faces-default-attributes)
+    (add-hook 'change-major-mode-after-body-hook 'remap-faces-default-attributes))
 
 
   (use-package hide-mode-line)
