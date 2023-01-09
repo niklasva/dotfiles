@@ -114,6 +114,11 @@
   (setq help-window-select t)
 #+end_src
 
+Remove trailing spaces
+#+begin_src emacs-lisp
+  (add-hook 'before-save-hook
+          'delete-trailing-whitespace)
+#+end_src
 ** Hide buffers
 #+Begin_src emacs-lisp
   ;; Removes *scratch* from buffer after the mode has been set.
