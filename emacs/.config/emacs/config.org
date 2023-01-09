@@ -1145,10 +1145,6 @@ Get path from shell
      '(git-gutter:deleted-sign "┊"))
     :init
     (global-git-gutter-mode +1))
-
-  ;; (use-package git-gutter
-
-
 #+end_src
 
 * Tools
