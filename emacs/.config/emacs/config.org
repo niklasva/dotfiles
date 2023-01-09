@@ -13,51 +13,49 @@
 ** Remember window
 
 #+begin_src emacs-lisp
- ; ;; Custom functions/hooks for persisting/loading frame geometry upon save/load
- ; (defun save-frameg ()
- ;   "Gets the current frame's geometry and saves to ~/.emacs.frameg."
- ;   (let ((frameg-font (frame-parameter (selected-frame) 'font))
- ;         (frameg-left (frame-parameter (selected-frame) 'left))
- ;         (frameg-top (frame-parameter (selected-frame) 'top))
- ;         (frameg-width (frame-parameter (selected-frame) 'width))
- ;         (frameg-height (frame-parameter (selected-frame) 'height))
- ;         (frameg-file (expand-file-name "~/.emacs.frameg")))
- ;     (with-temp-buffer
- ;       ;; Turn off backup for this file
- ;       (make-local-variable 'make-backup-files)
- ;       (setq make-backup-files nil)
- ;       (insert
- ;        ";;; This file stores the previous emacs frame's geometry.\n"
- ;        ";;; Last generated " (current-time-string) ".\n"
- ;        "(setq initial-frame-alist\n"
- ;        ;; " '((font . \"" frameg-font "\")\n"
- ;        " '("
- ;        (format " (top . %d)\n" (max frameg-top 0))
- ;        (format " (left . %d)\n" (max frameg-left 0))
- ;        (format " (width . %d)\n" (max frameg-width 0))
- ;        (format " (height . %d)))\n" (max frameg-height 0)))
- ;       (when (file-writable-p frameg-file)
- ;         (write-file frameg-file)))))
+  ;; ;; Custom functions/hooks for persisting/loading frame geometry upon save/load
+  ;; (defun save-frameg ()
+  ;;   "Gets the current frame's geometry and saves to ~/.emacs.frameg."
+  ;;   (let ((frameg-font (frame-parameter (selected-frame) 'font))
+  ;;         (frameg-left (frame-parameter (selected-frame) 'left))
+  ;;         (frameg-top (frame-parameter (selected-frame) 'top))
+  ;;         (frameg-width (frame-parameter (selected-frame) 'width))
+  ;;         (frameg-height (frame-parameter (selected-frame) 'height))
+  ;;         (frameg-file (expand-file-name "~/.emacs.frameg")))
+  ;;     (with-temp-buffer
+  ;;       ;; Turn off backup for this file
+  ;;       (make-local-variable 'make-backup-files)
+  ;;       (setq make-backup-files nil)
+  ;;       (insert
+  ;;        ";;; This file stores the previous emacs frame's geometry.\n"
+  ;;        ";;; Last generated " (current-time-string) ".\n"
+  ;;        "(setq initial-frame-alist\n"
+  ;;        ;; " '((font . \"" frameg-font "\")\n"
+  ;;        " '("
+  ;;        (format " (top . %d)\n" (max frameg-top 0))
+  ;;        (format " (left . %d)\n" (max frameg-left 0))
+  ;;        (format " (width . %d)\n" (max frameg-width 0))
+  ;;        (format " (height . %d)))\n" (max frameg-height 0)))
+  ;;       (when (file-writable-p frameg-file)
+  ;;         (write-file frameg-file)))))
 
- ; (defun load-frameg ()
- ;   "Loads ~/.emacs.frameg which should load the previous frame's geometry."
- ;   (let ((frameg-file (expand-file-name "~/.emacs.frameg")))
- ;     (when (file-readable-p frameg-file)
- ;       (load-file frameg-file))))
-;
- ;                                         ; Special work to do ONLY when there is a window system being used
- ; (if window-system (progn
- ;                     (add-hook 'after-init-hook 'load-frameg)
- ;                     (add-hook 'kill-emacs-hook 'save-frameg)))
-;
- ; (if (daemonp)
- ;     (add-hook 'after-make-frame-functions
- ;               (lambda (frame)
- ;                 (select-frame frame)
- ;                 (load-frameg)
- ;                 ))
- ;   (load-frameg))
+  ;; (defun load-frameg ()
+  ;;   "Loads ~/.emacs.frameg which should load the previous frame's geometry."
+  ;;   (let ((frameg-file (expand-file-name "~/.emacs.frameg")))
+  ;;     (when (file-readable-p frameg-file)
+  ;;       (load-file frameg-file))))
 
+  ;; ;;Special work to do ONLY when there is a window system being used
+  ;; (if window-system (progn
+  ;;                     (add-hook 'after-init-hook 'load-frameg)
+  ;;                     (add-hook 'kill-emacs-hook 'save-frameg)))
+  ;; (if (daemonp)
+  ;;     (add-hook 'after-make-frame-functions
+  ;;               (lambda (frame)
+  ;;                 (select-frame frame)
+  ;;                 (load-frameg)
+  ;;                 ))
+  ;;   (load-frameg))
 #+end_src
 
 * Package management
@@ -119,14 +117,14 @@
 ** Hide buffers
 #+Begin_src emacs-lisp
   ;; Removes *scratch* from buffer after the mode has been set.
-;  (defun remove-scratch-buffer ()
-;    (setq-default message-log-max nil)
-;    (if (get-buffer "*scratch*")
-;        (with-current-buffer "*scratch*"
-;          (rename-buffer " *scratch*"))))
-;  (add-hook 'after-change-major-mode-hook 'remove-scratch-buffer)
+  ;;  (defun remove-scratch-buffer ()
+  ;;    (setq-default message-log-max nil)
+  ;;    (if (get-buffer "*scratch*")
+  ;;        (with-current-buffer "*scratch*"
+  ;;          (rename-buffer " *scratch*"))))
+  ;;  (add-hook 'after-change-major-mode-hook 'remove-scratch-buffer)
 
-(setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
+  (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
 
   ;; Removes *messages* from the buffer.
   (defun remove-messages-buffer ()
@@ -273,9 +271,9 @@ Prevent emacs from contaminating system clipboard.
                  '(undecorated-round . t)
                  )))
 
-                                          ;(setq window-divider-default-right-width 32)
-                                          ;(setq window-divider-default-bottom-width 4)
-                                          ;(setq window-divider-default-places 'right-only)
+  ;;(setq window-divider-default-right-width 32)
+  ;;(setq window-divider-default-bottom-width 4)
+  ;;(setq window-divider-default-places 'right-only)
   (setq window-divider-default-places t)
 
   (setq ns-use-thin-smoothing t
@@ -301,10 +299,10 @@ Prevent emacs from contaminating system clipboard.
           tab-bar-auto-width-max '(120 . 20)
           tab-bar-border 0
           tab-bar-close-button-show nil
-                                          ;tab-bar-close-last-tab-choice 'tab-bar-mode-disable
+          ;; tab-bar-close-last-tab-choice 'tab-bar-mode-disable
           tab-bar-close-tab-select 'recent
           tab-bar-new-button-show nil
-                                          ;tab-bar-new-tab-choice "*dashboard*"
+          ;; tab-bar-new-tab-choice "*dashboard*"
           tab-bar-new-tab-to 'right
           tab-bar-position t
           tab-bar-tab-name-function 'tab-bar-tab-name-current
@@ -346,13 +344,13 @@ Prevent accidental close.
   (use-package nano-modeline
     :config
     (nano-modeline-mode))
-                                          ;  (use-package mood-line
-                                          ;    :config
-                                          ;    (setq-default mood-line-glyph-alist mood-line-glyphs-ascii)
-                                          ;    (mood-line-mode))
+  ;;  (use-package mood-line
+  ;;    :config
+  ;;    (setq-default mood-line-glyph-alist mood-line-glyphs-ascii)
+  ;;    (mood-line-mode))
 
-                                          ;(setq-default header-line-format mode-line-format)
-                                          ;(setq-default mode-line-format nil)
+  ;;(setq-default header-line-format mode-line-format)
+  ;;(setq-default mode-line-format nil)
 #+end_src
 
 Save colors for later use.
@@ -427,8 +425,8 @@ Only use variable-pitch if explicitly called.
     (set-face-attribute 'fixed-pitch nil    :font "Roboto Mono 13" :height 1.0)
     (set-face-attribute 'variable-pitch nil :font "Roboto Mono 13" :height 1.0))
 
-                                          ;(when (eq (nth 3 (assq 'geometry (car (display-monitor-attributes-list)))) 3840)
-                                          ;  (set-face-attribute 'default nil :font "Mononoki 18"))
+  ;;(when (eq (nth 3 (assq 'geometry (car (display-monitor-attributes-list)))) 3840)
+  ;;  (set-face-attribute 'default nil :font "Mononoki 18"))
 
   (defun remap-faces-default-attributes ()
     (let ((family (face-attribute 'default :family))
@@ -461,19 +459,19 @@ Only use variable-pitch if explicitly called.
 ** Dashboard
 #+begin_src emacs-lisp
   (use-package dashboard
-  :ensure t
-  :defer t
+    :ensure t
+    :defer t
     :init
     (dashboard-setup-startup-hook)
     :config
     (setq
      dashboard-startup-banner nil
      dashboard-set-init-info nil
-     dashboard-banner-logo-title (concat "\n\n   Welcome to GNU Emacs " emacs-version
-"\n\n\nFind file               (SPC .)"
-"\nSwitch buffers          (SPC b)"
-"\nFind recent files       (SPC p e)"
-"\nEval region             (SPC e r)")
+     dashboard-banner-logo-title (concat "\n\n      Welcome to GNU Emacs        " emacs-version
+                                         "\n\n\nFind file               (SPC .)"
+                                         "\nSwitch buffers          (SPC b)"
+                                         "\nFind recent files       (SPC p e)"
+                                         "\nEval region             (SPC e r)")
 
      dashboard-set-navigator t
      dashboard-set-footer nil
@@ -481,13 +479,13 @@ Only use variable-pitch if explicitly called.
      dashboard-center-content t
      dashboard-filter-agenda-entry 'dashboard-no-filter-agenda)
     )
-(set-face-attribute 'dashboard-text-banner nil :inherit 'default :height 0.1 :font "PT Mono 8")
+  (set-face-attribute 'dashboard-text-banner nil :inherit 'default :height 0.1 :font "PT Mono 8")
 
 
-                                        (global-unset-key [tab])
-                                          (global-unset-key (kbd "C-e"))
-                                          (set-face-attribute 'dashboard-items-face nil :inherit 'default)
-                                          (set-face-attribute 'dashboard-heading-face nil :inherit 'default)
+  (global-unset-key [tab])
+  (global-unset-key (kbd "C-e"))
+  (set-face-attribute 'dashboard-items-face nil :inherit 'default)
+  (set-face-attribute 'dashboard-heading-face nil :inherit 'default)
 
 
 #+end_src
@@ -531,7 +529,7 @@ Only use variable-pitch if explicitly called.
   (use-package evil-collection
     :after evil
     :config
-    ;(setq evil-collection-mode-list '(dashboard dired ibuffer))
+    ;;(setq evil-collection-mode-list '(dashboard dired ibuffer))
     (evil-collection-init))
   (use-package evil-tutor)
 
@@ -540,7 +538,6 @@ Only use variable-pitch if explicitly called.
 ** Keybindings
 
 #+begin_src emacs-lisp
-
   (setq mac-option-modifier nil
         Mac-escape-modifier nil
         mac-right-command-modifier 'meta)
@@ -621,8 +618,8 @@ simpleclip-mode radically simplifies clipboard handling: the system clipboard an
   (use-package which-key
     :ensure t
     :config
-                                          ;(setq which-key-idle-delay 0.01)
-                                          ;(setq which-key-idle-secondary-delay 0.01)
+    ;;(setq which-key-idle-delay 0.01)
+    ;;(setq which-key-idle-secondary-delay 0.01)
     (which-key-mode))
 
   (nvmap :keymaps 'override :prefix "SPC"
@@ -652,8 +649,7 @@ simpleclip-mode radically simplifies clipboard handling: the system clipboard an
 
     "p e"   '(projectile-recentf :which-key "projectile-recentf")
     "e r"   '(eval-region :which-key "eval-region")
-    "conf"  '((lambda () (interactive) (find-file "~/.config/emacs/config.org")) :which-key "Open config.org")
-    )
+    "conf"  '((lambda () (interactive) (find-file "~/.config/emacs/config.org")) :which-key "Open config.org"))
 #+end_src
 
 ** ivy + counsel
@@ -703,16 +699,15 @@ simpleclip-mode radically simplifies clipboard handling: the system clipboard an
           (bottom-fringe . 12)
           ))
 
-                                          ;(ivy-posframe-mode 1)
+  (ivy-posframe-mode 1)
 
   (use-package ivy-rich
     :after ivy
     :config
-                                          ;(ivy-rich-modify-columns
-                                          ;'counsel-M-x
-                                          ;'((counsel-M-x-transformer (:width 40))
-                                          ;(ivy-rich-counsel-function-docstring (:width 80))))
-                                          ;
+    ;; (ivy-rich-modify-columns
+    ;; 'counsel-M-x
+    ;; '((counsel-M-x-transformer (:width 40))
+    ;; (ivy-rich-counsel-function-docstring (:width 80))))
     )
 
   (ivy-rich-mode 1)
@@ -757,7 +752,6 @@ simpleclip-mode radically simplifies clipboard handling: the system clipboard an
 #+begin_src emacs-lisp
   (use-package crux
     :ensure t)
-
 #+end_src
 
 ** Vertico
@@ -781,7 +775,6 @@ simpleclip-mode radically simplifies clipboard handling: the system clipboard an
 #+begin_src emacs-lisp
   (use-package treemacs
     :ensure t
-
     :defer t
 
     :init
@@ -855,9 +848,9 @@ simpleclip-mode radically simplifies clipboard handling: the system clipboard an
     (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
 
 
-  :bind (:map projectile-mode-map
-              ("s-p" . projectile-command-map)
-              ("C-c p" . projectile-command-map)))
+    :bind (:map projectile-mode-map
+                ("s-p" . projectile-command-map)
+                ("C-c p" . projectile-command-map)))
 
 #+end_src
 
@@ -902,9 +895,9 @@ Always follow symlinks
 ** Org-mode appearance
 *** Mixed-pitch
 #+begin_src emacs-lisp
-  ;(use-package mixed-pitch
-  ;  :hook
-  ;  (text-mode . mixed-pitch-mode))
+  ;;(use-package mixed-pitch
+  ;;  :hook
+  ;;  (text-mode . mixed-pitch-mode))
 #+end_src
 
 *** Font
@@ -971,22 +964,22 @@ Always follow symlinks
     (variable-pitch-mode nil)
     (setq evil-auto-indent nil)
     (require 'org-inlinetask)
-                                          ;(org-tex-style)
+    ;;(org-tex-style)
     )
 #+end_src
 
 *** Column width
 
 #+begin_src emacs-lisp
-                                          ;(defun org-mode-visual-fill ()
-                                          ;  (setq visual-fill-column-width 80
-                                          ;        visual-fill-column-center-text t
-                                          ;        visual-fill-column-extra-text-width '(0 . 5)
-                                          ;        )
-                                          ;  (visual-fill-column-mode 1))
+  ;;(defun org-mode-visual-fill ()
+  ;;  (setq visual-fill-column-width 80
+  ;;        visual-fill-column-center-text t
+  ;;        visual-fill-column-extra-text-width '(0 . 5)
+  ;;        )
+  ;;  (visual-fill-column-mode 1))
 
-                                          ;(use-package visual-fill-column
-                                          ;  :hook (org-mode . org-mode-visual-fill))
+  ;;(use-package visual-fill-column
+  ;;  :hook (org-mode . org-mode-visual-fill))
 #+end_src
 
 *** org-tempo
@@ -1021,27 +1014,26 @@ Always follow symlinks
   (defadvice ansi-term (after advice-term-line-mode activate)
     (term-char-mode))
 
-
   (general-create-definer
     ninrod--term-mode
     :keymaps '(term-raw-map term-mode-map))
 
   (ninrod--term-mode
-    :states 'emacs
-    :prefix "C-c"
-    "<escape>" 'term-send-esc
-    "l"        'term-line-mode
-    "c"        'term-char-mode
-    "j"        'multi-term-next
-    "k"        'multi-term-prev)
+   :states 'emacs
+   :prefix "C-c"
+   "<escape>" 'term-send-esc
+   "l"        'term-line-mode
+   "c"        'term-char-mode
+   "j"        'multi-term-next
+   "k"        'multi-term-prev)
 
   (ninrod--term-mode
-    :states '(normal visual)
-    :prefix ","
-    "l" 'term-line-mode
-    "c" 'term-char-mode
-    "n" 'multi-term-next
-    "p" 'multi-term-prev)
+   :states '(normal visual)
+   :prefix ","
+   "l" 'term-line-mode
+   "c" 'term-char-mode
+   "n" 'multi-term-next
+   "p" 'multi-term-prev)
 
   (defun my-term-handle-exit (&optional process-name msg)
     (message "%s | %s" process-name msg)
@@ -1050,7 +1042,6 @@ Always follow symlinks
   (advice-add 'term-handle-exit :after 'my-term-handle-exit)
 
   (xterm-mouse-mode 1)
-
 #+end_src
 
 ** ENV
@@ -1080,11 +1071,9 @@ Get path from shell
     :demand
     :hook
     (focus-out-hook . gcmh-idle-garbage-collect)
-
     :custom
     (gcmh-idle-delay 10)
     (gcmh-high-cons-threshold 104857600)
-
     :config
     (gcmh-mode +1))
 
@@ -1092,7 +1081,6 @@ Get path from shell
 ** Byte compile on exit
 
 #+begin_src emacs-lisp
-
   (defun compile-config ()
     (interactive)
     (org-babel-tangle-file
@@ -1103,17 +1091,15 @@ Get path from shell
      (expand-file-name "config.el" user-emacs-directory)
      (expand-file-name "config.elc" user-emacs-directory)))
 
-; Enable if not using emacs daemon
-;(add-hook 'kill-emacs-hook 'compile-config)
+  ;; Enable if not using emacs daemon
+  ;;(add-hook 'kill-emacs-hook 'compile-config)
 
   (add-to-list 'org-babel-default-header-args
                '(:noweb . "yes"))
-
 #+end_src
 
 *{* Tweak garbage collection
 #+begin_src emacs-lisp
-
   (defmacro k-time (&rest body)
     "Measure and return the time it takes evaluating BODY."
     `(let ((time (current-time)))
@@ -1143,7 +1129,7 @@ Get path from shell
     :init
     (global-git-gutter-mode +1))
 
-                                          ; (use-package git-gutter
+  ;; (use-package git-gutter
 
 
 #+end_src
@@ -1196,9 +1182,9 @@ Get path from shell
           company-minimum-prefix-length   1
           company-idle-delay              0.3
           company-backends
-          '((company-files          ; files & directory
-             company-keywords       ; keywords
-             company-capf           ; what is this?
+          '((company-files          ;; files & directory
+             company-keywords       ;; keywords
+             company-capf           ;; what is this?
              company-yasnippet)
             (company-abbrev company-dabbrev))))
 
@@ -1226,7 +1212,6 @@ Get path from shell
     (setq flycheck-display-errors-function
           #'flycheck-display-error-messages-unless-error-list
           flycheck-display-errors-delay 0.0))
-
 #+end_src
 
 ** Tree-sitter
@@ -1241,16 +1226,13 @@ Get path from shell
   (push '(js-json-mode . json-ts-mode) major-mode-remap-alist)
   (push '(python-mode . python-ts-mode) major-mode-remap-alist)
 
-
   (set-face-attribute 'font-lock-preprocessor-face nil
                       :weight (face-attribute 'default :weight)
                       :slant (face-attribute 'default :slant) :inherit 'default)
-
 #+end_src
 
 ** clang-format
 #+begin_src emacs-lisp
-
   (use-package clang-format
     :ensure t
     :init
@@ -1270,19 +1252,18 @@ Get path from shell
                 ;; Buffer local hook.
                 t)))
 
-    ;; Run this for each mode you want to use the hook.
-    (add-hook 'c-mode-hook (lambda () (clang-format-save-hook-for-this-buffer)))
-    (add-hook 'c++-mode-hook (lambda () (clang-format-save-hook-for-this-buffer)))
-    (add-hook 'c-ts-mode-hook (lambda () (clang-format-save-hook-for-this-buffer)))
-    (add-hook 'c++-ts-mode-hook (lambda () (clang-format-save-hook-for-this-buffer)))
-    (add-hook 'glsl-mode-hook (lambda () (clang-format-save-hook-for-this-buffer)))
+  ;; Run this for each mode you want to use the hook.
+  (add-hook 'c-mode-hook (lambda () (clang-format-save-hook-for-this-buffer)))
+  (add-hook 'c++-mode-hook (lambda () (clang-format-save-hook-for-this-buffer)))
+  (add-hook 'c-ts-mode-hook (lambda () (clang-format-save-hook-for-this-buffer)))
+  (add-hook 'c++-ts-mode-hook (lambda () (clang-format-save-hook-for-this-buffer)))
+  (add-hook 'glsl-mode-hook (lambda () (clang-format-save-hook-for-this-buffer)))
 
 #+end_src
 ** Documentation
 *** Mermaid
 #+begin_src emacs-lisp
   (use-package mermaid-mode)
-    (use-package vterm
-     :ensure t)
-
+  (use-package vterm
+    :ensure t)
 #+end_src
