@@ -181,9 +181,9 @@ Prevent emacs from contaminating system clipboard.
 * Customization
 ** Theme
 *** Theme packages
+#+begin_src emacs-lisp
   (use-package helm-themes :ensure nil)
   (use-package sublime-themes :ensure nil)
-  (use-package leuven-theme :ensure nil)
   (use-package color-theme-modern :ensure nil)
   (use-package nano-theme :defer t)
 
@@ -191,6 +191,8 @@ Prevent emacs from contaminating system clipboard.
     :ensure nil
     :custom (setq doom-themes-enable-bold nil
                   doom-themes-enable-italic nil))
+#+end_src
+
 *** Modus
 #+begin_src emacs-lisp
   (setq modus-themes-fringes 'subtle)
