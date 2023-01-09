@@ -94,23 +94,33 @@
    )
 
   (column-number-mode)
+#+end_src
 
-  ;; Enable line numbers for some modes
+Enable line numbers for some modes
+#+begin_src emacs-lisp
   (dolist (mode '(text-mode-hook
                   prog-mode-hook
                   conf-mode-hook))
     (add-hook mode (lambda () (display-line-numbers-mode 1))))
+#+end_src
 
-  ;; Override some modes which derive from the above
+Override some modes which derive from the above
+#+begin_src emacs-lisp
   (dolist (mode '(org-mode-hook))
-
     (add-hook mode (lambda () (display-line-numbers-mode 0))))
-  ;; Show only one active window when opening multiple files at the same time.
-  (add-hook 'window-setup-hook 'delete-other-windows)
+#+end_src
 
-  (fset 'yes-or-no-p 'y-or-n-p)
+Show only one active window when opening multiple files at the same time.
+#+begin_src emacs-lisp
+      (add-hook 'window-setup-hook 'delete-other-windows)
+#+end_src
 
-  ;; Always move cursor to help window
+#+begin_src emacs-lisp
+      (fset 'yes-or-no-p 'y-or-n-p)
+#+end_src
+
+Always move cursor to help window
+#+begin_src emacs-lisp
   (setq help-window-select t)
 #+end_src
 
@@ -119,6 +129,7 @@ Remove trailing spaces
   (add-hook 'before-save-hook
           'delete-trailing-whitespace)
 #+end_src
+
 ** Hide buffers
 #+Begin_src emacs-lisp
   ;; Removes *scratch* from buffer after the mode has been set.
@@ -336,7 +347,6 @@ Prevent emacs from contaminating system clipboard.
   (tab-bar-mode 1)
 
 #+end_src
-
 
 Prevent accidental close.
 
