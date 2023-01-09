@@ -206,10 +206,11 @@ Prevent emacs from contaminating system clipboard.
 
 *** Modus
 #+begin_src emacs-lisp
-  (setq modus-themes-fringes 'subtle)
-  (setq modus-themes-mode-line (quote (borderless accented 0.9)))
-  (setq modus-themes-hl-line (quote (accented)))
-  (setq modus-themes-tabs-accented t)
+  (setq modus-themes-fringes 'subtle
+        modus-themes-mode-line (quote (borderless accented 0.9))
+        modus-themes-hl-line (quote (accented))
+        modus-themes-tabs-accented t
+        modus-themes-org-blocks 'tinted-background)
 #+end_src
 *** Window divider fix
 #+begin_src emacs-lisp
@@ -1002,7 +1003,6 @@ Always follow symlinks
 *** org-tempo
 #+begin_src emacs-lisp
   (require 'org-tempo)
-
   (add-to-list 'org-structure-template-alist '("sh" . "src sh"))
   (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
   (add-to-list 'org-structure-template-alist '("sc" . "src scheme"))
@@ -1134,7 +1134,6 @@ Get path from shell
 
 * Version control
 ** Git gutter
-
 #+begin_src emacs-lisp
   (use-package git-gutter-fringe
     :ensure t
