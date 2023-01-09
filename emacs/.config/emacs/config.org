@@ -651,11 +651,9 @@ simpleclip-mode radically simplifies clipboard handling: the system clipboard an
     "h p"   '(ff-find-other-file :which-key "ff-find-other-file")
 
     "p e"   '(projectile-recentf :which-key "projectile-recentf")
-    "e r"   'eval-region :which-key "eval-region")
+    "e r"   '(eval-region :which-key "eval-region")
     "conf"  '((lambda () (interactive) (find-file "~/.config/emacs/config.org")) :which-key "Open config.org")
     )
-#+end_src
-
 #+end_src
 
 ** ivy + counsel
