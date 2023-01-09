@@ -813,7 +813,6 @@ simpleclip-mode radically simplifies clipboard handling: the system clipboard an
 ** Dired
 
 #+begin_src emacs-lisp
-                                          ;  (use-package all-the-icons-dired)
   (use-package dired-open)
   (use-package peep-dired)
   (use-package dired-single)
