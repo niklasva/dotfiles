@@ -1269,16 +1269,18 @@ Set up where treesitter binaries are located.
 
 Decoration level to be used by tree-sitter fontifications.
 
-Major modes categorize their fontification features into levels,
-from 1 which is the absolute minimum, to 4 that yields the maximum
-fontifications.
+#+begin_src org
+  Major modes categorize their fontification features into levels,
+  from 1 which is the absolute minimum, to 4 that yields the maximum
+  fontifications.
 
-Level 1 usually contains only comments and definitions.
-Level 2 usually adds keywords, strings, constants, types, etc.
-Level 3 usually represents a full-blown fontification, including
-assignment, constants, numbers, properties, etc.
-Level 4 adds everything else that can be fontified: delimiters,
-operators, brackets, all functions and variables, etc.
+  Level 1 usually contains only comments and definitions.
+  Level 2 usually adds keywords, strings, constants, types, etc.
+  Level 3 usually represents a full-blown fontification, including
+  assignment, constants, numbers, properties, etc.
+  Level 4 adds everything else that can be fontified: delimiters,
+  operators, brackets, all functions and variables, etc.
+#+end_src
 
 #+begin_src emacs-lisp
   (setq-default treesit-font-lock-level 4)
