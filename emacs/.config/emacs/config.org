@@ -1,5 +1,6 @@
 #+TITLE: config.org
 #+PROPERTY: header - args: tangle "~/.config/emacs/config.el"
+#+OPTIONS: toc:2
 
 * Pre-init
 #+STARTUP: overview
