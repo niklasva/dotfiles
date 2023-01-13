@@ -1191,28 +1191,38 @@ Get path from shell
   (setq use-system-tooltips nil)
 
   (use-package lsp-mode
-    :ensure t :hook ((c-mode . lsp)
-                     (c++-mode . lsp)
-                     (c-ts-mode . lsp)
-                     (c++-ts-mode . lsp)
-                     (python-mode . lsp)
-                     (python-ts-mode . lsp)
-                     (lsp-mode . lsp-enable-which-key-integration)
-                     )
+    :ensure t
+    :hook ((lsp-mode . lsp-enable-which-key-integration)
+           (c-mode . lsp)
+           (c++-mode . lsp)
+           (c++-ts-mode . lsp)
+           (python-mode . lsp)
+           )
     :commands lsp
     :config
-    (setq lsp-headerline-breadcrumb-enable nil)
-    (setq lsp-keymap-prefix "C-c l")
-    (setq lsp-signature-auto-activate nil)
-    (setq lsp-enable-symbol-highlighting nil)
-    (setq lsp-file-watch-threshold 15000)
-    (setq lsp-enable-links nil)
-    (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
+    (setq lsp-headerline-breadcrumb-enable nil
+          lsp-keymap-prefix "C-c l"
+          lsp-signature-auto-activate nil
+          lsp-enable-symbol-highlighting nil
+          lsp-file-watch-threshold 15000
+          lsp-enable-links nil)
+
     )
+
   (setq lsp-eldoc-enable-hover nil)
 
   (setq max-mini-window-height 2
         eldoc-echo-area-use-multiline-p nil)
+
+
+  (defun lsp-c-save-hooks ()
+    (add-hook 'before-save-hook #'lsp-format-buffer t t)
+    (add-hook 'before-save-hook #'lsp-organize-imports t t))
+
+  (add-hook 'c-mode-hook #'lsp-c-save-hooks)
+  (add-hook 'c-ts-mode-hook #'lsp-c-save-hooks)
+  (add-hook 'c++-mode-hook #'lsp-c-save-hooks)
+  (add-hook 'c++-ts-mode-hook #'lsp-c-save-hooks)
 
   (use-package lsp-ivy
     :ensure t
@@ -1240,7 +1250,7 @@ Get path from shell
     (setq lsp-ui-doc-show-with-cursor t
           lsp-ui-doc-show-with-mouse nil
           lsp-ui-doc-position 'at-point
-          lsp-ui-doc-delay 4
+          lsp-ui-doc-delay 1
           lsp-ui-sideline-enable t
           )
     )
