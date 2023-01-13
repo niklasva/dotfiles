@@ -207,10 +207,11 @@ Prevent emacs from contaminating system clipboard.
 *** Modus
 #+begin_src emacs-lisp
   (setq modus-themes-fringes 'subtle
-        modus-themes-mode-line (quote (borderless accented 0.9))
-        modus-themes-hl-line (quote (accented))
-        modus-themes-tabs-accented t
-        modus-themes-org-blocks 'tinted-background)
+       modus-themes-mode-line (quote (borderless accented))
+       modus-themes-hl-line (quote (accented))
+       modus-themes-tabs-accented t
+       modus-themes-org-blocks 'tinted-background
+       )
 #+end_src
 *** Window divider fix
 #+begin_src emacs-lisp
@@ -225,10 +226,10 @@ Prevent emacs from contaminating system clipboard.
 *** Theme switcher
 #+begin_src emacs-lisp
   (defun niva/switch-theme (theme)
-    "Disable theme and switch"
-    (interactive (list (intern (completing-read "Theme: "
-                                                (->> (custom-available-themes)
-                                                     (-map #'symbol-name))))))
+    (interactive (list (intern (completing-read
+                                "Theme: " (->> (custom-available-themes)
+                                               (-map #'symbol-name))))))
+
     (mapc #'disable-theme custom-enabled-themes)
     (load-theme theme 'no-confirm)
     (niva/fix-window-divider-color)
@@ -240,6 +241,7 @@ Prevent emacs from contaminating system clipboard.
 #+begin_src emacs-lisp
   (setq custom-safe-themes t)
   (setq nano-fonts-use t)
+
   (load-theme 'modus-operandi t)
 
   (defun niva/disable-bold-font-lock ()
@@ -290,9 +292,6 @@ Prevent emacs from contaminating system clipboard.
                  '(undecorated-round . t)
                  )))
 
-  ;;(setq window-divider-default-right-width 32)
-  ;;(setq window-divider-default-bottom-width 4)
-  ;;(setq window-divider-default-places 'right-only)
   (setq window-divider-default-places t)
 
   (setq ns-use-thin-smoothing t
@@ -439,9 +438,9 @@ Only use variable-pitch if explicitly called.
 
 #+begin_src emacs-lisp
   (defun set-fonts()
-    (set-face-attribute 'default nil        :font "Roboto Mono 13")
-    (set-face-attribute 'fixed-pitch nil    :font "Roboto Mono 13" :height 1.0)
-    (set-face-attribute 'variable-pitch nil :font "Roboto Mono 13" :height 1.0))
+    (set-face-attribute 'default nil        :font "mononoki 13")
+    (set-face-attribute 'fixed-pitch nil    :font "mononoki 13" :height 1.0)
+    (set-face-attribute 'variable-pitch nil :font "mononoki 13" :height 1.0))
 
   ;;(when (eq (nth 3 (assq 'geometry (car (display-monitor-attributes-list)))) 3840)
   ;;  (set-face-attribute 'default nil :font "Mononoki 18"))
@@ -474,6 +473,17 @@ Only use variable-pitch if explicitly called.
 
 #+end_src
 
+*** Ligatures
+#+begin_src emacs-lisp
+    (use-package ligature
+      :config (global-ligature-mode t)
+      (ligature-set-ligatures 'prog-mode '(
+"==" "!="
+"<-" "<--" "->" "-->"
+  ))
+      )
+#+end_src
+
 ** Dashboard
 #+begin_src emacs-lisp
   (use-package dashboard
@@ -483,13 +493,14 @@ Only use variable-pitch if explicitly called.
     (dashboard-setup-startup-hook)
     :config
     (setq
-     dashboard-startup-banner nil
+     dashboard-startup-banner 4
      dashboard-set-init-info nil
-     dashboard-banner-logo-title (concat "\n\n      Welcome to GNU Emacs        " emacs-version
-                                         "\n\n\nFind file               (SPC .)"
-                                         "\nSwitch buffers          (SPC b)"
-                                         "\nFind recent files       (SPC p e)"
-                                         "\nEval region             (SPC e r)")
+     dashboard-banner-logo-title (concat "GNU Emacs " emacs-version)
+
+     ;; "\n\nFind file               (SPC .)"
+     ;; "\nSwitch buffers          (SPC b)"
+     ;; "\nFind recent files       (SPC p e)"
+     ;; "\nEval region             (SPC e r)")
 
      dashboard-set-navigator t
      dashboard-set-footer nil
@@ -497,8 +508,7 @@ Only use variable-pitch if explicitly called.
      dashboard-center-content t
      dashboard-filter-agenda-entry 'dashboard-no-filter-agenda)
     )
-  (set-face-attribute 'dashboard-text-banner nil :inherit 'default :height 0.1 :font "PT Mono 8")
-
+  (set-face-attribute 'dashboard-text-banner nil :inherit 'font-lock-function-name-face)
 
   (global-unset-key [tab])
   (global-unset-key (kbd "C-e"))
@@ -638,6 +648,7 @@ simpleclip-mode radically simplifies clipboard handling: the system clipboard an
     :config
     ;;(setq which-key-idle-delay 0.01)
     ;;(setq which-key-idle-secondary-delay 0.01)
+    (setq which-key-popup-type 'minibuffer)
     (which-key-mode))
 
   (nvmap :keymaps 'override :prefix "SPC"
@@ -747,6 +758,9 @@ simpleclip-mode radically simplifies clipboard handling: the system clipboard an
 
   (add-to-list 'ivy-sort-functions-alist
                '(ivy-switch-buffer . ivy-string<))
+
+  (add-to-list 'ivy-sort-functions-alist
+               '(niva/switch-theme . ivy-string<))
 
   (use-package ripgrep)
 #+end_src
