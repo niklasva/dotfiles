@@ -137,45 +137,44 @@ Scroll compilation buffer
 #+end_src
 
 ** Hide buffers
+Show dashboard on startup
 #+Begin_src emacs-lisp
-  ;; Removes *scratch* from buffer after the mode has been set.
-  ;;  (defun remove-scratch-buffer ()
-  ;;    (setq-default message-log-max nil)
-  ;;    (if (get-buffer "*scratch*")
-  ;;        (with-current-buffer "*scratch*"
-  ;;          (rename-buffer " *scratch*"))))
-  ;;  (add-hook 'after-change-major-mode-hook 'remove-scratch-buffer)
-
   (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
+#+end_src
 
+Hide buffers by prepending space to buffer name.
+#+Begin_src emacs-lisp
+  (defun niva/hide-buffer (bufname)
+    (if (get-buffer (concat " " bufname))
+        (kill-buffer (concat " " bufname)))
+    (if (get-buffer bufname)
+        (with-current-buffer bufname
+          (rename-buffer (concat " " bufname)))))
+#+end_src
+
+#+Begin_src emacs-lisp
   ;; Removes *messages* from the buffer.
   (defun remove-messages-buffer ()
-    (setq-default message-log-max nil)
-    (if (get-buffer "*Messages*")
-        (with-current-buffer "*Messages*"
-          (rename-buffer " *Messages*"))))
+    (niva/hide-buffer "*Messages*"))
   (add-hook 'after-change-major-mode-hook 'remove-messages-buffer)
 
+  ;; Removes *scratch* from the buffer.
+  (defun remove-scratch-buffer ()
+    (niva/hide-buffer "*scratch*"))
+  (add-hook 'after-change-major-mode-hook 'remove-scratch-buffer)
 
-  ;; Prepend space to buffer name to hide it
   (defun hide-lsp-buffers ()
     (interactive)
     (setq-default message-log-max nil)
-    (if (get-buffer "*clangd*")
-        (with-current-buffer "*clangd*"
-          (rename-buffer " *clangd*")))
-    (if (get-buffer "*clangd::stderr*")
-        (with-current-buffer "*clangd::stderr*"
-          (rename-buffer " *clangd::stderr*")))
-    (if (get-buffer "*pyright*")
-        (with-current-buffer "*pyright*"
-          (rename-buffer " *pyright*")))
-    (if (get-buffer "*pyright::stderr*")
-        (with-current-buffer "*pyright::stderr*"
-          (rename-buffer " *pyright::stderr*"))))
+    (niva/hide-buffer "*clangd*")
+    (niva/hide-buffer "*clangd::stderr*")
+    (niva/hide-buffer "*pyright*")
+    (niva/hide-buffer "*pyright::stderr*"))
   (add-hook 'after-change-major-mode-hook 'hide-lsp-buffers)
+#+end_src
 
-  ;; Don't show *Buffer list* when opening multiple files at the same time.
+Don't show *Buffer list* when opening multiple files at the same time.
+#+Begin_src emacs-lisp
   (setq inhibit-startup-buffer-menu t)
 #+end_src
 
