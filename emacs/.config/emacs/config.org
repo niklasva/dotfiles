@@ -131,6 +131,11 @@ Remove trailing spaces
           'delete-trailing-whitespace)
 #+end_src
 
+Scroll compilation buffer
+#+begin_src emacs-lisp
+  (setq compilation-scroll-output t)
+#+end_src
+
 ** Hide buffers
 #+Begin_src emacs-lisp
   ;; Removes *scratch* from buffer after the mode has been set.
@@ -194,13 +199,13 @@ Prevent emacs from contaminating system clipboard.
 ** Theme
 *** Theme packages
 #+begin_src emacs-lisp
-  (use-package helm-themes :ensure nil)
-  (use-package sublime-themes :ensure nil)
-  (use-package color-theme-modern :ensure nil)
+  (use-package helm-themes :ensure t)
+  (use-package sublime-themes :ensure t)
+  (use-package color-theme-modern :ensure t)
   (use-package nano-theme :defer t)
 
   (use-package doom-themes
-    :ensure nil
+    :ensure t
     :custom (setq doom-themes-enable-bold nil
                   doom-themes-enable-italic nil))
 #+end_src
@@ -243,7 +248,7 @@ Prevent emacs from contaminating system clipboard.
   (setq custom-safe-themes t)
   (setq nano-fonts-use t)
 
-  (load-theme 'modus-operandi t)
+  (load-theme 'doom-nord-aurora t)
 
   (defun niva/disable-bold-font-lock ()
     "Disable bold font-faces"
@@ -304,26 +309,31 @@ Prevent emacs from contaminating system clipboard.
 
   ;; Vertical window divider
 
-  (window-divider-mode 1)
+  ;; (window-divider-mode 1)
 
-  (niva/fix-window-divider-color)
+  ;; (niva/fix-window-divider-color)
   (setq frame-resize-pixelwise t)
 
   (global-hl-line-mode)
 
   (blink-cursor-mode -1)
 
+  (use-package tab-bar-echo-area
+  :ensure
+  :config
+  (tab-bar-echo-area-mode 1))
+
   (defun niva/tab-bar-config ()
-    (setq tab-bar-show t
+    (setq tab-bar-show nil
           tab-bar-auto-width-max '(120 . 20)
-          tab-bar-border 0
+          ;; tab-bar-border 5
           tab-bar-close-button-show nil
           ;; tab-bar-close-last-tab-choice 'tab-bar-mode-disable
           tab-bar-close-tab-select 'recent
           tab-bar-new-button-show nil
           ;; tab-bar-new-tab-choice "*dashboard*"
           tab-bar-new-tab-to 'right
-          tab-bar-position t
+          tab-bar-position nil
           tab-bar-tab-name-function 'tab-bar-tab-name-current
           )
 
@@ -354,7 +364,6 @@ Prevent accidental close.
 #+begin_src emacs-lisp
   (setq confirm-kill-emacs 'y-or-n-p)
 #+end_src
-
 
 ** Mode line
 
@@ -534,6 +543,15 @@ Only use variable-pitch if explicitly called.
            (window-height . 0.33)
            )))
 #+end_src
+
+#+begin_src emacs-lisp
+  (use-package xterm-color)
+  (setq compilation-environment '("TERM=xterm-256color"))
+  (defun my/advice-compilation-filter (f proc string)
+    (funcall f proc (xterm-color-filter string)))
+  (advice-add 'compilation-filter :around #'my/advice-compilation-filter)
+
+#+end_src
 * Controls
 ** Evil mode
 
@@ -570,15 +588,21 @@ Only use variable-pitch if explicitly called.
   (setq mac-option-modifier nil
         Mac-escape-modifier nil
         mac-right-command-modifier 'meta)
+#+end_src
 
+#+begin_src emacs-lisp
   (global-set-key (kbd "C-+") 'text-scale-increase)
   (global-set-key (kbd "C--") 'text-scale-decrease)
   (global-set-key (kbd "C-=") 'text-scale-set)
+#+end_src
 
+
+#+begin_src emacs-lisp
   (global-set-key (kbd "C-j") nil)
   (global-set-key (kbd "C-k") nil)
+#+end_src
 
-
+#+begin_src emacs-lisp
   (global-set-key (kbd "§") 'evil-invert-char)
 
   (define-key evil-normal-state-map (kbd "U") 'evil-redo)
@@ -600,6 +624,11 @@ Only use variable-pitch if explicitly called.
 
   (evil-define-key 'treemacs treemacs-mode-map (kbd "C-a C-x")    #'evil-delete-buffer)
   (evil-define-key 'treemacs treemacs-mode-map (kbd "C-a C-e")    #'evil-delete-buffer)
+
+  (define-key evil-normal-state-map (kbd "C-w C-j") (lambda () (interactive) (evil-window-decrease-height 3)))
+  (define-key evil-normal-state-map (kbd "C-w C-k") (lambda () (interactive) (evil-window-increase-height 3)))
+  (define-key evil-normal-state-map (kbd "C-w C-h") (lambda () (interactive) (evil-window-decrease-width 6)))
+  (define-key evil-normal-state-map (kbd "C-w C-l") (lambda () (interactive) (evil-window-increase-width 6)))
 
   (global-set-key (kbd "s-q") 'save-buffers-kill-terminal)
 
@@ -629,6 +658,11 @@ Only use variable-pitch if explicitly called.
                 ("<g>" . nil)))
 #+end_src
 
+#+begin_src emacs-lisp
+  (global-set-key (kbd "s-<return>") 'toggle-frame-fullscreen)
+#+end_src
+
+
 ** Simpleclip
 
 By default, Emacs orchestrates a subtle interaction between the internal kill ring and the external system clipboard.
@@ -654,9 +688,11 @@ simpleclip-mode radically simplifies clipboard handling: the system clipboard an
 
   (nvmap :keymaps 'override :prefix "SPC"
     "SPC"   '(counsel-M-x :which-key "M-x")
+
     "c c"   '(compile :which-key "Compile")
     "c C"   '(recompile :which-key "Recompile")
-    "h r r" '((lambda () (interactive) (load-file "~/.emacs.d/init.el")) :which-key "Reload emacs config")
+
+    "h r r" '((lambda () (interactive) (load-file "~/.config/emacs/init.el")) :which-key "Reload emacs config")
     "t t"   '(toggle-truncate-lines :which-key "Toggle truncate lines")
 
     "m *"   '(org-ctrl-c-star :which-key "Org-ctrl-c-star")
@@ -679,7 +715,14 @@ simpleclip-mode radically simplifies clipboard handling: the system clipboard an
 
     "p e"   '(projectile-recentf :which-key "projectile-recentf")
     "e r"   '(eval-region :which-key "eval-region")
-    "conf"  '((lambda () (interactive) (find-file "~/.config/emacs/config.org")) :which-key "Open config.org"))
+
+    "c a"   '(lsp-execute-code-action :which-key "lsp-execute-code-action")
+
+    "conf"  '((lambda () (interactive) (find-file "~/.config/emacs/config.org")) :which-key "Open config.org")
+    "vconf"  '((lambda () (interactive) (split-window-right)
+                 (find-file "~/.config/emacs/config.org")) :which-key "Open config.org")
+    "sconf"  '((lambda () (interactive) (split-window-below)
+                 (find-file "~/.config/emacs/config.org")) :which-key "Open config.org"))
 #+end_src
 
 ** ivy + counsel
@@ -853,6 +896,8 @@ simpleclip-mode radically simplifies clipboard handling: the system clipboard an
     (evil-define-key 'normal dired-mode-map (kbd "l") 'dired-open-file)
     (evil-define-key 'normal peep-dired-mode-map (kbd "j") 'peep-dired-next-file)
     (evil-define-key 'normal peep-dired-mode-map (kbd "k") 'peep-dired-prev-file))
+
+  (setf dired-kill-when-opening-new-dired-buffer t)
 
   (add-hook 'peep-dired-hook 'evil-normalize-keymaps)
 #+end_src
@@ -1049,14 +1094,14 @@ Always follow symlinks
   (add-to-list 'org-structure-template-alist '("cpp" . "src cpp"))
 #+end_src
 
-* Org-roam
+** Org-roam
 #+begin_src emacs-lisp
   (use-package org-roam
     :ensure t)
-  (setq org-roam-directory (file-truename "~/Documents/Org/Roam"))
+  (setq org-roam-directory (file-truename "~/org/roam"))
   (org-roam-db-autosync-mode)
-
 #+end_src
+
 * Term mode
 
 #+begin_src emacs-lisp
@@ -1167,21 +1212,7 @@ Get path from shell
 
 #+end_src
 
-* Version control
-** Git gutter
-#+begin_src emacs-lisp
-  (use-package git-gutter-fringe
-    :ensure t
-    :config
-    (custom-set-variables
-     '(git-gutter:modified-sign "┊") ;; two space
-     '(git-gutter:added-sign "┊")    ;; multiple character is OK
-     '(git-gutter:deleted-sign "┊"))
-    :init
-    (global-git-gutter-mode +1))
-#+end_src
-
-* Tools
+* Language server
 ** LSP
 
 #+begin_src emacs-lisp
@@ -1294,7 +1325,7 @@ Decoration level to be used by tree-sitter fontifications.
 #+end_src
 
 #+begin_src emacs-lisp
-  (setq-default treesit-font-lock-level 4)
+  (setq-default treesit-font-lock-level 3)
 #+end_src
 
 Associate extensions with the correct tree-sitter mode and others
@@ -1314,4 +1345,18 @@ Associate extensions with the correct tree-sitter mode and others
                   ("\\.json\\'" . json-ts-mode)
                   ("\\.css\\'" . css-ts-mode)))
     (push pair auto-mode-alist))
+#+end_src
+
+* Version control
+** Git gutter
+#+begin_src emacs-lisp
+  (use-package git-gutter-fringe
+    :ensure t
+    :config
+    (custom-set-variables
+     '(git-gutter:modified-sign "┊")
+     '(git-gutter:added-sign "┊")
+     '(git-gutter:deleted-sign "┊"))
+    :init
+    (global-git-gutter-mode +1))
 #+end_src
