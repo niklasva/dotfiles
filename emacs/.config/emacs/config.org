@@ -447,19 +447,20 @@ Only use variable-pitch if explicitly called.
 
 #+begin_src emacs-lisp
   (defun set-fonts()
-    (set-face-attribute 'default nil        :font "mononoki 13")
-    (set-face-attribute 'fixed-pitch nil    :font "mononoki 13" :height 1.0)
-    (set-face-attribute 'variable-pitch nil :font "mononoki 13" :height 1.0))
+    (set-face-attribute 'default nil        :font "Iosevka 15" :weight 'light)
+    (set-face-attribute 'fixed-pitch nil    :font "Iosevka 15" :weight 'light)
+(set-face-attribute 'variable-pitch nil :font "Iosevka 15" :weight 'light))
 
-  ;;(when (eq (nth 3 (assq 'geometry (car (display-monitor-attributes-list)))) 3840)
-  ;;  (set-face-attribute 'default nil :font "Mononoki 18"))
+;;(when (eq (nth 3 (assq 'geometry (car (display-monitor-attributes-list)))) 3840)
+;;  (set-face-attribute 'default nil :font "Mononoki 18"))
 
   (defun remap-faces-default-attributes ()
     (let ((family (face-attribute 'default :family))
-          (height (face-attribute 'default :height)))
+          (height (face-attribute 'default :height))
+          (weight (face-attribute 'default :weight)))
       (mapcar (lambda (face)
                 (face-remap-add-relative
-                 face :family family :weight 'unspecified :height height))
+                 face :family family :weight weight :height height))
               (face-list))))
 
   (if (daemonp)
