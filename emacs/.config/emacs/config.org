@@ -187,7 +187,7 @@ Prevent emacs from contaminating system clipboard.
     (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode))
     #+end_src
 
-* Customization
+ Customization
 ** Theme
 *** Theme packages
 #+begin_src emacs-lisp
@@ -583,8 +583,6 @@ Only use variable-pitch if explicitly called.
   (setq display-buffer-alist
         `((,(rx bos
                 (| (literal "*compilation")
-                   (literal "*shell")
-                   (literal "*eshell")
                    (literal "*Compile-Log")))
            display-buffer-in-direction
            (window . t)
@@ -601,7 +599,7 @@ Only use variable-pitch if explicitly called.
   (advice-add 'compilation-filter :around #'my/advice-compilation-filter)
 
 #+end_src
-* Controls
+ Controls
 ** Evil mode
 
 #+begin_src emacs-lisp
