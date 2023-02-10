@@ -360,16 +360,72 @@ Prevent accidental close.
 ** Mode line
 
 #+begin_src emacs-lisp
-  (use-package nano-modeline
-    :config
-    (nano-modeline-mode))
+  (setq inhibit-compacting-font-caches t)
+
+  (use-package doom-modeline
+    :ensure t)
+
+  (custom-set-variables
+   '(package-selected-packages '(evil doom-modeline ivy command-log-mode use-package)))
+  (custom-set-faces)
+
+  ;; (custom-set-faces
+  ;;  '(doom-modeline ((t (:font "Iosevka Light" :height 0.9))))
+  ;;  '(doom-modeline-inactive ((t (:font "Iosevka Light" :height 0.9)))))
+
+  (setq evil-normal-state-tag   "n"
+        evil-insert-state-tag   "i"
+        evil-emacs-state-tag    "e"
+        evil-visual-state-tag   "v"
+        evil-replace-state-tag  "r"
+        evil-operator-state-tag "o"
+        )
+
+  (setq
+   doom-modeline-buffer-encoding nil
+   doom-modeline-buffer-file-name-style 'relative-to-project
+   doom-modeline-buffer-state-icon nil
+   doom-modeline-icon nil
+   doom-modeline-lsp nil
+   doom-modeline-major-mode nil
+   doom-modeline-major-mode-icon nil
+   doom-modeline-minor-modes nil
+   doom-modeline-percent-position nil
+   doom-modeline-vcs-max-length 40
+   )
+
+  (doom-modeline-def-modeline 'my-simple-line
+    '(workspace-name window-number modals matches buffer-info remote-host buffer-position word-count parrot selection-info)
+    '(objed-state misc-info persp-name battery grip irc mu4e gnus github debug repl lsp minor-modes input-method indent-info buffer-encoding major-mode process vcs debug))
+
+
+  ;; Set default mode-line
+  (add-hook 'doom-modeline-mode-hook
+            (lambda ()
+              (doom-modeline-set-modeline 'my-simple-line 'default)))
+  (setq doom-modeline-mode-alist nil)
+
+  ;; Hide modes from minibuffer
+  (setq evil-emacs-state-message nil)
+  (setq evil-motion-state-message nil)
+  (setq evil-visual-state-message nil)
+  (setq evil-normal-state-message nil)
+  (setq evil-insert-state-message nil)
+  (setq evil-replace-state-message nil)
+  (setq evil-operator-state-message nil)
+
+  ;; (use-package nano-modeline
+  ;;   :config
+  ;;   (nano-modeline-mode))
   ;;  (use-package mood-line
   ;;    :config
   ;;    (setq-default mood-line-glyph-alist mood-line-glyphs-ascii)
   ;;    (mood-line-mode))
 
-  ;;(setq-default header-line-format mode-line-format)
-  ;;(setq-default mode-line-format nil)
+  ;; (setq-default header-line-format mode-line-format)
+  ;; (setq-default mode-line-format nil)
+
+  (doom-modeline-mode 1)
 #+end_src
 
 Save colors for later use.
