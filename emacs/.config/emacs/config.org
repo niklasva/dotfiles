@@ -145,8 +145,6 @@ Show dashboard on startup
 Hide buffers by prepending space to buffer name.
 #+Begin_src emacs-lisp
   (defun niva/hide-buffer (bufname)
-    (if (get-buffer (concat " " bufname))
-        (kill-buffer (concat " " bufname)))
     (if (get-buffer bufname)
         (with-current-buffer bufname
           (rename-buffer (concat " " bufname)))))
@@ -157,11 +155,6 @@ Hide buffers by prepending space to buffer name.
   (defun remove-messages-buffer ()
     (niva/hide-buffer "*Messages*"))
   (add-hook 'after-change-major-mode-hook 'remove-messages-buffer)
-
-  ;; Removes *scratch* from the buffer.
-  (defun remove-scratch-buffer ()
-    (niva/hide-buffer "*scratch*"))
-  (add-hook 'after-change-major-mode-hook 'remove-scratch-buffer)
 
   (defun hide-lsp-buffers ()
     (interactive)
