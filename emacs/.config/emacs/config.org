@@ -1067,9 +1067,11 @@ Associate extensions with the correct tree-sitter mode and others
 ** eshell
 #+begin_src emacs-lisp
   (use-package eshell
-    :ensure nil
+    :ensure t
     :defines eshell-prompt-function
     :config
+      (add-hook 'eshell-mode-hook
+            (lambda ()
     (define-key eshell-mode-map (kbd "C-l") 'eshell/clear)
     (define-key eshell-mode-map (kbd "C-a") 'eshell-bol)
     (define-key eshell-mode-map (kbd "C-j") 'eshell-send-input)
@@ -1077,6 +1079,8 @@ Associate extensions with the correct tree-sitter mode and others
     (define-key eshell-mode-map (kbd "C-r") 'helm-eshell-history)
     (define-key eshell-mode-map (kbd "C-r") 'helm-eshell-history)
     (define-key eshell-hist-mode-map (kbd "C-c C-l") nil)
+    (define-key eshell-hist-mode-map (kbd "M-s") nil)
+    ))
 
     (setq eshell-cmpl-ignore-case t
           eshell-ask-to-save-history 'always
