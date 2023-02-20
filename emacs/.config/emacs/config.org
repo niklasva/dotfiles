@@ -686,18 +686,21 @@ simpleclip-mode radically simplifies clipboard handling: the system clipboard an
   ;; (setf dired-kill-when-opening-new-dired-buffer t)
 
   ;; (add-hook 'peep-dired-hook 'evil-normalize-keymaps)
+  #+end_src
 
+** Ranger
+
+#+begin_src emacs-lisp
   (use-package ranger
     :config
     (ranger-override-dired-mode t)
     (setq ranger-cleanup-eagerly t)
     (setq ranger-show-literal t)
-    (setq ranger-cleanup-on-disable t)
-    )
+    (setq ranger-cleanup-on-disable t))
 
   (nvmap :states '(normal visual) :keymaps 'override :prefix "SPC"
     "d d" '(ranger :which-key "Open ranger"))
-  #+end_src
+#+end_src
 
 ** Projectile
 
