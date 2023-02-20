@@ -1073,22 +1073,41 @@ Associate extensions with the correct tree-sitter mode and others
     :ensure t
     :defines eshell-prompt-function
     :config
-      (add-hook 'eshell-mode-hook
-            (lambda ()
-    (define-key eshell-mode-map (kbd "C-l") 'eshell/clear)
-    (define-key eshell-mode-map (kbd "C-a") 'eshell-bol)
-    (define-key eshell-mode-map (kbd "C-j") 'eshell-send-input)
-    (define-key eshell-mode-map (kbd "C-u") 'eshell-kill-input)
-    (define-key eshell-mode-map (kbd "C-r") 'helm-eshell-history)
-    (define-key eshell-mode-map (kbd "C-r") 'helm-eshell-history)
-    (define-key eshell-hist-mode-map (kbd "C-c C-l") nil)
-    (define-key eshell-hist-mode-map (kbd "M-s") nil)
-    ))
+    (add-hook 'eshell-mode-hook
+              (lambda ()
+                (define-key eshell-mode-map (kbd "C-l") 'eshell/clear)
+                (define-key eshell-mode-map (kbd "C-a") 'eshell-bol)
+                (define-key eshell-mode-map (kbd "C-j") 'eshell-send-input)
+                (define-key eshell-mode-map (kbd "C-u") 'eshell-kill-input)
+                (define-key eshell-mode-map (kbd "C-r") 'helm-eshell-history)
+                (define-key eshell-mode-map (kbd "C-r") 'helm-eshell-history)
+                (define-key eshell-hist-mode-map (kbd "C-c C-l") nil)
+                (define-key eshell-hist-mode-map (kbd "M-s") nil)
+                ))
 
-    (setq eshell-cmpl-ignore-case t
-          eshell-ask-to-save-history 'always
-          eshell-cmpl-cycle-completions t
-          eshell-hist-ignoredups t))
+    (setq
+     eshell-ask-to-save-history 'always
+     eshell-cmpl-cycle-completions t
+     eshell-cmpl-ignore-case t
+     eshell-error-if-no-glob t
+     eshell-glob-case-insensitive t
+     eshell-hist-ignoredups t
+     eshell-hist-ignoredups t
+     eshell-input-filter (lambda (input) (not (string-match-p "\\`\\s-+" input)))
+     eshell-kill-processes-on-exit t
+     eshell-scroll-to-bottom-on-input 'all
+     eshell-scroll-to-bottom-on-output nil
+     eshell-banner-message
+     '(format "%s %s\n"
+              (propertize (format " %s " (string-trim (buffer-name)))
+                          'face 'mode-line-highlight)
+              (propertize (current-time-string)
+                          'face 'font-lock-keyword-face))))
+
+
+  (use-package eshell-syntax-highlighting
+    :hook (eshell-mode . eshell-syntax-highlighting-mode))
+
 #+end_src
 
 ** env
