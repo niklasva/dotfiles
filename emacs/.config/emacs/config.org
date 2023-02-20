@@ -1030,26 +1030,26 @@ Decoration level to be used by tree-sitter fontifications.
 #+end_src
 
 #+begin_src emacs-lisp
-  (setq-default treesit-font-lock-level 4)
+  (setq-default treesit-font-lock-level 3)
 #+end_src
 
 Associate extensions with the correct tree-sitter mode and others
 #+begin_src emacs-lisp
-  ;; (dolist (pair '(("\\.py\\'" . python-ts-mode)
-  ;;                 ("\\.c\\'"  . c-ts-mode)
-  ;;                 ("\\.h\\'"  . c-ts-mode)
-  ;;                 ("\\.cpp\\'" . c++-ts-mode)
-  ;;                 ("\\.hpp\\'" . c++-ts-mode)
-  ;;                 ("\\.tpp\\'" . c++-ts-mode)
-  ;;                 ("\\.sh\\'" . bash-ts-mode)
-  ;;                 ("\\.js\\'" . js-ts-mode)
-  ;;                 ("\\.ts\\'" . typescript-ts-mode)
-  ;;                 ("\\.tsx\\'" . tsx-ts-mode)
-  ;;                 ("\\.cs\\'" . csharp-ts-mode)
-  ;;                 ("\\.java\\'" . java-ts-mode)
-  ;;                 ("\\.json\\'" . json-ts-mode)
-  ;;                 ("\\.css\\'" . css-ts-mode)))
-  ;;   (push pair auto-mode-alist))
+  (dolist (pair '(("\\.py\\'" . python-ts-mode)
+                  ("\\.c\\'"  . c-ts-mode)
+                  ("\\.h\\'"  . c-ts-mode)
+                  ("\\.cpp\\'" . c++-ts-mode)
+                  ("\\.hpp\\'" . c++-ts-mode)
+                  ("\\.tpp\\'" . c++-ts-mode)
+                  ("\\.sh\\'" . bash-ts-mode)
+                  ("\\.js\\'" . js-ts-mode)
+                  ("\\.ts\\'" . typescript-ts-mode)
+                  ("\\.tsx\\'" . tsx-ts-mode)
+                  ("\\.cs\\'" . csharp-ts-mode)
+                  ("\\.java\\'" . java-ts-mode)
+                  ("\\.json\\'" . json-ts-mode)
+                  ("\\.css\\'" . css-ts-mode)))
+    (push pair auto-mode-alist))
 #+end_src
 
 * Version control
