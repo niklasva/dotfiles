@@ -39,13 +39,33 @@
    c-basic-offset 4
    c-default-style "linux"
    create-lockfiles nil
-   evil-auto-indent nil
+   electric-indent-inhibit t
+   evil-auto-indent t
    indent-line-function 'insert-tab
-   indent-tabs-mode nil
    indent-tabs-mode nil
    tab-width 4)
 
   (column-number-mode)
+  (electric-indent-mode +1)
+  (electric-pair-mode +1)
+
+#+end_src
+
+#+begin_src emacs-lisp
+  (defun indent-tabs-hook ()
+    (setq tab-width 4
+          indent-tabs-mode t
+          indent-line-function 'c-indent-line))
+
+  (add-hook 'c++-mode-hook 'indent-tabs-hook)
+  (add-hook 'c-mode-hook 'indent-tabs-hook)
+#+end_src
+
+#+begin_src emacs-lisp
+  (setq
+   org-src-strip-leading-and-trailing-blank-lines t
+   org-src-tab-acts-natively t)
+
 #+end_src
 
 Enable line numbers for some modes
@@ -131,15 +151,13 @@ Prevent emacs from contaminating system clipboard.
   (setq x-select-enable-primary nil)
 #+end_src
 
-** Aggressive indent
 
+** Syntactic close
 #+begin_src emacs-lisp
-  (use-package aggressive-indent
+  (use-package syntactic-close            ; Automatically insert closing delimiter
     :ensure t
-    :config
-    (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode))
-    #+end_src
-
+    :bind ("C-c x c" . syntactic-close))
+#+end_src
 * Customization
 ** Theme
 *** Theme packages
@@ -297,7 +315,7 @@ Prevent accidental close.
     :init (popwin-mode 1)
     :config
     (push '(compilation-mode :noselect t) popwin:special-display-config))
-  #+end_src
+ #+end_src
 
 ** Mode line
 
@@ -330,7 +348,7 @@ Use lowercase evil-mode state tags (not used by mood-line)
 
 
     :init (mood-line-mode))
-  #+end_src
+#+end_src
 
 #+begin_src emacs-lisp
   (setq inhibit-compacting-font-caches t)
@@ -907,7 +925,7 @@ Always follow symlinks
                '(:noweb . "yes"))
 #+end_src
 
-*{* Tweak garbage collection
+** Tweak garbage collection
 #+begin_src emacs-lisp
   (defmacro k-time (&rest body)
     "Measure and return the time it takes evaluating BODY."
@@ -917,6 +935,8 @@ Always follow symlinks
 
   ;; Set garbage collection threshold to 1GB.
   (setq gc-cons-threshold #x40000000)
+
+  (setq garbage-collection-messages t)
 
   ;; When idle for 15sec run the GC no matter what.
   (defvar k-gc-timer
@@ -1167,7 +1187,7 @@ Remove font weight on some faces
   (set-face-attribute 'magit-header-line nil    :weight 'unspecified)
   (set-face-attribute 'mode-line-buffer-id nil :weight 'unspecified)
   (set-face-attribute 'mood-line-buffer-status-narrowed nil :weight 'unspecified)
- #+end_src
+#+end_src
 
 Only use variable-pitch if explicitly called.
 
