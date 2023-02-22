@@ -181,8 +181,8 @@ Prevent emacs from contaminating system clipboard.
         modus-themes-mode-line (quote (borderless accented))
         modus-themes-hl-line (quote (accented))
         modus-themes-tabs-accented t
-        modus-themes-org-blocks 'tinted-background)
-        #+end_src
+        modus-themes-org-blocks nil)
+#+end_src
 *** Window divider fix
 
 #+begin_src emacs-lisp
@@ -405,7 +405,10 @@ Use lowercase evil-mode state tags (not used by mood-line)
           evil-want-C-u-scroll t
           evil-undo-system 'undo-redo)
     (evil-mode))
+
   (use-package transpose-frame)
+  (use-package general :config (general-evil-setup t))
+  (use-package elpy :bind (:map elpy-mode-map ("<g>" . nil)))
 #+end_src
 
 *** Evil collection
@@ -417,6 +420,14 @@ Use lowercase evil-mode state tags (not used by mood-line)
     ;;(setq evil-collection-mode-list '(dashboard dired ibuffer))
     (evil-collection-init))
   (use-package evil-tutor)
+#+end_src
+
+*** savehist
+
+#+begin_src emacs-lisp
+  (use-package savehist
+    :init
+    (savehist-mode))
 #+end_src
 
 ** Keybindings
@@ -433,30 +444,50 @@ Use lowercase evil-mode state tags (not used by mood-line)
 #+end_src
 
 #+begin_src emacs-lisp
-  (global-set-key (kbd "§") 'evil-invert-char)
+  (global-set-key (kbd "<f13>") 'evil-invert-char)
   (global-set-key (kbd "€") (kbd "$"))
+
+  (define-key evil-insert-state-map (kbd "C-c C-e") 'comment-line)
+  (define-key evil-visual-state-map (kbd "C-c C-e") 'comment-line)
 
   (define-key evil-normal-state-map (kbd "U") 'evil-redo)
 
   (define-key evil-normal-state-map (kbd "C-a C-x") 'kill-this-buffer)
   (define-key help-mode-map (kbd "C-a C-x") 'evil-delete-buffer)
 
-  (define-key evil-normal-state-map (kbd "C-w -") 'evil-window-split)
-  (define-key evil-normal-state-map (kbd "C-w |") 'evil-window-vsplit)
-  (define-key evil-normal-state-map (kbd "C-w SPC") 'transpose-frame)
   (define-key evil-normal-state-map (kbd "M-e") 'eshell)
-
-  (define-key evil-normal-state-map (kbd "C-w n") 'tab-next)
-  (define-key evil-normal-state-map (kbd "C-w c") 'tab-new)
 
   (define-key evil-normal-state-map (kbd "SPC b") 'ivy-switch-buffer)
   (define-key evil-normal-state-map (kbd "SPC h p") 'ff-find-other-file)
 
-  (define-key evil-normal-state-map (kbd "C-w C-j") (lambda () (interactive) (evil-window-decrease-height 3)))
-  (define-key evil-normal-state-map (kbd "C-w C-k") (lambda () (interactive) (evil-window-increase-height 3)))
-  (define-key evil-normal-state-map (kbd "C-w C-h") (lambda () (interactive) (evil-window-decrease-width 6)))
-  (define-key evil-normal-state-map (kbd "C-w C-l") (lambda () (interactive) (evil-window-increase-width 6)))
+  ;; Visual-select block
+  (define-key evil-normal-state-map (kbd "B V") 'org-babel-mark-block)
 
+  ;; Eval block
+  (define-key evil-normal-state-map (kbd "SPC e b") 'org-babel-execute-src-block-maybe)
+#+end_src
+
+Window management
+#+begin_src emacs-lisp
+  (define-key evil-normal-state-map (kbd "C-w n") 'tab-next)
+  (define-key evil-normal-state-map (kbd "C-w c") 'tab-new)
+
+  (define-key evil-normal-state-map (kbd "C-w -") 'evil-window-split)
+  (define-key evil-normal-state-map (kbd "C-w |") 'evil-window-vsplit)
+  (define-key evil-normal-state-map (kbd "C-w SPC") 'transpose-frame)
+
+  (define-key evil-normal-state-map (kbd "C-w C-j") (lambda () (interactive) (evil-window-decrease-height 4)))
+  (define-key evil-normal-state-map (kbd "C-w C-k") (lambda () (interactive) (evil-window-increase-height 4)))
+  (define-key evil-normal-state-map (kbd "C-w C-h") (lambda () (interactive) (evil-window-decrease-width 8)))
+  (define-key evil-normal-state-map (kbd "C-w C-l") (lambda () (interactive) (evil-window-increase-width 8)))
+
+  (define-key evil-normal-state-map (kbd "C-w H") 'buf-move-left)
+  (define-key evil-normal-state-map (kbd "C-w J") 'buf-move-down)
+  (define-key evil-normal-state-map (kbd "C-w K") 'buf-move-up)
+  (define-key evil-normal-state-map (kbd "C-w L") 'buf-move-right)
+#+end_src
+
+#+begin_src emacs-lisp
   (global-set-key (kbd "s-q") 'save-buffers-kill-terminal)
 
   (defvar dashboard-mode-map
@@ -476,19 +507,11 @@ Use lowercase evil-mode state tags (not used by mood-line)
       map)
     "Keymap for dashboard mode.")
 
-  (use-package general
-    :config
-    (general-evil-setup t))
-
-  (use-package elpy
-    :bind (:map elpy-mode-map
-                ("<g>" . nil)))
 #+end_src
 
 #+begin_src emacs-lisp
   (global-set-key (kbd "s-<return>") 'toggle-frame-fullscreen)
 #+end_src
-
 
 ** Simpleclip
 
@@ -660,18 +683,21 @@ simpleclip-mode radically simplifies clipboard handling: the system clipboard an
 ** Vertico
 
 #+begin_src emacs-lisp
-  (use-package vertico
-    :init
-    (vertico-mode))
+(use-package vertico
+  :init
+  (vertico-mode))
 
-  (use-package savehist
-    :init
-    (savehist-mode))
+(use-package vertico-posframe
+  :init
+  (vertico-posframe-mode))
 
-  (use-package vertico-posframe
-    :init
-    (vertico-posframe-mode))
-  #+end_src
+#+end_src
+
+** buffer-move
+
+#+begin_src emacs-lisp
+(use-package buffer-move)
+#+end_src
 
 * File management
 ** Dired
@@ -704,7 +730,7 @@ simpleclip-mode radically simplifies clipboard handling: the system clipboard an
   ;; (setf dired-kill-when-opening-new-dired-buffer t)
 
   ;; (add-hook 'peep-dired-hook 'evil-normalize-keymaps)
-  #+end_src
+ #+end_src
 
 ** Ranger
 
@@ -716,8 +742,7 @@ simpleclip-mode radically simplifies clipboard handling: the system clipboard an
     (setq ranger-show-literal t)
     (setq ranger-cleanup-on-disable t))
 
-  (nvmap :states '(normal visual) :keymaps 'override :prefix "SPC"
-    "d d" '(ranger :which-key "Open ranger"))
+  (nvmap :states '(normal visual) :keymaps 'override :prefix "SPC" "d d" '(ranger :which-key "Open ranger"))
 #+end_src
 
 ** Projectile
@@ -769,7 +794,7 @@ simpleclip-mode radically simplifies clipboard handling: the system clipboard an
 #+begin_src emacs-lisp
     (setq backup-directory-alist `(("." . ,(expand-file-name "tmp/backups/" user-emacs-directory))))
     (make-directory (expand-file-name "tmp/auto-saves/" user-emacs-directory) t)
-  #+end_src
+ #+end_src
 
 *** Auto-save files
 #+begin_src emacs-lisp
@@ -904,7 +929,7 @@ Always follow symlinks
     (gcmh-high-cons-threshold 104857600)
     :config
     (gcmh-mode +1))
-  #+end_src
+ #+end_src
 ** Byte compile on exit
 
 #+begin_src emacs-lisp
