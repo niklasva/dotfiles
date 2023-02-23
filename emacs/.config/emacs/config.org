@@ -38,6 +38,8 @@
   (setq-default
    c-basic-offset 4
    c-default-style "linux"
+   c-ts-mode-indent-style "linux"
+   c-ts-mode-indent-offset 4
    create-lockfiles nil
    electric-indent-inhibit t
    evil-auto-indent t
@@ -55,6 +57,7 @@
   (defun indent-tabs-hook ()
     (setq tab-width 4
           indent-tabs-mode t
+          evil-auto-indent t
           indent-line-function 'c-indent-line))
 
   (add-hook 'c++-mode-hook 'indent-tabs-hook)
@@ -888,7 +891,7 @@ Always follow symlinks
     (auto-fill-mode 0)
     (visual-line-mode 1)
     (org-num-mode 1)
-    (setq evil-auto-indent nil)
+    (setq evil-auto-indent t)
     (require 'org-inlinetask)
     ;;(org-tex-style)
     )
