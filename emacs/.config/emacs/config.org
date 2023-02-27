@@ -123,13 +123,10 @@ Hide buffers by prepending space to buffer name.
     (if (get-buffer bufname)
         (with-current-buffer bufname
           (rename-buffer (concat " " bufname)))))
-#+end_src
 
-#+Begin_src emacs-lisp
-  ;; Removes *messages* from the buffer.
   (defun remove-messages-buffer ()
     (niva/hide-buffer "*Messages*"))
-  (add-hook 'after-change-major-mode-hook 'remove-messages-buffer)
+  ;; (add-hook 'after-change-major-mode-hook 'remove-messages-buffer)
 
   (defun hide-lsp-buffers ()
     (interactive)
@@ -138,7 +135,7 @@ Hide buffers by prepending space to buffer name.
     (niva/hide-buffer "*clangd::stderr*")
     (niva/hide-buffer "*pyright*")
     (niva/hide-buffer "*pyright::stderr*"))
-  (add-hook 'after-change-major-mode-hook 'hide-lsp-buffers)
+  ;; (add-hook 'after-change-major-mode-hook 'hide-lsp-buffers)
 #+end_src
 
 Don't show *Buffer list* when opening multiple files at the same time.
@@ -153,7 +150,6 @@ Prevent emacs from contaminating system clipboard.
   (setq x-select-enable-clipboard nil)
   (setq x-select-enable-primary nil)
 #+end_src
-
 
 ** Syntactic close
 #+begin_src emacs-lisp
@@ -563,7 +559,8 @@ simpleclip-mode radically simplifies clipboard handling: the system clipboard an
     "m I"   '(org-toggle-inline-images :which-key "Org toggle inline imager")
     "m T"   '(org-todo-list :which-key "Org todo list")
     "o a"   '(org-agenda :which-key "Org agenda")
-    "b"     '(ivy-switch-buffer :which-key "ivy-switch-buffer")
+    "B"     '(ido-switch-buffer :which-key "Switch buffer")
+    "b"     '(project-switch-to-buffer :which-key "Switch buffer")
     "h p"   '(ff-find-other-file :which-key "ff-find-other-file")
 
     "p e"   '(projectile-recentf :which-key "projectile-recentf")
