@@ -1,5 +1,5 @@
 #+TITLE: config.org
-#+PROPERTY: header-args :tangle "~/.config/emacs/config.el" :results silent
+#+PROPERTY: header-args : tangle "~/.config/emacs/config.el" :results silent
 #+OPTIONS: toc:2
 
 * Pre-init
@@ -573,6 +573,9 @@ simpleclip-mode radically simplifies clipboard handling: the system clipboard an
 
     "c a"   '(lsp-execute-code-action :which-key "lsp-execute-code-action")
 
+    "n" '(flycheck-next-error :which-key "flycheck-next-error")
+    "N" '(flycheck-previous-error :which-key "flycheck-previous-error")
+
     "conf"  '((lambda () (interactive) (find-file "~/.config/emacs/config.org")) :which-key "Open config.org")
     "vconf"  '((lambda () (interactive) (split-window-right)
                  (find-file "~/.config/emacs/config.org")) :which-key "Open config.org")
@@ -1016,20 +1019,72 @@ Always follow symlinks
   (add-hook 'c++-ts-mode-hook #'lsp-c-save-hooks)
 
   (use-package lsp-ivy
+    :after lsp
     :ensure t
     :commands lsp-ivy-workspace-symbol)
 
   ;; company
-  (setq company-tooltip-align-annotations t
-        company-tooltip-limit 12
-        company-idle-delay 0
-        company-echo-delay (if (display-graphic-p) nil 0)
-        company-minimum-prefix-length 1
-        company-require-match nil
-        company-dabbrev-ignore-case nil
-        company-dabbrev-downcase nil
-        company-global-modes '(not erc-mode message-mode help-mode
-                                   gud-mode eshell-mode shell-mode))
+
+  (use-package pos-tip)
+
+  (setq company-frontends
+        '(company-echo-metadata-frontend
+          company-preview-if-just-one-frontend
+          company-pseudo-tooltip-unless-just-one-frontend
+          ))
+
+  (setq
+   ;; company-show-quick-access 'right
+   company-tooltip-minimum-width 75
+   company-tooltip-maximum-width 75
+   company-tooltip-width-grow-only t
+   company-tooltip-align-annotations t
+   company-tooltip-idle-delay 0.5
+   company-tooltip-limit 12
+   company-tooltip-flip-when-above t
+   company-idle-delay 0
+   company-dabbrev-downcase nil
+   company-dabbrev-ignore-case nil
+   company-format-margin-function 'company-text-icons-margin
+   company-minimum-prefix-length 2
+   ;; company-require-match nil
+   )
+
+  (use-package company-quickhelp
+    :after company
+    :ensure t
+    :config
+    (setq company-quickhelp-delay 0
+          company-quickhelp-timer 0
+          )
+
+    (company-quickhelp-mode))
+
+  ;;(use-package company-box
+  ;;  :after company
+  ;;  :hook (company-mode . company-box-mode)
+  ;;  :config
+
+  ;;  (setq company-box-doc-frame-parameters '((internal-border-width . 1)
+  ;;                                           (left-fringe . 3)
+  ;;                                           (right-fringe . 3)))
+
+  ;;  (add-to-list 'company-box-frame-parameters '(left-fringe . 200))
+  ;;  (add-to-list 'company-box-frame-parameters '(right-fringe . 200))
+
+  ;;  (setq company-box-doc-delay 0))
+
+  ;; (use-package company-posframe
+  ;;   :after company
+  ;;   :hook (company-mode . company-posframe-mode)
+  ;;   :config
+  ;;   ;; (setq company-posframe-backend-separator " | ")
+  ;;   ;; (setq company-posframe-show-indicator nil)
+  ;;   ;; (setq company-posframe-show-metadata nil)
+  ;;   (setq company-posframe-quickhelp-delay 0.0)
+
+  ;;   ;; (company-posframe-mode t)
+  ;;   )
 
   (use-package lsp-ui
     :ensure t
@@ -1038,21 +1093,59 @@ Always follow symlinks
           lsp-ui-doc-show-with-mouse nil
           lsp-ui-doc-position 'at-point
           lsp-ui-doc-delay 1
-          lsp-ui-sideline-enable t))
+          lsp-ui-sideline-enable nil))
 
-  (use-package company-box
-    :ensure t
-    :after company
-    :hook (company-mode . company-box-mode))
-
-  ;; flycheck
   (use-package flycheck
-    :ensure t
-    :init (global-flycheck-mode)
     :config
-    (setq flycheck-display-errors-function
-          #'flycheck-display-error-messages-unless-error-list
-          flycheck-display-errors-delay 1.0))
+    (setq flycheck-display-errors-delay 0.0
+          flycheck-idle-change-delay 0.5
+
+          ;; columns: Highlight a single character
+          ;; symbols: highlight the problematic symbol, if any, or act like columns
+          ;; sexps:   highlight a full expression, if any, or act like columns
+          ;; lines:   highlight the entire line (faster)
+          flycheck-highlighting-mode 'lines))
+
+#+end_src
+
+** Toggling flycheck buffer with "M-C"
+I have my own little hook to open the flycheck buffer with ~M-C~, and close it again with another ~M-C~ keystroke.
+#+begin_src emacs-lisp
+  (defvar should-delete-flycheck-list-buffer nil)
+  (defun my/flycheck-list-errors ()
+    "Open flycheck list if it doesn't exist.  If it does, close it."
+    (interactive)
+    (let* ((target-buffer-name "*Flycheck errors*")
+           (target-buffer (get-buffer target-buffer-name))
+           (target-window (get-buffer-window target-buffer)))
+      (if (and target-buffer target-window)
+          ;; the target buffer exists and window is visible
+          (progn
+            (when should-delete-flycheck-list-buffer
+              (delete-window target-window))
+            (kill-buffer target-buffer))
+        ;; the target buffer doesn't exist or the window isn't visible
+        (let* ((starting-window-count (count-windows)))
+          (flycheck-list-errors)
+          (setq should-delete-flycheck-list-buffer
+                (> (count-windows) starting-window-count))))))
+
+  (define-key flycheck-mode-map (kbd "M-C") 'my/flycheck-list-errors)
+#+end_src
+
+#+begin_src emacs-lisp
+  (use-package orderless
+    :demand t
+    :config
+    (setq completion-styles '(orderless partial-completion)
+          completion-category-defaults nil
+          completion-category-overrides '((file (styles . (partial-completion))))))
+
+  (use-package yasnippet
+    :diminish yas-minor-mode
+    :hook (prog-mode . yas-minor-mode)
+    :config
+    (yas-reload-all))
 
 #+end_src
 
@@ -1084,21 +1177,21 @@ Decoration level to be used by tree-sitter fontifications.
 
 Associate extensions with the correct tree-sitter mode and others
 #+begin_src emacs-lisp
-  (dolist (pair '(("\\.py\\'" . python-ts-mode)
-                  ("\\.c\\'"  . c-ts-mode)
-                  ("\\.h\\'"  . c-ts-mode)
-                  ("\\.cpp\\'" . c++-ts-mode)
-                  ("\\.hpp\\'" . c++-ts-mode)
-                  ("\\.tpp\\'" . c++-ts-mode)
-                  ("\\.sh\\'" . bash-ts-mode)
-                  ("\\.js\\'" . js-ts-mode)
-                  ("\\.ts\\'" . typescript-ts-mode)
-                  ("\\.tsx\\'" . tsx-ts-mode)
-                  ("\\.cs\\'" . csharp-ts-mode)
-                  ("\\.java\\'" . java-ts-mode)
-                  ("\\.json\\'" . json-ts-mode)
-                  ("\\.css\\'" . css-ts-mode)))
-    (push pair auto-mode-alist))
+  ;; (dolist (pair '(("\\.py\\'" . python-ts-mode)
+  ;;                 ("\\.c\\'"  . c-ts-mode)
+  ;;                 ("\\.h\\'"  . c-ts-mode)
+  ;;                 ("\\.cpp\\'" . c++-ts-mode)
+  ;;                 ("\\.hpp\\'" . c++-ts-mode)
+  ;;                 ("\\.tpp\\'" . c++-ts-mode)
+  ;;                 ("\\.sh\\'" . bash-ts-mode)
+  ;;                 ("\\.js\\'" . js-ts-mode)
+  ;;                 ("\\.ts\\'" . typescript-ts-mode)
+  ;;                 ("\\.tsx\\'" . tsx-ts-mode)
+  ;;                 ("\\.cs\\'" . csharp-ts-mode)
+  ;;                 ("\\.java\\'" . java-ts-mode)
+  ;;                 ("\\.json\\'" . json-ts-mode)
+  ;;                 ("\\.css\\'" . css-ts-mode)))
+  ;;   (push pair auto-mode-alist))
 #+end_src
 
 * Version control
