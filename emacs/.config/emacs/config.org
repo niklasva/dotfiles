@@ -177,10 +177,18 @@ Prevent emacs from contaminating system clipboard.
 
 #+begin_src emacs-lisp
   (setq modus-themes-fringes 'subtle
-        modus-themes-mode-line (quote (borderless accented))
+        modus-themes-bold-constructs nil
         modus-themes-hl-line (quote (accented))
-        modus-themes-tabs-accented t
-        modus-themes-org-blocks nil)
+        modus-themes-mode-line '(accented borderless (padding 6))
+        modus-themes-org-blocks nil
+        modus-themes-region '(bg-only)
+        modus-themes-tabs-accented t)
+
+
+  (setq modus-themes-completions '((matches . (background minimal))
+                                   (selection . (background minimal))
+                                   (popup . (background minimal))))
+
 #+end_src
 *** Window divider fix
 
@@ -209,8 +217,7 @@ Prevent emacs from contaminating system clipboard.
 
 #+begin_src emacs-lisp
   (setq custom-safe-themes t)
-  ;; (setq nano-fonts-use t)
-  (load-theme 'doom-nord-aurora t)
+  (load-theme 'modus-operandi-tinted t)
 #+end_src
 
 ** GUI settings
@@ -221,7 +228,7 @@ Prevent emacs from contaminating system clipboard.
 
   (scroll-bar-mode -1)
   (tool-bar-mode -1)
-  (tooltip-mode -1)
+  (tooltip-mode nil)
   (menu-bar-mode 1)
   (set-fringe-mode 1)
 
@@ -407,7 +414,6 @@ Use lowercase evil-mode state tags (not used by mood-line)
 
   (use-package transpose-frame)
   (use-package general :config (general-evil-setup t))
-  (use-package elpy :bind (:map elpy-mode-map ("<g>" . nil)))
 #+end_src
 
 *** Evil collection
@@ -456,7 +462,6 @@ Use lowercase evil-mode state tags (not used by mood-line)
 
   (define-key evil-normal-state-map (kbd "M-e") 'eshell)
 
-  (define-key evil-normal-state-map (kbd "SPC b") 'ivy-switch-buffer)
   (define-key evil-normal-state-map (kbd "SPC h p") 'ff-find-other-file)
 
   ;; Visual-select block
@@ -742,8 +747,8 @@ simpleclip-mode radically simplifies clipboard handling: the system clipboard an
     (setq ranger-show-literal t)
     (setq ranger-cleanup-on-disable t))
 
-  (nvmap :states '(normal visual) :keymaps 'override :prefix "SPC" "d d" '(ranger :which-key "Open ranger"))
-#+end_src
+  (nvmap :states '(normal visual) :keymaps 'override :prefix "SPC" "d d" '(ranger : "Open ranger"))
+  #+end_src
 
 ** Projectile
 
@@ -816,7 +821,6 @@ Always follow symlinks
 #+end_src
 
 * Magit
-
 #+begin_src emacs-lisp
   (use-package magit)
 #+end_src
@@ -1182,7 +1186,7 @@ Get path from shell
 Set font.
 
 #+begin_src emacs-lisp
-    (add-to-list 'default-frame-alist '(font . "Iosevka Light 17"))
+    (add-to-list 'default-frame-alist '(font . "Iosevka 14"))
 #+end_src
 
 Remove font weight on some faces
@@ -1212,6 +1216,8 @@ Remove font weight on some faces
   (set-face-attribute 'magit-header-line nil    :weight 'unspecified)
   (set-face-attribute 'mode-line-buffer-id nil :weight 'unspecified)
   (set-face-attribute 'mood-line-buffer-status-narrowed nil :weight 'unspecified)
+
+  (set-face-attribute 'tooltip nil :inherit 'default :font "Iosevka 16")
 #+end_src
 
 Only use variable-pitch if explicitly called.
