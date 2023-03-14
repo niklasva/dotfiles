@@ -1049,12 +1049,16 @@ Always follow symlinks
 #+end_src
 
 * Performance
+** Native compilation
+#+begin_src emacs-lisp
+  (setq warning-minimum-level :error)
+#+end_src
 ** GCMH
 #+begin_src emacs-lisp
   (use-package gcmh
     :demand
-    :hook
-    (focus-out-hook . gcmh-idle-garbage-collect)
+    ;; :hook
+    ;; (focus-out-hook . gcmh-idle-garbage-collect)
     :custom
     (gcmh-idle-delay 10)
     (gcmh-high-cons-threshold 104857600)
@@ -1092,9 +1096,8 @@ Always follow symlinks
   ;; Set garbage collection threshold to 1GB.
   (setq gc-cons-threshold #x40000000)
 
-  (setq garbage-collection-messages t)
+  (setq garbage-collection-messages nil)
 
-  ;; When idle for 15sec run the GC no matter what.
   (defvar k-gc-timer
     (run-with-idle-timer 300 t (lambda () (garbage-collect))))
 
