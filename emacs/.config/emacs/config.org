@@ -1236,8 +1236,9 @@ Always follow symlinks
 #+end_src
 
 ** Toggling flycheck buffer with "M-C"
+
 I have my own little hook to open the flycheck buffer with ~M-C~, and close it again with another ~M-C~ keystroke.
-#+begin_src emacs-lisp
+#+begin_src disabled
   (defvar should-delete-flycheck-list-buffer nil)
   (defun my/flycheck-list-errors ()
     "Open flycheck list if it doesn't exist.  If it does, close it."
@@ -1276,6 +1277,46 @@ I have my own little hook to open the flycheck buffer with ~M-C~, and close it a
 
 #+end_src
 
+** Eglot
+#+begin_src emacs-lisp
+  (use-package eglot
+    :hook
+    (c-mode . eglot-ensure)
+    (c-mode . company-mode)
+
+    (c++-mode . company-mode)
+    (c++-mode . eglot-ensure))
+
+  (with-eval-after-load 'eglot
+    (add-to-list 'eglot-server-programs
+                 '((c++-mode c-mode) . ("clangd"
+                                        "--completion-style=detailed"
+                                        "-j=8"
+                                        "-background-index"
+                                        "--clang-tidy"
+                                        "--query-driver=/Applications/ARM/**/*"
+                                        "--pch-storage=memory"
+                                        ))))
+
+
+  ;;   (add-hook 'eglot--managed-mode-hook
+  ;;           (lambda () (progn
+  ;;                        (eldoc--format-doc-buffer nil)
+  ;;                        (setq eldoc-echo-area-prefer-doc-buffer t)
+  ;;                        (eldoc-doc-buffer))))
+  ;;
+  ;; (setq display-buffer-alist
+  ;;       `(("*eldoc*"
+  ;;          (display-buffer-in-side-window)
+  ;;          (side . bottom)
+  ;;          (window-height . 0.16)
+  ;;          (slot . 0))))
+
+  (use-package eldoc-box
+    :hook (eglot-managed-mode . eldoc-box-hover-at-point-mode))
+
+#+end_src
+
 ** Tree-sitter
 
 Set up where treesitter binaries are located.
@@ -1304,21 +1345,21 @@ Decoration level to be used by tree-sitter fontifications.
 
 Associate extensions with the correct tree-sitter mode and others
 #+begin_src emacs-lisp
-  ;; (dolist (pair '(("\\.py\\'" . python-ts-mode)
-  ;;                 ("\\.c\\'"  . c-ts-mode)
-  ;;                 ("\\.h\\'"  . c-ts-mode)
-  ;;                 ("\\.cpp\\'" . c++-ts-mode)
-  ;;                 ("\\.hpp\\'" . c++-ts-mode)
-  ;;                 ("\\.tpp\\'" . c++-ts-mode)
-  ;;                 ("\\.sh\\'" . bash-ts-mode)
-  ;;                 ("\\.js\\'" . js-ts-mode)
-  ;;                 ("\\.ts\\'" . typescript-ts-mode)
-  ;;                 ("\\.tsx\\'" . tsx-ts-mode)
-  ;;                 ("\\.cs\\'" . csharp-ts-mode)
-  ;;                 ("\\.java\\'" . java-ts-mode)
-  ;;                 ("\\.json\\'" . json-ts-mode)
-  ;;                 ("\\.css\\'" . css-ts-mode)))
-  ;;   (push pair auto-mode-alist))
+;;   (dolist (pair '(("\\.py\\'" . python-ts-mode)
+;;                   ("\\.c\\'"  . c-ts-mode)
+;;                   ("\\.h\\'"  . c-ts-mode)
+;;                   ("\\.cpp\\'" . c++-ts-mode)
+;;                   ("\\.hpp\\'" . c++-ts-mode)
+;;                   ("\\.tpp\\'" . c++-ts-mode)
+;;                   ("\\.sh\\'" . bash-ts-mode)
+;;                   ("\\.js\\'" . js-ts-mode)
+;;                   ("\\.ts\\'" . typescript-ts-mode)
+;;                   ("\\.tsx\\'" . tsx-ts-mode)
+;;                   ("\\.cs\\'" . csharp-ts-mode)
+;;                   ("\\.java\\'" . java-ts-mode)
+;;                   ("\\.json\\'" . json-ts-mode)
+;;                   ("\\.css\\'" . css-ts-mode)))
+;;     (push pair auto-mode-alist))
 #+end_src
 
 * Version control
