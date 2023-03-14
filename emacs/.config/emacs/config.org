@@ -114,7 +114,7 @@ Scroll compilation buffer
 
 Show dashboard on startup
 #+Begin_src emacs-lisp
-  (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
+  ;; (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
 #+end_src
 
 Hide buffers by prepending space to buffer name.
@@ -247,7 +247,7 @@ Prevent emacs from contaminating system clipboard.
                  '(min-width  . 1)
                  '(width      . 155)
                  '(vertical-scroll-bars . nil)
-                 '(internal-border-width . 16)
+                 '(internal-border-width . 8)
                  '(left-fringe    . 3)
                  '(right-fringe   . 3)
                  '(tool-bar-lines . 0)
@@ -363,25 +363,25 @@ Use lowercase evil-mode state tags (not used by mood-line)
 ** Dashboard
 
 #+begin_src emacs-lisp
-  (use-package dashboard
-    :ensure t
-    :defer t
-    :init
-    (dashboard-setup-startup-hook)
-    :config
-    (setq
-     dashboard-startup-banner 4
-     dashboard-set-init-info nil
-     dashboard-banner-logo-title (concat "GNU Emacs " emacs-version)
-     dashboard-set-navigator t
-     dashboard-set-footer nil
-     dashboard-items '((bookmarks . 5) (projects . 3) (recents . 5))
-     dashboard-center-content t
-     dashboard-filter-agenda-entry 'dashboard-no-filter-agenda)
-  )
-    (set-face-attribute 'dashboard-text-banner nil :inherit 'font-lock-function-name-face)
-    (set-face-attribute 'dashboard-items-face nil :inherit 'default)
-    (set-face-attribute 'dashboard-heading-face nil :inherit 'default)
+  ;; (use-package dashboard
+  ;;   :ensure t
+  ;;   :defer t
+  ;;   :init
+  ;;   (dashboard-setup-startup-hook)
+  ;;   :config
+  ;;   (setq
+  ;;    dashboard-startup-banner 4
+  ;;    dashboard-set-init-info nil
+  ;;    dashboard-banner-logo-title (concat "GNU Emacs " emacs-version)
+  ;;    dashboard-set-navigator t
+  ;;    dashboard-set-footer nil
+  ;;    dashboard-items '((bookmarks . 5) (projects . 3) (recents . 5))
+  ;;    dashboard-center-content t
+  ;;    dashboard-filter-agenda-entry 'dashboard-no-filter-agenda)
+  ;; )
+  ;;   (set-face-attribute 'dashboard-text-banner nil :inherit 'font-lock-function-name-face)
+  ;;   (set-face-attribute 'dashboard-items-face nil :inherit 'default)
+  ;;   (set-face-attribute 'dashboard-heading-face nil :inherit 'default)
 
     (global-unset-key [tab])
     (global-unset-key (kbd "C-e"))
@@ -1221,7 +1221,6 @@ Associate extensions with the correct tree-sitter mode and others
                 (define-key eshell-mode-map (kbd "C-a") 'eshell-bol)
                 (define-key eshell-mode-map (kbd "C-j") 'eshell-send-input)
                 (define-key eshell-mode-map (kbd "C-u") 'eshell-kill-input)
-                (define-key eshell-mode-map (kbd "C-r") 'helm-eshell-history)
                 (define-key eshell-mode-map (kbd "C-r") 'helm-eshell-history)
                 (define-key eshell-hist-mode-map (kbd "C-c C-l") nil)
                 (define-key eshell-hist-mode-map (kbd "M-s") nil)
