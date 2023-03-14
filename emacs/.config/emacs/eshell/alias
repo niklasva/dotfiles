@@ -1,12 +1,13 @@
-alias ts ts '[%Y-%m-%d %H:%M:%S]'
-alias pico picocom -b 1000000 /dev/tty.usbmodem0006839531341
-alias lt ls -ltFh
-alias lsa ls -lah
-alias lrt ls -lFcrt
-alias lr ls -tRFh
-alias ll ls -l
-alias la ls -lAFh
-alias l ls -lFh
-alias fo find-file-other-window $1
-alias f find-file $1
+alias ff for i in ${eshell-flatten-list $*} {find-file $i}
 alias d dired $1
+alias f find-file $1
+alias fo find-file-other-window $1
+alias l ls -lFh
+alias la ls -lAFh
+alias ll ls -l
+alias lr ls -tRFh
+alias lrt ls -lFcrt
+alias lsa ls -lah
+alias lt ls -ltFh
+alias pico picocom -b 1000000 /dev/tty.usbmodem0006839531341
+alias ts ts '[%Y-%m-%d %H:%M:%S]'
