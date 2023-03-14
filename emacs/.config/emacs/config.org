@@ -240,6 +240,10 @@ Prevent emacs from contaminating system clipboard.
 #+end_src
 
 #+begin_src emacs-lisp
+  (winner-mode 1)
+#+end_src
+
+#+begin_src emacs-lisp
   (setq default-frame-alist
         (append (list
                  '(min-height . 1)
@@ -564,8 +568,8 @@ simpleclip-mode radically simplifies clipboard handling: the system clipboard an
     "m I"   '(org-toggle-inline-images :which-key "Org toggle inline imager")
     "m T"   '(org-todo-list :which-key "Org todo list")
     "o a"   '(org-agenda :which-key "Org agenda")
-    "B"     '(ido-switch-buffer :which-key "Switch buffer")
-    "b"     '(project-switch-to-buffer :which-key "Switch buffer")
+    "b"     '(ido-switch-buffer :which-key "Switch buffer")
+    "B"     '(project-switch-to-buffer :which-key "Switch buffer")
     "h p"   '(ff-find-other-file :which-key "ff-find-other-file")
 
     "p e"   '(projectile-recentf :which-key "projectile-recentf")
