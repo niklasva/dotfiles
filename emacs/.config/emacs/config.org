@@ -545,7 +545,7 @@ simpleclip-mode radically simplifies clipboard handling: the system clipboard an
     (which-key-mode))
 
   (nvmap :keymaps 'override :prefix "SPC"
-    "SPC"   '(counsel-M-x :which-key "M-x")
+    "SPC"   '(execute-extended-command :which-key "M-x")
 
     "c c"   '(compile :which-key "Compile")
     "c C"   '(recompile :which-key "Recompile")
@@ -589,7 +589,7 @@ simpleclip-mode radically simplifies clipboard handling: the system clipboard an
 
 ** ivy + counsel
 
-#+begin_src emacs-lisp
+#+begin_src disabled
   (use-package counsel
     :after ivy
     :config (counsel-mode))
@@ -669,12 +669,13 @@ simpleclip-mode radically simplifies clipboard handling: the system clipboard an
                '(niva/switch-theme . ivy-string<))
 
   (use-package ripgrep)
+
+  (setq ivy-initial-inputs-alist nil)
 #+end_src
 
 ** m-x
 
 #+begin_src emacs-lisp
-  (setq ivy-initial-inputs-alist nil)
   (use-package smex)
   (smex-initialize)
 #+end_src
@@ -695,16 +696,134 @@ simpleclip-mode radically simplifies clipboard handling: the system clipboard an
 ** Vertico
 
 #+begin_src emacs-lisp
-(use-package vertico
-  :init
-  (vertico-mode))
+  (use-package vertico
+    :custom (vertico-cycle t)
+    :init
+    (vertico-mode))
 
-(use-package vertico-posframe
-  :init
-  (vertico-posframe-mode))
+  (use-package vertico-posframe
+    :after vertico
+    :when (display-graphic-p)
+    :config
+    (setq vertico-posframe-parameters
+          '((max-width . 0.8)
+            (min-width . 0.8)
+            (left-fringe . 8)
+            (right-fringe . 8))
+          vertico-posframe-border-width 1)
+
+    (set-face-attribute 'vertico-posframe nil :background (face-attribute 'fringe :background))
+    (vertico-posframe-mode))
 
 #+end_src
 
+** Consult
+
+#+begin_src emacs-lisp
+  (use-package consult
+    ;; :bind (("C-c fb" . consult-buffer)
+    ;;        ("C-c ff" . consult-find)
+    ;;        ("C-c fl" . consult-line)
+    ;;        ("C-c fr" . consult-ripgrep)
+    ;;        ([remap switch-to-buffer] . consult-buffer))
+    :custom
+    (completion-in-region-function #'consult-completion-in-region)
+    (consult-async-input-debounce 0.1)
+    (consult-async-input-throttle 0.2)
+    (consult-async-refresh-delay  0.15)
+    (consult-line-numbers-widen t)
+    (consult-narrow-key "<")
+    (consult-preview-key (list (kbd "C-S-n") (kbd "C-S-p"))))
+#+end_src
+
+** Corfu
+#+begin_src emacs-lisp
+  (use-package corfu
+    :custom
+    (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
+    (corfu-auto t)                 ;; Enable auto completion
+    ;; (corfu-separator ?\s)          ;; Orderless field separator
+    ;; (corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
+    (corfu-quit-no-match 'separator)      ;; Never quit, even if there is no match
+    ;; (corfu-preview-current nil)    ;; Disable current candidate preview
+    (corfu-preselect 'prompt)      ;; Preselect the prompt
+    ;; (corfu-on-exact-match nil)     ;; Configure handling of exact matches
+    ;; (corfu-scroll-margin 5)        ;; Use scroll margin
+
+    ;; Enable Corfu only for certain modes.
+    ;; :hook ((prog-mode . corfu-mode)
+    ;;        (shell-mode . corfu-mode)
+    ;;        (eshell-mode . corfu-mode))
+
+    ;; Recommended: Enable Corfu globally.
+    ;; This is recommended since Dabbrev can be used globally (M-/).
+    ;; See also `corfu-excluded-modes'.
+
+    (corfu-echo-documentation t)
+    (corfu-auto-delay 0)
+    (corfu-auto-prefix 1)
+
+    :bind
+    (:map corfu-map
+          ("TAB" . corfu-next)
+          ([tab] . corfu-next)
+          ("S-TAB" . corfu-previous)
+          ([backtab] . corfu-previous))
+
+    :init
+    (corfu-popupinfo-mode)
+    (global-corfu-mode)
+    )
+
+  (add-hook 'eshell-mode-hook
+            (lambda ()
+              (setq-local corfu-auto nil)
+              (corfu-mode)))
+
+  (defun corfu-send-shell (&rest _)
+    "Send completion candidate when inside comint/eshell."
+    (cond
+     ((and (derived-mode-p 'eshell-mode) (fboundp 'eshell-send-input))
+      (eshell-send-input))
+     ((and (derived-mode-p 'comint-mode)  (fboundp 'comint-send-input))
+      (comint-send-input))))
+
+  (advice-add #'corfu-insert :after #'corfu-send-shell)
+
+  (use-package kind-icon
+    :ensure t
+    :after corfu
+    :custom
+    (kind-icon-default-face 'corfu-default) ; to compute blended backgrounds correctly
+    :config
+    (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
+
+  (use-package emacs
+    :init
+    ;; TAB cycle if there are only few candidates
+    (setq completion-cycle-threshold 3)
+
+    ;; Emacs 28: Hide commands in M-x which do not apply to the current mode.
+    ;; Corfu commands are hidden, since they are not supposed to be used via M-x.
+    ;; (setq read-extended-command-predicate
+    ;;       #'command-completion-default-include-p)
+
+    ;; Enable indentation+completion using the TAB key.
+    ;; `completion-at-point' is often bound to M-TAB.
+    (setq tab-always-indent 'complete))
+
+  ;; Optionally use the `orderless' completion style.
+  (use-package orderless
+    :init
+    ;; Configure a custom style dispatcher (see the Consult wiki)
+    ;; (setq orderless-style-dispatchers '(+orderless-dispatch)
+    ;;       orderless-component-separator #'orderless-escapable-split-on-space)
+    (setq completion-styles '(orderless basic)
+          completion-category-defaults nil
+          completion-category-overrides '((file (styles . (partial-completion)))))
+    )
+
+#+end_src
 ** buffer-move
 
 #+begin_src emacs-lisp
@@ -790,6 +909,7 @@ simpleclip-mode radically simplifies clipboard handling: the system clipboard an
   (nvmap :states '(normal visual) :keymaps 'override :prefix "SPC"
     "."     '(find-file :which-key "Find file")
     "f f"   '(find-file :which-key "Find file")
+    "p f"   '(projectile-find-file :which-key "projectile-find-file")
     "f r"   '(counsel-recentf :which-key "Recent files")
     "f s"   '(save-buffer :which-key "Save file")
     "f u"   '(sudo-edit-find-file :which-key "Sudo find file")
@@ -983,7 +1103,7 @@ Always follow symlinks
 * Language server
 ** LSP
 
-#+begin_src emacs-lisp
+#+begin_src disabled
   (use-package lsp-pyright :ensure t)
 
   (setq lsp-clients-clangd-args '("-j=8" "-background-index" "-log=error" "--clang-tidy" "--query-driver=/Applications/ARM/**/*"))
@@ -1054,15 +1174,15 @@ Always follow symlinks
    ;; company-require-match nil
    )
 
-  (use-package company-quickhelp
-    :after company
-    :ensure t
-    :config
-    (setq company-quickhelp-delay 0
-          company-quickhelp-timer 0
-          )
+  ;; (use-package company-quickhelp
+  ;;   :after company
+  ;;   :ensure t
+  ;;   :config
+  ;;   (setq company-quickhelp-delay 0
+  ;;         company-quickhelp-timer 0
+  ;;         )
 
-    (company-quickhelp-mode))
+  ;;   (company-quickhelp-mode))
 
   ;;(use-package company-box
   ;;  :after company
@@ -1236,8 +1356,7 @@ Associate extensions with the correct tree-sitter mode and others
      eshell-cmpl-ignore-case t
      eshell-error-if-no-glob t
      eshell-glob-case-insensitive t
-     eshell-hist-ignoredups t
-     eshell-hist-ignoredups t
+     ;; eshell-hist-ignoredups t
      eshell-input-filter (lambda (input) (not (string-match-p "\\`\\s-+" input)))
      eshell-kill-processes-on-exit t
      eshell-scroll-to-bottom-on-input 'all
