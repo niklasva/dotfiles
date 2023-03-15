@@ -1309,6 +1309,13 @@ I have my own little hook to open the flycheck buffer with ~M-C~, and close it a
   (use-package eldoc-box
     :hook (eglot-managed-mode . eldoc-box-hover-at-point-mode))
 
+  (defun format-on-save-hook ()
+    (add-hook 'before-save-hook #'eglot-format-buffer t t))
+
+  (add-hook 'c-mode-hook #'format-on-save-hook)
+  (add-hook 'c-ts-mode-hook #'format-on-save-hook)
+  (add-hook 'c++-mode-hook #'format-on-save-hook)
+  (add-hook 'c++-ts-mode-hook #'format-on-save-hook)
 #+end_src
 
 ** Tree-sitter
