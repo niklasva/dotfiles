@@ -1,5 +1,3 @@
-(profiler-start 'cpu)
-
 (setq vc-follow-symlinks t)
 
 (if (file-exists-p "~/.config/emacs/config.elc")
