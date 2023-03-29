@@ -34,24 +34,52 @@
 * Text edit settings
 ** Defaults
 #+begin_src emacs-lisp
+(setq-default
+ c-basic-offset 4
+ c-default-style "linux"
+ c-ts-mode-indent-offset 4
+ c-ts-mode-indent-style "linux"
+ create-lockfiles nil
+ ;;electric-indent-inhibit t
+ evil-auto-indent t
+ indent-line-function 'insert-tab
+ indent-tabs-mode nil
+ completion-cycle-threshold 3
+ tab-always-indent 'complete
+ tab-width 4)
 
-  (setq-default
-   c-basic-offset 4
-   c-default-style "linux"
-   c-ts-mode-indent-offset 4
-   c-ts-mode-indent-style "linux"
-   create-lockfiles nil
-   electric-indent-inhibit t
-   evil-auto-indent t
-   indent-line-function 'insert-tab
-   indent-tabs-mode nil
-   completion-cycle-threshold 3
-   tab-always-indent 'complete
-   tab-width 4)
+(column-number-mode)
+(electric-indent-mode +1)
+#+end_src
 
-  (column-number-mode)
-  (electric-indent-mode +1)
-  (electric-pair-mode +1)
+#+begin_src emacs-lisp
+  (use-package aggressive-indent
+    :ensure t
+    :config
+     (add-hook 'emacs-lisp-moed-hook #'aggressive-indent-mode)
+     (add-hook 'css-mode-hook #'aggressive-indent-mode)
+     (add-hook 'org-mode-hook #'aggressive-indent-mode)
+#+end_src
+
+#+begin_src emacs-lisp
+  (defun prog-pair-hook ()
+    (setq electric-pair-inhibit-predicate (lambda (c) (or
+                                                       (char-equal c ?\()
+                                                       (or
+                                                        (char-equal c ?\")
+                                                        (char-equal c ?\<)))))
+    (electric-pair-mode 1))
+  (add-hook 'prog-mode-hook 'prog-pair-hook)
+
+  (defun c-pair-hook ()
+    (setq electric-pair-inhibit-predicate (lambda (c) (or
+                                                       (char-equal c ?\")
+                                                       (char-equal c ?\<))))
+    (electric-pair-mode 1))
+  (add-hook 'c-mode-hook 'c-pair-hook)
+  (add-hook 'c++-mode-hook 'c-pair-hook)
+  (add-hook 'c-ts-mode-hook 'c-pair-hook)
+  (add-hook 'c++-ts-mode-hook 'c-pair-hook)
 #+end_src
 
 #+begin_src emacs-lisp
