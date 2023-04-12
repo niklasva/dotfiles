@@ -642,54 +642,56 @@ Window management
 
 ** Corfu
  #+begin_src emacs-lisp
-  (use-package corfu
-    :ensure t
-    :custom
-    (corfu-cycle t)
-    (corfu-auto t)
-    ;; (corfu-separator ?\s)
-    ;; (corfu-quit-at-boundary nil)
-    (corfu-quit-no-match 'separator)
-    (corfu-preselect 'prompt)
-    ;; (corfu-on-exact-match nil)
-    ;; (corfu-scroll-margin 5)
+   (use-package corfu
+     :ensure t
+     :custom
+     (corfu-cycle t)
+     (corfu-auto t)
+     ;; (corfu-separator ?\s)
+     ;; (corfu-quit-at-boundary nil)
+     (corfu-quit-no-match 'separator)
+     (corfu-preselect 'prompt)
+     ;; (corfu-on-exact-match nil)
+     ;; (corfu-scroll-margin 5)
 
-    (corfu-echo-documentation t)
-    (corfu-auto-delay 0)
-    (corfu-auto-prefix 1)
+     (corfu-echo-documentation t)
+     (corfu-auto-delay 0)
+     (corfu-auto-prefix 1)
 
-    :bind
-    (:map corfu-map
-          ("TAB"     . corfu-next)
-          ([tab]     . corfu-next)
-          ("S-TAB"   . corfu-previous)
-          ([backtab] . corfu-previous))
+     :bind
+     (:map corfu-map
+           ("TAB"     . corfu-next)
+           ("C-SPC"   . corfu-next)
+           ([tab]     . corfu-next)
+           ("S-TAB"   . corfu-previous)
+           ("C-S-SPC" . corfu-previous)
+           ([backtab] . corfu-previous))
 
     :init
     (corfu-popupinfo-mode)
     (global-corfu-mode))
 
-  (add-hook 'eshell-mode-hook (lambda () (setq-local corfu-auto nil) (corfu-mode)))
+   (add-hook 'eshell-mode-hook (lambda () (setq-local corfu-auto nil) (corfu-mode)))
 
-  (defun corfu-send-shell (&rest _)
-    "Send completion candidate when inside comint/eshell."
-    (cond
-     ((and (derived-mode-p 'eshell-mode) (fboundp 'eshell-send-input))
-      (eshell-send-input))
-     ((and (derived-mode-p 'comint-mode)  (fboundp 'comint-send-input))
-      (comint-send-input))))
+   (defun corfu-send-shell (&rest _)
+     "Send completion candidate when inside comint/eshell."
+     (cond
+      ((and (derived-mode-p 'eshell-mode) (fboundp 'eshell-send-input))
+       (eshell-send-input))
+      ((and (derived-mode-p 'comint-mode)  (fboundp 'comint-send-input))
+       (comint-send-input))))
 
-  (use-package kind-icon
-    :ensure t
-    :after corfu
-    :custom
-    (kind-icon-default-face 'corfu-default)
-    :config
-    (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
+   (use-package kind-icon
+     :ensure t
+     :after corfu
+     :custom
+     (kind-icon-default-face 'corfu-default)
+     :config
+     (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
 
   ;; Optionally use the `orderless' completion style.
-  (use-package orderless
-    :ensure t
+   (use-package orderless
+     :ensure t
     :init
     (setq completion-styles '(orderless basic)
           completion-category-defaults nil
@@ -944,42 +946,56 @@ Always follow symlinks
 * Language server
 ** Eglot
  #+begin_src emacs-lisp
-  (use-package eglot
-    :ensure t
-    :hook
-    ((c-mode c++-mode c-ts-mode c++-ts-mode) . eglot-ensure))
+   (use-package eglot
+     :ensure t
+     :hook
+     ((c-mode c++-mode c-ts-mode c++-ts-mode) . eglot-ensure))
 
-  (with-eval-after-load 'eglot
-    (add-to-list 'eglot-server-programs
-                 '((c++-mode c-mode c++-ts-mode c-ts-mode)
-                   . ("clangd"
-                      "--clang-tidy"
-                      "--completion-style=detailed"
-                      "--header-insertion-decorators"
-                      "--pch-storage=memory"
-                      "--query-driver=/Applications/ARM/**/*"
-                      "-background-index"
-                      "-background-index-priority=background"
-                      "-j=8"
-                      "--log=error"
-                      ))))
+   (with-eval-after-load 'eglot
+     (add-to-list 'eglot-server-programs
+                  '((c++-mode c-mode c++-ts-mode c-ts-mode)
+                    . ("clangd"
+                       "--clang-tidy"
+                       "--completion-style=detailed"
+                       "--header-insertion=never"
+                       "--pch-storage=memory"
+                       "--query-driver=/Applications/ARM/**/*"
+                       "-background-index"
+                       "-background-index-priority=background"
+                       "-j=8"
+                       "--log=error"
+                       ))))
 
-  (defun eglot-post-config ()
-    (eglot-inlay-hints-mode -1))
+   (defun eglot-post-config ()
+     (eglot-inlay-hints-mode -1))
 
-  (add-hook'eglot-managed-mode-hook 'eglot-post-config)
+   (add-hook'eglot-managed-mode-hook 'eglot-post-config)
 
-  (use-package eldoc-box
-    :ensure t
-    :hook (eglot-managed-mode . eldoc-box-hover-at-point-mode))
+   ;; (use-package eldoc
+   ;;   :ensure t
+   ;;   ;; :hook (eglot-managed-mode . turn-on-eldoc-mode)
+   ;;   :config
+   ;;   (setq eldoc-minor-mode-string ""
+   ;;         eldoc-documentation-strategy 'eldoc-documentation-compose-eagerly
+   ;;         eldoc-echo-area-display-truncation-message t
+   ;;         eldoc-echo-area-prefer-doc-buffer t
+   ;;         eldoc-echo-area-use-multiline-p t
+   ;;         max-mini-window-height 5
+   ;;         eldoc-idle-delay 0.1
+   ;;         ))
 
-  (defun format-on-save-hook ()
-    (add-hook 'before-save-hook #'eglot-format-buffer t t))
+   ;; (use-package eldoc-box
+   ;;   :ensure t
+   ;;   :config
+   ;;   :hook (eglot-managed-mode . eldoc-box-hover-at-point-mode))
 
-  (add-hook 'c-mode-hook #'format-on-save-hook)
-  (add-hook 'c-ts-mode-hook #'format-on-save-hook)
-  (add-hook 'c++-mode-hook #'format-on-save-hook)
-  (add-hook 'c++-ts-mode-hook #'format-on-save-hook)
+   (defun format-on-save-hook ()
+     (add-hook 'before-save-hook #'eglot-format-buffer t t))
+
+   (add-hook 'c-mode-hook #'format-on-save-hook)
+   (add-hook 'c-ts-mode-hook #'format-on-save-hook)
+   (add-hook 'c++-mode-hook #'format-on-save-hook)
+   (add-hook 'c++-ts-mode-hook #'format-on-save-hook)
   #+end_src
 
 ** Tree-sitter
@@ -1090,15 +1106,10 @@ Associate extensions with the correct tree-sitter mode and others
 ** env
 
  #+begin_src emacs-lisp
-  (setenv "LANG" (shell-command-to-string "$SHELL --login -c 'echo $LANG'"))
+  (setenv "LANG" "sv_SE.UTF-8")
   (setenv "LIBRARY_PATH" "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib")
 
   (defun set-exec-path-from-shell-PATH ()
-    "Set up Emacs' `exec-path' and PATH environment variable to match
-  that used by the user's shell.
-
-  This is particularly useful under Mac OS X and macOS, where GUI
-  apps are not started from a shell."
     (interactive)
     (let ((path-from-shell (replace-regexp-in-string
                             "[ \t\n]*$" "" (shell-command-to-string
