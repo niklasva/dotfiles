@@ -1266,3 +1266,14 @@ Only use variable-pitch if explicitly called.
     :config (global-ligature-mode t)
     (ligature-set-ligatures 'prog-mode '("==" "!=" "<-" "<--" "->" "-->")))
 #+end_src
+
+* Web browser
+#+begin_src emacs-lisp
+  (setq browse-url-browser-function 'eww-browse-url
+        shr-use-fonts nil
+        shr-use-colors nil
+        shr-indentation 2
+        shr-width 70
+        eww-search-prefix "https://frogfind.com/?q="
+        shr-inhibit-images t)
+#+end_src
