@@ -64,7 +64,6 @@
                       :background (face-attribute 'default :background)
                       :foreground (face-attribute 'font-lock-comment-face :foreground)))
 (niva/tab-bar-config)
-;; (tab-bar-mode 1)
 
 (global-hl-line-mode -1)
 (blink-cursor-mode 1)
@@ -218,11 +217,6 @@ Scroll compilation buffer
 #+end_src
 
 ** Hide buffers
-
-Show dashboard on startup
-#+begin_src emacs-lisp
-;; (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
-#+end_src
 
 Hide buffers by prepending space to buffer name.
 #+begin_src emacs-lisp
@@ -642,17 +636,12 @@ Window management
      :custom
      (corfu-cycle t)
      (corfu-auto t)
-     ;; (corfu-separator ?\s)
-     ;; (corfu-quit-at-boundary nil)
      (corfu-quit-no-match 'separator)
      (corfu-preselect 'prompt)
-     ;; (corfu-on-exact-match nil)
-     ;; (corfu-scroll-margin 5)
 
      (corfu-echo-documentation t)
      (corfu-auto-delay 0)
      (corfu-auto-prefix 1)
-
      :bind
      (:map corfu-map
            ("TAB"     . corfu-next)
@@ -897,8 +886,6 @@ Always follow symlinks
   (use-package gcmh
     :ensure t
     :demand
-    ;; :hook
-    ;; (focus-out-hook . gcmh-idle-garbage-collect)
     :custom
     (gcmh-idle-delay 100)
     (gcmh-high-cons-threshold 104857600)
@@ -956,24 +943,6 @@ Always follow symlinks
      (eglot-inlay-hints-mode -1))
 
    (add-hook'eglot-managed-mode-hook 'eglot-post-config)
-
-   ;; (use-package eldoc
-   ;;   :ensure t
-   ;;   ;; :hook (eglot-managed-mode . turn-on-eldoc-mode)
-   ;;   :config
-   ;;   (setq eldoc-minor-mode-string ""
-   ;;         eldoc-documentation-strategy 'eldoc-documentation-compose-eagerly
-   ;;         eldoc-echo-area-display-truncation-message t
-   ;;         eldoc-echo-area-prefer-doc-buffer t
-   ;;         eldoc-echo-area-use-multiline-p t
-   ;;         max-mini-window-height 5
-   ;;         eldoc-idle-delay 0.1
-   ;;         ))
-
-   ;; (use-package eldoc-box
-   ;;   :ensure t
-   ;;   :config
-   ;;   :hook (eglot-managed-mode . eldoc-box-hover-at-point-mode))
 
    (defun format-on-save-hook ()
      (add-hook 'before-save-hook #'eglot-format-buffer t t))
