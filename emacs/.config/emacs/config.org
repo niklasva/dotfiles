@@ -114,9 +114,8 @@ Prevent accidental close.
    c-ts-mode-indent-offset 4
    c-ts-mode-indent-style "linux"
    create-lockfiles nil
-   ;;electric-indent-inhibit t
    evil-auto-indent t
-   indent-line-function 'insert-tab
+   indent-line-function 'evil-indent-line
    indent-tabs-mode nil
    completion-cycle-threshold 3
    tab-always-indent 'complete
@@ -161,12 +160,13 @@ Prevent accidental close.
     (setq tab-width 4
           indent-tabs-mode t
           evil-auto-indent t
-          indent-line-function 'c-indent-line))
+          c-basic-offset 4
+          ))
 
-  (add-hook 'c++-mode-hook 'indent-tabs-hook)
-  (add-hook 'c-mode-hook 'indent-tabs-hook)
+  (add-hook 'c++-mode-hook    'indent-tabs-hook)
+  (add-hook 'c-mode-hook      'indent-tabs-hook)
   (add-hook 'c++-ts-mode-hook 'indent-tabs-hook)
-  (add-hook 'c-ts-mode-hook 'indent-tabs-hook)
+  (add-hook 'c-ts-mode-hook   'indent-tabs-hook)
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1123,6 +1123,7 @@ Associate extensions with the correct tree-sitter mode and others
 ** Documentation
 #+begin_src emacs-lisp
   (use-package devdocs
+    :ensure t
     :defer t
     :init
     (defvar lps/devdocs-alist
