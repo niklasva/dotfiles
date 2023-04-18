@@ -23,7 +23,7 @@
   (set-fringe-mode 1)
   (global-visual-line-mode t)
 
-  (setq-default left-fringe-width 3
+  (setq-default left-fringe-width 16
                 right-fringe-width 1)
                 #+end_src
 
@@ -109,22 +109,22 @@ Prevent accidental close.
 * Text edit settings
 ** Defaults
 #+begin_src emacs-lisp
-(setq-default
- c-basic-offset 4
- c-default-style "linux"
- c-ts-mode-indent-offset 4
- c-ts-mode-indent-style "linux"
- create-lockfiles nil
- ;;electric-indent-inhibit t
- evil-auto-indent t
- indent-line-function 'insert-tab
- indent-tabs-mode nil
- completion-cycle-threshold 3
- tab-always-indent 'complete
- tab-width 4)
+  (setq-default
+   c-basic-offset 4
+   c-default-style "linux"
+   c-ts-mode-indent-offset 4
+   c-ts-mode-indent-style "linux"
+   create-lockfiles nil
+   ;;electric-indent-inhibit t
+   evil-auto-indent t
+   indent-line-function 'insert-tab
+   indent-tabs-mode nil
+   completion-cycle-threshold 3
+   tab-always-indent 'complete
+   tab-width 4)
 
-(column-number-mode)
-(electric-indent-mode +1)
+  (column-number-mode)
+  (electric-indent-mode +1)
 #+end_src
 
 #+begin_src emacs-lisp
@@ -178,8 +178,9 @@ Prevent accidental close.
 
 Enable line numbers for some modes
 #+begin_src emacs-lisp
-(dolist (mode '(org-mode-hook text-mode-hook prog-mode-hook conf-mode-hook))
-  (add-hook mode (lambda () (display-line-numbers-mode 1))))
+
+  (dolist (mode '(org-mode-hook text-mode-hook prog-mode-hook conf-mode-hook))
+    (add-hook mode (lambda () (display-line-numbers-mode 1))))
 #+end_src
 
 Override some modes which derive from the above
@@ -535,53 +536,55 @@ Window management
 ** which-key
 
  #+begin_src emacs-lisp
-  (use-package which-key
-    :ensure t
-    :config
-    (setq which-key-popup-type 'minibuffer)
-    (which-key-mode))
+   (use-package which-key
+     :ensure t
+     :config
+     (setq which-key-popup-type 'minibuffer)
+     (which-key-mode))
 
-  (nvmap :keymaps 'override :prefix "SPC"
-    "SPC"   '(execute-extended-command :which-key "M-x")
+   (nvmap :keymaps 'override :prefix "SPC"
+     "SPC"   '(execute-extended-command :which-key "M-x")
 
-    "c c"   '(compile :which-key "Compile")
-    "c C"   '(recompile :which-key "Recompile")
+     "c c"   '(compile :which-key "Compile")
+     "c C"   '(recompile :which-key "Recompile")
 
-    "h r r" '((lambda () (interactive) (load-file "~/.config/emacs/init.el")) :which-key "Reload emacs config")
-    "t t"   '(toggle-truncate-lines :which-key "Toggle truncate lines")
+     "h r r" '((lambda () (interactive) (load-file "~/.config/emacs/init.el")) :which-key "Reload emacs config")
+     "t t"   '(toggle-truncate-lines :which-key "Toggle truncate lines")
 
-    "m *"   '(org-ctrl-c-star :which-key "Org-ctrl-c-star")
-    "m +"   '(org-ctrl-c-minus :which-key "Org-ctrl-c-minus")
-    "m ."   '(counsel-org-goto :which-key "Counsel org goto")
-    "m e"   '(org-export-dispatch :which-key "Org export dispatch")
-    "m f"   '(org-footnote-new :which-key "Org footnote new")
-    "m h"   '(org-toggle-heading :which-key "Org toggle heading")
-    "m i"   '(org-toggle-item :which-key "Org toggle item")
-    "m n"   '(org-store-link :which-key "Org store link")
-    "m o"   '(org-set-property :which-key "Org set property")
-    "m t"   '(org-todo :which-key "Org todo")
-    "m x"   '(org-toggle-checkbox :which-key "Org toggle checkbox")
-    "m B"   '(org-babel-tangle :which-key "Org babel tangle")
-    "m I"   '(org-toggle-inline-images :which-key "Org toggle inline imager")
-    "m T"   '(org-todo-list :which-key "Org todo list")
-    "o a"   '(org-agenda :which-key "Org agenda")
-    "b"     '(ido-switch-buffer :which-key "Switch buffer")
-    "B"     '(project-switch-to-buffer :which-key "Switch buffer")
-    "h p"   '(ff-find-other-file :which-key "ff-find-other-file")
+     "m *"   '(org-ctrl-c-star :which-key "Org-ctrl-c-star")
+     "m +"   '(org-ctrl-c-minus :which-key "Org-ctrl-c-minus")
+     "m ."   '(counsel-org-goto :which-key "Counsel org goto")
+     "m e"   '(org-export-dispatch :which-key "Org export dispatch")
+     "m f"   '(org-footnote-new :which-key "Org footnote new")
+     "m h"   '(org-toggle-heading :which-key "Org toggle heading")
+     "m i"   '(org-toggle-item :which-key "Org toggle item")
+     "m n"   '(org-store-link :which-key "Org store link")
+     "m o"   '(org-set-property :which-key "Org set property")
+     "m t"   '(org-todo :which-key "Org todo")
+     "m x"   '(org-toggle-checkbox :which-key "Org toggle checkbox")
+     "m B"   '(org-babel-tangle :which-key "Org babel tangle")
+     "m I"   '(org-toggle-inline-images :which-key "Org toggle inline imager")
+     "m T"   '(org-todo-list :which-key "Org todo list")
+     "o a"   '(org-agenda :which-key "Org agenda")
+     "b"     '(ido-switch-buffer :which-key "Switch buffer")
+     "B"     '(project-switch-to-buffer :which-key "Switch buffer")
+     "h p"   '(ff-find-other-file :which-key "ff-find-other-file")
 
-    "p e"   '(projectile-recentf :which-key "projectile-recentf")
-    "e r"   '(eval-region :which-key "eval-region")
+     "p e"   '(projectile-recentf :which-key "projectile-recentf")
+     "e r"   '(eval-region :which-key "eval-region")
 
-    "c a"   '(lsp-execute-code-action :which-key "lsp-execute-code-action")
+     "c a"   '(lsp-execute-code-action :which-key "lsp-execute-code-action")
 
-    "n"     '(flycheck-next-error :which-key "flycheck-next-error")
-    "N"     '(flycheck-previous-error :which-key "flycheck-previous-error")
+     "n"     '(flycheck-next-error :which-key "flycheck-next-error")
+     "N"     '(flycheck-previous-error :which-key "flycheck-previous-error")
 
-    "conf"  '((lambda () (interactive) (find-file "~/.config/emacs/config.org")) :which-key "Open config.org")
-    "vconf" '((lambda () (interactive) (split-window-right)
-                (find-file "~/.config/emacs/config.org")) :which-key "Open config.org")
-    "sconf" '((lambda () (interactive) (split-window-below)
-                (find-file "~/.config/emacs/config.org")) :which-key "Open config.org"))
+     "conf"  '((lambda () (interactive) (find-file "~/.config/emacs/config.org")) :which-key "Open config.org")
+     "vconf" '((lambda () (interactive) (split-window-right)
+                 (find-file "~/.config/emacs/config.org")) :which-key "Open config.org")
+     "sconf" '((lambda () (interactive) (split-window-below)
+                 (find-file "~/.config/emacs/config.org")) :which-key "Open config.org")
+
+     "d l"   '(devdocs-lookup :which-key "devdocs-lookup"))
 #+end_src
 
 ** m-x
@@ -746,7 +749,6 @@ Window management
 #+end_src
 
 ** File-related keybindings
-
  #+begin_src emacs-lisp
   (nvmap :states '(normal visual) :keymaps 'override :prefix "SPC"
     "."     '(find-file :which-key "Find file")
@@ -919,7 +921,6 @@ Always follow symlinks
     (gcmh-mode +1))
  #+end_src
 ** Byte compile on exit
-
  #+begin_src emacs-lisp
   (defun compile-config ()
     (interactive)
@@ -1043,26 +1044,119 @@ Associate extensions with the correct tree-sitter mode and others
   ;;   (push pair auto-mode-alist))
 #+end_src
 
-* Version control
-** Git gutter
+** Version control
+*** Git gutter
 #+begin_src emacs-lisp
   (use-package git-gutter-fringe
     :ensure t
     :config
-    ;; (custom-set-variables
-    ;;'(git-gutter:modified-sign "┊")
-    ;;'(git-gutter:added-sign "+")
-    ;;'(git-gutter:deleted-sign "-")
-    ;;(git-gutter:window-width 8)
-    ;; )
+  (setq git-gutter:update-timer 1)
 
-    (set-face-attribute 'git-gutter-fr:added nil :foreground (face-attribute 'git-gutter-fr:added :background))
-    (set-face-attribute 'git-gutter-fr:modified nil :foreground (face-attribute 'git-gutter-fr:modified :background))
-    (set-face-attribute 'git-gutter-fr:deleted  nil :foreground (face-attribute 'git-gutter-fr:deleted :background))
+    (cond ((member 'modus-operandi-tinted custom-enabled-themes)
+           (set-face-attribute 'git-gutter-fr:added nil :foreground (face-attribute 'modus-themes-fg-green-intense :foreground) :background nil )
+           (set-face-attribute 'git-gutter-fr:modified nil :foreground (face-attribute 'modus-themes-fg-blue :foreground) :background nil)
+           (set-face-attribute 'git-gutter-fr:deleted  nil :foreground (face-attribute 'modus-themes-fg-red-intense :foreground) :background nil)))
+
+    (fringe-helper-define 'git-gutter-fr:added nil
+      ".X..X"
+      "X..X."
+      "..X.."
+      ".X..X"
+      "X..X."
+      "..X.."
+      ".X..X"
+      "X..X."
+      "..X.."
+      ".X..X"
+      "X..X."
+      "..X.."
+      ".X..X"
+      "X..X."
+      "..X.."
+      ".X..X"
+      "X..X."
+      "..X.."
+      ".X..X")
+
+    (fringe-helper-define 'git-gutter-fr:deleted nil
+      ".X..X"
+      "X..X."
+      "..X.."
+      ".X..X"
+      "X..X."
+      "..X.."
+      ".X..X"
+      "X..X."
+      "..X.."
+      ".X..X"
+      "X..X."
+      "..X.."
+      ".X..X"
+      "X..X."
+      "..X.."
+      ".X..X"
+      "X..X."
+      "..X.."
+      ".X..X")
+
+    (fringe-helper-define 'git-gutter-fr:modified nil
+      ".X..X"
+      "X..X."
+      "..X.."
+      ".X..X"
+      "X..X."
+      "..X.."
+      ".X..X"
+      "X..X."
+      "..X.."
+      ".X..X"
+      "X..X."
+      "..X.."
+      ".X..X"
+      "X..X."
+      "..X.."
+      ".X..X"
+      "X..X."
+      "..X.."
+      ".X..X")
+
 
     (global-git-gutter-mode 1))
 #+end_src
 
+*** Magit
+#+begin_src emacs-lisp
+  (use-package magit
+    :ensure t
+    :defer t)
+#+end_src
+** Documentation
+#+begin_src emacs-lisp
+  (use-package devdocs
+    :defer t
+    :init
+    (defvar lps/devdocs-alist
+      '((python-mode-hook     . "python~3.8")
+        (c-mode-hook          . "c")
+        (c++-mode-hook        . "cpp")
+        (org-mode-hook        . "elisp")
+        (elisp-mode-hook      . "elisp")
+        (emacs-lisp-mode-hook . "elisp")
+        (sh-mode-hook         . "bash")
+        ))
+
+    (setq devdocs-window-select t
+          shr-max-image-proportion 0.4)
+
+    (dolist (pair lps/devdocs-alist)
+      (let ((hook (car pair))
+            (doc (cdr pair)))
+        (add-hook hook `(lambda () (setq-local devdocs-current-docs (list ,doc))))))
+
+    (define-key evil-normal-state-map (kbd "SPC g d")
+                (lambda () (interactive)
+                  (devdocs-lookup nil (thing-at-point 'symbol t)))))
+#+end_src
 * Terminal
 ** eshell
  #+begin_src emacs-lisp
@@ -1128,38 +1222,42 @@ Set font.
 Remove font weight on some faces
 
  #+begin_src emacs-lisp
-  (defun remove-font-weight ()
-    (custom-set-faces
-     '(default                           ((t (:background nil))))
-     '(compilation-error                 ((t (:weight unspecified))))
-     '(bold                              ((t (:weight unspecified))))
-     '(outline-1                         ((t (:weight unspecified))))
-     '(outline-2                         ((t (:weight unspecified))))
-     '(outline-3                         ((t (:weight unspecified))))
-     '(font-lock-comment-face            ((t (:weight unspecified))))
-     '(error nil                         ((t (:weight unspecified)))))
 
-    (set-face-attribute 'bold nil :weight 'unspecified)
-    (set-face-attribute 'buffer-menu-buffer nil :weight 'unspecified)
-    (set-face-attribute 'help-key-binding nil    :weight 'unspecified)
+      ;; (set-face-attribute 'variable-pitch nil :font 'unspecified :inherit 'default)
+      ;; (set-face-attribute 'variable-pitch-text nil :height 'unspecified :inherit 'default)
 
-    (set-face-attribute 'tooltip nil :inherit 'default :font "Iosevka 16"))
-  (remove-font-weight)
+      (defun remove-font-weight ()
+        (custom-set-faces
+         '(default                           ((t (:background nil))))
+         '(compilation-error                 ((t (:weight unspecified))))
+         '(bold                              ((t (:weight unspecified))))
+         '(outline-1                         ((t (:weight unspecified))))
+         '(outline-2                         ((t (:weight unspecified))))
+         '(outline-3                         ((t (:weight unspecified))))
+         '(font-lock-comment-face            ((t (:weight unspecified))))
+         '(error nil                         ((t (:weight unspecified)))))
 
-  (defun mood-line-remove-font-weight-hook ()
-    (set-face-attribute 'mode-line-buffer-id nil :weight unspecified)
-    (set-face-attribute 'mode-line-buffer-id nil :weight 'unspecified)
-    (set-face-attribute 'mood-line-buffer-status-narrowed nil :weight 'unspecified))
-  (add-hook 'mood-line-mode-hook 'mood-line-remove-font-weight-hook)
+        (set-face-attribute 'bold nil :weight 'unspecified)
+        (set-face-attribute 'buffer-menu-buffer nil :weight 'unspecified)
+        (set-face-attribute 'help-key-binding nil    :weight 'unspecified)
 
-  (defun magit-remove-font-weight-hook ()
-    (set-face-attribute 'magit-diff-added-highlight nil    :weight 'unspecified)
-    (set-face-attribute 'magit-diff-file-heading nil    :weight 'unspecified)
-    (set-face-attribute 'magit-diff-hunk-heading-highlight nil    :weight 'unspecified)
-    (set-face-attribute 'magit-diff-removed-highlight nil    :weight 'unspecified)
-    (set-face-attribute 'magit-diff-revision-summary-highlight nil    :weight 'unspecified)
-    (set-face-attribute 'magit-header-line nil    :weight 'unspecified))
-  (add-hook 'magit-mode-hook 'magit-remove-font-weight-hook)
+        (set-face-attribute 'tooltip nil :inherit 'default))
+      (remove-font-weight)
+
+      (defun mood-line-remove-font-weight-hook ()
+        (set-face-attribute 'mode-line-buffer-id nil :weight unspecified)
+        (set-face-attribute 'mode-line-buffer-id nil :weight 'unspecified)
+        (set-face-attribute 'mood-line-buffer-status-narrowed nil :weight 'unspecified))
+      (add-hook 'mood-line-mode-hook 'mood-line-remove-font-weight-hook)
+
+      (defun magit-remove-font-weight-hook ()
+        (set-face-attribute 'magit-diff-added-highlight nil    :weight 'unspecified)
+        (set-face-attribute 'magit-diff-file-heading nil    :weight 'unspecified)
+        (set-face-attribute 'magit-diff-hunk-heading-highlight nil    :weight 'unspecified)
+        (set-face-attribute 'magit-diff-removed-highlight nil    :weight 'unspecified)
+        (set-face-attribute 'magit-diff-revision-summary-highlight nil    :weight 'unspecified)
+        (set-face-attribute 'magit-header-line nil    :weight 'unspecified))
+      (add-hook 'magit-mode-hook 'magit-remove-font-weight-hook)
 
 #+end_src
 
