@@ -156,12 +156,12 @@ Prevent accidental close.
 #+end_src
 
 #+begin_src emacs-lisp
+
   (defun indent-tabs-hook ()
     (setq tab-width 4
           indent-tabs-mode t
           evil-auto-indent t
-          c-basic-offset 4
-          ))
+          c-basic-offset 4))
 
   (add-hook 'c++-mode-hook    'indent-tabs-hook)
   (add-hook 'c-mode-hook      'indent-tabs-hook)
@@ -788,6 +788,7 @@ Always follow symlinks
     ;; Low levels are unimportant = no scalinkjukjg
     (set-face-attribute 'org-level-7 nil :inherit 'org-level-8)
     (set-face-attribute 'org-level-6 nil :inherit 'org-level-8)
+
     (set-face-attribute 'org-level-5 nil :inherit 'org-level-8)
     (set-face-attribute 'org-level-4 nil :inherit 'org-level-8)
     ;; Top ones get scaled the same as in LaTeX (\large, \Large, \LARGE)
@@ -945,6 +946,7 @@ Always follow symlinks
 #+end_src
 
 ** Tree-sitter
+*** Setup
 #+begin_src emacs-lisp
   (use-package treesit
     :commands (treesit-install-language-grammar nf/treesit-install-all-languages)
@@ -979,16 +981,12 @@ Always follow symlinks
           (treesit-install-language-grammar lang)
           (message "`%s' parser was installed." lang)
           (sit-for 0.75)))))
+
+
 #+end_src
 
-Set up where treesitter binaries are located.
-#+begin_src emacs-lisp
-  ;; (add-to-list 'treesit-extra-load-path "/Users/niklas/dev/git/github/tree-sitter/tree-sitter-module/dist")
-#+end_src
-
-Decoration level to be used by tree-sitter fontifications.
-
-#+begin_src org
+*** Lock level
+#+begin_quote
   Major modes categorize their fontification features into levels,
   from 1 which is the absolute minimum, to 4 that yields the maximum
   fontifications.
@@ -999,29 +997,30 @@ Decoration level to be used by tree-sitter fontifications.
   assignment, constants, numbers, properties, etc.
   Level 4 adds everything else that can be fontified: delimiters,
   operators, brackets, all functions and variables, etc.
-#+end_src
+#+end_quote
 
 #+begin_src emacs-lisp
-  (setq-default treesit-font-lock-level 3)
+  (setq-default treesit-font-lock-level 4)
 #+end_src
 
+*** Hooks
 Associate extensions with the correct tree-sitter mode and others
 #+begin_src emacs-lisp
-  ;; (dolist (pair '(("\\.py\\'"   . python-ts-mode)
-  ;;                 ("\\.c\\'"    . c-ts-mode)
-  ;;                 ("\\.h\\'"    . c-ts-mode)
-  ;;                 ("\\.cpp\\'"  . c++-ts-mode)
-  ;;                 ("\\.hpp\\'"  . c++-ts-mode)
-  ;;                 ("\\.tpp\\'"  . c++-ts-mode)
-  ;;                 ("\\.sh\\'"   . bash-ts-mode)
-  ;;                 ("\\.js\\'"   . js-ts-mode)
-  ;;                 ("\\.ts\\'"   . typescript-ts-mode)
-  ;;                 ("\\.tsx\\'"  . tsx-ts-mode)
-  ;;                 ("\\.cs\\'"   . csharp-ts-mode)
-  ;;                 ("\\.java\\'" . java-ts-mode)
-  ;;                 ("\\.json\\'" . json-ts-mode)
-  ;;                 ("\\.css\\'"  . css-ts-mode)))
-  ;;   (push pair auto-mode-alist))
+;;   (dolist (pair '(("\\.py\\'"   . python-ts-mode)
+;;                   ("\\.c\\'"    . c-ts-mode)
+;;                   ("\\.h\\'"    . c-ts-mode)
+;;                   ("\\.cpp\\'"  . c++-ts-mode)
+;;                   ("\\.hpp\\'"  . c++-ts-mode)
+;;                   ("\\.tpp\\'"  . c++-ts-mode)
+;;                   ("\\.sh\\'"   . bash-ts-mode)
+;;                   ("\\.js\\'"   . js-ts-mode)
+;;                   ("\\.ts\\'"   . typescript-ts-mode)
+;;                   ("\\.tsx\\'"  . tsx-ts-mode)
+;;                   ("\\.cs\\'"   . csharp-ts-mode)
+;;                   ("\\.java\\'" . java-ts-mode)
+;;                   ("\\.json\\'" . json-ts-mode)
+;;                   ("\\.css\\'"  . css-ts-mode)))
+;;     (push pair auto-mode-alist))
 #+end_src
 
 ** Version control
