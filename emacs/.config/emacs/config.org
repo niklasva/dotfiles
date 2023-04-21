@@ -177,10 +177,12 @@ Prevent accidental close.
 
 Enable line numbers for some modes
 #+begin_src emacs-lisp
+  (setq display-line-numbers-width 3)
 
   (dolist (mode '(org-mode-hook text-mode-hook prog-mode-hook conf-mode-hook))
-    (add-hook mode (lambda () (display-line-numbers-mode 1))))
-#+end_src
+    (add-hook mode (lambda ()
+                     (display-line-numbers-mode 1))))
+     #+end_src
 
 Override some modes which derive from the above
 #+begin_src emacs-lisp
@@ -501,7 +503,6 @@ Window management
       (define-key map (kbd "{")      #'dashboard-previous-section)
       map)
     "Keymap for dashboard mode.")
-
 #+end_src
 
 #+begin_src emacs-lisp
@@ -567,7 +568,8 @@ Window management
     "sconf" '((lambda () (interactive) (split-window-below)
                 (find-file "~/.config/emacs/config.org")) :which-key "Open config.org")
 
-    "d l"   '(devdocs-lookup :which-key "devdocs-lookup"))
+    "d l"   '(devdocs-lookup :which-key "devdocs-lookup")
+    "rec"   '(recentf-open :which-key "devdocs-lookup"))
 #+end_src
 
 ** m-x
@@ -936,6 +938,10 @@ Always follow symlinks
 
   (add-hook'eglot-managed-mode-hook 'eglot-post-config)
 
+#+end_src
+
+*** Format on save
+#+begin_src emacs-lisp
   (defun format-on-save-hook ()
     (add-hook 'before-save-hook #'eglot-format-buffer t t))
 
@@ -1110,6 +1116,7 @@ Associate extensions with the correct tree-sitter mode and others
     :defer t)
 #+end_src
 ** Documentation
+*** Devdocs
 #+begin_src emacs-lisp
   (use-package devdocs
     :ensure t
@@ -1258,6 +1265,7 @@ Only use variable-pitch if explicitly called.
 #+end_src
 
 * Web browser
+** eww
 #+begin_src emacs-lisp
   (setq browse-url-browser-function 'eww-browse-url
         shr-use-fonts nil
@@ -1266,4 +1274,21 @@ Only use variable-pitch if explicitly called.
         shr-width 70
         eww-search-prefix "https://frogfind.com/?q="
         shr-inhibit-images t)
+#+end_src
+** elfeed
+#+begin_src emacs-lisp
+  (use-package elfeed
+    :ensure t
+    :defer t
+    :bind ("C-x w" . elfeed)
+    :config
+    (setq elfeed-db-directory (expand-file-name ".elfeed" user-emacs-directory))
+    (setq elfeed-feeds
+          '("http://planet.emacsen.org/atom.xml"
+            "http://www.masteringemacs.org/feed/"
+            "https://oremacs.com/atom.xml"
+            "https://pinecast.com/feed/emacscast")))
+#+end_src
+
+#+begin_src emacs-lisp
 #+end_src
