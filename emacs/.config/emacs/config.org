@@ -320,11 +320,60 @@ Prevent emacs from contaminating system clipboard.
 
 #+begin_src emacs-lisp
   (setq custom-safe-themes t)
-  (load-theme 'modus-operandi-tinted t)
+  (load-theme 'doom-wilmersdorf t)
+#+end_src
+
+** Compilaton mode
+#+begin_src emacs-lisp
+  (use-package xterm-color :ensure t)
+  (setq compilation-environment '("TERM=xterm-256color"))
+  (defun my/advice-compilation-filter (f proc string)
+    (funcall f proc (xterm-color-filter string)))
+  (advice-add 'compilation-filter :around #'my/advice-compilation-filter)
 #+end_src
 
 ** Mode line
+*** Mode line format
+
 #+begin_src emacs-lisp
+  (setq-default mode-line-format '("%e"
+                           mode-line-front-space
+                           (:eval
+                            (if vc-mode
+                                (let*
+                                    ((noback (replace-regexp-in-string
+                                              (format "^ %s" (vc-backend buffer-file-name)) " " vc-mode))
+                                     (face (cond ((string-match "^ -" noback) 'mode-line-vc)
+                                                 ((string-match "^ [:@]" noback) 'mode-line-vc-edit)
+                                                 ((string-match "^ [!\\?]" noback) 'mode-line-vc-modified))))
+                                  (format " %s | " (substring noback 2)))))
+                           "%+ %b"
+                           " | %l:%c"
+                           global-mode-string
+                           ))
+#+end_src
+
+*** Display time
+
+#+begin_src emacs-lisp
+  (setq display-time-format "%+4Y-%m-%d %H:%M"
+                display-time-default-load-average nil)
+
+  (defun display-time-bottom-right ()
+    (and (equal (cddr (window-pixel-edges))
+                (cddr (window-pixel-edges (frame-root-window))))
+         '(#(" " 0 1 (display (space :align-to (- right 18))))
+           " "display-time-string)))
+  (display-time-mode)
+  (setq global-mode-string '(:eval (display-time-bottom-right)))
+#+end_src
+
+#+begin_src emacs-lisp
+  (setq inhibit-compacting-font-caches t)
+#+end_src
+
+*** Mood line
+#+begin_src disabled
   (use-package mood-line
     :ensure t
     :config
