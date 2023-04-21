@@ -248,25 +248,14 @@ Don't show *Buffer list* when opening multiple files at the same time.
 ** Clipboard
 Prevent emacs from contaminating system clipboard.
 #+begin_src emacs-lisp
-  ;;     (setq x-select-enable-clipboard nil)
-  ;;     (setq x-select-enable-primary t)
-  ;;     (setq save-interprogram-paste-before-kill t)
-  ;;     (global-set-key (kbd "s-v") (kbd "s-y"))
-
-  ;; (use-package simpleclip
-  ;; :config
-  ;; (simpleclip-mode 1)
-  ;; (setq interprogram-cut-function 'simpleclip-set-contents)
-  ;; (setq interprogram-paste-function 'simpleclip-get-contents))
-
-#+end_src
-
-** Syntactic close
-#+begin_src emacs-lisp
-  (use-package syntactic-close
+  (use-package simpleclip
     :ensure t
-    :bind ("C-c x c" . syntactic-close))
+    :config
+    (setq interprogram-cut-function 'simpleclip-set-contents
+          interprogram-paste-function 'simpleclip-get-contents)
+    (simpleclip-mode 1))
 #+end_src
+
 * Customization
 ** Theme
 *** Theme packages
@@ -778,6 +767,7 @@ Always follow symlinks
   (use-package mixed-pitch
     :hook
     (text-mode . mixed-pitch-mode))
+
 #+end_src
 
 *** TeX style
