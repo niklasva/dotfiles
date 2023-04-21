@@ -177,7 +177,7 @@ Prevent accidental close.
 
 Enable line numbers for some modes
 #+begin_src emacs-lisp
-  (setq display-line-numbers-width 3)
+  (setq display-line-numbers-width 4)
 
   (dolist (mode '(org-mode-hook text-mode-hook prog-mode-hook conf-mode-hook))
     (add-hook mode (lambda ()
