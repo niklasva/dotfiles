@@ -177,12 +177,12 @@ Prevent accidental close.
 
 Enable line numbers for some modes
 #+begin_src emacs-lisp
-  (setq display-line-numbers-width 4)
+  (setq-default display-line-numbers-width 4)
 
   (dolist (mode '(org-mode-hook text-mode-hook prog-mode-hook conf-mode-hook))
     (add-hook mode (lambda ()
                      (display-line-numbers-mode 1))))
-     #+end_src
+#+end_src
 
 Override some modes which derive from the above
 #+begin_src emacs-lisp
@@ -337,27 +337,27 @@ Prevent emacs from contaminating system clipboard.
 
 #+begin_src emacs-lisp
   (setq-default mode-line-format '("%e"
-                           mode-line-front-space
-                           (:eval
-                            (if vc-mode
-                                (let*
-                                    ((noback (replace-regexp-in-string
-                                              (format "^ %s" (vc-backend buffer-file-name)) " " vc-mode))
-                                     (face (cond ((string-match "^ -" noback) 'mode-line-vc)
-                                                 ((string-match "^ [:@]" noback) 'mode-line-vc-edit)
-                                                 ((string-match "^ [!\\?]" noback) 'mode-line-vc-modified))))
-                                  (format " %s | " (substring noback 2)))))
-                           "%+ %b"
-                           " | %l:%c"
-                           global-mode-string
-                           ))
+                                   mode-line-front-space
+                                   "%+ %b"
+                                   (:eval
+                                    (if vc-mode
+                                        (let*
+                                            ((noback (replace-regexp-in-string
+                                                      (format "^ %s" (vc-backend buffer-file-name)) " " vc-mode))
+                                             (face (cond ((string-match "^ -" noback) 'mode-line-vc)
+                                                         ((string-match "^ [:@]" noback) 'mode-line-vc-edit)
+                                                         ((string-match "^ [!\\?]" noback) 'mode-line-vc-modified))))
+                                          (format " |  %s" (substring noback 2)))))
+                                   " | %l:%c"
+                                   global-mode-string
+                                   ))
 #+end_src
 
 *** Display time
 
 #+begin_src emacs-lisp
   (setq display-time-format "%+4Y-%m-%d %H:%M"
-                display-time-default-load-average nil)
+        display-time-default-load-average nil)
 
   (defun display-time-bottom-right ()
     (and (equal (cddr (window-pixel-edges))
@@ -759,7 +759,12 @@ Window management
 ** File-related keybindings
 #+begin_src emacs-lisp
   (nvmap :states '(normal visual) :keymaps 'override :prefix "SPC"
-    "."     '(find-file :which-key "Find file")
+    "."     '(lambda () (interactive)
+               (setq-local tmpdir default-directory)
+               (cd "~")
+               (call-interactively 'find-file)
+               (cd tmpdir)
+               :which-key "find ~/file")
     "f f"   '(find-file :which-key "Find file")
     "p f"   '(projectile-find-file :which-key "projectile-find-file")
     "f r"   '(counsel-recentf :which-key "Recent files")
@@ -805,7 +810,6 @@ Always follow symlinks
 (use-package mixed-pitch
 :hook
 (text-mode . mixed-pitch-mode))
-
 #+end_src
 
 *** TeX style
@@ -852,22 +856,21 @@ Always follow symlinks
           org-fontify-quote-and-verse-blocks t)
     (set-face-attribute 'org-quote nil :inherit 'font-lock-comment-face :slant 'oblique)
 
-  (defun org-mode-setup (interactive) ()
-         (org-indent-mode)
-         (auto-fill-mode 0)
-         (visual-line-mode 1)
-         (org-num-mode 1)
-         (require 'org-inlinetask))
+    (defun org-mode-setup (interactive) ()
+           (auto-fill-mode 0)
+           (visual-line-mode 1)
+           (org-num-mode 1)
+           (require 'org-inlinetask))
 
-  (add-hook 'org-font-lock-hook #'org-indent-quotes)
-  (defun org-indent-quotes (limit)
-    (let ((case-fold-search t))
-      (while (search-forward-regexp "^[ \t]*#\\+begin_quote" limit t)
-        (let ((beg (1+ (match-end 0))))
-          (when (search-forward-regexp "^[ \t]*#\\+end_quote" nil t)
-            (let ((end (1- (match-beginning 0)))
-                  (indent (propertize "    " 'face 'org-hide)))
-              (add-text-properties beg end (list 'line-prefix indent 'wrap-prefix indent))))))))
+    (add-hook 'org-font-lock-hook #'org-indent-quotes)
+    (defun org-indent-quotes (limit)
+      (let ((case-fold-search t))
+        (while (search-forward-regexp "^[ \t]*#\\+begin_quote" limit t)
+          (let ((beg (1+ (match-end 0))))
+            (when (search-forward-regexp "^[ \t]*#\\+end_quote" nil t)
+              (let ((end (1- (match-beginning 0)))
+                    (indent (propertize "    " 'face 'org-hide)))
+                (add-text-properties beg end (list 'line-prefix indent 'wrap-prefix indent)))))))))
 #+end_src
 
 ** org-tempo
@@ -992,7 +995,7 @@ Always follow symlinks
 
 ** Tree-sitter
 *** Setup
-#+begin_src emacs-lisp
+#+begin_src disabled
   (use-package treesit
     :commands (treesit-install-language-grammar nf/treesit-install-all-languages)
     :init
@@ -1032,16 +1035,16 @@ Always follow symlinks
 
 *** Lock level
 #+begin_quote
-  Major modes categorize their fontification features into levels,
-  from 1 which is the absolute minimum, to 4 that yields the maximum
-  fontifications.
+Major modes categorize their fontification features into levels,
+from 1 which is the absolute minimum, to 4 that yields the maximum
+fontifications.
 
-  Level 1 usually contains only comments and definitions.
-  Level 2 usually adds keywords, strings, constants, types, etc.
-  Level 3 usually represents a full-blown fontification, including
-  assignment, constants, numbers, properties, etc.
-  Level 4 adds everything else that can be fontified: delimiters,
-  operators, brackets, all functions and variables, etc.
+Level 1 usually contains only comments and definitions.
+Level 2 usually adds keywords, strings, constants, types, etc.
+Level 3 usually represents a full-blown fontification, including
+assignment, constants, numbers, properties, etc.
+Level 4 adds everything else that can be fontified: delimiters,
+operators, brackets, all functions and variables, etc.
 #+end_quote
 
 #+begin_src emacs-lisp
@@ -1051,22 +1054,22 @@ Always follow symlinks
 *** Hooks
 Associate extensions with the correct tree-sitter mode and others
 #+begin_src emacs-lisp
-;;   (dolist (pair '(("\\.py\\'"   . python-ts-mode)
-;;                   ("\\.c\\'"    . c-ts-mode)
-;;                   ("\\.h\\'"    . c-ts-mode)
-;;                   ("\\.cpp\\'"  . c++-ts-mode)
-;;                   ("\\.hpp\\'"  . c++-ts-mode)
-;;                   ("\\.tpp\\'"  . c++-ts-mode)
-;;                   ("\\.sh\\'"   . bash-ts-mode)
-;;                   ("\\.js\\'"   . js-ts-mode)
-;;                   ("\\.ts\\'"   . typescript-ts-mode)
-;;                   ("\\.tsx\\'"  . tsx-ts-mode)
-;;                   ("\\.cs\\'"   . csharp-ts-mode)
-;;                   ("\\.java\\'" . java-ts-mode)
-;;                   ("\\.json\\'" . json-ts-mode)
-;;                   ("\\.css\\'"  . css-ts-mode)))
-;;     (push pair auto-mode-alist))
-#+end_src
+  ;;   (dolist (pair '(("\\.py\\'"   . python-ts-mode)
+  ;;                   ("\\.c\\'"    . c-ts-mode)
+  ;;                   ("\\.h\\'"    . c-ts-mode)
+  ;;                   ("\\.cpp\\'"  . c++-ts-mode)
+  ;;                   ("\\.hpp\\'"  . c++-ts-mode)
+  ;;                   ("\\.tpp\\'"  . c++-ts-mode)
+  ;;                   ("\\.sh\\'"   . bash-ts-mode)
+  ;;                   ("\\.js\\'"   . js-ts-mode)
+  ;;                   ("\\.ts\\'"   . typescript-ts-mode)
+  ;;                   ("\\.tsx\\'"  . tsx-ts-mode)
+  ;;                   ("\\.cs\\'"   . csharp-ts-mode)
+  ;;                   ("\\.java\\'" . java-ts-mode)
+  ;;                   ("\\.json\\'" . json-ts-mode)
+  ;;                   ("\\.css\\'"  . css-ts-mode)))
+  ;;     (push pair auto-mode-alist))
+  #+end_src
 
 ** Version control
 *** Git gutter
@@ -1285,6 +1288,11 @@ Remove font weight on some faces
     (set-face-attribute 'magit-header-line nil    :weight 'unspecified))
   (add-hook 'magit-mode-hook 'magit-remove-font-weight-hook)
 
+  (defun eglot-font-lock-hook ()
+    (set-face-attribute 'eglot-highlight-symbol-face nil :inherit 'bold :slant 'oblique))
+  (add-hook 'eglot-mode-hook 'eglot-font-lock-hook)
+
+
 #+end_src
 
 Only use variable-pitch if explicitly called.
@@ -1327,7 +1335,4 @@ Only use variable-pitch if explicitly called.
             "http://www.masteringemacs.org/feed/"
             "https://oremacs.com/atom.xml"
             "https://pinecast.com/feed/emacscast")))
-#+end_src
-
-#+begin_src emacs-lisp
 #+end_src
