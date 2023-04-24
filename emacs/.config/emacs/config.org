@@ -126,15 +126,6 @@ Prevent accidental close.
 #+end_src
 
 #+begin_src emacs-lisp
-  (use-package aggressive-indent
-    :ensure t
-    :config
-    (add-hook 'css-mode-hook #'aggressive-indent-mode)
-    (add-hook 'elisp-mode-hook #'aggressive-indent-mode)
-    (add-hook 'sh-mode-hook #'aggressive-indent-mode))
-#+end_src
-
-#+begin_src emacs-lisp
   (defun prog-pair-hook ()
     (setq electric-pair-inhibit-predicate (lambda (c) (or
                                                        (char-equal c ?\()
