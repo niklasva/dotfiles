@@ -367,55 +367,6 @@ Prevent emacs from contaminating system clipboard.
   (setq inhibit-compacting-font-caches t)
 #+end_src
 
-*** Mood line
-#+begin_src disabled
-  (use-package mood-line
-    :ensure t
-    :config
-    (defconst mood-line-custom-glyphs
-      '((:checker-info        . ?↳)
-        (:checker-issues      . ?→)
-        (:checker-good        . ?x)
-        (:checker-checking    . ?⟳)
-        (:checker-errored     . ?x)
-        (:checker-interrupted . ?=)
-        (:vc-added            . ?+)
-        (:vc-needs-merge      . ?⟷)
-        (:vc-needs-update     . ?↓)
-        (:vc-conflict         . ?x)
-        (:vc-good             . ?)
-        (:buffer-narrowed     . ?v)
-        (:buffer-modified     . ?*)
-        (:buffer-read-only    . ?#)
-        (:count-separator     . ?×)))
-
-    (setq-default mode-line-format
-                  '((:eval
-                     (mood-line--format
-                      (format-mode-line
-                       '(" "
-                         (:eval (mood-line-segment-vc))
-                         (:eval (mood-line-segment-buffer-name))
-                         (:eval (mood-line-segment-buffer-status))
-                         (:eval (mood-line-segment-anzu))
-                         (:eval (mood-line-segment-multiple-cursors))))
-
-                      (format-mode-line
-                       '("%l:%c "
-                         (:eval (mood-line-segment-indentation))
-                         (:eval (downcase (mood-line-segment-major-mode)))
-                         (:eval (mood-line-segment-eol))
-                         (:eval (mood-line-segment-encoding))
-                         (:eval (mood-line-segment-process))
-                         ;; (:eval (downcase (mood-line-segment-checker)))
-                         " "))))))
-
-    (setq mood-line-glyph-alist mood-line-custom-glyphs
-          mode-line-percent-position nil)
-    :init
-    (mood-line-mode )
-
-#+end_src
 * Controls
 ** Evil mode
 #+begin_src emacs-lisp
