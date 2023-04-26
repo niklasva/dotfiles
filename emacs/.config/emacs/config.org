@@ -331,21 +331,23 @@ Prevent emacs from contaminating system clipboard.
 *** Mode line format
 
 #+begin_src emacs-lisp
-  (setq-default mode-line-format '("%e"
-                                   mode-line-front-space
-                                   "%+ %b"
-                                   (:eval
-                                    (if vc-mode
-                                        (let*
-                                            ((noback (replace-regexp-in-string
-                                                      (format "^ %s" (vc-backend buffer-file-name)) " " vc-mode))
-                                             (face (cond ((string-match "^ -" noback) 'mode-line-vc)
-                                                         ((string-match "^ [:@]" noback) 'mode-line-vc-edit)
-                                                         ((string-match "^ [!\\?]" noback) 'mode-line-vc-modified))))
-                                          (format " |  %s" (substring noback 2)))))
-                                   " | %l:%c"
-                                   global-mode-string
-                                   ))
+  (setq-default mode-line-format
+                '("%e "
+                  (:eval (if (and buffer-file-name (buffer-modified-p))
+                             (propertize "%b" 'face `(:slant oblique))
+                           "%b"))
+                  (:eval
+                   (if vc-mode
+                       (let*
+                           ((noback (replace-regexp-in-string
+                                     (format "^ %s" (vc-backend buffer-file-name)) " " vc-mode))
+                            (face (cond ((string-match "^ -" noback) 'mode-line-vc)
+                                        ((string-match "^ [:@]" noback) 'mode-line-vc-edit)
+                                        ((string-match "^ [!\\?]" noback) 'mode-line-vc-modified))))
+                         (format " |  %s" (substring noback 2)))))
+                  " | %l:%c"
+                  global-mode-string
+                  ))
 #+end_src
 
 *** Display time
@@ -1218,26 +1220,6 @@ Remove font weight on some faces
 
     (set-face-attribute 'tooltip nil :inherit 'default))
   (remove-font-weight)
-
-  (defun mood-line-remove-font-weight-hook ()
-    (set-face-attribute 'mode-line-buffer-id nil :weight unspecified)
-    (set-face-attribute 'mode-line-buffer-id nil :weight 'unspecified)
-    (set-face-attribute 'mood-line-buffer-status-narrowed nil :weight 'unspecified))
-  (add-hook 'mood-line-mode-hook 'mood-line-remove-font-weight-hook)
-
-  (defun magit-remove-font-weight-hook ()
-    (set-face-attribute 'magit-diff-added-highlight nil    :weight 'unspecified)
-    (set-face-attribute 'magit-diff-file-heading nil    :weight 'unspecified)
-    (set-face-attribute 'magit-diff-hunk-heading-highlight nil    :weight 'unspecified)
-    (set-face-attribute 'magit-diff-removed-highlight nil    :weight 'unspecified)
-    (set-face-attribute 'magit-diff-revision-summary-highlight nil    :weight 'unspecified)
-    (set-face-attribute 'magit-header-line nil    :weight 'unspecified))
-  (add-hook 'magit-mode-hook 'magit-remove-font-weight-hook)
-
-  (defun eglot-font-lock-hook ()
-    (set-face-attribute 'eglot-highlight-symbol-face nil :inherit 'bold :slant 'oblique))
-  (add-hook 'eglot-mode-hook 'eglot-font-lock-hook)
-
 
 #+end_src
 
