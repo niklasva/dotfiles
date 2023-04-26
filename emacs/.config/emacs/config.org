@@ -541,7 +541,7 @@ Window management
     "p e"   '(projectile-recentf :which-key "projectile-recentf")
     "e r"   '(eval-region :which-key "eval-region")
 
-    "c a"   '(lsp-execute-code-action :which-key "lsp-execute-code-action")
+    "c a"   '(eglot-code-actions :which-key "eglot-code-actions")
 
     "n"     '(flycheck-next-error :which-key "flycheck-next-error")
     "N"     '(flycheck-previous-error :which-key "flycheck-previous-error")
@@ -612,7 +612,7 @@ Window management
     (corfu-cycle t)
     (corfu-auto t)
     (corfu-quit-no-match 'separator)
-    (corfu-preselect 'prompt)
+    (corfu-preselect 'valid)
 
     (corfu-echo-documentation t)
     (corfu-auto-delay 0)
@@ -906,7 +906,10 @@ Always follow symlinks
   (use-package eglot
     :ensure t
     :hook
-    ((c-mode c++-mode c-ts-mode c++-ts-mode) . eglot-ensure))
+    ((c-mode c++-mode c-ts-mode c++-ts-mode) . eglot-ensure)
+    :config
+    (setq eldoc-idle-delay 0)
+    )
 
   (with-eval-after-load 'eglot
     (add-to-list 'eglot-server-programs
