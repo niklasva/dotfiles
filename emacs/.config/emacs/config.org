@@ -753,6 +753,16 @@ Always follow symlinks
 
 * Org-mode
 ** Org-mode appearance
+*** Olivetti
+#+begin_src emacs-lisp
+  (use-package olivetti
+    :ensure t
+    :defer t
+    :config
+    (setq olivetti-body-width 120
+          olivetti-minimum-body-width 100))
+
+  #+end_src
 *** Mixed-pitch
 #+begin_src disabled
 (use-package mixed-pitch
