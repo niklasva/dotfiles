@@ -1176,6 +1176,39 @@ Associate extensions with the correct tree-sitter mode and others
     :ensure t
     :hook (eshell-mode . eshell-syntax-highlighting-mode))
 
+  (defun my-term-handle-exit (&optional process-name msg)
+    ;; (message "%s | %s" process-name msg)
+    (kill-buffer (current-buffer)))
+
+  (advice-add 'term-handle-exit :after 'my-term-handle-exit)
+#+end_src
+
+*** alias
+#+begin_src emacs-lisp
+  (defalias 'eshell/v 'eshell-exec-visual)
+#+end_src
+
+** vterm
+#+begin_src emacs-lisp
+  (use-package vterm
+    :ensure t
+    :defer t
+    :config
+    (setq vterm-buffer-name-string "%s"
+          vterm-max-scrollback 100000
+          vterm-kill-buffer-on-exit t))
+#+end_src
+
+*** eshell-vterm
+#+begin_src emacs-lisp
+  (use-package eshell-vterm
+    :load-path "site-lisp/eshell-vterm"
+    :ensure t
+    :defer t
+    :demand t
+    :after eshell
+    :config
+    (eshell-vterm-mode))
 #+end_src
 ** env
 
