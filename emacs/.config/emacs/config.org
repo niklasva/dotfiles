@@ -109,6 +109,24 @@ Prevent accidental close.
   (require 'use-package)
 #+end_src
 
+* Encryption
+** gpg
+#+begin_src emacs-lisp
+  (setf epa-pinentry-mode 'loopback)
+#+end_src
+
+** authinfo
+#+begin_src emacs-lisp
+  (setq auth-sources
+        '((:source "~/.authinfo.gpg")))
+
+  (defun niva/lookup-password (&rest keys)
+    (let ((result (apply #'auth-source-search keys)))
+      (if result
+          (funcall (plist-get (car result) :secret))
+        nil)))
+#+end_src
+
 * Text edit settings
 ** Defaults
 #+begin_src emacs-lisp
@@ -124,9 +142,12 @@ Prevent accidental close.
    completion-cycle-threshold 3
    tab-always-indent 'complete
    tab-width 2)
-
   (column-number-mode)
   (electric-indent-mode +1)
+#+end_src
+
+#+begin_src emacs-lisp
+ (setq ring-bell-function 'ignore)
 #+end_src
 
 #+begin_src emacs-lisp
@@ -315,7 +336,7 @@ Prevent emacs from contaminating system clipboard.
 
 #+begin_src emacs-lisp
   (setq custom-safe-themes t)
-  (load-theme 'doom-wilmersdorf t)
+  (load-theme 'modus-operandi t)
 #+end_src
 
 ** Compilaton mode
@@ -1302,21 +1323,36 @@ Only use variable-pitch if explicitly called.
         shr-use-fonts nil
         shr-use-colors nil
         shr-indentation 2
-        shr-width 70
-        eww-search-prefix "https://frogfind.com/?q="
-        shr-inhibit-images t)
+        ;; shr-width 70
+        eww-search-prefix "https://frogfind.com/?q=")
 #+end_src
-** elfeed
+* elfeed
 #+begin_src emacs-lisp
+
   (use-package elfeed
     :ensure t
     :defer t
-    :bind ("C-x w" . elfeed)
+    :bind ("C-x w" . elfeed))
+
+  (setq test (concat (niva/lookup-password :host "fever") ""))
+  (use-package elfeed-protocol
+    :ensure t
+    :defer t
     :config
-    (setq elfeed-db-directory (expand-file-name ".elfeed" user-emacs-directory))
-    (setq elfeed-feeds
-          '("http://planet.emacsen.org/atom.xml"
-            "http://www.masteringemacs.org/feed/"
-            "https://oremacs.com/atom.xml"
-            "https://pinecast.com/feed/emacscast")))
+    (setq elfeed-use-curl t
+          elfeed-sort-order 'descending
+          elfeed-protocol-enabled-protocols '(fever)
+          elfeed-protocol-fever-update-unread-only nil
+          elfeed-protocol-fever-maxsize 150
+          elfeed-feeds '(("fever+https://niklas@rss.niklas.zone"
+                          :api-url "https://rss.niklas.zone/fever/"
+                          :password (niva/lookup-password :host "fever")
+                          ))))
+  (elfeed-protocol-enable)
+
+  (advice-add 'elfeed-show-visit :around #'suppress-messages)
+
+  (define-key elfeed-show-mode-map (kbd "j") 'elfeed-show-next)
+  (define-key elfeed-show-mode-map (kbd "k") 'elfeed-show-prev)
+
 #+end_src
