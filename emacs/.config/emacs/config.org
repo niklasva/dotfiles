@@ -467,6 +467,7 @@ Prevent emacs from contaminating system clipboard.
 
   (define-key evil-normal-state-map (kbd "C-a C-x") 'kill-this-buffer)
   (define-key help-mode-map         (kbd "C-a C-x") 'evil-delete-buffer)
+  (define-key evil-normal-state-map (kbd "C-w C-x") 'delete-window)
   (define-key evil-normal-state-map (kbd "M-e")     'eshell)
   (define-key evil-normal-state-map (kbd "B V")     'org-babel-mark-block)
   (define-key evil-normal-state-map (kbd "SPC e b") 'org-babel-execute-src-block-maybe)
@@ -479,9 +480,9 @@ Prevent emacs from contaminating system clipboard.
 
 Window management
 #+begin_src emacs-lisp
-  (define-key evil-normal-state-map (kbd "C-w n") 'tab-next)
-  (define-key evil-normal-state-map (kbd "C-w c") 'tab-new)
-  (define-key evil-normal-state-map (kbd "C-<tab>") 'tab-next)
+  (define-key evil-normal-state-map (kbd "C-w n")     'tab-next)
+  (define-key evil-normal-state-map (kbd "C-w c")     'tab-new)
+  (define-key evil-normal-state-map (kbd "C-<tab>")   'tab-next)
   (define-key evil-normal-state-map (kbd "C-S-<tab>") 'tab-previous)
 
   (define-key evil-normal-state-map (kbd "C-w -")   'evil-window-split)
@@ -497,6 +498,11 @@ Window management
   (define-key evil-normal-state-map (kbd "C-w J") 'buf-move-down)
   (define-key evil-normal-state-map (kbd "C-w K") 'buf-move-up)
   (define-key evil-normal-state-map (kbd "C-w L") 'buf-move-right)
+
+  (define-key evil-normal-state-map (kbd "s-<") 'ns-next-frame)
+  (define-key evil-normal-state-map (kbd "s->") 'ns-prev-frame)
+  (define-key evil-normal-state-map (kbd "M-<") 'ns-next-frame)
+  (define-key evil-normal-state-map (kbd "M->") 'ns-prev-frame)
 #+end_src
 
 #+begin_src disabled
