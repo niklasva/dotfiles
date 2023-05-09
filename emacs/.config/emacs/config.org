@@ -524,12 +524,9 @@ Window management
   (global-set-key (kbd "s-<return>") 'toggle-frame-fullscreen)
   (global-set-key (kbd "s-t")        'tab-new)
   (global-set-key (kbd "s-w")        'tab-close)
-  (global-set-key (kbd "s-d")        'winner-undo)
-  (global-set-key (kbd "s-D")        'winner-redo)
   (global-set-key (kbd "s-z")        nil)
 
 #+end_src
-
 
 ** which-key
 
@@ -583,7 +580,13 @@ Window management
                 (find-file "~/.config/emacs/config.org")) :which-key "Open config.org")
 
     "d l"   '(devdocs-lookup :which-key "devdocs-lookup")
-    "rec"   '(recentf-open :which-key "devdocs-lookup"))
+    "rec"   '(recentf-open :which-key "devdocs-lookup")
+
+    "elf"   '(elfeed :which-key "elfeed")
+    "eww"   '(eww :which-key "eww")
+    "wu" '(winner-undo :which-key "winner-undo")
+    "wU" '(winner-redo :which-key "winner-redo"))
+
 #+end_src
 
 ** m-x
@@ -1323,14 +1326,6 @@ Remove font weight on some faces
     (set-face-attribute 'tooltip nil :inherit 'default))
   (remove-font-weight)
 
-#+end_src
-
-Only use variable-pitch if explicitly called.
-
-#+begin_src emacs-lisp
-  (defun niva/variable-pitch-on ()
-    (interactive)
-    (set-face-attribute 'variable-pitch nil :font "CMU Serif 14" :inherit 'default))
 #+end_src
 
 ** Ligatures
