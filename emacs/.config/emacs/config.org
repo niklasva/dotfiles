@@ -1383,9 +1383,29 @@ Only use variable-pitch if explicitly called.
                           ))))
   (elfeed-protocol-enable)
 
+
   (advice-add 'elfeed-show-visit :around #'suppress-messages)
 
   (define-key elfeed-show-mode-map (kbd "j") 'elfeed-show-next)
   (define-key elfeed-show-mode-map (kbd "k") 'elfeed-show-prev)
+
+
+  (defun my/elfeed-toggle-images ()
+    (interactive)
+    (setq-local shr-inhibit-images (not shr-inhibit-images))
+    (elfeed-show-refresh))
+
+  (define-key elfeed-show-mode-map (kbd "I") #'my/elfeed-toggle-images)
+  (define-key elfeed-search-mode-map (kbd "I") #'my/elfeed-toggle-images)
+
+  (define-key elfeed-search-mode-map (kbd "r") 'elfeed-update)
+
+
+  (defun elfeed-olivetti (buff)
+    (switch-to-buffer buff)
+    (olivetti-mode)
+    (elfeed-show-refresh))
+
+  (setq elfeed-show-entry-switch 'elfeed-olivetti)
 
 #+end_src
