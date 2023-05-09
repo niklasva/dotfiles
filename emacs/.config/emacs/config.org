@@ -789,10 +789,10 @@ Always follow symlinks
     :ensure t
     :defer t
     :config
-    (setq olivetti-body-width 120
-          olivetti-minimum-body-width 100))
+    (setq olivetti-body-width 160
+          olivetti-minimum-body-width 140))
 
-  #+end_src
+#+end_src
 *** Mixed-pitch
 #+begin_src disabled
 (use-package mixed-pitch
