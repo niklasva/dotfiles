@@ -112,8 +112,10 @@ Prevent accidental close.
 * Encryption
 ** gpg
 #+begin_src emacs-lisp
-  (setf epa-pinentry-mode 'loopback)
-#+end_src
+  (use-package pinentry
+  :ensure t
+  :config (pinentry-start))
+  #+end_src
 
 ** authinfo
 #+begin_src emacs-lisp
