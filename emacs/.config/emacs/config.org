@@ -1344,30 +1344,38 @@ Only use variable-pitch if explicitly called.
 * Web browser
 ** eww
 #+begin_src emacs-lisp
-  (setq browse-url-browser-function 'eww-browse-url
-        shr-use-fonts nil
-        shr-use-colors nil
-        shr-indentation 2
-        ;; shr-width 70
-        eww-search-prefix "https://frogfind.com/?q=")
-#+end_src
+  (setq-default browse-url-browser-function 'eww-browse-url
+                shr-use-fonts nil
+                shr-use-colors nil
+                shr-inhibit-images t
+                shr-indentation 2
+                eww-search-prefix "https://html.duckduckgo.com/html?q=")
+
+  (defun my/eww-toggle-images ()
+    (interactive)
+    (setq-local shr-inhibit-images (not shr-inhibit-images))
+    (eww-reload))
+
+
+#+END_SRC
 * elfeed
 #+begin_src emacs-lisp
 
   (use-package elfeed
     :ensure t
     :defer t
-    :bind ("C-x w" . elfeed))
+    ;; :bind (:map elfeed-search-mode-map ("r" . elfeed-update))
+    :hook (elfeed-search-mode . elfeed-update))
 
-  (setq test (concat (niva/lookup-password :host "fever") ""))
   (use-package elfeed-protocol
     :ensure t
     :defer t
+    :after elfeed
     :config
     (setq elfeed-use-curl t
           elfeed-sort-order 'descending
           elfeed-protocol-enabled-protocols '(fever)
-          elfeed-protocol-fever-update-unread-only nil
+          elfeed-protocol-fever-update-unread-only t
           elfeed-protocol-fever-maxsize 150
           elfeed-feeds '(("fever+https://niklas@rss.niklas.zone"
                           :api-url "https://rss.niklas.zone/fever/"
