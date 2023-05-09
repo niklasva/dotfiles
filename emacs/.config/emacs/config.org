@@ -850,6 +850,16 @@ Always follow symlinks
               (let ((end (1- (match-beginning 0)))
                     (indent (propertize "    " 'face 'org-hide)))
                 (add-text-properties beg end (list 'line-prefix indent 'wrap-prefix indent)))))))))
+
+  (use-package org-superstar
+    :ensure t
+    :after org
+    :hook (org-mode . org-superstar-mode)
+    :custom
+    (org-superstar-remove-leading-stars t)
+    (org-superstar-headline-bullets-list '("◉" "○" "●" "○" "●" "○" "●")))
+#+end_src
+
 #+end_src
 
 ** org-tempo
