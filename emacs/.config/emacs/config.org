@@ -38,11 +38,11 @@
         ns-use-proxy-icon nil
         ns-use-mwheel-momentum t
         ns-use-mwheel-acceleration t
-        frame-title-format "\n"
         frame-resize-pixelwise t)
 
   (use-package tab-bar-echo-area
     :ensure t
+    :defer t
     :config
     (tab-bar-echo-area-mode 1))
 
@@ -95,8 +95,8 @@ Prevent accidental close.
 #+begin_src emacs-lisp
   (require 'package)
   (setq package-archives '(("melpa" . "https://melpa.org/packages/")
-                           ("org" . "https://orgmode.org/elpa/")
-                           ("elpa" . "https://elpa.gnu.org/packages/")))
+                           ("org"   . "https://orgmode.org/elpa/")
+                           ("elpa"  . "https://elpa.gnu.org/packages/")))
   (package-initialize)
   (unless package-archive-contents (package-refresh-contents))
 #+end_src
@@ -143,13 +143,20 @@ Prevent accidental close.
    indent-tabs-mode nil
    completion-cycle-threshold 3
    tab-always-indent 'complete
-   tab-width 2)
+   tab-width 4)
   (column-number-mode)
   (electric-indent-mode +1)
 #+end_src
 
 #+begin_src emacs-lisp
- (setq ring-bell-function 'ignore)
+  (setq-default scroll-preserve-screen-position t
+                scroll-conservatively 5
+                maximum-scroll-margin 0.5
+                scroll-margin 4)
+#+end_src
+
+#+begin_src emacs-lisp
+  (setq ring-bell-function 'ignore)
 #+end_src
 
 #+begin_src emacs-lisp
@@ -404,7 +411,8 @@ Prevent emacs from contaminating system clipboard.
           evil-vsplit-window-right t
           evil-split-window-below t
           evil-want-C-u-scroll t
-          evil-undo-system 'undo-redo)
+          evil-undo-system 'undo-redo
+          evil-scroll-count 8)
     (evil-mode))
 
   (use-package transpose-frame
