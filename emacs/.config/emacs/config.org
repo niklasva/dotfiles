@@ -13,18 +13,18 @@
 ** GUI settings
 
 #+begin_src emacs-lisp
-  (setq inhibit-startup-message t
-        inhibit-startup-echo-area-message t)
+(setq inhibit-startup-message t
+    inhibit-startup-echo-area-message t)
 
-  (scroll-bar-mode -1)
-  (tool-bar-mode -1)
-  (tooltip-mode nil)
-  (menu-bar-mode 1)
-  (set-fringe-mode 1)
-  (global-visual-line-mode t)
+(scroll-bar-mode -1)
+(tool-bar-mode -1)
+(tooltip-mode nil)
+(menu-bar-mode 1)
+(set-fringe-mode 1)
+(global-visual-line-mode t)
 
-  (setq-default left-fringe-width 16
-                right-fringe-width 3)
+(setq-default left-fringe-width 16
+            right-fringe-width 3)
 #+end_src
 
 #+begin_src emacs-lisp
@@ -445,10 +445,9 @@ Prevent emacs from contaminating system clipboard.
 ** Keybindings
 
 #+begin_src emacs-lisp
-  (setq mac-option-modifier nil
-        Mac-escape-modifier nil
-        mac-right-command-modifier 'meta
-        )
+  (setq mac-escape-modifier nil
+        mac-option-modifier nil
+        mac-right-command-modifier 'meta)
   (setq mac-pass-command-to-system t)
 #+end_src
 
@@ -830,7 +829,7 @@ Always follow symlinks
     (setq org-cycle-level-faces nil)
     (setq org-n-level-faces 4)
     (variable-pitch-mode 1)
-    (variable-pitch-on))
+    (niva/variable-pitch-on))
 #+end_src
 
 ** Set up
@@ -870,6 +869,12 @@ Always follow symlinks
     (org-superstar-headline-bullets-list '("◉" "○" "●" "○" "●" "○" "●")))
 #+end_src
 
+Only use variable-pitch if explicitly called.
+
+#+begin_src emacs-lisp
+  (defun niva/variable-pitch-on ()
+    (interactive)
+    (set-face-attribute 'variable-pitch nil :font " Serif 14" :inherit 'default))
 #+end_src
 
 ** org-tempo
