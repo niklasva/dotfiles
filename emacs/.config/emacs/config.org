@@ -287,11 +287,6 @@ Prevent emacs from contaminating system clipboard.
 ** Theme
 *** Theme packages
 #+begin_src emacs-lisp
-  (use-package helm-themes :ensure t :defer t)
-  (use-package sublime-themes :ensure t :defer t)
-  (use-package color-theme-modern :ensure t :defer t)
-  (use-package nano-theme :ensure t :defer t)
-
   (use-package doom-themes
     :ensure t
     :defer t
@@ -328,24 +323,10 @@ Prevent emacs from contaminating system clipboard.
     (set-face-foreground 'window-divider-last-pixel (face-attribute 'default :background)))
 #+end_src
 
-*** Theme switcher
-#+begin_src emacs-lisp
-  (defun niva/switch-theme (theme)
-    "Disable theme and switch"
-    (interactive (list (intern (completing-read
-                                "Theme: "
-                                (->> (custom-available-themes)
-                                     (-map #'symbol-name))))))
-    (mapc #'disable-theme custom-enabled-themes)
-    (load-theme theme 'no-confirm)
-    (niva/fix-window-divider-color))
-#+end_src
-
 *** Load theme
-
 #+begin_src emacs-lisp
   (setq custom-safe-themes t)
-  (load-theme 'modus-operandi t)
+  (load-theme 'doom-feather-light t)
 #+end_src
 
 ** Compilaton mode
