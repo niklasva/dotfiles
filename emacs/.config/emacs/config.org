@@ -342,38 +342,58 @@ Prevent emacs from contaminating system clipboard.
 *** Mode line format
 
 #+begin_src emacs-lisp
+
+  (mu4e-alert-enable-mode-line-display)
+  (setq display-time-format "  %+4Y-%m-%d %H:%M"
+        display-time-default-load-average nil)
+  (display-time-mode)
+
+  (defun simple-mode-line-render (left right)
+    "Return a string of `window-width' length.
+       Containing LEFT, and RIGHT aligned respectively."
+    (let ((available-width
+           (- (window-total-width)
+              (+ (length (format-mode-line left))
+                 (length (format-mode-line right))))))
+      (append left
+              (list (format (format "%%%ds" available-width) ""))
+              right)))
+
   (setq-default mode-line-format
-                '("%e "
-                  (:eval (if (and buffer-file-name (buffer-modified-p))
-                             (propertize "%b" 'face `(:slant oblique))
-                           "%b"))
-                  (:eval
-                   (if vc-mode
-                       (let*
-                           ((noback (replace-regexp-in-string
-                                     (format "^ %s" (vc-backend buffer-file-name)) " " vc-mode))
-                            (face (cond ((string-match "^ -" noback) 'mode-line-vc)
-                                        ((string-match "^ [:@]" noback) 'mode-line-vc-edit)
-                                        ((string-match "^ [!\\?]" noback) 'mode-line-vc-modified))))
-                         (format " |  %s" (substring noback 2)))))
-                  " | %l:%c"
-                  global-mode-string
-                  ))
+                '((:eval
+                   (simple-mode-line-render
+                    ;; Left.
+                    (quote ("%e "
+                            (:eval (if (and buffer-file-name (buffer-modified-p))
+                                       (propertize "%b" 'face `(:slant oblique))
+                                     "%b"))
+                            (:eval
+                             (if vc-mode
+                                 (let*
+                                     ((noback (replace-regexp-in-string
+                                               (format "^ %s" (vc-backend buffer-file-name)) " " vc-mode))
+                                      (face (cond ((string-match "^ -" noback) 'mode-line-vc)
+                                                  ((string-match "^ [:@]" noback) 'mode-line-vc-edit)
+                                                  ((string-match "^ [!\\?]" noback) 'mode-line-vc-modified))))
+                                   (format " |  %s" (substring noback 2)))))
+                            " | %l:%c"))
+                    ;; Right.
+                    (quote (" " global-mode-string))))))
 #+end_src
 
 *** Display time
 
 #+begin_src emacs-lisp
-  (setq display-time-format "%+4Y-%m-%d %H:%M"
-        display-time-default-load-average nil)
-
-  (defun display-time-bottom-right ()
-    (and (equal (cddr (window-pixel-edges))
-                (cddr (window-pixel-edges (frame-root-window))))
-         '(#(" " 0 1 (display (space :align-to (- right 18))))
-           " "display-time-string)))
-  (display-time-mode)
-  (setq global-mode-string '(:eval (display-time-bottom-right)))
+;;   (setq display-time-format "%+4Y-%m-%d %H:%M"
+;;         display-time-default-load-average nil)
+;;
+;;   (defun display-time-bottom-right ()
+;;     (and (equal (cddr (window-pixel-edges))
+;;                 (cddr (window-pixel-edges (frame-root-window))))
+;;          '(#(" " 0 1 (display (space :align-to (- right 38))))
+;;            " "display-time-string)))
+;;   (display-time-mode)
+;;   (setq global-mode-string '(:eval (display-time-bottom-right)))
 #+end_src
 
 #+begin_src emacs-lisp
