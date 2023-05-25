@@ -431,7 +431,6 @@ Prevent emacs from contaminating system clipboard.
     :after evil
     :ensure t
     :config
-    ;;(setq evil-collection-mode-list '(dashboard dired ibuffer))
     (evil-collection-init))
 #+end_src
 
@@ -500,10 +499,8 @@ Window management
   (define-key evil-normal-state-map (kbd "C-w K") 'buf-move-up)
   (define-key evil-normal-state-map (kbd "C-w L") 'buf-move-right)
 
-  (define-key evil-normal-state-map (kbd "s-<") 'ns-next-frame)
-  (define-key evil-normal-state-map (kbd "s->") 'ns-prev-frame)
-  (define-key evil-normal-state-map (kbd "M-<") 'ns-next-frame)
-  (define-key evil-normal-state-map (kbd "M->") 'ns-prev-frame)
+  (define-key evil-normal-state-map (kbd "C-S-U") (lambda() (interactive) (pixel-scroll-down 8)))
+  (define-key evil-normal-state-map (kbd "C-S-D") (lambda() (interactive) (pixel-scroll-up 8)))
 #+end_src
 
 #+begin_src disabled
@@ -799,8 +796,8 @@ Always follow symlinks
     :ensure t
     :defer t
     :config
-    (setq olivetti-body-width 160
-          olivetti-minimum-body-width 140))
+    (setq olivetti-body-width 100
+          olivetti-minimum-body-width 100))
 
 #+end_src
 *** Mixed-pitch
@@ -818,7 +815,7 @@ Always follow symlinks
 
     (set-face-attribute 'org-document-title nil
                         :height 2.0
-                        :weight 'regular
+                        ;; :weight 'regular
                         :font "CMU Serif"
                         :foreground nil
                         )
@@ -842,29 +839,22 @@ Always follow symlinks
     (niva/variable-pitch-on))
 #+end_src
 
+
 ** Set up
 #+begin_src emacs-lisp
   (use-package org
     :ensure t
     :defer t
-    :hook (org-mode . org-mode-setup)
     :config
     (setq org-ellipsis " .."
           org-hide-emphasis-markers t
           org-fontify-quote-and-verse-blocks t)
     (set-face-attribute 'org-quote nil :inherit 'font-lock-comment-face :slant 'oblique)
 
-    (defun org-mode-setup (interactive) ()
-           (auto-fill-mode 0)
-           (visual-line-mode 1)
-           (org-num-mode 1)
-           (require 'org-inlinetask))
-
     (add-hook 'org-font-lock-hook #'org-indent-quotes)
     (defun org-indent-quotes (limit)
       (let ((case-fold-search t))
-        (while (search-forward-regexp "^[ \t]*#\\+begin_quote" limit t)
-          (let ((beg (1+ (match-end 0))))
+        (while (search-forward-regexp "^[ \t]*#\\+begin_quote" limit t) (let ((beg (1+ (match-end 0))))
             (when (search-forward-regexp "^[ \t]*#\\+end_quote" nil t)
               (let ((end (1- (match-beginning 0)))
                     (indent (propertize "    " 'face 'org-hide)))
@@ -1270,16 +1260,8 @@ Associate extensions with the correct tree-sitter mode and others
 #+end_src
 
 * Font
-
-Set font.
-
 Remove font weight on some faces
-
 #+begin_src emacs-lisp
-
-  ;; (set-face-attribute 'variable-pitch nil :font 'unspecified :inherit 'default)
-  ;; (set-face-attribute 'variable-pitch-text nil :height 'unspecified :inherit 'default)
-
   (defun remove-font-weight ()
     (custom-set-faces
      '(default                           ((t (:background nil))))
@@ -1296,8 +1278,7 @@ Remove font weight on some faces
     (set-face-attribute 'help-key-binding nil    :weight 'unspecified)
 
     (set-face-attribute 'tooltip nil :inherit 'default))
-  (remove-font-weight)
-
+  ;; (remove-font-weight)
 #+end_src
 
 ** Ligatures
@@ -1315,19 +1296,16 @@ Remove font weight on some faces
                 shr-use-fonts nil
                 shr-use-colors nil
                 shr-inhibit-images t
-                shr-indentation 2
+                shr-indentation 4
                 eww-search-prefix "https://html.duckduckgo.com/html?q=")
 
   (defun my/eww-toggle-images ()
     (interactive)
     (setq-local shr-inhibit-images (not shr-inhibit-images))
     (eww-reload))
-
-
-#+END_SRC
+#+end_src
 * elfeed
 #+begin_src emacs-lisp
-
   (use-package elfeed
     :ensure t
     :defer t
@@ -1366,8 +1344,6 @@ Remove font weight on some faces
   (define-key elfeed-search-mode-map (kbd "I") #'my/elfeed-toggle-images)
 
   (define-key elfeed-search-mode-map (kbd "r") 'elfeed-update)
-
-
   (defun elfeed-olivetti (buff)
     (switch-to-buffer buff)
     (olivetti-mode)
