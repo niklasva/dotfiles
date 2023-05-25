@@ -285,30 +285,32 @@ Prevent emacs from contaminating system clipboard.
 ** Theme
 *** Theme packages
 #+begin_src emacs-lisp
+  (use-package kaolin-themes
+	:ensure t)
   (use-package doom-themes
-    :ensure t
-    :defer t
-    :custom (doom-themes-enable-bold nil)
-    (doom-themes-org-config)
-    (doom-themes-enable-italic t))
+	:ensure t
+	:defer t
+	:custom (doom-themes-enable-bold nil)
+	(doom-themes-org-config)
+	(doom-themes-enable-italic t))
 #+end_src
 
 *** Modus
 #+begin_src emacs-lisp
   (setq modus-themes-bold-constructs nil
-        modus-themes-hl-line (quote (accented))
-        modus-themes-org-blocks nil
-        modus-themes-region '(bg-only)
-        modus-themes-tabs-accented t)
+		modus-themes-hl-line (quote (accented))
+		modus-themes-org-blocks nil
+		modus-themes-region '(bg-only)
+		modus-themes-tabs-accented t)
 
   (setq modus-themes-common-palette-overrides
-        '((fringe unspecified)
-          (border-mode-line-active unspecified)
-          (border-mode-line-inactive unspecified)))
+		'((fringe unspecified)
+		  (border-mode-line-active unspecified)
+		  (border-mode-line-inactive unspecified)))
 
   (setq modus-themes-completions '((matches . (background minimal))
-                                   (selection . (background minimal))
-                                   (popup . (background minimal))))
+								   (selection . (background minimal))
+								   (popup . (background minimal))))
 
 #+end_src
 *** Window divider fix
@@ -324,7 +326,7 @@ Prevent emacs from contaminating system clipboard.
 *** Load theme
 #+begin_src emacs-lisp
   (setq custom-safe-themes t)
-  (load-theme 'doom-feather-light t)
+  (load-theme 'modus-operandi t)
 #+end_src
 
 ** Compilaton mode
