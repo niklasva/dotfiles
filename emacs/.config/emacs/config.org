@@ -644,54 +644,71 @@ Window management
 ** Corfu
 #+begin_src emacs-lisp
   (use-package corfu
-    :ensure t
-    :custom
-    (corfu-cycle t)
-    (corfu-auto t)
-    (corfu-quit-no-match 'separator)
-    (corfu-preselect 'valid)
+	:ensure t
+	:custom
+	(corfu-cycle t)
+	(corfu-auto t)
+	(corfu-quit-no-match 'separator)
+	(corfu-preselect 'valid)
 
-    (corfu-echo-documentation t)
-    (corfu-auto-delay 0)
-    (corfu-auto-prefix 1)
-    :bind
-    (:map corfu-map
-          ("TAB"     . corfu-next)
-          ("C-SPC"   . corfu-next)
-          ([tab]     . corfu-next)
-          ("S-TAB"   . corfu-previous)
-          ("C-S-SPC" . corfu-previous)
-          ([backtab] . corfu-previous))
+	(corfu-echo-documentation t)
+	(corfu-auto-delay 0)
+	(corfu-auto-prefix 1)
+	:bind
+	(:map corfu-map
+		  ("TAB"     . corfu-next)
+		  ("C-SPC"   . corfu-next)
+		  ([tab]     . corfu-next)
+		  ("S-TAB"   . corfu-previous)
+		  ("C-S-SPC" . corfu-previous)
+		  ([backtab] . corfu-previous))
 
-    :init
-    (corfu-popupinfo-mode)
-    (global-corfu-mode))
+	:init
+	(global-corfu-mode)
+	(corfu-popupinfo-mode t)
+
+	:config
+	(setq corfu-popupinfo-delay '(0.5 . 0.2))
+	(custom-set-faces
+	 '(corfu-default ((t (:height 130))))))
 
   (add-hook 'eshell-mode-hook (lambda () (setq-local corfu-auto nil) (corfu-mode)))
 
   (defun corfu-send-shell (&rest _)
-    "Send completion candidate when inside comint/eshell."
-    (cond
-     ((and (derived-mode-p 'eshell-mode) (fboundp 'eshell-send-input))
-      (eshell-send-input))
-     ((and (derived-mode-p 'comint-mode)  (fboundp 'comint-send-input))
-      (comint-send-input))))
+	"Send completion candidate when inside comint/eshell."
+	(cond
+	 ((and (derived-mode-p 'eshell-mode) (fboundp 'eshell-send-input))
+	  (eshell-send-input))
+	 ((and (derived-mode-p 'comint-mode)  (fboundp 'comint-send-input))
+	  (comint-send-input))))
 
   (use-package kind-icon
-    :ensure t
-    :after corfu
-    :custom
-    (kind-icon-default-face 'corfu-default)
-    :config
-    (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
+	:ensure t
+	:after corfu
+	:custom
+	;; (kind-icon-default-face 'corfu-default)
+	(kind-icon-use-icons nil)
+	:config
+	(add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
 
   ;; Optionally use the `orderless' completion style.
   (use-package orderless
-    :ensure t
-    :init
-    (setq completion-styles '(orderless basic)
-          completion-category-defaults nil
-          completion-category-overrides '((file (styles . (partial-completion))))))
+	:ensure t
+	:init
+	(setq completion-styles '(orderless basic)
+		  completion-category-defaults nil
+		  completion-category-overrides '((file (styles . (partial-completion))))))
+
+  (use-package cape
+	;; Bind dedicated completion commands
+	;; Alternative prefix keys: C-c p, M-p, M-+, ...
+	:ensure t
+	:config
+	(add-to-list 'completion-at-point-functions #'cape-dabbrev)
+	(add-to-list 'completion-at-point-functions #'cape-file)
+	(add-to-list 'completion-at-point-functions #'cape-keyword)
+	)
+
 #+end_src
 ** buffer-move
 #+begin_src emacs-lisp
