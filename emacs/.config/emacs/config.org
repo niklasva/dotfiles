@@ -641,6 +641,35 @@ Window management
     :ensure t)
 #+end_src
 
+** Marginalia
+#+begin_src emacs-lisp
+  (use-package marginalia
+	:ensure t
+	:init
+	(marginalia-mode))
+  #+end_src
+
+**  Yasnippet
+#+begin_src emacs-lisp
+  (use-package yasnippet
+	:ensure   t
+	:commands (yas-recompile-all yas-reload-all yas-minor-mode)
+
+	:hook
+	(c++-ts-mode . yas-minor-mode)
+	(c++-mode . yas-minor-mode)
+	(c-mode . yas-minor-mode)
+	(c-ts-mode . yas-minor-mode)
+	:config
+	(setq yas-snippet-dirs
+		  `(,(concat user-emacs-directory (file-name-as-directory "snippets"))))
+	)
+
+  (use-package yasnippet-snippets
+	:ensure t
+	:after yasnippet)
+
+#+end_src
 ** Corfu
 #+begin_src emacs-lisp
   (use-package corfu
