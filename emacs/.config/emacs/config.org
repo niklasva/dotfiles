@@ -1211,79 +1211,80 @@ Associate extensions with the correct tree-sitter mode and others
 *** Git gutter
 #+begin_src emacs-lisp
   (use-package git-gutter-fringe
-    :ensure t
-    :config
-    (setq git-gutter:update-timer 1)
+	:ensure t
+	:config
+	(setq git-gutter:update-timer 1)
 
-    (cond ((member 'modus-operandi-tinted custom-enabled-themes)
-           (set-face-attribute 'git-gutter-fr:added nil :foreground (face-attribute 'modus-themes-fg-green-intense :foreground) :background nil )
-           (set-face-attribute 'git-gutter-fr:modified nil :foreground (face-attribute 'modus-themes-fg-blue :foreground) :background nil)
-           (set-face-attribute 'git-gutter-fr:deleted  nil :foreground (face-attribute 'modus-themes-fg-red-intense :foreground) :background nil)))
+	(or (cond ((member 'modus-operandi-tinted custom-enabled-themes)))
+		(cond ((member 'modus-operandi-tinted custom-enabled-themes)))
+		(set-face-attribute 'git-gutter-fr:added nil :foreground (face-attribute 'modus-themes-fg-green-intense :foreground) :background nil )
+		(set-face-attribute 'git-gutter-fr:modified nil :foreground (face-attribute 'modus-themes-fg-blue :foreground) :background nil)
+		(set-face-attribute 'git-gutter-fr:deleted  nil :foreground (face-attribute 'modus-themes-fg-red-intense :foreground) :background nil)))
 
-    (fringe-helper-define 'git-gutter-fr:added nil
-      ".X..X"
-      "X..X."
-      "..X.."
-      ".X..X"
-      "X..X."
-      "..X.."
-      ".X..X"
-      "X..X."
-      "..X.."
-      ".X..X"
-      "X..X."
-      "..X.."
-      ".X..X"
-      "X..X."
-      "..X.."
-      ".X..X"
-      "X..X."
-      "..X.."
-      ".X..X")
+  (fringe-helper-define 'git-gutter-fr:added nil
+	".X..X"
+	"X..X."
+	"..X.."
+	".X..X"
+	"X..X."
+	"..X.."
+	".X..X"
+	"X..X."
+	"..X.."
+	".X..X"
+	"X..X."
+	"..X.."
+	".X..X"
+	"X..X."
+	"..X.."
+	".X..X"
+	"X..X."
+	"..X.."
+	".X..X")
 
-    (fringe-helper-define 'git-gutter-fr:deleted nil
-      ".X..X"
-      "X..X."
-      "..X.."
-      ".X..X"
-      "X..X."
-      "..X.."
-      ".X..X"
-      "X..X."
-      "..X.."
-      ".X..X"
-      "X..X."
-      "..X.."
-      ".X..X"
-      "X..X."
-      "..X.."
-      ".X..X"
-      "X..X."
-      "..X.."
-      ".X..X")
+  (fringe-helper-define 'git-gutter-fr:deleted nil
+	".X..X"
+	"X..X."
+	"..X.."
+	".X..X"
+	"X..X."
+	"..X.."
+	".X..X"
+	"X..X."
+	"..X.."
+	".X..X"
+	"X..X."
+	"..X.."
+	".X..X"
+	"X..X."
+	"..X.."
+	".X..X"
+	"X..X."
+	"..X.."
+	".X..X")
 
-    (fringe-helper-define 'git-gutter-fr:modified nil
-      ".X..X"
-      "X..X."
-      "..X.."
-      ".X..X"
-      "X..X."
-      "..X.."
-      ".X..X"
-      "X..X."
-      "..X.."
-      ".X..X"
-      "X..X."
-      "..X.."
-      ".X..X"
-      "X..X."
-      "..X.."
-      ".X..X"
-      "X..X."
-      "..X.."
-      ".X..X")
+  (fringe-helper-define 'git-gutter-fr:modified nil
+	".X..X"
+	"X..X."
+	"..X.."
+	".X..X"
+	"X..X."
+	"..X.."
+	".X..X"
+	"X..X."
+	"..X.."
+	".X..X"
+	"X..X."
+	"..X.."
+	".X..X"
+	"X..X."
+	"..X.."
+	".X..X"
+	"X..X."
+	"..X.."
+	".X..X")
 
-    (global-git-gutter-mode 1))
+  (global-git-gutter-mode 1))
 #+end_src
 
 *** Magit
