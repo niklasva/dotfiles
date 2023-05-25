@@ -613,25 +613,38 @@ Window management
 ** Vertico
 #+begin_src emacs-lisp
   (use-package vertico
-    :ensure t
-    :custom (vertico-cycle t)
-    :init
-    (vertico-mode))
+	:ensure t
+	:custom (vertico-cycle t)
+	:config
+	(setq vertico-count 10
+		  vertico-resize nil)
+	(setq vertico-sort-function #'vertico-sort-history-alpha
+		  vertico-multiform-commands
+		  '((consult-theme (vertico-sort-function . vertico-sort-alpha))
+			;; (consult-line (:not posframe))
+			(consult-grep (vertico-count . 20))
+			(consult-ripgrep (vertico-count . 20))))
+
+	(vertico-mode)
+	(vertico-multiform-mode)
+	(vertico-mouse-mode)
+	)
 
   (use-package vertico-posframe
-    :ensure t
-    :after vertico
-    :when (display-graphic-p)
-    :config
-    (setq vertico-posframe-parameters
-          '((max-width . 0.8)
-            (min-width . 0.8)
-            (left-fringe . 8)
-            (right-fringe . 8))
-          vertico-posframe-border-width 1)
-
-    (set-face-attribute 'vertico-posframe nil :background (face-attribute 'fringe :background))
-    (vertico-posframe-mode))
+	:ensure t
+	:after vertico
+	:when (display-graphic-p)
+	:config
+	(setq vertico-posframe-parameters
+		  '((max-width . 0.8)
+			(min-width . 0.8)
+			(left-fringe . 8)
+			(right-fringe . 8))
+		  vertico-posframe-width 180
+		  vertico-posframe-border-width 1
+		  vertico-posframe-poshandler #'posframe-poshandler-frame-bottom-center)
+	(set-face-attribute 'vertico-posframe nil :background (face-attribute 'fringe :background))
+	(vertico-posframe-mode))
 
 #+end_src
 
