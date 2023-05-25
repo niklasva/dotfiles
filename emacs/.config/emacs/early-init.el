@@ -11,8 +11,9 @@
                  '(tool-bar-lines . 0)
                  '(ns-transparent-titlebar . t)
                  '(ns-appearance . dark)
-                 ;; '(undecorated-round . t)
                  )))
 
-;;(add-to-list 'default-frame-alist '(font . "Liga mononoki 13"))
-(add-to-list 'default-frame-alist '(font . "Iosevka Light 13"))
+;; (add-to-list 'default-frame-alist '(font . "SF Mono 14"))
+;; (add-to-list 'default-frame-alist '(font . "Iosevka Fixed Medium 14"))
+(add-to-list 'default-frame-alist '(font . "Liga mononoki 15"))
+;; (add-to-list 'default-frame-alist '(font . "Iosevka ExtraLight 16"))
