@@ -614,13 +614,12 @@ Window management
 	:custom (vertico-cycle t)
 	:config
 	(setq vertico-count 10
-		  vertico-resize nil)
+		  vertico-resize t)
 	(setq vertico-sort-function #'vertico-sort-history-alpha
 		  vertico-multiform-commands
 		  '((consult-theme (vertico-sort-function . vertico-sort-alpha))
-			;; (consult-line (:not posframe))
 			(consult-grep (vertico-count . 20))
-			(consult-ripgrep (vertico-count . 20))))
+			(consult-ripgrep (vertico-posframe-poshandler . posframe-poshandler-frame-bottom-center) (vertico-count . 20))))
 
 	(vertico-mode)
 	(vertico-multiform-mode)
@@ -637,9 +636,8 @@ Window management
 			(min-width . 0.8)
 			(left-fringe . 8)
 			(right-fringe . 8))
-		  vertico-posframe-width 180
 		  vertico-posframe-border-width 1
-		  vertico-posframe-poshandler #'posframe-poshandler-frame-bottom-center)
+		  vertico-posframe-poshandler #'posframe-poshandler-frame-center)
 	(set-face-attribute 'vertico-posframe nil :background (face-attribute 'fringe :background))
 	(vertico-posframe-mode))
 
