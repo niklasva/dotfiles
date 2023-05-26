@@ -343,7 +343,7 @@ Prevent emacs from contaminating system clipboard.
 
 #+begin_src emacs-lisp
 
-  (mu4e-alert-enable-mode-line-display)
+  ;; (mu4e-alert-enable-mode-line-display)
   (setq display-time-format "  %+4Y-%m-%d %H:%M"
         display-time-default-load-average nil)
   (display-time-mode)
@@ -1210,76 +1210,75 @@ Associate extensions with the correct tree-sitter mode and others
 	:config
 	(setq git-gutter:update-timer 1)
 
-	(or (cond ((member 'modus-operandi-tinted custom-enabled-themes)))
-		(cond ((member 'modus-operandi-tinted custom-enabled-themes)))
-		(set-face-attribute 'git-gutter-fr:added nil :foreground (face-attribute 'modus-themes-fg-green-intense :foreground) :background nil )
-		(set-face-attribute 'git-gutter-fr:modified nil :foreground (face-attribute 'modus-themes-fg-blue :foreground) :background nil)
-		(set-face-attribute 'git-gutter-fr:deleted  nil :foreground (face-attribute 'modus-themes-fg-red-intense :foreground) :background nil)))
+	(if (or (member 'modus-operandi-tinted custom-enabled-themes) (member 'modus-operandi custom-enabled-themes))
+		((set-face-attribute 'git-gutter-fr:added nil :foreground (face-attribute 'modus-themes-fg-green-intense :foreground) :background nil )
+		 (set-face-attribute 'git-gutter-fr:modified nil :foreground (face-attribute 'modus-themes-fg-blue :foreground) :background nil)
+		 (set-face-attribute 'git-gutter-fr:deleted  nil :foreground (face-attribute 'modus-themes-fg-red-intense :foreground) :background nil)))
 
-  (fringe-helper-define 'git-gutter-fr:added nil
-	".X..X"
-	"X..X."
-	"..X.."
-	".X..X"
-	"X..X."
-	"..X.."
-	".X..X"
-	"X..X."
-	"..X.."
-	".X..X"
-	"X..X."
-	"..X.."
-	".X..X"
-	"X..X."
-	"..X.."
-	".X..X"
-	"X..X."
-	"..X.."
-	".X..X")
+	(fringe-helper-define 'git-gutter-fr:added nil
+	  ".X..X"
+	  "X..X."
+	  "..X.."
+	  ".X..X"
+	  "X..X."
+	  "..X.."
+	  ".X..X"
+	  "X..X."
+	  "..X.."
+	  ".X..X"
+	  "X..X."
+	  "..X.."
+	  ".X..X"
+	  "X..X."
+	  "..X.."
+	  ".X..X"
+	  "X..X."
+	  "..X.."
+	  ".X..X")
 
-  (fringe-helper-define 'git-gutter-fr:deleted nil
-	".X..X"
-	"X..X."
-	"..X.."
-	".X..X"
-	"X..X."
-	"..X.."
-	".X..X"
-	"X..X."
-	"..X.."
-	".X..X"
-	"X..X."
-	"..X.."
-	".X..X"
-	"X..X."
-	"..X.."
-	".X..X"
-	"X..X."
-	"..X.."
-	".X..X")
+	(fringe-helper-define 'git-gutter-fr:deleted nil
+	  ".X..X"
+	  "X..X."
+	  "..X.."
+	  ".X..X"
+	  "X..X."
+	  "..X.."
+	  ".X..X"
+	  "X..X."
+	  "..X.."
+	  ".X..X"
+	  "X..X."
+	  "..X.."
+	  ".X..X"
+	  "X..X."
+	  "..X.."
+	  ".X..X"
+	  "X..X."
+	  "..X.."
+	  ".X..X")
 
-  (fringe-helper-define 'git-gutter-fr:modified nil
-	".X..X"
-	"X..X."
-	"..X.."
-	".X..X"
-	"X..X."
-	"..X.."
-	".X..X"
-	"X..X."
-	"..X.."
-	".X..X"
-	"X..X."
-	"..X.."
-	".X..X"
-	"X..X."
-	"..X.."
-	".X..X"
-	"X..X."
-	"..X.."
-	".X..X")
+	(fringe-helper-define 'git-gutter-fr:modified nil
+	  ".X..X"
+	  "X..X."
+	  "..X.."
+	  ".X..X"
+	  "X..X."
+	  "..X.."
+	  ".X..X"
+	  "X..X."
+	  "..X.."
+	  ".X..X"
+	  "X..X."
+	  "..X.."
+	  ".X..X"
+	  "X..X."
+	  "..X.."
+	  ".X..X"
+	  "X..X."
+	  "..X.."
+	  ".X..X")
 
-  (global-git-gutter-mode 1))
+	(global-git-gutter-mode 1))
 #+end_src
 
 *** Magit
