@@ -424,8 +424,7 @@ Prevent emacs from contaminating system clipboard.
           evil-scroll-count 8)
     (evil-mode))
 
-  (use-package transpose-frame
-    :ensure t)
+(use-package transpose-frame :ensure t)
 
   (use-package general
     :ensure t
@@ -896,7 +895,7 @@ Always follow symlinks
 
     (set-face-attribute 'org-document-title nil
                         :height 2.0
-                        ;; :weight 'regular
+                        :weight 'regular
                         :font "CMU Serif"
                         :foreground nil
                         )
@@ -955,7 +954,7 @@ Only use variable-pitch if explicitly called.
 #+begin_src emacs-lisp
   (defun niva/variable-pitch-on ()
     (interactive)
-    (set-face-attribute 'variable-pitch nil :font " Serif 14" :inherit 'default))
+    (set-face-attribute 'variable-pitch nil :font "CMU Serif 14" :height 1.4 :inherit 'default))
 #+end_src
 
 ** org-tempo
