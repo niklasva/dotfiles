@@ -1436,6 +1436,18 @@ Associate extensions with the correct tree-sitter mode and others
     (kill-buffer (current-buffer)))
 
   (advice-add 'term-handle-exit :after 'my-term-handle-exit)
+
+  (defun font-lock-comment-annotations ()
+	(font-lock-add-keywords
+	 nil
+	 '(("\\<\\(.*ERR.*\\)"     1 'compilation-error    t)
+	   ;; ("\\<\\(.*INFO.*\\)" 1 'compilation-info    t)
+	   ("\\<\\(.*DEBUG.*\\)"   1 'compilation-info    t)
+	   ("\\<\\(.*WARN.*\\)"    1 'compilation-warning t)
+	   ("\\<\\(.*DEBUG: --- CMD: POLL(60) REPLY: ISTATR(49) ---.*\\)" 1 'completions-common-part t)
+	   ("\\<\\(.*DEBUG: --- CMD: OUT(68) REPLY: ACK(40) ---.*\\)"     1 'completions-common-part t)
+	   )))
+  (add-hook 'eshell-mode-hook 'font-lock-comment-annotations)
 #+end_src
 
 *** alias
