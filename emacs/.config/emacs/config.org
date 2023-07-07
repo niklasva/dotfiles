@@ -1481,7 +1481,7 @@ Associate extensions with the correct tree-sitter mode and others
 
 * Font
 Remove font weight on some faces
-#+begin_src emacs-lisp
+#+begin_src disabled
   (defun remove-font-weight ()
     (custom-set-faces
      '(default                           ((t (:background nil))))
@@ -1498,7 +1498,7 @@ Remove font weight on some faces
     (set-face-attribute 'help-key-binding nil    :weight 'unspecified)
 
     (set-face-attribute 'tooltip nil :inherit 'default))
-  ;; (remove-font-weight)
+  (remove-font-weight)
 #+end_src
 
 ** Ligatures
