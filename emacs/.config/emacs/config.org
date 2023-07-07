@@ -586,6 +586,7 @@ Window management
 
 	"d l"   '(devdocs-lookup           :which-key "devdocs-lookup")
 	"rec"   '(recentf-open             :which-key "devdocs-lookup")
+"rip"   '(consult-ripgrep          :which-key "consult-ripgrep")
 
 	"elf"   '(elfeed                   :which-key "elfeed")
 	"eww"   '(eww                      :which-key "eww")
