@@ -350,11 +350,10 @@ Prevent emacs from contaminating system clipboard.
 *** Mode line format
 
 #+begin_src emacs-lisp
-
   ;; (mu4e-alert-enable-mode-line-display)
   (setq display-time-format "  %+4Y-%m-%d %H:%M"
         display-time-default-load-average nil)
-  (display-time-mode)
+  ;; (display-time-mode)
 
   (defun simple-mode-line-render (left right)
     "Return a string of `window-width' length.
@@ -384,7 +383,14 @@ Prevent emacs from contaminating system clipboard.
                                                   ((string-match "^ [:@]" noback) 'mode-line-vc-edit)
                                                   ((string-match "^ [!\\?]" noback) 'mode-line-vc-modified))))
                                    (format " |  %s" (substring noback 2)))))
-                            " | %l:%c"))
+                                   (:eval
+                                    (setq repository-name "")
+
+                                    (if buffer-file-name
+                                     (progn (setq repository-name (vc-git-repository-url buffer-file-name)) (setq repository-name (replace-regexp-in-string ".git" "" (replace-regexp-in-string "git@github.com:" "" repository-name)))
+                                     )
+                                     )repository-name)
+							" | %l:%c" ))
                     ;; Right.
                     (quote (" " global-mode-string))))))
 #+end_src
