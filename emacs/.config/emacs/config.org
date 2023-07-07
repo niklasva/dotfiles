@@ -1221,11 +1221,10 @@ Associate extensions with the correct tree-sitter mode and others
 	:ensure t
 	:config
 	(setq git-gutter:update-timer 1)
-
 	(if (or (member 'modus-operandi-tinted custom-enabled-themes) (member 'modus-operandi custom-enabled-themes))
-		((set-face-attribute 'git-gutter-fr:added nil :foreground (face-attribute 'modus-themes-fg-green-intense :foreground) :background nil )
-		 (set-face-attribute 'git-gutter-fr:modified nil :foreground (face-attribute 'modus-themes-fg-blue :foreground) :background nil)
-		 (set-face-attribute 'git-gutter-fr:deleted  nil :foreground (face-attribute 'modus-themes-fg-red-intense :foreground) :background nil)))
+		(progn (set-face-attribute 'git-gutter-fr:added    nil :foreground (face-attribute 'modus-themes-fg-green-intense :foreground) :background 'unspecified )
+			   (set-face-attribute 'git-gutter-fr:modified nil :foreground (face-attribute 'modus-themes-fg-blue          :foreground) :background 'unspecified)
+			   (set-face-attribute 'git-gutter-fr:deleted  nil :foreground (face-attribute 'modus-themes-fg-red-intense   :foreground) :background 'unspecified)))
 
 	(fringe-helper-define 'git-gutter-fr:added nil
 	  ".X..X"
