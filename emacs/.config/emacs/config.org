@@ -475,6 +475,7 @@ Prevent emacs from contaminating system clipboard.
   (define-key evil-normal-state-map (kbd "C-a C-x") 'kill-this-buffer)
   (define-key help-mode-map         (kbd "C-a C-x") 'evil-delete-buffer)
   (define-key evil-normal-state-map (kbd "C-w C-x") 'delete-window)
+(define-key evil-normal-state-map (kbd "s-e")     'eshell)
   (define-key evil-normal-state-map (kbd "M-e")     'eshell)
   (define-key evil-normal-state-map (kbd "B V")     'org-babel-mark-block)
   (define-key evil-normal-state-map (kbd "SPC e b") 'org-babel-execute-src-block-maybe)
