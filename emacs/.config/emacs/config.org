@@ -1106,7 +1106,7 @@ Only use variable-pitch if explicitly called.
 		  lsp-signature-auto-activate nil
 		  lsp-enable-symbol-highlighting nil
 		  lsp-file-watch-threshold 15000
-		  lsp-enable-links nil
+		  lsp-enable-links t
 		  lsp-enable-snippet t
 		  lsp-eldoc-enable-hover t
 		  lsp-eldoc-enable-signature-help t
