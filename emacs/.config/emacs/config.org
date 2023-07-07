@@ -1482,6 +1482,12 @@ Associate extensions with the correct tree-sitter mode and others
 #+begin_src emacs-lisp
   (setenv "LANG" "sv_SE.UTF-8")
   (setenv "LIBRARY_PATH" "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib")
+  (setenv "CPPFLAGS" "-I/opt/homebrew/opt/openssl@3/include")
+  (setenv "LDFLAGS" "-L/opt/homebrew/opt/openssl@3/lib")
+  (setenv "PKG_CONFIG_PATH" "/opt/homebrew/opt/openssl@3/lib/pkgconfig")
+  (setenv "OPENSSL_ROOT_DIR" "/opt/homebrew/Cellar/openssl@3/3.1.1")
+  (setenv "CPATH" "/opt/homebrew/include")
+  (setenv "LIBRARY_PATH" "/opt/homebrew/lib")
 
   (defun set-exec-path-from-shell-PATH ()
     (interactive)
