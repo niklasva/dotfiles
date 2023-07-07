@@ -1206,7 +1206,7 @@ operators, brackets, all functions and variables, etc.
 
 *** Hooks
 Associate extensions with the correct tree-sitter mode and others
-#+begin_src emacs-lisp
+#+begin_src disabled
   (dolist (pair '(("\\.py\\'"   . python-ts-mode)
                   ("\\.c\\'"    . c-ts-mode)
                   ("\\.h\\'"    . c-ts-mode)
