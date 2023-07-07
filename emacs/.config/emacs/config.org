@@ -83,13 +83,6 @@ Prevent accidental close.
   (setq confirm-kill-emacs 'y-or-n-p)
 #+end_src
 
-#+begin_src disabled
-(use-package popwin
-  :ensure t
-  :init (popwin-mode 1)
-  :config (push '(compilation-mode :noselect t) popwin:special-display-config))
-#+end_src
-
 * Package management
 ** Setup package.el to work with melpa.
 #+begin_src emacs-lisp
@@ -285,16 +278,18 @@ Prevent emacs from contaminating system clipboard.
 ** Theme
 *** Theme packages
 #+begin_src emacs-lisp
-  (use-package kaolin-themes
-	:ensure t)
   (use-package doom-themes
 	:ensure t
 	:defer t
 	:custom (doom-themes-enable-bold nil)
 	(doom-themes-org-config)
 	(doom-themes-enable-italic t))
-#+end_src
+  (use-package kaolin-themes :ensure t)
+  (use-package ample-theme :ensure t)
+  (use-package cyberpunk-theme :ensure t)
+  (use-package stimmung-themes :ensure t)
 
+  #+end_src
 *** Modus
 #+begin_src emacs-lisp
   (setq modus-themes-bold-constructs nil
@@ -323,10 +318,23 @@ Prevent emacs from contaminating system clipboard.
     (set-face-foreground 'window-divider-last-pixel (face-attribute 'default :background)))
 #+end_src
 
+*** Solaire
+#+begin_src emacs-lisp
+  (use-package solaire-mode
+	:ensure t
+	:defer t
+	:config
+	(solaire-global-mode +1)
+	(solaire-mode-reset))
+
+  (add-hook 'eshell-mode-hook (solaire-mode-reset))
+  ;; (add-hook 'compilation-mode-hook (solaire-mode-reset))
+#+end_src
 *** Load theme
 #+begin_src emacs-lisp
   (setq custom-safe-themes t)
-  (load-theme 'modus-operandi t)
+
+  (load-theme 'doom-tokyo-night t)
 #+end_src
 
 ** Compilaton mode
