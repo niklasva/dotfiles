@@ -865,6 +865,7 @@ Disable lock files.
 ** Other
 Always follow symlinks
 #+begin_src emacs-lisp
+  (global-auto-revert-mode t)
   (setq vc-follow-symlinks t)
 #+end_src
 
