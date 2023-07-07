@@ -940,6 +940,10 @@ Always follow symlinks
     (setq org-ellipsis " .."
           org-hide-emphasis-markers t
           org-fontify-quote-and-verse-blocks t)
+
+  (dolist (mode '(org-mode-hook text-mode-hook prog-mode-hook conf-mode-hook))
+	(add-hook mode (lambda () (org-indent-mode 1))))
+
     (set-face-attribute 'org-quote nil :inherit 'font-lock-comment-face :slant 'oblique)
 
     (add-hook 'org-font-lock-hook #'org-indent-quotes)
