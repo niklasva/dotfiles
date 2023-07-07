@@ -1,8 +1,7 @@
-alias vim for i in ${eshell-flatten-list $*} {find-file $i}
-alias vi for i in ${eshell-flatten-list $*} {find-file $i}
-alias ff for i in ${eshell-flatten-list $*} {find-file $i}
-alias ts ts '[%Y-%m-%d %H:%M:%S]'
-alias pico picocom -b 1000000 /dev/tty.usbmodem0006839531341
-alias fo find-file-other-window $1
-alias f find-file $1
 alias d ranger $1
+alias f find-file $1
+alias fo find-file-other-window $1
+alias ts ts '[%Y-%m-%d %H:%M:%S]'
+alias ff for i in ${eshell-flatten-list $*} {find-file $i}
+alias vi for i in ${eshell-flatten-list $*} {find-file $i}
+alias vim for i in ${eshell-flatten-list $*} {find-file $i}
