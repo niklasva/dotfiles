@@ -685,7 +685,7 @@ Window management
 	(marginalia-mode))
   #+end_src
 
-**  Yasnippet
+** Yasnippet
 #+begin_src emacs-lisp
   (use-package yasnippet
 	:ensure   t
@@ -789,9 +789,10 @@ Window management
     :defer t
     :config
     (ranger-override-dired-mode t)
-    (setq ranger-cleanup-eagerly t)
-    (setq ranger-show-literal t)
-    (setq ranger-cleanup-on-disable t))
+	(setq ranger-cleanup-eagerly t
+		  ranger-cleanup-on-disable t
+		  ranger-parent-depth 0
+		  ranger-show-literal nil))
 
   (nvmap :states '(normal visual) :keymaps 'override :prefix "SPC" "r r" '(ranger : "Open ranger"))
 #+end_src
@@ -834,6 +835,7 @@ Window management
                :which-key "find ~/file")
     "f f"   '(find-file :which-key "Find file")
     "p f"   '(projectile-find-file :which-key "projectile-find-file")
+"p p"   '(projectile-switch-project :which-key "projectile-switch-project")
     "f r"   '(counsel-recentf :which-key "Recent files")
     "f s"   '(save-buffer :which-key "Save file")
     "f u"   '(sudo-edit-find-file :which-key "Sudo find file")
