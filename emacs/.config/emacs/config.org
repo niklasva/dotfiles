@@ -1061,6 +1061,25 @@ Only use variable-pitch if explicitly called.
     :ensure t)
 #+end_src
 * Development
+** C/C++
+#+begin_src emacs-lisp
+  (setq cc-other-file-alist '(("\\.cc\\'" (".hh" ".h"))
+                              ("\\.hh\\'" (".cc" ".C" ".CC" ".cxx" ".cpp" ".c++"))
+                              ("\\.c\\'" (".h"))
+                              ("\\.m\\'" (".h"))
+                              ("\\.h\\'" (".c" ".cc" ".C" ".CC" ".cxx" ".cpp" ".c++" ".m"))
+                              ("\\.C\\'" (".H" ".hh" ".h"))
+                              ("\\.H\\'" (".C" ".CC"))
+                              ("\\.CC\\'" (".HH" ".H" ".hh" ".h"))
+                              ("\\.HH\\'" (".CC"))
+                              ("\\.c\\+\\+\\'" (".h++" ".hh" ".h"))
+                              ("\\.h\\+\\+\\'" (".c++"))
+                              ("\\.cpp\\'" (".hpp" ".hh" ".h"))
+                              ("\\.tpp\\'" (".hpp" ".hh" ".h"))
+                              ("\\.hpp\\'" (".cpp" ".tpp"))
+                              ("\\.cxx\\'" (".hxx" ".hh" ".h"))
+                              ("\\.hxx\\'" (".cxx"))))
+#+end_src
 ** Language server
 *** Eglot
 #+begin_src disabled
