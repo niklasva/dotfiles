@@ -1,87 +1,7 @@
 #+TITLE: config.org
 #+PROPERTY: header-args : tangle "~/.config/emacs/config.el" :results silent
 #+OPTIONS: toc:2
-
-* Pre-init
 #+STARTUP: overview
-** Startup garbage collection
-#+begin_src emacs-lisp
-  (setq gc-cons-threshold most-positive-fixnum)
-  (add-hook 'emacs-startup-hook (lambda () (setq gc-cons-threshold (expt 2 23))))
-#+end_src
-
-** GUI settings
-
-#+begin_src emacs-lisp
-(setq inhibit-startup-message t
-    inhibit-startup-echo-area-message t)
-
-(scroll-bar-mode -1)
-(tool-bar-mode -1)
-(tooltip-mode nil)
-(menu-bar-mode 1)
-(set-fringe-mode 1)
-(global-visual-line-mode t)
-
-(setq-default left-fringe-width 16
-            right-fringe-width 3)
-#+end_src
-
-#+begin_src emacs-lisp
-  (setq window-divider-default-places t
-        window-divider-default-bottom-width 1
-        window-divider-default-right-width 1)
-
-  (window-divider-mode 1)
-
-  (setq ns-use-thin-smoothing t
-        ns-use-proxy-icon nil
-        ns-use-mwheel-momentum t
-        ns-use-mwheel-acceleration t
-        frame-resize-pixelwise t)
-
-  (use-package tab-bar-echo-area
-    :ensure t
-    :defer t
-    :config
-    (tab-bar-echo-area-mode 1))
-
-  (defun niva/tab-bar-config ()
-    (setq tab-bar-show nil
-          tab-bar-auto-width-max '(120 . 20)
-          tab-bar-close-button-show nil
-          tab-bar-close-tab-select 'recent
-          tab-bar-new-button-show nil
-          tab-bar-new-tab-to 'right
-          tab-bar-position nil
-          tab-bar-tab-name-function 'tab-bar-tab-name-current)
-
-    (set-face-attribute 'tab-bar nil
-                        :box nil
-                        :background (face-attribute 'default :background))
-    (set-face-attribute 'tab-bar-tab nil
-                        :box nil
-                        :background (face-attribute 'default :background)
-                        :foreground (face-attribute 'font-lock-keyword-face :foreground))
-    (set-face-attribute 'tab-bar-tab-inactive nil
-                        :box nil
-                        :background (face-attribute 'default :background)
-                        :foreground (face-attribute 'font-lock-comment-face :foreground)))
-  (niva/tab-bar-config)
-
-  (global-hl-line-mode -1)
-  (blink-cursor-mode 1)
-#+end_src
-
-#+begin_src emacs-lisp
-  (winner-mode 1)
-#+end_src
-
-Prevent accidental close.
-
-#+begin_src emacs-lisp
-  (setq confirm-kill-emacs 'y-or-n-p)
-#+end_src
 
 * Package management
 ** Setup package.el to work with melpa.
@@ -275,6 +195,78 @@ Prevent emacs from contaminating system clipboard.
 #+end_src
 
 * Customization
+** GUI settings
+
+#+begin_src emacs-lisp
+(setq inhibit-startup-message t
+    inhibit-startup-echo-area-message t)
+
+(scroll-bar-mode -1)
+(tool-bar-mode -1)
+(tooltip-mode nil)
+(menu-bar-mode 1)
+(set-fringe-mode 1)
+(global-visual-line-mode t)
+
+(setq-default left-fringe-width 16
+            right-fringe-width 3)
+#+end_src
+
+#+begin_src emacs-lisp
+  (setq window-divider-default-places t
+        window-divider-default-bottom-width 1
+        window-divider-default-right-width 1)
+
+  (window-divider-mode 1)
+
+  (setq ns-use-thin-smoothing t
+        ns-use-proxy-icon nil
+        ns-use-mwheel-momentum t
+        ns-use-mwheel-acceleration t
+        frame-resize-pixelwise t)
+
+  (use-package tab-bar-echo-area
+    :ensure t
+    :config
+    (tab-bar-echo-area-mode 1))
+
+  (defun niva/tab-bar-config ()
+    (setq tab-bar-show nil
+          tab-bar-auto-width-max '(120 . 20)
+          tab-bar-close-button-show nil
+          tab-bar-close-tab-select 'recent
+          tab-bar-new-button-show nil
+          tab-bar-new-tab-to 'right
+          tab-bar-position nil
+          tab-bar-tab-name-function 'tab-bar-tab-name-current)
+
+    (set-face-attribute 'tab-bar nil
+                        :box nil
+                        :background (face-attribute 'default :background))
+    (set-face-attribute 'tab-bar-tab nil
+                        :box nil
+                        :background (face-attribute 'default :background)
+                        :foreground (face-attribute 'font-lock-keyword-face :foreground))
+    (set-face-attribute 'tab-bar-tab-inactive nil
+                        :box nil
+                        :background (face-attribute 'default :background)
+                        :foreground (face-attribute 'font-lock-comment-face :foreground)))
+  (niva/tab-bar-config)
+
+  (global-hl-line-mode -1)
+  (blink-cursor-mode 1)
+#+end_src
+
+#+begin_src emacs-lisp
+  (winner-mode 1)
+#+end_src
+
+Prevent accidental close.
+
+#+begin_src emacs-lisp
+  (setq confirm-kill-emacs 'y-or-n-p)
+#+end_src
+
 ** Theme
 *** Theme packages
 #+begin_src emacs-lisp
@@ -334,7 +326,7 @@ Prevent emacs from contaminating system clipboard.
 #+begin_src emacs-lisp
   (setq custom-safe-themes t)
 
-  (load-theme 'doom-tokyo-night t)
+  (load-theme 'doom-city-lights t)
 #+end_src
 
 ** Compilaton mode
@@ -412,6 +404,36 @@ Prevent emacs from contaminating system clipboard.
 
 #+begin_src emacs-lisp
   (setq inhibit-compacting-font-caches t)
+#+end_src
+
+** Font
+Remove font weight on some faces
+#+begin_src disabled
+  (defun remove-font-weight ()
+    (custom-set-faces
+     '(default                           ((t (:background nil))))
+     '(compilation-error                 ((t (:weight unspecified))))
+     '(bold                              ((t (:weight unspecified))))
+     '(outline-1                         ((t (:weight unspecified))))
+     '(outline-2                         ((t (:weight unspecified))))
+     '(outline-3                         ((t (:weight unspecified))))
+     '(font-lock-comment-face            ((t (:weight unspecified))))
+     '(error nil                         ((t (:weight unspecified)))))
+
+    (set-face-attribute 'bold nil :weight 'unspecified)
+    (set-face-attribute 'buffer-menu-buffer nil :weight 'unspecified)
+    (set-face-attribute 'help-key-binding nil    :weight 'unspecified)
+
+    (set-face-attribute 'tooltip nil :inherit 'default))
+  (remove-font-weight)
+#+end_src
+
+** Ligatures
+#+begin_src emacs-lisp
+  (use-package ligature
+    :ensure t
+    :config (global-ligature-mode t)
+    (ligature-set-ligatures 'prog-mode '("==" "!=" "<-" "<--" "->" "-->")))
 #+end_src
 
 * Controls
@@ -790,17 +812,17 @@ Window management
 ** Ranger
 
 #+begin_src emacs-lisp
-  (use-package ranger
-    :ensure t
-    :defer t
-    :config
-    (ranger-override-dired-mode t)
-	(setq ranger-cleanup-eagerly t
-		  ranger-cleanup-on-disable t
-		  ranger-parent-depth 0
-		  ranger-show-literal nil))
+  ;; (use-package ranger
+  ;;   :ensure t
+  ;;   :defer t
+  ;;   :config
+  ;;   ;; (ranger-override-dired-mode t)
+  ;;   (setq ranger-cleanup-eagerly t
+  ;;   	  ranger-cleanup-on-disable t
+  ;;   	  ranger-parent-depth 0
+  ;;   	  ranger-show-literal nil))
 
-  (nvmap :states '(normal visual) :keymaps 'override :prefix "SPC" "r r" '(ranger : "Open ranger"))
+  ;; (nvmap :states '(normal visual) :keymaps 'override :prefix "SPC" "r r" '(ranger : "Open ranger"))
 #+end_src
 
 ** Projectile
@@ -877,135 +899,6 @@ Always follow symlinks
 #+begin_src emacs-lisp
   (global-auto-revert-mode t)
   (setq vc-follow-symlinks t)
-#+end_src
-
-* Org-mode
-** Org-mode appearance
-*** Olivetti
-#+begin_src emacs-lisp
-  (use-package olivetti
-    :ensure t
-    :defer t
-    :config
-    (setq olivetti-body-width 100
-          olivetti-minimum-body-width 100))
-
-#+end_src
-*** Mixed-pitch
-#+begin_src disabled
-(use-package mixed-pitch
-:hook
-(text-mode . mixed-pitch-mode))
-#+end_src
-
-*** TeX style
-#+begin_src emacs-lisp
-  (defun niva/org-tex-style()
-    (interactive)
-    (setq org-hidden-keywords '(title))
-
-    (set-face-attribute 'org-document-title nil
-                        :height 2.0
-                        :weight 'regular
-                        :font "CMU Serif"
-                        :foreground nil
-                        )
-
-    ;; set basic title font
-    (set-face-attribute 'org-level-8 nil :weight 'bold :inherit 'default)
-    ;; Low levels are unimportant = no scalinkjukjg
-    (set-face-attribute 'org-level-7 nil :inherit 'org-level-8)
-    (set-face-attribute 'org-level-6 nil :inherit 'org-level-8)
-
-    (set-face-attribute 'org-level-5 nil :inherit 'org-level-8)
-    (set-face-attribute 'org-level-4 nil :inherit 'org-level-8)
-    ;; Top ones get scaled the same as in LaTeX (\large, \Large, \LARGE)
-    (set-face-attribute 'org-level-3 nil :inherit 'org-level-8 :height 1.2 :weight 'bold) ;\large
-    (set-face-attribute 'org-level-2 nil :inherit 'org-level-8 :height 1.4 :weight 'bold) ;\Large
-    (set-face-attribute 'org-level-1 nil :inherit 'org-level-8 :height 1.5 :weight 'bold) ;\LARGE
-    ;; Only use the first 4 styles and do not cycle.
-    (setq org-cycle-level-faces nil)
-    (setq org-n-level-faces 4)
-    (variable-pitch-mode 1)
-    (niva/variable-pitch-on))
-#+end_src
-
-
-** Set up
-#+begin_src emacs-lisp
-  (use-package org
-	:ensure t
-	:defer t
-	:config
-	(setq org-ellipsis " .."
-		  org-hide-emphasis-markers t
-		  org-fontify-quote-and-verse-blocks t)
-
-  (dolist (mode '(org-mode-hook text-mode-hook prog-mode-hook conf-mode-hook))
-	(add-hook mode (lambda () (org-indent-mode 1))))
-
-	(set-face-attribute 'org-quote nil :inherit 'font-lock-comment-face :slant 'oblique)
-
-	(add-hook 'org-font-lock-hook #'org-indent-quotes)
-	(defun org-indent-quotes (limit)
-	  (let ((case-fold-search t))
-		(while (search-forward-regexp "^[ \t]*#\\+begin_quote" limit t) (let ((beg (1+ (match-end 0))))
-																		  (when (search-forward-regexp "^[ \t]*#\\+end_quote" nil t)
-																			(let ((end (1- (match-beginning 0)))
-																				  (indent (propertize "    " 'face 'org-hide)))
-																			  (add-text-properties beg end (list 'line-prefix indent 'wrap-prefix indent)))))))))
-
-  (use-package org-superstar
-	:ensure t
-	:after org
-	:hook (org-mode . org-superstar-mode)
-	:custom
-	(org-superstar-remove-leading-stars t)
-	(org-superstar-headline-bullets-list '("◉" "○" "●" "○" "●" "○" "●")))
-#+end_src
-
-Only use variable-pitch if explicitly called.
-
-#+begin_src emacs-lisp
-  (defun niva/variable-pitch-on ()
-  (interactive)
-  (set-face-attribute 'variable-pitch nil :font "CMU Serif 14" :height 1.4 :inherit 'default)
-  )
-#+end_src
-
-** org-tempo
-#+begin_src emacs-lisp
-  (require 'org-tempo)
-  (add-to-list 'org-structure-template-alist '("sh" . "src sh"))
-  (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
-  (add-to-list 'org-structure-template-alist '("sc" . "src scheme"))
-  (add-to-list 'org-structure-template-alist '("ts" . "src typescript"))
-  (add-to-list 'org-structure-template-alist '("py" . "src python"))
-  (add-to-list 'org-structure-template-alist '("go" . "src go"))
-  (add-to-list 'org-structure-template-alist '("yaml" . "src yaml"))
-  (add-to-list 'org-structure-template-alist '("json" . "src json"))
-  (add-to-list 'org-structure-template-alist '("cpp" . "src cpp"))
-#+end_src
-
-** org-roam
-#+begin_src emacs-lisp
-  (use-package org-roam
-    :after org
-    :ensure t
-    :defer t
-    :init
-    (setq org-roam-directory "~/Library/Mobile Documents/com~apple~CloudDocs/Roam"
-          org-roam-database-connector 'sqlite-builtin)
-    :config
-    (org-roam-setup)
-    :bind (("C-c n f" . org-roam-node-find)
-           ("C-c n r" . org-roam-node-random)
-           (:map org-mode-map
-                 (("C-c n i" . org-roam-node-insert)
-                  ("C-c n o" . org-id-get-create)
-                  ("C-c n t" . org-roam-tag-add)
-                  ("C-c n a" . org-roam-alias-add)
-                  ("C-c n l" . org-roam-buffer-toggle)))))
 #+end_src
 
 * Performance
@@ -1221,12 +1114,12 @@ operators, brackets, all functions and variables, etc.
 #+end_quote
 
 #+begin_src emacs-lisp
-  (setq-default treesit-font-lock-level 4)
+  ;;(setq-default treesit-font-lock-level 2)
 #+end_src
 
 *** Hooks
 Associate extensions with the correct tree-sitter mode and others
-#+begin_src disabled
+#+begin_src emacs-lisp
   (dolist (pair '(("\\.py\\'"   . python-ts-mode)
                   ("\\.c\\'"    . c-ts-mode)
                   ("\\.h\\'"    . c-ts-mode)
@@ -1530,37 +1423,136 @@ Associate extensions with the correct tree-sitter mode and others
   (set-exec-path-from-shell-PATH)
 #+end_src
 
-* Font
-Remove font weight on some faces
-#+begin_src disabled
-  (defun remove-font-weight ()
-    (custom-set-faces
-     '(default                           ((t (:background nil))))
-     '(compilation-error                 ((t (:weight unspecified))))
-     '(bold                              ((t (:weight unspecified))))
-     '(outline-1                         ((t (:weight unspecified))))
-     '(outline-2                         ((t (:weight unspecified))))
-     '(outline-3                         ((t (:weight unspecified))))
-     '(font-lock-comment-face            ((t (:weight unspecified))))
-     '(error nil                         ((t (:weight unspecified)))))
-
-    (set-face-attribute 'bold nil :weight 'unspecified)
-    (set-face-attribute 'buffer-menu-buffer nil :weight 'unspecified)
-    (set-face-attribute 'help-key-binding nil    :weight 'unspecified)
-
-    (set-face-attribute 'tooltip nil :inherit 'default))
-  (remove-font-weight)
-#+end_src
-
-** Ligatures
+* Org
+** Org-mode appearance
+*** Olivetti
 #+begin_src emacs-lisp
-  (use-package ligature
+  (use-package olivetti
     :ensure t
-    :config (global-ligature-mode t)
-    (ligature-set-ligatures 'prog-mode '("==" "!=" "<-" "<--" "->" "-->")))
+    :defer t
+    :config
+    (setq olivetti-body-width 100
+          olivetti-minimum-body-width 100))
+
+#+end_src
+*** Mixed-pitch
+#+begin_src disabled
+(use-package mixed-pitch
+:hook
+(text-mode . mixed-pitch-mode))
 #+end_src
 
-* Web browser
+*** TeX style
+#+begin_src emacs-lisp
+  (defun niva/org-tex-style()
+    (interactive)
+    (setq org-hidden-keywords '(title))
+
+    (set-face-attribute 'org-document-title nil
+                        :height 2.0
+                        :weight 'regular
+                        :font "CMU Serif"
+                        :foreground nil
+                        )
+
+    ;; set basic title font
+    (set-face-attribute 'org-level-8 nil :weight 'bold :inherit 'default)
+    ;; Low levels are unimportant = no scalinkjukjg
+    (set-face-attribute 'org-level-7 nil :inherit 'org-level-8)
+    (set-face-attribute 'org-level-6 nil :inherit 'org-level-8)
+
+    (set-face-attribute 'org-level-5 nil :inherit 'org-level-8)
+    (set-face-attribute 'org-level-4 nil :inherit 'org-level-8)
+    ;; Top ones get scaled the same as in LaTeX (\large, \Large, \LARGE)
+    (set-face-attribute 'org-level-3 nil :inherit 'org-level-8 :height 1.2 :weight 'bold) ;\large
+    (set-face-attribute 'org-level-2 nil :inherit 'org-level-8 :height 1.4 :weight 'bold) ;\Large
+    (set-face-attribute 'org-level-1 nil :inherit 'org-level-8 :height 1.5 :weight 'bold) ;\LARGE
+    ;; Only use the first 4 styles and do not cycle.
+    (setq org-cycle-level-faces nil)
+    (setq org-n-level-faces 4)
+    (variable-pitch-mode 1)
+    (niva/variable-pitch-on))
+#+end_src
+
+
+** Set up
+#+begin_src emacs-lisp
+  (use-package org
+	:ensure t
+	:defer t
+	:config
+	(setq org-ellipsis " .."
+		  org-hide-emphasis-markers t
+		  org-fontify-quote-and-verse-blocks t)
+
+  (dolist (mode '(org-mode-hook text-mode-hook prog-mode-hook conf-mode-hook))
+	(add-hook mode (lambda () (org-indent-mode 1))))
+
+	(set-face-attribute 'org-quote nil :inherit 'font-lock-comment-face :slant 'oblique)
+
+	(add-hook 'org-font-lock-hook #'org-indent-quotes)
+	(defun org-indent-quotes (limit)
+	  (let ((case-fold-search t))
+		(while (search-forward-regexp "^[ \t]*#\\+begin_quote" limit t) (let ((beg (1+ (match-end 0))))
+																		  (when (search-forward-regexp "^[ \t]*#\\+end_quote" nil t)
+																			(let ((end (1- (match-beginning 0)))
+																				  (indent (propertize "    " 'face 'org-hide)))
+																			  (add-text-properties beg end (list 'line-prefix indent 'wrap-prefix indent)))))))))
+
+  (use-package org-superstar
+	:ensure t
+	:after org
+	:hook (org-mode . org-superstar-mode)
+	:custom
+	(org-superstar-remove-leading-stars t)
+	(org-superstar-headline-bullets-list '("◉" "○" "●" "○" "●" "○" "●")))
+#+end_src
+
+Only use variable-pitch if explicitly called.
+
+#+begin_src emacs-lisp
+  (defun niva/variable-pitch-on ()
+  (interactive)
+  (set-face-attribute 'variable-pitch nil :font "CMU Serif 14" :height 1.4 :inherit 'default)
+  )
+#+end_src
+
+** org-tempo
+#+begin_src emacs-lisp
+  (require 'org-tempo)
+  (add-to-list 'org-structure-template-alist '("sh" . "src sh"))
+  (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+  (add-to-list 'org-structure-template-alist '("sc" . "src scheme"))
+  (add-to-list 'org-structure-template-alist '("ts" . "src typescript"))
+  (add-to-list 'org-structure-template-alist '("py" . "src python"))
+  (add-to-list 'org-structure-template-alist '("go" . "src go"))
+  (add-to-list 'org-structure-template-alist '("yaml" . "src yaml"))
+  (add-to-list 'org-structure-template-alist '("json" . "src json"))
+  (add-to-list 'org-structure-template-alist '("cpp" . "src cpp"))
+#+end_src
+
+** org-roam
+#+begin_src emacs-lisp
+  (use-package org-roam
+    :after org
+    :ensure t
+    :defer t
+    :init
+    (setq org-roam-directory "~/Library/Mobile Documents/com~apple~CloudDocs/Roam"
+          org-roam-database-connector 'sqlite-builtin)
+    :config
+    (org-roam-setup)
+    :bind (("C-c n f" . org-roam-node-find)
+           ("C-c n r" . org-roam-node-random)
+           (:map org-mode-map
+                 (("C-c n i" . org-roam-node-insert)
+                  ("C-c n o" . org-id-get-create)
+                  ("C-c n t" . org-roam-tag-add)
+                  ("C-c n a" . org-roam-alias-add)
+                  ("C-c n l" . org-roam-buffer-toggle)))))
+#+end_src
+
+* Web
 ** eww
 #+begin_src emacs-lisp
   (setq-default browse-url-browser-function 'eww-browse-url
@@ -1575,7 +1567,7 @@ Remove font weight on some faces
     (setq-local shr-inhibit-images (not shr-inhibit-images))
     (eww-reload))
 #+end_src
-* elfeed
+** elfeed
 #+begin_src emacs-lisp
   (use-package elfeed
     :ensure t
