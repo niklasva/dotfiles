@@ -1116,41 +1116,41 @@ Only use variable-pitch if explicitly called.
 *** LSP
 #+begin_src emacs-lisp
   (setq lsp-clients-clangd-args '(
-								  "--clang-tidy"
-								  "--completion-style=detailed"
-								  "--header-insertion=never"
-								  "--pch-storage=memory"
-								  "--query-driver=/Applications/ARM/**/*"
-								  "-background-index-priority=background"
-								  "-j=8"
-								  "--log=error"))
+                                  "--clang-tidy"
+                                  "--completion-style=detailed"
+                                  "--header-insertion=never"
+                                  "--pch-storage=memory"
+                                  "--query-driver=/Applications/ARM/**/*"
+                                  "-background-index-priority=background"
+                                  "-j=8"
+                                  "--log=error"))
   (setq use-dialog-box nil)
   (setq use-system-tooltips t)
 
   (use-package lsp-mode
-	:ensure t
-	:hook ((lsp-mode . lsp-enable-which-key-integration)
-		   (c-mode . lsp)
-		   (c++-mode . lsp)
-		   (c++-ts-mode . lsp))
-	:commands lsp
-	:config
-	(setq lsp-headerline-breadcrumb-enable nil
-		  lsp-keymap-prefix "C-c l"
-		  lsp-signature-auto-activate nil
-		  lsp-enable-symbol-highlighting nil
-		  lsp-file-watch-threshold 15000
-		  lsp-enable-links t
-		  lsp-enable-snippet t
-		  lsp-eldoc-enable-hover t
-		  lsp-eldoc-enable-signature-help t
-		  lsp-eldoc-prefer-signature-help t
-		  )
-	(setq lsp-completion-provider :none))
+    :ensure t
+    :hook ((lsp-mode . lsp-enable-which-key-integration)
+           (c-mode . lsp)
+           (c++-mode . lsp)
+           (c++-ts-mode . lsp))
+    :commands lsp
+    :config
+    (setq lsp-headerline-breadcrumb-enable nil
+          lsp-keymap-prefix "C-c l"
+          lsp-signature-auto-activate nil
+          lsp-enable-symbol-highlighting nil
+          lsp-file-watch-threshold 15000
+          lsp-enable-links t
+          lsp-enable-snippet t
+          lsp-eldoc-enable-hover t
+          lsp-eldoc-enable-signature-help t
+          lsp-eldoc-prefer-signature-help t
+          )
+    (setq lsp-completion-provider :none))
 
   (defun lsp-c-save-hooks ()
-	(add-hook 'before-save-hook #'lsp-format-buffer t t)
-	(add-hook 'before-save-hook #'lsp-organize-imports t t))
+    (add-hook 'before-save-hook #'lsp-format-buffer t t)
+    (add-hook 'before-save-hook #'lsp-organize-imports t t))
 
   (add-hook 'c-mode-hook #'lsp-c-save-hooks)
   (add-hook 'c-ts-mode-hook #'lsp-c-save-hooks)
@@ -1158,16 +1158,16 @@ Only use variable-pitch if explicitly called.
   (add-hook 'c++-ts-mode-hook #'lsp-c-save-hooks)
 
   (use-package lsp-ui
-	:ensure t
-	:config
-	(setq lsp-ui-doc-show-with-cursor t
-		  lsp-ui-doc-show-with-mouse t
-		  lsp-ui-doc-position 'bottom
-		  lsp-ui-doc-alignment 'window
-		  lsp-ui-doc-delay 0.1
-		  lsp-ui-doc-include-signature t
-		  lsp-ui-doc-border (face-background 'corfu-border)
-		  lsp-ui-sideline-enable t))
+    :ensure t
+    :config
+    (setq lsp-ui-doc-show-with-cursor t
+          lsp-ui-doc-show-with-mouse t
+          lsp-ui-doc-position 'bottom
+          lsp-ui-doc-alignment 'window
+          lsp-ui-doc-delay 0.1
+          lsp-ui-doc-include-signature t
+          lsp-ui-doc-border (face-background 'corfu-border)
+          lsp-ui-sideline-enable t))
 
   (custom-set-faces
    '(markdown-code-face             ((t (:background unspecified))))
@@ -1177,8 +1177,8 @@ Only use variable-pitch if explicitly called.
   (setq markdown-list-item-bullets '("-"))
 
   (add-hook 'lsp-ui-doc-frame-hook
-			(lambda (frame _w)
-			  (set-face-attribute 'default frame :height 120)))
+            (lambda (frame _w)
+              (set-face-attribute 'default frame :height 120)))
 #+end_src
 
 #+end_src
