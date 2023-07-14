@@ -1623,3 +1623,36 @@ Remove font weight on some faces
   (setq elfeed-show-entry-switch 'elfeed-olivetti)
 
 #+end_src
+
+#+begin_src emacs-lisp
+  (use-package dired-sidebar
+    :ensure t
+    :hook
+    (dired-sidebar-mode .  (lambda()
+                             (interactive)
+                             (dired-omit-mode)
+                             (visual-line-mode -1)
+                             (dired-sidebar-set-font)
+                             ))
+    :config
+    (setq dired-sidebar-use-one-instance t)
+    (setq dired-sidebar-use-custom-font t)
+    (setq dired-sidebar-face '(:family "Helvetica" :height 0.8))
+    (setq dired-sidebar-display-alist '((side . left) (slot . 1)))
+    )
+
+
+  (use-package ibuffer-sidebar
+    :ensure t
+    :config
+    (setq ibuffer-sidebar-use-custom-font t
+          ibuffer-sidebar-face '(:family "Helvetica" :height 0.8))
+    (setq ibuffer-sidebar-display-alist '((side . left) (slot . -1) (window-height . 0.3)))
+    (setq ibuffer-sidebar-refresh-timer 0.1))
+
+  (defun +sidebar-toggle ()
+    "Toggle both `dired-sidebar' and `ibuffer-sidebar'."
+    (interactive)
+    (dired-sidebar-toggle-sidebar)
+    (ibuffer-sidebar-toggle-sidebar))
+    #+end_src
