@@ -1308,7 +1308,9 @@ Associate extensions with the correct tree-sitter mode and others
 
 *** alias
 #+begin_src emacs-lisp
-  (defalias 'eshell/v 'eshell-exec-visual)
+  (eshell/alias "ff" "for i in ${eshell-flatten-list $*} {find-file $i}")
+  (eshell/alias "fo" "find-file-other-window $1")
+  (eshell/alias "ts" "ts '[%Y-%m-%d %H:%M:%S]'")
 #+end_src
 
 #+begin_src emacs-lisp
