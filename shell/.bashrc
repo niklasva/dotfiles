@@ -21,6 +21,7 @@ export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
 export PATH="/usr/local/opt/qt@5/bin:$PATH"
 export PATH="~/.bin/mipsel-none-elf/bin:$PATH"
 export PATH="~/.go/bin:/Users/niklas/.cargo/bin:$PATH"
+export PATH="~/.script:$PATH"
 
 export VITASDK=/usr/local/vitasdk
 export PATH=$VITASDK/bin:$PATH
