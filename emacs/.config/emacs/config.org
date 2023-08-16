@@ -840,22 +840,6 @@ Window management
 #+end_src
 
 * File management
-** Ranger
-
-#+begin_src emacs-lisp
-  ;; (use-package ranger
-  ;;   :straight t
-  ;;    t
-  ;;   :config
-  ;;   ;; (ranger-override-dired-mode t)
-  ;;   (setq ranger-cleanup-eagerly t
-  ;;      ranger-cleanup-on-disable t
-  ;;      ranger-parent-depth 0
-  ;;      ranger-show-literal nil))
-
-  ;; (nvmap :states '(normal visual) :keymaps 'override :prefix "SPC" "r r" '(ranger : "Open ranger"))
-#+end_src
-
 ** Projectile
 
 #+begin_src emacs-lisp
@@ -1240,60 +1224,6 @@ Associate extensions with the correct tree-sitter mode and others
   (advice-add 'ediff-quit :around #'disable-y-or-n-p)
 #+end_src
 ** Documentation
-*** Eldoc
-#+begin_src disabled
-
-  (use-package eldoc-box
-    :straight t
-    :custom
-    ;; (eldoc-box-offset '(16 16 40))
-    ;; (eldoc-idle-delay 0.5)
-    (eldoc-box-clear-with-C-g t)
-    :init
-    (defun eldoc-box-scroll-up ()
-      "Scroll up in `eldoc-box--frame'"
-      (interactive)
-      (with-current-buffer eldoc-box--buffer
-        (with-selected-frame eldoc-box--frame
-          (scroll-down 1))))
-
-    (defun eldoc-box-scroll-down ()
-      "Scroll down in `eldoc-box--frame'"
-      (interactive)
-      (with-current-buffer eldoc-box--buffer
-        (with-selected-frame eldoc-box--frame
-          (scroll-up 1))))
-
-    (defun eldoc-box-scroll-left ()
-      "Scroll left in `eldoc-box--frame'"
-      (interactive)
-      (with-current-buffer eldoc-box--buffer
-        (with-selected-frame eldoc-box--frame
-          (scroll-left 1))))
-
-    (defun eldoc-box-scroll-right ()
-      "Scroll right in `eldoc-box--frame'"
-      (interactive)
-      (with-current-buffer eldoc-box--buffer
-        (with-selected-frame eldoc-box--frame
-          (scroll-right 1))))
-
-    (nvmap :states '(insert normal hybrid motion visual operator emacs)
-      :keymaps 'eglot-mode-map
-      "C-k" 'eldoc-box-scroll-up
-      "C-j" 'eldoc-box-scroll-down
-      "C-h" 'eldoc-box-scroll-right
-      "C-l" 'eldoc-box-scroll-left
-      "K" 'eldoc-box-eglot-help-at-point)
-
-    ;; :hook
-    ;; (eglot-managed-mode . eldoc-box-hover-at-point-mode)
-    (lsp-managed-mode . eldoc-box-hover-at-point-mode)
-    )
-
-  ;; (setq markdown-hr-display-char nil)
-
-  #+end_src
 *** Devdocs
 #+begin_src emacs-lisp
   (use-package devdocs
@@ -1306,8 +1236,7 @@ Associate extensions with the correct tree-sitter mode and others
         (org-mode-hook        . "elisp")
         (elisp-mode-hook      . "elisp")
         (emacs-lisp-mode-hook . "elisp")
-        (sh-mode-hook         . "bash")
-        ))
+        (sh-mode-hook         . "bash")))
 
     (setq devdocs-window-select t
           shr-max-image-proportion 0.4)
