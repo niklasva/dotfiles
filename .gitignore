@@ -29,4 +29,3 @@ emacs/.config/emacs/*
 !*emacs/.config/emacs/init.el
 !*emacs/.config/emacs/early-init.el
 !*emacs/.config/emacs/config.org
-!*emacs/.config/emacs/eshell/alias
