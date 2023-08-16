@@ -89,17 +89,17 @@ scroll-margin 4)
 #+begin_src emacs-lisp
 (defun prog-pair-hook ()
 (setq electric-pair-inhibit-predicate (lambda (c) (or
-								(char-equal c ?\()
-								(or
-								(char-equal c ?\")
-								(char-equal c ?\<)))))
+                (char-equal c ?\()
+                (or
+                (char-equal c ?\")
+                (char-equal c ?\<)))))
 (electric-pair-mode 1))
 (add-hook 'prog-mode-hook 'prog-pair-hook)
 
 (defun c-pair-hook ()
 (setq electric-pair-inhibit-predicate (lambda (c) (or
-								(char-equal c ?\")
-								(char-equal c ?\<))))
+                (char-equal c ?\")
+                (char-equal c ?\<))))
 (electric-pair-mode 1))
 (add-hook 'c-mode-hook 'prog-pair-hook)
 (add-hook 'c++-mode-hook 'prog-pair-hook)
@@ -394,7 +394,7 @@ Prevent accidental close.
 
                              (if buffer-file-name
                                  (progn (setq repository-name (vc-git-repository-url buffer-file-name)) (setq repository-name (replace-regexp-in-string ".git" "" (replace-regexp-in-string "git@github.com:" "" repository-name)))
-  									  )
+                      )
                                )repository-name)
                             " | %l:%c" ))
                     ;; Right.
@@ -641,8 +641,8 @@ Window management
     "wu"    '(winner-undo                :which-key "winner-undo")
     "wU"    '(winner-redo                :which-key "winner-redo")
 
-	"conf"  '((lambda () (interactive) (find-file "~/.config/emacs/config.org")) :which-key "Open config.org")
-	"vconf" '((lambda () (interactive) (split-window-right)
+  "conf"  '((lambda () (interactive) (find-file "~/.config/emacs/config.org")) :which-key "Open config.org")
+  "vconf" '((lambda () (interactive) (split-window-right)
                 (find-file "~/.config/emacs/config.org")) :which-key "Open config.org")
     "sconf" '((lambda () (interactive) (split-window-below)
                 (find-file "~/.config/emacs/config.org")) :which-key "Open config.org"))
@@ -868,8 +868,8 @@ Window management
     (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
 
     (projectile-register-project-type 'has-command-at-point '(".mbed")
-									:compile "build-slim-debug" :src-dir "src/")
-	)
+                  :compile "build-slim-debug" :src-dir "src/")
+  )
 #+end_src
 
 ** File-related keybindings
@@ -1257,8 +1257,8 @@ Associate extensions with the correct tree-sitter mode and others
     :straight t
     :defines eshell-prompt-function
     :config
-	(add-hook 'eshell-mode-hook
-			(lambda ()
+  (add-hook 'eshell-mode-hook
+      (lambda ()
                 (define-key eshell-hist-mode-map (kbd "C-c C-l") nil)
                 (define-key eshell-hist-mode-map (kbd "M-s")     nil)
                 (define-key eshell-mode-map      (kbd "C-a")     'eshell-bol)
