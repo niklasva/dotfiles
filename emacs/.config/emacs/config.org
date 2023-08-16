@@ -35,7 +35,7 @@
         (goto-char (point-max))
         (eval-print-last-sexp)))
     (load bootstrap-file nil 'nomessage))
-    ;; (straight-use-package 'org)
+  ;; (straight-use-package 'org)
 #+end_src
 
 * Encryption
@@ -61,171 +61,169 @@
 * Text edit settings
 ** Defaults
 #+begin_src emacs-lisp
-(setq-default
-c-basic-offset 4
-c-default-style "linux"
-create-lockfiles nil
-evil-auto-indent t
-indent-line-function 'evil-indent-line
-indent-tabs-mode t
-completion-cycle-threshold 3
-tab-always-indent 'complete
-tab-width 4)
-(column-number-mode)
-(electric-indent-mode +1)
+  (setq-default
+   c-basic-offset 4
+   c-default-style "linux"
+   create-lockfiles nil
+   evil-auto-indent t
+   indent-line-function 'evil-indent-line
+   ;; indent-tabs-mode t
+   completion-cycle-threshold 3
+   tab-always-indent 'complete
+   tab-width 4)
+  (column-number-mode)
+  (electric-indent-mode +1)
 #+end_src
 
 #+begin_src emacs-lisp
-(setq-default scroll-preserve-screen-position t
-scroll-conservatively 5
-maximum-scroll-margin 0.5
-scroll-margin 4)
+  (setq-default scroll-preserve-screen-position t
+                scroll-conservatively 5
+          maximum-scroll-margin 0.5
+                scroll-margin 4)
 #+end_src
 
 #+begin_src emacs-lisp
-(setq ring-bell-function 'ignore)
+  (setq ring-bell-function 'ignore)
 #+end_src
 
 #+begin_src emacs-lisp
-(defun prog-pair-hook ()
-(setq electric-pair-inhibit-predicate (lambda (c) (or
-                (char-equal c ?\()
-                (or
-                (char-equal c ?\")
-                (char-equal c ?\<)))))
-(electric-pair-mode 1))
-(add-hook 'prog-mode-hook 'prog-pair-hook)
+  (defun prog-pair-hook ()
+    (setq electric-pair-inhibit-predicate (lambda (c) (or
+                                                       (char-equal c ?\()
+                                                       (or
+                                                        (char-equal c ?\")
+                                                        (char-equal c ?\<)))))
+    (electric-pair-mode 1))
+  (add-hook 'prog-mode-hook 'prog-pair-hook)
 
-(defun c-pair-hook ()
-(setq electric-pair-inhibit-predicate (lambda (c) (or
-                (char-equal c ?\")
-                (char-equal c ?\<))))
-(electric-pair-mode 1))
-(add-hook 'c-mode-hook 'prog-pair-hook)
-(add-hook 'c++-mode-hook 'prog-pair-hook)
-(add-hook 'c-ts-mode-hook 'prog-pair-hook)
-(add-hook 'c++-ts-mode-hook 'prog-pair-hook)
+  (defun c-pair-hook ()
+    (setq electric-pair-inhibit-predicate (lambda (c) (or
+                                                       (char-equal c ?\")
+                                                       (char-equal c ?\<))))
+    (electric-pair-mode 1))
+  (add-hook 'c-mode-hook 'prog-pair-hook)
+  (add-hook 'c++-mode-hook 'prog-pair-hook)
+  (add-hook 'c-ts-mode-hook 'prog-pair-hook)
+  (add-hook 'c++-ts-mode-hook 'prog-pair-hook)
 #+end_src
 
 #+begin_src emacs-lisp
+  (defun indent-tabs-hook ()
+    (setq tab-width 4
+          indent-tabs-mode t
+          evil-auto-indent t
+          c-basic-offset 4))
 
-(defun indent-tabs-hook ()
-(setq tab-width 4
-indent-tabs-mode t
-evil-auto-indent t
-c-basic-offset 4))
-
-(add-hook 'c++-mode-hook    'indent-tabs-hook)
-(add-hook 'c-mode-hook      'indent-tabs-hook)
-(add-hook 'c++-ts-mode-hook 'indent-tabs-hook)
-(add-hook 'c-ts-mode-hook   'indent-tabs-hook)
+  (add-hook 'c++-mode-hook    'indent-tabs-hook)
+  (add-hook 'c-mode-hook      'indent-tabs-hook)
+  (add-hook 'c++-ts-mode-hook 'indent-tabs-hook)
+  (add-hook 'c-ts-mode-hook   'indent-tabs-hook)
 #+end_src
 
 #+begin_src emacs-lisp
-(setq org-src-strip-leading-and-trailing-blank-lines t
-org-src-tab-acts-natively t)
-
+  (setq org-src-strip-leading-and-trailing-blank-lines t
+        org-src-tab-acts-natively t)
 #+end_src
 
 Enable line numbers for some modes
 #+begin_src emacs-lisp
-(setq-default display-line-numbers-width 4)
+  (setq-default display-line-numbers-width 4)
 
-(dolist (mode '(org-mode-hook text-mode-hook prog-mode-hook conf-mode-hook))
-(add-hook mode (lambda ()
-(display-line-numbers-mode 1))))
+  (dolist (mode '(org-mode-hook text-mode-hook prog-mode-hook conf-mode-hook))
+    (add-hook mode (lambda ()
+                     (display-line-numbers-mode 1))))
 #+end_src
 
 Override some modes which derive from the above
 #+begin_src emacs-lisp
-(dolist (mode '(org-mode-hook)) (add-hook mode (lambda () (display-line-numbers-mode 0))))
+  (dolist (mode '(org-mode-hook)) (add-hook mode (lambda () (display-line-numbers-mode 0))))
 #+end_src
 
 Show only one active window when opening multiple files at the same time.
 #+begin_src emacs-lisp
-(add-hook 'window-setup-hook 'delete-other-windows)
+  (add-hook 'window-setup-hook 'delete-other-windows)
 #+end_src
 
 #+begin_src emacs-lisp
-(fset 'yes-or-no-p 'y-or-n-p)
+  (fset 'yes-or-no-p 'y-or-n-p)
 #+end_src
 
 Always move cursor to help window
 #+begin_src emacs-lisp
-(setq help-window-select t)
+  (setq help-window-select t)
 #+end_src
 
 Remove trailing spaces
 #+begin_src emacs-lisp
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
+  (add-hook 'before-save-hook 'delete-trailing-whitespace)
 #+end_src
 
 Scroll compilation buffer
 #+begin_src emacs-lisp
-(setq compilation-scroll-output t)
+  (setq compilation-scroll-output t)
 #+end_src
 
 #+begin_src emacs-lisp
-(defun show-trailing-whitespace-hook () (setq show-trailing-whitespace t))
-(add-hook 'prog-mode-hook 'show-trailing-whitespace-hook)
+  (defun show-trailing-whitespace-hook () (setq show-trailing-whitespace t))
+  (add-hook 'prog-mode-hook 'show-trailing-whitespace-hook)
 #+end_src
 
 ** Hide buffers
 
 Hide buffers by prepending space to buffer name.
 #+begin_src emacs-lisp
-(defun niva/hide-buffer (bufname)
-(if (get-buffer bufname)
-(with-current-buffer bufname
-(rename-buffer (concat " " bufname)))))
+  (defun niva/hide-buffer (bufname)
+    (if (get-buffer bufname)
+        (with-current-buffer bufname
+          (rename-buffer (concat " " bufname)))))
 
-(defun remove-messages-buffer ()
-(niva/hide-buffer "*Messages*"))
+  (defun remove-messages-buffer ()
+    (niva/hide-buffer "*Messages*"))
 
-;; (add-hook 'after-change-major-mode-hook 'remove-messages-buffer)
+  ;; (add-hook 'after-change-major-mode-hook 'remove-messages-buffer)
 
-(defun hide-lsp-buffers ()
-(interactive)
-(setq-default message-log-max nil)
-(niva/hide-buffer "*clangd*")
-(niva/hide-buffer "*clangd::stderr*")
-(niva/hide-buffer "*pyright*")
-(niva/hide-buffer "*pyright::stderr*"))
-;; (add-hook 'after-change-major-mode-hook 'hide-lsp-buffers)
+  (defun hide-lsp-buffers ()
+    (interactive)
+    (setq-default message-log-max nil)
+    (niva/hide-buffer "*clangd*")
+    (niva/hide-buffer "*clangd::stderr*")
+    (niva/hide-buffer "*pyright*")
+    (niva/hide-buffer "*pyright::stderr*"))
+  ;; (add-hook 'after-change-major-mode-hook 'hide-lsp-buffers)
 #+end_src
 
 Don't show *Buffer list* when opening multiple files at the same time.
 #+begin_src emacs-lisp
-(setq inhibit-startup-buffer-menu t)
+  (setq inhibit-startup-buffer-menu t)
 #+end_src
 
 ** Clipboard
 Prevent emacs from contaminating system clipboard.
 #+begin_src emacs-lisp
-(use-package simpleclip
-:straight t
-:config
-(setq interprogram-cut-function 'simpleclip-set-contents
-interprogram-paste-function 'simpleclip-get-contents)
-(simpleclip-mode 1))
+  (use-package simpleclip
+    :straight t
+    :config
+    (setq interprogram-cut-function 'simpleclip-set-contents
+          interprogram-paste-function 'simpleclip-get-contents)
+    (simpleclip-mode 1))
 #+end_src
 
 * Customization
 ** GUI settings
 
 #+begin_src emacs-lisp
-(setq inhibit-startup-message t
-    inhibit-startup-echo-area-message t)
+  (setq inhibit-startup-message t
+        inhibit-startup-echo-area-message t)
 
-(scroll-bar-mode -1)
-(tool-bar-mode -1)
-(tooltip-mode nil)
-(menu-bar-mode 1)
-(set-fringe-mode 1)
-(global-visual-line-mode t)
+  (scroll-bar-mode -1)
+  (tool-bar-mode -1)
+  (tooltip-mode nil)
+  (menu-bar-mode 1)
+  (set-fringe-mode 1)
+  (global-visual-line-mode t)
 
-(setq-default left-fringe-width 16
-            right-fringe-width 3)
+  (setq-default left-fringe-width 16
+                right-fringe-width 3)
 #+end_src
 
 #+begin_src emacs-lisp
@@ -394,7 +392,7 @@ Prevent accidental close.
 
                              (if buffer-file-name
                                  (progn (setq repository-name (vc-git-repository-url buffer-file-name)) (setq repository-name (replace-regexp-in-string ".git" "" (replace-regexp-in-string "git@github.com:" "" repository-name)))
-                      )
+                                        )
                                )repository-name)
                             " | %l:%c" ))
                     ;; Right.
@@ -407,16 +405,16 @@ Prevent accidental close.
 *** Display time
 
 #+begin_src emacs-lisp
-;;   (setq display-time-format "%+4Y-%m-%d %H:%M"
-;;         display-time-default-load-average nil)
-;;
-;;   (defun display-time-bottom-right ()
-;;     (and (equal (cddr (window-pixel-edges))
-;;                 (cddr (window-pixel-edges (frame-root-window))))
-;;          '(#(" " 0 1 (display (space :align-to (- right 38))))
-;;            " "display-time-string)))
-;;   (display-time-mode)
-;;   (setq global-mode-string '(:eval (display-time-bottom-right)))
+  ;;   (setq display-time-format "%+4Y-%m-%d %H:%M"
+  ;;         display-time-default-load-average nil)
+  ;;
+  ;;   (defun display-time-bottom-right ()
+  ;;     (and (equal (cddr (window-pixel-edges))
+  ;;                 (cddr (window-pixel-edges (frame-root-window))))
+  ;;          '(#(" " 0 1 (display (space :align-to (- right 38))))
+  ;;            " "display-time-string)))
+  ;;   (display-time-mode)
+  ;;   (setq global-mode-string '(:eval (display-time-bottom-right)))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -469,7 +467,7 @@ Remove font weight on some faces
           evil-scroll-count 8)
     (evil-mode))
 
-(use-package transpose-frame :straight t)
+  (use-package transpose-frame :straight t)
 
   (use-package general
     :straight t
@@ -499,8 +497,8 @@ Remove font weight on some faces
 #+begin_src emacs-lisp
   (setq mac-escape-modifier nil
         mac-option-modifier nil
-        mac-right-command-modifier 'meta)
-  (setq mac-pass-command-to-system t)
+        mac-right-command-modifier 'meta
+        mac-pass-command-to-system t)
 #+end_src
 
 #+begin_src emacs-lisp
@@ -509,7 +507,6 @@ Remove font weight on some faces
 #+end_src
 
 #+begin_src emacs-lisp
-
   (global-set-key                   (kbd "€") (kbd "$"))
   (global-set-key                   (kbd "<f13>") 'evil-invert-char)
   (define-key evil-insert-state-map (kbd "C-c C-e") 'comment-line)
@@ -585,7 +582,6 @@ Window management
   (global-set-key (kbd "s-t")        'tab-new)
   (global-set-key (kbd "s-w")        'tab-close)
   (global-set-key (kbd "s-z")        nil)
-
 #+end_src
 
 ** which-key
@@ -641,8 +637,8 @@ Window management
     "wu"    '(winner-undo                :which-key "winner-undo")
     "wU"    '(winner-redo                :which-key "winner-redo")
 
-  "conf"  '((lambda () (interactive) (find-file "~/.config/emacs/config.org")) :which-key "Open config.org")
-  "vconf" '((lambda () (interactive) (split-window-right)
+    "conf"  '((lambda () (interactive) (find-file "~/.config/emacs/config.org")) :which-key "Open config.org")
+    "vconf" '((lambda () (interactive) (split-window-right)
                 (find-file "~/.config/emacs/config.org")) :which-key "Open config.org")
     "sconf" '((lambda () (interactive) (split-window-below)
                 (find-file "~/.config/emacs/config.org")) :which-key "Open config.org"))
@@ -670,7 +666,7 @@ Window management
     :straight t
     :config
     (setq vertico-count 10
-            vertico-resize t)
+          vertico-resize t)
     :custom (vertico-cycle t))
 
   (use-package vertico-multiform
@@ -679,10 +675,10 @@ Window management
     :after vertico
     :config
     (setq vertico-sort-function #'vertico-sort-history-alpha
-            vertico-multiform-commands
-            '((consult-theme (vertico-sort-function . vertico-sort-alpha))
-              (consult-grep (vertico-count . 20))
-              (consult-ripgrep (vertico-posframe-poshandler . posframe-poshandler-frame-bottom-center) (vertico-count . 20))))
+          vertico-multiform-commands
+          '((consult-theme (vertico-sort-function . vertico-sort-alpha))
+            (consult-grep (vertico-count . 20))
+            (consult-ripgrep (vertico-posframe-poshandler . posframe-poshandler-frame-bottom-center) (vertico-count . 20))))
 
     (vertico-mode)
     (vertico-multiform-mode))
@@ -700,15 +696,14 @@ Window management
     :when (display-graphic-p)
     :config
     (setq vertico-posframe-parameters
-            '((max-width . 0.8)
-              (min-width . 0.8)
-              (left-fringe . 8)
-              (right-fringe . 8))
-            vertico-posframe-border-width 1
-            vertico-posframe-poshandler #'posframe-poshandler-frame-center)
+          '((max-width . 0.8)
+            (min-width . 0.8)
+            (left-fringe . 8)
+            (right-fringe . 8))
+          vertico-posframe-border-width 1
+          vertico-posframe-poshandler #'posframe-poshandler-frame-center)
     (set-face-attribute 'vertico-posframe nil :background (face-attribute 'fringe :background))
     (vertico-posframe-mode))
-
 #+end_src
 
 ** Consult
@@ -732,8 +727,7 @@ Window management
               --line-number \
               --hidden \
               --follow \
-              --glob \"!.git/*\" .")
-    )
+              --glob \"!.git/*\" ."))
 #+end_src
 
 ** Marginalia
@@ -780,12 +774,12 @@ Window management
     (corfu-auto-prefix 1)
     :bind
     (:map corfu-map
-        ("TAB"     . corfu-next)
-        ("C-SPC"   . corfu-next)
-        ([tab]     . corfu-next)
-        ("S-TAB"   . corfu-previous)
-        ("C-S-SPC" . corfu-previous)
-        ([backtab] . corfu-previous))
+      ("TAB"     . corfu-next)
+      ("C-SPC"   . corfu-next)
+      ([tab]     . corfu-next)
+      ("S-TAB"   . corfu-previous)
+      ("C-S-SPC" . corfu-previous)
+      ([backtab] . corfu-previous))
 
     :init
     (global-corfu-mode)
@@ -820,8 +814,8 @@ Window management
     :straight t
     :init
     (setq completion-styles '(orderless basic)
-        completion-category-defaults nil
-        completion-category-overrides '((file (styles . (partial-completion))))))
+      completion-category-defaults nil
+      completion-category-overrides '((file (styles . (partial-completion))))))
 
   (use-package cape
     ;; Bind dedicated completion commands
@@ -868,8 +862,8 @@ Window management
     (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
 
     (projectile-register-project-type 'has-command-at-point '(".mbed")
-                  :compile "build-slim-debug" :src-dir "src/")
-  )
+                    :compile "build-slim-debug" :src-dir "src/")
+    )
 #+end_src
 
 ** File-related keybindings
@@ -883,7 +877,7 @@ Window management
                :which-key "find ~/file")
     "f f"   '(find-file :which-key "Find file")
     "p f"   '(projectile-find-file :which-key "projectile-find-file")
-"p p"   '(projectile-switch-project :which-key "projectile-switch-project")
+    "p p"   '(projectile-switch-project :which-key "projectile-switch-project")
     "f r"   '(counsel-recentf :which-key "Recent files")
     "f s"   '(save-buffer :which-key "Save file")
     "f u"   '(sudo-edit-find-file :which-key "Sudo find file")
@@ -1214,8 +1208,7 @@ Associate extensions with the correct tree-sitter mode and others
     :straight t
     :config
     (setq ediff-split-window-function 'split-window-horizontally
-          ediff-window-setup-function 'ediff-setup-windows-plain)
-    )
+          ediff-window-setup-function 'ediff-setup-windows-plain))
 
   (defun disable-y-or-n-p (orig-fun &rest args)
     (cl-letf (((symbol-function 'y-or-n-p) (lambda (prompt) t)))
@@ -1257,8 +1250,8 @@ Associate extensions with the correct tree-sitter mode and others
     :straight t
     :defines eshell-prompt-function
     :config
-  (add-hook 'eshell-mode-hook
-      (lambda ()
+    (add-hook 'eshell-mode-hook
+              (lambda ()
                 (define-key eshell-hist-mode-map (kbd "C-c C-l") nil)
                 (define-key eshell-hist-mode-map (kbd "M-s")     nil)
                 (define-key eshell-mode-map      (kbd "C-a")     'eshell-bol)
@@ -1344,13 +1337,12 @@ Associate extensions with the correct tree-sitter mode and others
     :config
     (setq olivetti-body-width 100
           olivetti-minimum-body-width 100))
-
 #+end_src
 *** Mixed-pitch
 #+begin_src disabled
-(use-package mixed-pitch
-:hook
-(text-mode . mixed-pitch-mode))
+  (use-package mixed-pitch
+  :hook
+  (text-mode . mixed-pitch-mode))
 #+end_src
 
 *** TeX style
@@ -1388,15 +1380,15 @@ Associate extensions with the correct tree-sitter mode and others
 
 ** Set up
 #+begin_src disabled
-(use-package org
-:straight t
-:config
+  (use-package org
+    :straight t
+    :config
     (setq org-ellipsis " .."
           org-hide-emphasis-markers t
           org-fontify-quote-and-verse-blocks t)
 
-  (dolist (mode '(org-mode-hook text-mode-hook prog-mode-hook conf-mode-hook))
-    (add-hook mode (lambda () (org-indent-mode 1))))
+    (dolist (mode '(org-mode-hook text-mode-hook prog-mode-hook conf-mode-hook))
+      (add-hook mode (lambda () (org-indent-mode 1))))
 
     (set-face-attribute 'org-quote nil :inherit 'font-lock-comment-face :slant 'oblique)
 
@@ -1410,22 +1402,21 @@ Associate extensions with the correct tree-sitter mode and others
                                                                               (add-text-properties beg end (list 'line-prefix indent 'wrap-prefix indent))))))))
     ;;)
 
-  (use-package org-superstar
-    :straight t
-    :after org
-    :hook (org-mode . org-superstar-mode)
-    :custom
-    (org-superstar-remove-leading-stars t)
-    (org-superstar-headline-bullets-list '("◉" "○" "●" "○" "●" "○" "●")))
+    (use-package org-superstar
+      :straight t
+      :after org
+      :hook (org-mode . org-superstar-mode)
+      :custom
+      (org-superstar-remove-leading-stars t)
+      (org-superstar-headline-bullets-list '("◉" "○" "●" "○" "●" "○" "●")))
 #+end_src
 
 Only use variable-pitch if explicitly called.
 
 #+begin_src emacs-lisp
   (defun niva/variable-pitch-on ()
-  (interactive)
-  (set-face-attribute 'variable-pitch nil :font "CMU Serif 14" :height 1.4 :inherit 'default)
-  )
+    (interactive)
+    (set-face-attribute 'variable-pitch nil :font "CMU Serif 14" :height 1.4 :inherit 'default))
 #+end_src
 
 ** org-tempo
@@ -1481,7 +1472,6 @@ Only use variable-pitch if explicitly called.
 #+begin_src emacs-lisp
   (use-package elfeed
     :straight t
-    ;; :bind (:map elfeed-search-mode-map ("r" . elfeed-update))
     :hook (elfeed-search-mode . elfeed-update))
 
   (use-package elfeed-protocol
@@ -1527,8 +1517,6 @@ Only use variable-pitch if explicitly called.
 #+begin_src emacs-lisp
   (use-package sr-speedbar :straight t)
   (use-package projectile-speedbar :straight t)
-
-  ;; (set-face-attribute 'vertico-posframe nil :background (face-attribute 'fringe :background))
   (set-face-attribute 'speedbar-button-face          nil :family "Helvetica" :height 0.9 :foreground (face-attribute 'ansi-color-green :foreground))
   (set-face-attribute 'speedbar-directory-face       nil :family "Helvetica" :height 0.9 :foreground (face-attribute 'ansi-color-blue :foreground))
   (set-face-attribute 'speedbar-separator-face       nil :family "Helvetica" :height 0.9 :foreground (face-attribute 'ansi-color-blue :foreground))
