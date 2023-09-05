@@ -46,18 +46,11 @@
   :config (pinentry-start))
   #+end_src
 
-** authinfo
+* Imports
 #+begin_src emacs-lisp
-  (setq auth-sources
-        '((:source "~/.authinfo.gpg")))
-
-  (defun niva/lookup-password (&rest keys)
-    (let ((result (apply #'auth-source-search keys)))
-      (if result
-          (funcall (plist-get (car result) :secret))
-        nil)))
+  (setq-local import-file (expand-file-name (concat user-emacs-directory "private/config.el")))
+  (if (file-readable-p import-file) (load import-file))
 #+end_src
-
 * Text edit settings
 ** Defaults
 #+begin_src emacs-lisp
@@ -67,11 +60,10 @@
    create-lockfiles nil
    evil-auto-indent t
    indent-line-function 'evil-indent-line
-   ;; indent-tabs-mode t
+   indent-tabs-mode nil
    completion-cycle-threshold 3
    tab-always-indent 'complete
    tab-width 4)
-  (column-number-mode)
   (electric-indent-mode +1)
 #+end_src
 
@@ -231,7 +223,7 @@ Prevent emacs from contaminating system clipboard.
 
   (window-divider-mode 1)
 
-  (setq ns-use-thin-smoothing t
+  (setq ns-use-thin-smoothing nil
         ns-use-proxy-icon nil
         ns-use-mwheel-momentum t
         ns-use-mwheel-acceleration t
@@ -336,7 +328,7 @@ Prevent accidental close.
 #+begin_src emacs-lisp
   (setq custom-safe-themes t)
 
-  (load-theme 'modus-operandi-tinted t)
+  (load-theme 'modus-vivendi t)
 #+end_src
 
 ** Compilaton mode
@@ -551,6 +543,8 @@ Window management
 
   (define-key evil-normal-state-map (kbd "M-<") 'ns-next-frame)
   (define-key evil-normal-state-map (kbd "M->") 'ns-prev-frame)
+  (define-key evil-normal-state-map (kbd "s-<") 'ns-next-frame)
+  (define-key evil-normal-state-map (kbd "s->") 'ns-prev-frame)
 
   (define-key evil-normal-state-map (kbd "C-S-U") (lambda() (interactive) (pixel-scroll-down 8)))
   (define-key evil-normal-state-map (kbd "C-S-D") (lambda() (interactive) (pixel-scroll-up 8)))
@@ -1358,33 +1352,12 @@ Associate extensions with the correct tree-sitter mode and others
   ;; (add-hook 'eshell-mode-hook 'font-lock-comment-annotations)
 #+end_src
 
-*** alias
+*** Alias
 #+begin_src emacs-lisp
-  (eshell/alias "ff" "for i in ${eshell-flatten-list $*} {find-file $i}")
-  (eshell/alias "fo" "find-file-other-window $1")
-  (eshell/alias "ts" "ts '[%Y-%m-%d %H:%M:%S]'")
-#+end_src
-
-#+begin_src emacs-lisp
-  (setenv "LANG" "sv_SE.UTF-8")
-  (setenv "LIBRARY_PATH" "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib")
-  (setenv "CPPFLAGS" "-I/opt/homebrew/opt/openssl@3/include")
-  (setenv "LDFLAGS" "-L/opt/homebrew/opt/openssl@3/lib")
-  (setenv "PKG_CONFIG_PATH" "/opt/homebrew/opt/openssl@3/lib/pkgconfig")
-  (setenv "OPENSSL_ROOT_DIR" "/opt/homebrew/Cellar/openssl@3/3.1.1")
-  (setenv "CPATH" "/opt/homebrew/include")
-  (setenv "LIBRARY_PATH" "/opt/homebrew/lib")
-
-  (defun set-exec-path-from-shell-PATH ()
-    (interactive)
-    (let ((path-from-shell (replace-regexp-in-string
-                            "[ \t\n]*$" "" (shell-command-to-string
-                                            "$SHELL --login -i -c 'echo $PATH'"
-                                            ))))
-      (setenv "PATH" path-from-shell)
-      (setq exec-path (split-string path-from-shell path-separator))))
-
-  (set-exec-path-from-shell-PATH)
+  (defalias 'ff    "for i in ${eshell-flatten-list $*} {find-file $i}")
+  (defalias 'emacs "ff")
+  (defalias 'fo    "find-file-other-window $1")
+  (defalias 'ts    "ts '[%Y-%m-%d %H:%M:%S]'")
 #+end_src
 
 * Org
@@ -1529,46 +1502,47 @@ Only use variable-pitch if explicitly called.
 #+end_src
 ** elfeed
 #+begin_src emacs-lisp
-  (use-package elfeed
-    :straight t
-    :hook (elfeed-search-mode . elfeed-update))
+  (if niva/elfeed-enabled
+      (use-package elfeed
+        :straight t
+        :hook (elfeed-search-mode . elfeed-update))
 
-  (use-package elfeed-protocol
-    :straight t
-    :after elfeed
-    :config
-    (setq elfeed-use-curl t
-          elfeed-sort-order 'descending
-          elfeed-protocol-enabled-protocols '(fever)
-          elfeed-protocol-fever-update-unread-only t
-          elfeed-protocol-fever-maxsize 150
-          elfeed-feeds '(("fever+https://niklas@rss.niklas.zone"
-                          :api-url "https://rss.niklas.zone/fever/"
-                          :password (niva/lookup-password :host "fever")
-                          ))))
-  (elfeed-protocol-enable)
-
-
-  (advice-add 'elfeed-show-visit :around #'suppress-messages)
-
-  (define-key elfeed-show-mode-map (kbd "j") 'elfeed-show-next)
-  (define-key elfeed-show-mode-map (kbd "k") 'elfeed-show-prev)
+    (use-package elfeed-protocol
+      :straight t
+      :after elfeed
+      :config
+      (setq elfeed-use-curl t
+            elfeed-sort-order 'descending
+            elfeed-protocol-enabled-protocols '(fever)
+            elfeed-protocol-fever-update-unread-only t
+            elfeed-protocol-fever-maxsize 150
+            elfeed-feeds '((niva/elfeed-fever-url
+                            :api-url niva/elfeed-api-url
+                            :password (niva/lookup-password :host "fever")
+                            ))))
+    (elfeed-protocol-enable)
 
 
-  (defun my/elfeed-toggle-images ()
-    (interactive)
-    (setq-local shr-inhibit-images (not shr-inhibit-images))
-    (elfeed-show-refresh))
+    (advice-add 'elfeed-show-visit :around #'suppress-messages)
 
-  (define-key elfeed-show-mode-map (kbd "I") #'my/elfeed-toggle-images)
-  (define-key elfeed-search-mode-map (kbd "I") #'my/elfeed-toggle-images)
+    (define-key elfeed-show-mode-map (kbd "j") 'elfeed-show-next)
+    (define-key elfeed-show-mode-map (kbd "k") 'elfeed-show-prev)
 
-  (define-key elfeed-search-mode-map (kbd "r") 'elfeed-update)
-  (defun elfeed-olivetti (buff)
-    (switch-to-buffer buff)
-    (olivetti-mode)
-    (elfeed-show-refresh))
 
-  (setq elfeed-show-entry-switch 'elfeed-olivetti)
+    (defun my/elfeed-toggle-images ()
+      (interactive)
+      (setq-local shr-inhibit-images (not shr-inhibit-images))
+      (elfeed-show-refresh))
+
+    (define-key elfeed-show-mode-map (kbd "I") #'my/elfeed-toggle-images)
+    (define-key elfeed-search-mode-map (kbd "I") #'my/elfeed-toggle-images)
+
+    (define-key elfeed-search-mode-map (kbd "r") 'elfeed-update)
+    (defun elfeed-olivetti (buff)
+      (switch-to-buffer buff)
+      (olivetti-mode)
+      (elfeed-show-refresh))
+
+    (setq elfeed-show-entry-switch 'elfeed-olivetti))
 
 #+end_src
