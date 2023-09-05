@@ -657,14 +657,6 @@ Window management
   (smex-initialize)
 #+end_src
 
-#+begin_src emacs-lisp
-  ;; (use-package tramp
-  ;;   :straight t
-  ;;   :config
-  ;;   (set-default 'tramp-auto-save-directory "~/.config/emacs/temp")
-  ;;   (set-default 'tramp-default-method "plink"))
-#+end_src
-
 ** Vertico
 #+begin_src emacs-lisp
   (use-package vertico
@@ -913,6 +905,49 @@ Disable lock files.
   (setq create-lockfiles nil)
 #+end_src
 
+** Speedbar
+#+begin_src disabled
+  (use-package sr-speedbar :straight t)
+  (use-package projectile-speedbar :straight t)
+  (set-face-attribute 'speedbar-button-face nil
+                      ;; :family "Helvetica"
+                      :height 0.8
+                      :foreground (face-attribute 'ansi-color-green :foreground))
+
+  (set-face-attribute 'speedbar-directory-face nil
+                      ;; :family "Helvetica"
+                      :height 0.8
+  					:foreground (face-attribute 'ansi-color-blue :foreground))
+
+  (set-face-attribute 'speedbar-separator-face nil
+                      ;; :family "Helvetica"
+                      :height 0.8
+                      :foreground (face-attribute 'ansi-color-blue :foreground))
+
+  (set-face-attribute 'speedbar-file-face nil
+  					;; :family "Helvetica"
+                      :height 0.8
+                      :foreground (face-attribute 'ansi-color-cyan :foreground))
+
+  (set-face-attribute 'speedbar-highlight-face nil
+  					;; :family "Helvetica"
+                      :height 0.8
+                      :foreground (face-attribute 'ansi-color-yellow :foreground))
+
+  (set-face-attribute 'speedbar-selected-face nil
+  					;; :family "Helvetica"
+                      :height 0.8
+                      :underline t :foreground (face-attribute 'ansi-color-red :foreground))
+
+  (set-face-attribute 'speedbar-tag-face nil
+  					;; :family "Helvetica"
+                      :height 0.8
+                      :foreground (face-attribute 'ansi-color-yellow :foreground))
+
+  (setq speedbar-use-images nil)
+  (setq speedbar-auto-refresh nil)
+  (define-key evil-normal-state-map (kbd "C-e") 'sr-speedbar-toggle)
+#+end_src
 ** Other
 Always follow symlinks
 #+begin_src emacs-lisp
@@ -1517,19 +1552,4 @@ Only use variable-pitch if explicitly called.
 
   (setq elfeed-show-entry-switch 'elfeed-olivetti)
 
-#+end_src
-
-#+begin_src emacs-lisp
-  (use-package sr-speedbar :straight t)
-  (use-package projectile-speedbar :straight t)
-  (set-face-attribute 'speedbar-button-face          nil :family "Helvetica" :height 0.9 :foreground (face-attribute 'ansi-color-green :foreground))
-  (set-face-attribute 'speedbar-directory-face       nil :family "Helvetica" :height 0.9 :foreground (face-attribute 'ansi-color-blue :foreground))
-  (set-face-attribute 'speedbar-separator-face       nil :family "Helvetica" :height 0.9 :foreground (face-attribute 'ansi-color-blue :foreground))
-  (set-face-attribute 'speedbar-file-face            nil :family "Helvetica" :height 0.9 :foreground (face-attribute 'ansi-color-cyan :foreground))
-  (set-face-attribute 'speedbar-highlight-face       nil :family "Helvetica" :height 0.9 :foreground (face-attribute 'ansi-color-yellow :foreground))
-  (set-face-attribute 'speedbar-selected-face        nil :family "Helvetica" :height 0.9 :underline t :foreground (face-attribute 'ansi-color-red :foreground))
-  (set-face-attribute 'speedbar-tag-face             nil :family "Helvetica" :height 0.9 :foreground (face-attribute 'ansi-color-yellow :foreground))
-
-  (setq speedbar-use-images nil)
-  (define-key evil-normal-state-map (kbd "C-e") 'sr-speedbar-toggle)
 #+end_src
