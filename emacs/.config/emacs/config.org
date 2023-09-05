@@ -126,16 +126,14 @@
 #+end_src
 
 Enable line numbers for some modes
-#+begin_src emacs-lisp
+#+begin_src disabled
   (setq-default display-line-numbers-width 4)
 
   (dolist (mode '(org-mode-hook text-mode-hook prog-mode-hook conf-mode-hook))
     (add-hook mode (lambda ()
                      (display-line-numbers-mode 1))))
-#+end_src
+  ;; Override some modes which derive from the above
 
-Override some modes which derive from the above
-#+begin_src emacs-lisp
   (dolist (mode '(org-mode-hook)) (add-hook mode (lambda () (display-line-numbers-mode 0))))
 #+end_src
 
@@ -687,20 +685,20 @@ Window management
     :hook
     (vertico-mode . vertico-mouse-mode))
 
-  (use-package vertico-posframe
-    :straight t
-    :after vertico
-    :when (display-graphic-p)
-    :config
-    (setq vertico-posframe-parameters
-          '((max-width . 0.8)
-            (min-width . 0.8)
-            (left-fringe . 8)
-            (right-fringe . 8))
-          vertico-posframe-border-width 1
-          vertico-posframe-poshandler #'posframe-poshandler-frame-center)
-    (set-face-attribute 'vertico-posframe nil :background (face-attribute 'fringe :background))
-    (vertico-posframe-mode))
+  ;; (use-package vertico-posframe
+  ;;   :straight t
+  ;;   :after vertico
+  ;;   :when (display-graphic-p)
+  ;;   :config
+  ;;   (setq vertico-posframe-parameters
+  ;;         '((max-width . 0.8)
+  ;;           (min-width . 0.8)
+  ;;           (left-fringe . 8)
+  ;;           (right-fringe . 8))
+  ;;         vertico-posframe-border-width 1
+  ;;         vertico-posframe-poshandler #'posframe-poshandler-frame-center)
+  ;;   (set-face-attribute 'vertico-posframe nil :background (face-attribute 'fringe :background))
+  ;;   (vertico-posframe-mode))
 #+end_src
 
 ** Consult
@@ -767,25 +765,29 @@ Window management
     (corfu-preselect 'valid)
 
     (corfu-echo-documentation t)
-    (corfu-auto-delay 0)
+    (corfu-auto-delay 0.2)
     (corfu-auto-prefix 1)
+
+    :hook ((prog-mode . corfu-mode))
+
     :bind
     (:map corfu-map
-      ("TAB"     . corfu-next)
-      ("C-SPC"   . corfu-next)
-      ([tab]     . corfu-next)
-      ("S-TAB"   . corfu-previous)
-      ("C-S-SPC" . corfu-previous)
-      ([backtab] . corfu-previous))
+    		("TAB"     . corfu-next)
+    		("C-SPC"   . corfu-next)
+    		([tab]     . corfu-next)
+    		("S-TAB"   . corfu-previous)
+    		("C-S-SPC" . corfu-previous)
+    		([backtab] . corfu-previous))
 
     :init
-    (global-corfu-mode)
+    ;; (global-corfu-mode)
     (corfu-popupinfo-mode t)
 
     :config
     (setq corfu-popupinfo-delay '(0.5 . 0.2))
-    (custom-set-faces
-     '(corfu-default ((t (:height 130))))))
+    ;; (custom-set-faces
+    ;;  '(corfu-default ((t (:height 0.9)))))
+    )
 
   (add-hook 'eshell-mode-hook (lambda () (setq-local corfu-auto nil) (corfu-mode)))
 
@@ -793,9 +795,9 @@ Window management
     "Send completion candidate when inside comint/eshell."
     (cond
      ((and (derived-mode-p 'eshell-mode) (fboundp 'eshell-send-input))
-    (eshell-send-input))
+    	(eshell-send-input))
      ((and (derived-mode-p 'comint-mode)  (fboundp 'comint-send-input))
-    (comint-send-input))))
+    	(comint-send-input))))
 
   (use-package kind-icon
     :straight t
@@ -811,8 +813,8 @@ Window management
     :straight t
     :init
     (setq completion-styles '(orderless basic)
-      completion-category-defaults nil
-      completion-category-overrides '((file (styles . (partial-completion))))))
+    		completion-category-defaults nil
+    		completion-category-overrides '((file (styles . (partial-completion))))))
 
   (use-package cape
     ;; Bind dedicated completion commands
@@ -1080,7 +1082,7 @@ Always follow symlinks
           lsp-ui-doc-show-with-mouse t
           lsp-ui-doc-position 'bottom
           lsp-ui-doc-alignment 'window
-          lsp-ui-doc-delay 0.1
+          lsp-ui-doc-delay 1.0
           lsp-ui-doc-include-signature t
           lsp-ui-doc-border (face-background 'corfu-border)
           lsp-ui-sideline-enable t))
@@ -1092,9 +1094,9 @@ Always follow symlinks
    '(lsp-ui-doc-background          ((t (:inherit corfu-default)))))
   (setq markdown-list-item-bullets '("-"))
 
-  (add-hook 'lsp-ui-doc-frame-hook
-            (lambda (frame _w)
-              (set-face-attribute 'default frame :height 120)))
+  ;; (add-hook 'lsp-ui-doc-frame-hook
+  ;;           (lambda (frame _w)
+  ;;             (set-face-attribute 'default frame :height 0.9)))
 #+end_src
 
 #+end_src
@@ -1118,12 +1120,11 @@ Always follow symlinks
 
 ** Tree-sitter
 *** Setup
-#+begin_src emacs-lisp
+#+begin_src disabled
   (use-package treesit
     :straight (:type built-in)
-    ;; :custom
-    ;; (treesit-font-lock-level 4)
     :config
+    (setq treesit-font-lock-level 1)
     (setq treesit-language-source-alist
           '((bash         "https://github.com/tree-sitter/tree-sitter-bash")
             (c            "https://github.com/tree-sitter/tree-sitter-c")
@@ -1142,7 +1143,7 @@ Always follow symlinks
 
 *** Hooks
 Associate extensions with the correct tree-sitter mode and others
-#+begin_src emacs-lisp
+#+begin_src disabled
   (dolist (pair '(("\\.sh\\'"           . bash-ts-mode)
                   ("\\.c\\'"            . c-ts-mode)
                   ("\\.h\\'"            . c-ts-mode)
