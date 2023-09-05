@@ -355,13 +355,13 @@ Prevent accidental close.
 
 #+begin_src emacs-lisp
   ;; (mu4e-alert-enable-mode-line-display)
-  (setq display-time-format "  %+4Y-%m-%d %H:%M"
-        display-time-default-load-average nil)
-  ;; (display-time-mode)
+
+  ;; (setq display-time-format "  %+4Y-%m-%d %H:%M"
+  ;;       display-time-default-load-average nil)
 
   (defun simple-mode-line-render (left right)
     "Return a string of `window-width' length.
-       Containing LEFT, and RIGHT aligned respectively."
+           Containing LEFT, and RIGHT aligned respectively."
     (let ((available-width
            (- (window-total-width)
               (+ (length (format-mode-line left))
@@ -376,7 +376,7 @@ Prevent accidental close.
                     ;; Left.
                     (quote ("%e "
                             (:eval (if (and buffer-file-name (buffer-modified-p))
-                                       (propertize "%b" 'face `(:slant oblique))
+                                       (propertize "%b" 'face `(:slant nil))
                                      "%b"))
                             (:eval
                              (if vc-mode
@@ -398,23 +398,25 @@ Prevent accidental close.
                     ;; Right.
                     (quote (" " global-mode-string))))))
 
-  (set-face-attribute 'mode-line-active nil :height 0.9)
-  (set-face-attribute 'mode-line-inactive nil :height 0.9)
+  ;; (set-face-attribute 'mode-line-active nil :height 0.9)
+  ;; (set-face-attribute 'mode-line-inactive nil :height 0.9)
 #+end_src
 
 *** Display time
 
 #+begin_src emacs-lisp
-  ;;   (setq display-time-format "%+4Y-%m-%d %H:%M"
-  ;;         display-time-default-load-average nil)
-  ;;
-  ;;   (defun display-time-bottom-right ()
-  ;;     (and (equal (cddr (window-pixel-edges))
-  ;;                 (cddr (window-pixel-edges (frame-root-window))))
-  ;;          '(#(" " 0 1 (display (space :align-to (- right 38))))
-  ;;            " "display-time-string)))
-  ;;   (display-time-mode)
-  ;;   (setq global-mode-string '(:eval (display-time-bottom-right)))
+;;   (setq display-time-format "%+4Y-%m-%d %H:%M"
+;;         display-time-default-load-average nil)
+;;
+;;   (defun display-time-bottom-right ()
+;;     (and (equal (cddr (window-pixel-edges))
+;;                 (cddr (window-pixel-edges (frame-root-window))))
+;;          '(#(" " 0 1 (display (space :align-to (- right 38))))
+;;            " "display-time-string)))
+;;
+;;   (setq global-mode-string '(:eval (display-time-bottom-right)))
+;;    (display-time-mode)
+
 #+end_src
 
 #+begin_src emacs-lisp
@@ -637,11 +639,14 @@ Window management
     "wu"    '(winner-undo                :which-key "winner-undo")
     "wU"    '(winner-redo                :which-key "winner-redo")
 
+	"time" '((lambda () (interactive) (message (format-time-string "%H:%M | %a %d %b | v%W"))) :which-key "Display current time")
+
     "conf"  '((lambda () (interactive) (find-file "~/.config/emacs/config.org")) :which-key "Open config.org")
     "vconf" '((lambda () (interactive) (split-window-right)
                 (find-file "~/.config/emacs/config.org")) :which-key "Open config.org")
     "sconf" '((lambda () (interactive) (split-window-below)
                 (find-file "~/.config/emacs/config.org")) :which-key "Open config.org"))
+
 #+end_src
 
 ** m-x
