@@ -620,7 +620,7 @@ Window management
     "o a"   '(org-agenda                 :which-key "Org agenda")
     "b"     '(ido-switch-buffer          :which-key "Switch buffer")
     "B"     '(project-switch-to-buffer   :which-key "Switch buffer")
-    "h p"   '(ff-find-other-file         :which-key "ff-find-other-file")
+    "h p"   '(projectile-find-other-file :which-key "projectile-find-other-file")
 
     "p e"   '(projectile-recentf         :which-key "projectile-recentf")
     "e r"   '(eval-region                :which-key "eval-region")
