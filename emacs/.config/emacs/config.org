@@ -1009,10 +1009,7 @@ Always follow symlinks
    '(eldoc-box-body                 ((t (:inherit corfu-default))))
    '(lsp-ui-doc-background          ((t (:inherit corfu-default)))))
   (setq markdown-list-item-bullets '("-"))
-
-  ;; (add-hook 'lsp-ui-doc-frame-hook
-  ;;           (lambda (frame _w)
-  ;;             (set-face-attribute 'default frame :height 0.9)))
+  (setq lsp-modeline-code-action-fallback-icon "")
 #+end_src
 
 #+end_src
