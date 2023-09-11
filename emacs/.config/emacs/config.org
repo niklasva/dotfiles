@@ -280,12 +280,11 @@ Prevent accidental close.
     :custom (doom-themes-enable-bold nil)
     (doom-themes-org-config)
     (doom-themes-enable-italic t))
-  (use-package kaolin-themes :straight t)
   (use-package ample-theme :straight t)
   (use-package cyberpunk-theme :straight t)
   (use-package stimmung-themes :straight t)
-
   #+end_src
+
 *** Modus
 #+begin_src emacs-lisp
   (setq modus-themes-bold-constructs nil
@@ -303,6 +302,17 @@ Prevent accidental close.
                                    (selection . (background minimal))
                                    (popup . (background minimal))))
 
+#+end_src
+
+*** Kaolin
+#+begin_src emacs-lisp
+  (use-package kaolin-themes
+    :straight t
+    :config
+    (setq kaolin-themes-bold nil
+          kaolin-themes-italic t
+          kaolin-themes-underline t
+          kaolin-themes-modeline-border nil))
 #+end_src
 *** Window divider fix
 #+begin_src emacs-lisp
@@ -329,7 +339,7 @@ Prevent accidental close.
 #+begin_src emacs-lisp
   (setq custom-safe-themes t)
 
-  (load-theme 'modus-vivendi t)
+  (load-theme 'kaolin-dark t)
 #+end_src
 
 ** Compilaton mode
