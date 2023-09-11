@@ -226,6 +226,7 @@ Prevent emacs from contaminating system clipboard.
   (setq ns-use-thin-smoothing nil
         ns-use-proxy-icon nil
         ns-use-mwheel-momentum t
+        ns-antialias-text nil
         ns-use-mwheel-acceleration t
         frame-resize-pixelwise t)
 
@@ -550,26 +551,6 @@ Window management
   (define-key evil-normal-state-map (kbd "C-S-D") (lambda() (interactive) (pixel-scroll-up 8)))
 #+end_src
 
-#+begin_src disabled
-  (defvar dashboard-mode-map
-    (let ((map (make-sparse-keymap)))
-      (define-key map [mouse-1]      'dashboard-mouse-1)
-      (define-key map (kbd "C-p")    'dashboard-previous-line)
-      (define-key map (kbd "C-n")    'dashboard-next-line)
-      (define-key map (kbd "<up>")   'dashboard-previous-line)
-      (define-key map (kbd "<down>") 'dashboard-next-line)
-      (define-key map (kbd "k")      'dashboard-previous-line)
-      (define-key map (kbd "j")      'dashboard-next-line)
-      (define-key map [tab]          'evil-next-buffer)
-      (define-key map [backtab]      'evil-prev-buffer)
-      (define-key map (kbd "C-i")    'widget-forward)
-      (define-key map (kbd "RET")    'dashboard-return)
-      (define-key map (kbd "}")      #'dashboard-next-section)
-      (define-key map (kbd "{")      #'dashboard-previous-section)
-      map)
-    "Keymap for dashboard mode.")
-#+end_src
-
 #+begin_src emacs-lisp
   (global-set-key (kbd "s-q")        'save-buffers-kill-terminal)
   (global-set-key (kbd "s-<return>") 'toggle-frame-fullscreen)
@@ -678,21 +659,6 @@ Window management
     :after vertico
     :hook
     (vertico-mode . vertico-mouse-mode))
-
-  ;; (use-package vertico-posframe
-  ;;   :straight t
-  ;;   :after vertico
-  ;;   :when (display-graphic-p)
-  ;;   :config
-  ;;   (setq vertico-posframe-parameters
-  ;;         '((max-width . 0.8)
-  ;;           (min-width . 0.8)
-  ;;           (left-fringe . 8)
-  ;;           (right-fringe . 8))
-  ;;         vertico-posframe-border-width 1
-  ;;         vertico-posframe-poshandler #'posframe-poshandler-frame-center)
-  ;;   (set-face-attribute 'vertico-posframe nil :background (face-attribute 'fringe :background))
-  ;;   (vertico-posframe-mode))
 #+end_src
 
 ** Consult
@@ -797,7 +763,6 @@ Window management
     :straight t
     :after corfu
     :custom
-    ;; (kind-icon-default-face 'corfu-default)
     (kind-icon-use-icons nil)
     :config
     (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
@@ -901,49 +866,6 @@ Disable lock files.
   (setq create-lockfiles nil)
 #+end_src
 
-** Speedbar
-#+begin_src disabled
-  (use-package sr-speedbar :straight t)
-  (use-package projectile-speedbar :straight t)
-  (set-face-attribute 'speedbar-button-face nil
-                      ;; :family "Helvetica"
-                      :height 0.8
-                      :foreground (face-attribute 'ansi-color-green :foreground))
-
-  (set-face-attribute 'speedbar-directory-face nil
-                      ;; :family "Helvetica"
-                      :height 0.8
-  					:foreground (face-attribute 'ansi-color-blue :foreground))
-
-  (set-face-attribute 'speedbar-separator-face nil
-                      ;; :family "Helvetica"
-                      :height 0.8
-                      :foreground (face-attribute 'ansi-color-blue :foreground))
-
-  (set-face-attribute 'speedbar-file-face nil
-  					;; :family "Helvetica"
-                      :height 0.8
-                      :foreground (face-attribute 'ansi-color-cyan :foreground))
-
-  (set-face-attribute 'speedbar-highlight-face nil
-  					;; :family "Helvetica"
-                      :height 0.8
-                      :foreground (face-attribute 'ansi-color-yellow :foreground))
-
-  (set-face-attribute 'speedbar-selected-face nil
-  					;; :family "Helvetica"
-                      :height 0.8
-                      :underline t :foreground (face-attribute 'ansi-color-red :foreground))
-
-  (set-face-attribute 'speedbar-tag-face nil
-  					;; :family "Helvetica"
-                      :height 0.8
-                      :foreground (face-attribute 'ansi-color-yellow :foreground))
-
-  (setq speedbar-use-images nil)
-  (setq speedbar-auto-refresh nil)
-  (define-key evil-normal-state-map (kbd "C-e") 'sr-speedbar-toggle)
-#+end_src
 ** Other
 Always follow symlinks
 #+begin_src emacs-lisp
@@ -1132,12 +1054,8 @@ Always follow symlinks
             (python       "https://github.com/tree-sitter/tree-sitter-python")
             (tsx          "https://github.com/tree-sitter/tree-sitter-typescript")
             (typescript   "https://github.com/tree-sitter/tree-sitter-typescript")
-            (yaml         "https://github.com/ikatyang/tree-sitter-yaml"))))
-#+end_src
+            (yaml         "https://github.com/ikatyang/tree-sitter-yaml")))
 
-*** Hooks
-Associate extensions with the correct tree-sitter mode and others
-#+begin_src disabled
   (dolist (pair '(("\\.sh\\'"           . bash-ts-mode)
                   ("\\.c\\'"            . c-ts-mode)
                   ("\\.h\\'"            . c-ts-mode)
@@ -1156,7 +1074,7 @@ Associate extensions with the correct tree-sitter mode and others
                   ("\\.yml\\'"          . yaml-ts-mode)
                   ("\\.clang-format\\'" . yaml-ts-mode)
                   ("\\.clang-tidy\\'"   . yaml-ts-mode)))
-    (push pair auto-mode-alist))
+    (push pair auto-mode-alist)))
 #+end_src
 
 ** Version control
