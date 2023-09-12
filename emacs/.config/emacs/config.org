@@ -801,6 +801,7 @@ Window management
   (use-package hydra
     :straight t
     :config
+    (setq hydra-is-helpful nil)
     (defhydra hydra-win-resize (evil-normal-state-map "C-w")
       "Resize window"
       ("C-j" (lambda () (interactive) (evil-window-decrease-height 4)))
@@ -825,19 +826,18 @@ Window management
     (add-to-list 'projectile-globally-ignored-directories "BUILD")
     (projectile-mode +1)
     (projectile-global-mode 1)
-    (setq
-     projectile-globally-ignored-file-suffixes '(".elc" ".pyc" ".o" ".swp" ".so" ".a" ".d" ".ld")
-     projectile-globally-ignored-files '("TAGS" "tags" ".DS_Store" ".cache")
-     projectile-ignored-projects `("~/.pyenv/")
-     projectile-mode-line-function #'(lambda () (format " [%s]" (projectile-project-name)))
-     projectile-enable-caching t
-     projectile-indexing-method 'native
-     projectile-file-exists-remote-cache-expire nil)
+    (setq projectile-globally-ignored-file-suffixes '(".elc" ".pyc" ".o" ".swp" ".so" ".a" ".d" ".ld")
+          projectile-globally-ignored-files '("TAGS" "tags" ".DS_Store" ".cache")
+          projectile-ignored-projects `("~/.pyenv/")
+          projectile-mode-line-function #'(lambda () (format " [%s]" (projectile-project-name)))
+          projectile-enable-caching t
+          projectile-indexing-method 'native
+          projectile-file-exists-remote-cache-expire nil)
 
     (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
 
     (projectile-register-project-type 'has-command-at-point '(".mbed")
-                    :compile "build-slim-debug" :src-dir "src/")
+                                      :compile "build-slim-debug" :src-dir "src/")
     )
 #+end_src
 
