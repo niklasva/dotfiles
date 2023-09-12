@@ -837,7 +837,7 @@ Window management
     (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
 
     (projectile-register-project-type 'has-command-at-point '(".mbed")
-                                      :compile "build-slim-debug" :src-dir "src/")
+                                      :compile "build-target" :src-dir "src/")
     )
 #+end_src
 
