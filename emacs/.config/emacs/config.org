@@ -1294,6 +1294,14 @@ Always follow symlinks
 
 * Org
 ** Org-mode appearance
+*** Base
+#+begin_src emacs-lisp
+  (set-face-attribute 'org-level-1 nil :height 'unspecified :weight 'unspecified)
+  (set-face-attribute 'org-level-2 nil :height 'unspecified :weight 'unspecified)
+  (set-face-attribute 'org-level-3 nil :height 'unspecified :weight 'unspecified)
+  (set-face-attribute 'org-level-4 nil :height 'unspecified :weight 'unspecified)
+#+end_src
+
 *** Olivetti
 #+begin_src emacs-lisp
   (use-package olivetti
