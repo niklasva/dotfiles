@@ -578,6 +578,7 @@ Window management
 
     "c c"   '(projectile-compile-project :which-key "Compile project")
     "c C"   '(recompile                  :which-key "Recompile")
+    "c t"   '(projectile-test-project    :which-key "Test project")
 
     "t t"   '(toggle-truncate-lines      :which-key "Toggle truncate lines")
 
