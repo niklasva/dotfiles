@@ -172,7 +172,7 @@ Hide buffers by prepending space to buffer name.
 
   ;; (add-hook 'after-change-major-mode-hook 'remove-messages-buffer)
 
-  (defun hide-lsp-buffers ()
+  (defun niva/hide-lsp-buffers ()
     (interactive)
     (setq-default message-log-max nil)
     (niva/hide-buffer "*clangd*")
@@ -427,7 +427,7 @@ Prevent accidental close.
 ** Font
 Remove font weight on some faces
 #+begin_src emacs-lisp
-  (defun remove-font-weight ()
+  (defun niva/remove-font-weight ()
     (interactive)
     (custom-set-faces
      '(default                           ((t (:background nil))))
@@ -908,7 +908,7 @@ Always follow symlinks
 #+end_src
 
 #+begin_src emacs-lisp
-  (defun ap/garbage-collect ()
+  (defun niva/garbage-collect ()
     "Run `garbage-collect' and print stats about memory usage."
     (interactive)
     (message (cl-loop for (type size used free) in (garbage-collect)
@@ -921,7 +921,7 @@ Always follow symlinks
 #+end_src
 ** Byte compile on exit
 #+begin_src emacs-lisp
-  (defun compile-config ()
+  (defun niva/compile-config ()
     (interactive)
     (org-babel-tangle-file
      (expand-file-name "config.org" user-emacs-directory)
@@ -1266,12 +1266,11 @@ Always follow symlinks
     :hook (eshell-mode . eshell-syntax-highlighting-mode))
 
   (defun my-term-handle-exit (&optional process-name msg)
-    ;; (message "%s | %s" process-name msg)
     (kill-buffer (current-buffer)))
 
   (advice-add 'term-handle-exit :after 'my-term-handle-exit)
 
-  (defun font-lock-comment-annotations ()
+  (defun niva/font-lock-comment-annotations () (interactive)
     (font-lock-add-keywords
      nil
      '(("\\<\\(.*ERR.*\\)"     1 'compilation-error    t)
@@ -1427,7 +1426,7 @@ Only use variable-pitch if explicitly called.
                 shr-indentation 4
                 eww-search-prefix "https://html.duckduckgo.com/html?q=")
 
-  (defun my/eww-toggle-images ()
+  (defun niva/eww-toggle-images ()
     (interactive)
     (setq-local shr-inhibit-images (not shr-inhibit-images))
     (eww-reload))
@@ -1461,7 +1460,7 @@ Only use variable-pitch if explicitly called.
         (define-key elfeed-show-mode-map (kbd "k") 'elfeed-show-prev)
 
 
-        (defun my/elfeed-toggle-images ()
+        (defun niva/elfeed-toggle-images ()
           (interactive)
           (setq-local shr-inhibit-images (not shr-inhibit-images))
           (elfeed-show-refresh))
