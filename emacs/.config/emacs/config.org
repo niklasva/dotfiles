@@ -3,24 +3,6 @@
 #+STARTUP: overview
 
 * Package management
-** Setup package.el to work with melpa.
-#+begin_src disabled
-  (require 'package)
-  (setq package-archives '(("melpa" . "https://melpa.org/packages/")
-                           ("org"   . "https://orgmode.org/elpa/")
-                           ("elpa"  . "https://elpa.gnu.org/packages/")))
-  (package-initialize)
-  (unless package-archive-contents (package-refresh-contents))
-#+end_src
-
-** Installing use-package
-#+begin_src disabled
-  (unless (package-installed-p 'use-package)
-    (package-install 'use-package))
-  (require 'use-package)
-#+end_src
-
-
 ** straight.el
 #+begin_src emacs-lisp
   (defvar bootstrap-version)
