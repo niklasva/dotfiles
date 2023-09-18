@@ -555,16 +555,23 @@ Window management
 
   (nvmap :keymaps 'override :prefix "SPC"
     "SPC"   '(execute-extended-command :which-key "M-x")
-
-    "c c"   '(projectile-compile-project :which-key "Compile project")
+    "B"     '(project-switch-to-buffer   :which-key "Switch buffer")
+    "N"     '(flycheck-previous-error    :which-key "flycheck-previous-error")
+    "b"     '(ido-switch-buffer          :which-key "Switch buffer")
     "c C"   '(recompile                  :which-key "Recompile")
+    "c a"   '(lsp-execute-code-action    :which-key "lsp-execute-code-action")
+    "c c"   '(projectile-compile-project :which-key "Compile project")
     "c t"   '(projectile-test-project    :which-key "Test project")
-
-    "t t"   '(toggle-truncate-lines      :which-key "Toggle truncate lines")
-
+    "d l"   '(devdocs-lookup             :which-key "devdocs-lookup")
+    "d u"   '(magit-diff-unstaged        :which-key "magit-diff-unstaged")
+    "e r"   '(eval-region                :which-key "eval-region")
+    "h p"   '(projectile-find-other-file :which-key "projectile-find-other-file")
     "m *"   '(org-ctrl-c-star            :which-key "Org-ctrl-c-star")
     "m +"   '(org-ctrl-c-minus           :which-key "Org-ctrl-c-minus")
     "m ."   '(counsel-org-goto           :which-key "Counsel org goto")
+    "m B"   '(org-babel-tangle           :which-key "Org babel tangle")
+    "m I"   '(org-toggle-inline-images   :which-key "Org toggle inline imager")
+    "m T"   '(org-todo-list              :which-key "Org todo list")
     "m e"   '(org-export-dispatch        :which-key "Org export dispatch")
     "m f"   '(org-footnote-new           :which-key "Org footnote new")
     "m h"   '(org-toggle-heading         :which-key "Org toggle heading")
@@ -573,38 +580,23 @@ Window management
     "m o"   '(org-set-property           :which-key "Org set property")
     "m t"   '(org-todo                   :which-key "Org todo")
     "m x"   '(org-toggle-checkbox        :which-key "Org toggle checkbox")
-    "m B"   '(org-babel-tangle           :which-key "Org babel tangle")
-    "m I"   '(org-toggle-inline-images   :which-key "Org toggle inline imager")
-    "m T"   '(org-todo-list              :which-key "Org todo list")
-    "o a"   '(org-agenda                 :which-key "Org agenda")
-    "b"     '(ido-switch-buffer          :which-key "Switch buffer")
-    "B"     '(project-switch-to-buffer   :which-key "Switch buffer")
-    "h p"   '(projectile-find-other-file :which-key "projectile-find-other-file")
-
-    "p e"   '(projectile-recentf         :which-key "projectile-recentf")
-    "e r"   '(eval-region                :which-key "eval-region")
-
-    "c a"   '(lsp-execute-code-action    :which-key "lsp-execute-code-action")
-
     "n"     '(flycheck-next-error        :which-key "flycheck-next-error")
-    "N"     '(flycheck-previous-error    :which-key "flycheck-previous-error")
-
-    "d l"   '(devdocs-lookup             :which-key "devdocs-lookup")
-    "rec"   '(recentf-open               :which-key "devdocs-lookup")
-    "rip"   '(consult-ripgrep                :which-key "consult-ripgrep")
+    "o a"   '(org-agenda                 :which-key "Org agenda")
+    "p e"   '(projectile-recentf         :which-key "projectile-recentf")
+    "s h"   '(git-gutter:stage-hunk      :which-key "git-gutter:stage-hunk")
+    "t t"   '(toggle-truncate-lines      :which-key "Toggle truncate lines")
+    "w U"   '(winner-redo                :which-key "winner-redo")
+    "w u"   '(winner-undo                :which-key "winner-undo")
 
     "elf"   '(elfeed                     :which-key "elfeed")
     "eww"   '(eww                        :which-key "eww")
-    "wu"    '(winner-undo                :which-key "winner-undo")
-    "wU"    '(winner-redo                :which-key "winner-redo")
+    "rec"   '(recentf-open               :which-key "devdocs-lookup")
+    "rip"   '(consult-ripgrep            :which-key "consult-ripgrep")
 
-	"time" '((lambda () (interactive) (message (format-time-string "%H:%M | %a %d %b | v%W"))) :which-key "Display current time")
-
-    "conf"  '((lambda () (interactive) (find-file "~/.config/emacs/config.org")) :which-key "Open config.org")
-    "vconf" '((lambda () (interactive) (split-window-right)
-                (find-file "~/.config/emacs/config.org")) :which-key "Open config.org")
-    "sconf" '((lambda () (interactive) (split-window-below)
-                (find-file "~/.config/emacs/config.org")) :which-key "Open config.org"))
+    "time"  '((lambda () (interactive) (message (format-time-string "%H:%M | %a %d %b | v%W")))       :which-key "Display current time")
+    "conf"  '((lambda () (interactive) (find-file "~/.config/emacs/config.org"))                      :which-key "Open config.org")
+    "vconf" '((lambda () (interactive) (split-window-right) (find-file "~/.config/emacs/config.org")) :which-key "Open config.org")
+    "sconf" '((lambda () (interactive) (split-window-below) (find-file "~/.config/emacs/config.org")) :which-key "Open config.org"))
 
 #+end_src
 
