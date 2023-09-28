@@ -1488,7 +1488,10 @@ Only use variable-pitch if explicitly called.
       (progn
         (use-package elfeed
           :straight t
-          :hook (elfeed-search-mode . elfeed-update))
+          :hook (elfeed-search-mode . elfeed-update)
+          :config
+          (setq elfeed-search-filter "+unread"
+                elfeed-show-entry-switch #'niva/elfeed-split))
 
         (use-package elfeed-protocol
           :straight t
@@ -1499,32 +1502,110 @@ Only use variable-pitch if explicitly called.
                 elfeed-protocol-enabled-protocols '(fever)
                 elfeed-protocol-fever-update-unread-only t
                 elfeed-protocol-fever-maxsize 150
-                elfeed-feeds (list (list niva/elfeed-fever-url
+                elfeed-protocol-fever-fetch-category-as-tag t
+                elfeed-protocol-feeds (list (list niva/elfeed-fever-url
                                 :api-url niva/elfeed-api-url
                                 :password (niva/lookup-password :host "fever")))))
 
         (elfeed-protocol-enable)
 
-        (advice-add 'elfeed-show-visit :around #'suppress-messages)
+        ;; (advice-add 'elfeed-show-visit :around #'suppress-messages)
 
+        (evil-define-key 'normal 'elfeed-show "I" #'niva/elfeed-toggle-images)
         (define-key elfeed-show-mode-map (kbd "j") 'elfeed-show-next)
         (define-key elfeed-show-mode-map (kbd "k") 'elfeed-show-prev)
-
+        (define-key elfeed-show-mode-map (kbd "I") #'niva/elfeed-toggle-images)
+        (define-key elfeed-search-mode-map (kbd "I") #'niva/elfeed-toggle-images)
+        (define-key elfeed-search-mode-map (kbd "r") 'elfeed-update)
+ #+end_src
+*** Custom functions
+#+begin_src emacs-lisp
+  (defun elfeed-olivetti (buff)
+    (switch-to-buffer buff)
+    (olivetti-mode)
+    (elfeed-show-refresh))
 
         (defun niva/elfeed-toggle-images ()
           (interactive)
           (setq-local shr-inhibit-images (not shr-inhibit-images))
           (elfeed-show-refresh))
+#+end_src
 
-        (define-key elfeed-show-mode-map (kbd "I") #'my/elfeed-toggle-images)
-        (define-key elfeed-search-mode-map (kbd "I") #'my/elfeed-toggle-images)
+#+begin_src emacs-lisp
+  (defun elfeed-search-format-date (date)
+    (if (string= (format-time-string "%Y%m%d") (format-time-string "%Y%m%d" (seconds-to-time date)))
+        (format-time-string "      Today %H:%M" (seconds-to-time date))
+      (progn
+        (if (string= (format-time-string "%Y") (format-time-string "%Y" (seconds-to-time date)))
+            (format-time-string " %a %d %b %H:%M" (seconds-to-time date))
+          (format-time-string " %a %d %b %Y" (seconds-to-time date))))
+      ))
 
-        (define-key elfeed-search-mode-map (kbd "r") 'elfeed-update)
-        (defun elfeed-olivetti (buff)
-          (switch-to-buffer buff)
-          (olivetti-mode)
-          (elfeed-show-refresh))
+  (defun elfeed-entry-buffer ()
+    (get-buffer-create "*elfeed-entry*"))
+#+end_src
 
-        (setq elfeed-show-entry-switch 'elfeed-olivetti)))
+Display article in split window below the elfeed search buffer
+#+begin_src emacs-lisp
+  (defun niva/elfeed-split (buff)
+    (interactive)
+    (let ((w (split-window-below)))
+      (select-window w))
+    (switch-to-buffer buff))
+
+  (defun elfeed-kill-buffer ()
+    (interactive)
+    (let* ((buff (get-buffer "*elfeed-entry*"))
+           (window (get-buffer-window buff)))
+      (kill-buffer buff)
+      (delete-window window)))
+
+  (defun elfeed-search-quit-window ()
+    (interactive)
+    (elfeed-db-save)
+    (elfeed-kill-buffer)
+    (quit-window))
+  ))
+#+end_src
+
+#+begin_src emacs-lisp
+  (defun niva/elfeed-search-print-entry (entry)
+    (setq-local tags (mapcar #'symbol-name (elfeed-entry-tags entry)))
+    (delete "unread" tags)
+
+    (let* ((date (elfeed-search-format-date (elfeed-entry-date entry)))
+           (title (or (elfeed-meta entry :title) (elfeed-entry-title entry) ""))
+           (title-faces (elfeed-search--faces (elfeed-entry-tags entry)))
+           (feed (elfeed-entry-feed entry))
+           (feed-title
+            (when feed
+              (or (elfeed-meta feed :title) (elfeed-feed-title feed))))
+
+           (tags-str (mapconcat
+                      (lambda (s) (propertize s 'face 'elfeed-search-tag-face))
+                      tags " "))
+           (title-width (- (window-width) 20 elfeed-search-trailing-width))
+           (title-column (elfeed-format-column
+                          title (elfeed-clamp
+                                 elfeed-search-title-min-width
+                                 title-width
+                                 elfeed-search-title-max-width)
+                          :left)))
+      (insert (propertize date 'face 'elfeed-search-title-face) " ")
+      (insert (propertize title-column 'face title-faces 'kbd-help title) " ")
+      (when feed-title (insert (propertize feed-title 'face 'elfeed-search-feed-face) " "))
+      (when tags (insert "(" tags-str ")"))))
+
+  (setq elfeed-search-title-max-width 80
+        elfeed-search-print-entry-function #'niva/elfeed-search-print-entry)
+
+  (defun my-elfeed-tag-sort (a b)
+    (let* ((a-tags (format "%s" (elfeed-entry-tags a)))
+           (b-tags (format "%s" (elfeed-entry-tags b))))
+      (if (string= a-tags b-tags)
+          (< (elfeed-entry-date b) (elfeed-entry-date a)))
+      (string< a-tags b-tags)))
+
+  (setf elfeed-search-sort-function #'my-elfeed-tag-sort)
 
 #+end_src
