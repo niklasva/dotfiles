@@ -1013,8 +1013,7 @@ Always follow symlinks
     (setq lsp-completion-provider :none))
 
   (defun lsp-c-save-hooks ()
-    (add-hook 'before-save-hook #'lsp-format-buffer t t)
-    (add-hook 'before-save-hook #'lsp-organize-imports t t))
+    (add-hook 'before-save-hook #'lsp-format-buffer t t))
 
   (add-hook 'c-mode-hook #'lsp-c-save-hooks)
   (add-hook 'c-ts-mode-hook #'lsp-c-save-hooks)
@@ -1028,10 +1027,10 @@ Always follow symlinks
           lsp-ui-doc-show-with-mouse t
           lsp-ui-doc-position 'bottom
           lsp-ui-doc-alignment 'window
-          lsp-ui-doc-delay 1.0
+          lsp-ui-doc-delay 0.5
           lsp-ui-doc-include-signature t
           lsp-ui-doc-border (face-background 'corfu-border)
-          lsp-ui-sideline-enable t))
+          lsp-ui-sideline-enable nil))
 
   (custom-set-faces
    '(markdown-code-face             ((t (:background unspecified))))
@@ -1049,7 +1048,16 @@ Always follow symlinks
     :straight t
     :config
     (setq flycheck-indication-mode nil))
+
+  (use-package flycheck-popup-tip
+    :after flycheck
+    :straight t
+    :hook ((prog-mode . flycheck-popup-tip-mode))
+    :config
+    (setq flycheck-popup-tip-error-prefix " "
+          flycheck-display-errors-delay 0.2))
 #+end_src
+
 *** Format on save
 #+begin_src emacs-lisp
   (defun format-on-save-hook ()
