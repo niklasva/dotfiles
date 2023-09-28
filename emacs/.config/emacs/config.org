@@ -102,6 +102,31 @@
         org-src-tab-acts-natively t)
 #+end_src
 
+#+begin_src disabled
+  (desktop-save-mode 1)
+  (setq desktop-path (list user-emacs-directory)
+        desktop-files-not-to-save "\\(\\`/[^/:]*:\\|(ftp)\\'\\|\\.gpg\\'\\)"
+        desktop-auto-save-timeout 600
+        desktop-restore-eager 10)
+
+
+  (add-to-list 'desktop-globals-to-save   '(extended-command-history . 1000))
+  (add-to-list 'desktop-globals-to-save   '(kill-ring . 1000))
+
+  (add-to-list 'desktop-modes-not-to-save 'Info-mode)
+  (add-to-list 'desktop-modes-not-to-save 'compilation-mode)
+  (add-to-list 'desktop-modes-not-to-save 'dired-mode)
+  (add-to-list 'desktop-modes-not-to-save 'fundamental-mode)
+  (add-to-list 'desktop-modes-not-to-save 'info-lookup-mode)
+  (add-to-list 'desktop-modes-not-to-save 'special-mode)
+#+end_src
+
+#+begin_src emacs-lisp
+  (recentf-mode 1)
+  (setq history-length 9999
+        history-delete-duplicates t)
+#+end_src
+
 Enable line numbers for some modes
 #+begin_src disabled
   (setq-default display-line-numbers-width 4)
