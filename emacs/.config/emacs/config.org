@@ -33,6 +33,7 @@
   (setq-local import-file (expand-file-name (concat user-emacs-directory "private/config.el")))
   (if (file-readable-p import-file) (load import-file))
 #+end_src
+
 * Text edit settings
 ** Defaults
 #+begin_src emacs-lisp
@@ -46,7 +47,6 @@
    completion-cycle-threshold 3
    tab-always-indent 'complete
    tab-width 4)
-  (electric-indent-mode +1)
 #+end_src
 
 #+begin_src emacs-lisp
@@ -62,23 +62,26 @@
 
 #+begin_src emacs-lisp
   (defun prog-pair-hook ()
-    (setq electric-pair-inhibit-predicate (lambda (c) (or
+    (setq electric-pair-inhibit-predicate
+          (lambda (c) (or
                                                        (char-equal c ?\()
                                                        (or
                                                         (char-equal c ?\")
                                                         (char-equal c ?\<)))))
     (electric-pair-mode 1))
-  (add-hook 'prog-mode-hook 'prog-pair-hook)
 
   (defun c-pair-hook ()
-    (setq electric-pair-inhibit-predicate (lambda (c) (or
+    (setq electric-pair-inhibit-predicate
+          (lambda (c) (or
                                                        (char-equal c ?\")
                                                        (char-equal c ?\<))))
     (electric-pair-mode 1))
-  (add-hook 'c-mode-hook 'prog-pair-hook)
-  (add-hook 'c++-mode-hook 'prog-pair-hook)
-  (add-hook 'c-ts-mode-hook 'prog-pair-hook)
-  (add-hook 'c++-ts-mode-hook 'prog-pair-hook)
+
+  ;; (add-hook 'c-mode-hook      'c-pair-hook)
+  ;; (add-hook 'c++-mode-hook    'c-pair-hook)
+  ;; (add-hook 'c-ts-mode-hook   'c-pair-hook)
+  ;; (add-hook 'c++-ts-mode-hook 'c-pair-hook)
+  ;; (add-hook 'python-mode-hook 'prog-pair-hook)
 #+end_src
 
 #+begin_src emacs-lisp
@@ -326,9 +329,9 @@ Prevent accidental close.
 #+begin_src emacs-lisp
   (use-package xterm-color :straight t)
   (setq compilation-environment '("TERM=xterm-256color"))
-  (defun my/advice-compilation-filter (f proc string)
+  (defun niva/advice-compilation-filter (f proc string)
     (funcall f proc (xterm-color-filter string)))
-  (advice-add 'compilation-filter :around #'my/advice-compilation-filter)
+  (advice-add 'compilation-filter :around #'niva/advice-compilation-filter)
 #+end_src
 
 ** Mode line
@@ -1174,7 +1177,7 @@ Always follow symlinks
     :straight t
     :init
     (defvar lps/devdocs-alist
-      '((python-mode-hook     . "python~3.8")
+      '((python-mode-hook     . "python~3.11")
         (c-mode-hook          . "c")
         (c++-mode-hook        . "cpp")
         (org-mode-hook        . "elisp")
@@ -1194,6 +1197,7 @@ Always follow symlinks
                 (lambda () (interactive)
                   (devdocs-lookup nil (thing-at-point 'symbol t)))))
 #+end_src
+
 * Terminal
 ** eshell
 #+begin_src emacs-lisp
@@ -1401,30 +1405,31 @@ Only use variable-pitch if explicitly called.
                 eww-search-prefix "https://html.duckduckgo.com/html?q=")
 
   (ignore-errors
-    (set-face-attribute 'shr-h1 nil :height 'unspecified :weight 'bold)
-    (set-face-attribute 'shr-text nil :height 'unspecified :inherit 'default)
-    (set-face-attribute 'shr-code nil :height 'unspecified :inherit 'default)
-    (set-face-attribute 'variable-pitch-text nil :height 'unspecified)
-    (set-face-attribute 'gnus-header nil :height 'unspecified)
-    (set-face-attribute 'info-title-1 nil :height 'unspecified)
-    (set-face-attribute 'info-title-2 nil :height 'unspecified)
-    (set-face-attribute 'info-title-3 nil :height 'unspecified)
-    (set-face-attribute 'info-title-4 nil :height 'unspecified)
-    (set-face-attribute 'help-for-help-header nil :height 'unspecified :weight 'bold)
-    (set-face-attribute 'variable-pitch nil :height 'unspecified :family 'unspecified)
-    (set-face-attribute 'variable-pitch-text nil :height 'unspecified :family 'unspecified)
+    (set-face-attribute 'shr-h1 nil                    :height 'unspecified :weight 'bold)
+    (set-face-attribute 'shr-text nil                  :height 'unspecified :inherit 'default)
+    (set-face-attribute 'shr-code nil                  :height 'unspecified :inherit 'default)
+    (set-face-attribute 'variable-pitch-text nil       :height 'unspecified)
+    (set-face-attribute 'gnus-header nil               :height 'unspecified)
+    (set-face-attribute 'info-title-1 nil              :height 'unspecified)
+    (set-face-attribute 'info-title-2 nil              :height 'unspecified)
+    (set-face-attribute 'info-title-3 nil              :height 'unspecified)
+    (set-face-attribute 'info-title-4 nil              :height 'unspecified)
+    (set-face-attribute 'help-for-help-header nil      :height 'unspecified :weight 'bold)
+    (set-face-attribute 'variable-pitch nil            :height 'unspecified :family 'unspecified)
+    (set-face-attribute 'variable-pitch-text nil       :height 'unspecified :family 'unspecified)
     (set-face-attribute 'read-multiple-choice-face nil :height 'unspecified :weight 'unspecified)
-    (set-face-attribute 'help-key-binding nil :height 'unspecified :weight 'unspecified :family 'unspecified)
-    (set-face-attribute 'fixed-pitch nil :height 'unspecified :weight 'unspecified :family 'unspecified :inherit 'default)
-    (set-face-attribute 'fixed-pitch-serif nil :height 'unspecified :weight 'unspecified :family 'unspecified :inherit 'default)
-    (set-face-attribute 'info-menu-header nil :height 'unspecified :weight 'unspecified :family 'unspecified :inherit 'default)
-    (set-face-attribute 'eww-valid-certificate nil :weight 'unspecified :inherit 'default :foreground (face-attribute 'font-lock-preprocessor-face :foreground)))
+    (set-face-attribute 'help-key-binding nil          :height 'unspecified :weight 'unspecified :family 'unspecified)
+    (set-face-attribute 'fixed-pitch nil               :height 'unspecified :weight 'unspecified :family 'unspecified :inherit 'default)
+    (set-face-attribute 'fixed-pitch-serif nil         :height 'unspecified :weight 'unspecified :family 'unspecified :inherit 'default)
+    (set-face-attribute 'info-menu-header nil          :height 'unspecified :weight 'unspecified :family 'unspecified :inherit 'default)
+    (set-face-attribute 'eww-valid-certificate nil     :weight 'unspecified :inherit 'default :foreground (face-attribute 'font-lock-preprocessor-face :foreground)))
 
   (defun niva/eww-toggle-images ()
     (interactive)
     (setq-local shr-inhibit-images (not shr-inhibit-images))
     (eww-reload))
 #+end_src
+
 ** elfeed
 #+begin_src emacs-lisp
   (if niva/elfeed-enabled
