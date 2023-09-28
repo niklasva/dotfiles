@@ -523,6 +523,7 @@ Window management
 
   (define-key evil-normal-state-map (kbd "C-w -")   'evil-window-split)
   (define-key evil-normal-state-map (kbd "C-w |")   'evil-window-vsplit)
+  (define-key evil-normal-state-map (kbd "C-w C--") 'evil-window-vsplit)
   (define-key evil-normal-state-map (kbd "C-w SPC") 'transpose-frame)
 
   (define-key evil-normal-state-map (kbd "C-w H") 'buf-move-left)
