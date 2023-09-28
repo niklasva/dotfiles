@@ -26,7 +26,7 @@
   (use-package pinentry
   :straight t
   :config (pinentry-start))
-  #+end_src
+#+end_src
 
 * Imports
 #+begin_src emacs-lisp
@@ -47,12 +47,12 @@
    completion-cycle-threshold 3
    tab-always-indent 'complete
    tab-width 4)
-#+end_src
+   #+end_src
 
 #+begin_src emacs-lisp
   (setq-default scroll-preserve-screen-position t
                 scroll-conservatively 5
-          maximum-scroll-margin 0.5
+                maximum-scroll-margin 0.5
                 scroll-margin 4)
 #+end_src
 
@@ -64,17 +64,17 @@
   (defun prog-pair-hook ()
     (setq electric-pair-inhibit-predicate
           (lambda (c) (or
-                                                       (char-equal c ?\()
-                                                       (or
-                                                        (char-equal c ?\")
-                                                        (char-equal c ?\<)))))
+                       (char-equal c ?\()
+                       (or
+                        (char-equal c ?\")
+                        (char-equal c ?\<)))))
     (electric-pair-mode 1))
 
   (defun c-pair-hook ()
     (setq electric-pair-inhibit-predicate
           (lambda (c) (or
-                                                       (char-equal c ?\")
-                                                       (char-equal c ?\<))))
+                       (char-equal c ?\")
+                       (char-equal c ?\<))))
     (electric-pair-mode 1))
 
   ;; (add-hook 'c-mode-hook      'c-pair-hook)
@@ -409,22 +409,22 @@ Prevent accidental close.
 
   ;; (set-face-attribute 'mode-line-active nil :height 0.9)
   ;; (set-face-attribute 'mode-line-inactive nil :height 0.9)
-#+end_src
+                    #+end_src
 
 *** Display time
 
 #+begin_src emacs-lisp
-;;   (setq display-time-format "%+4Y-%m-%d %H:%M"
-;;         display-time-default-load-average nil)
-;;
-;;   (defun display-time-bottom-right ()
-;;     (and (equal (cddr (window-pixel-edges))
-;;                 (cddr (window-pixel-edges (frame-root-window))))
-;;          '(#(" " 0 1 (display (space :align-to (- right 38))))
-;;            " "display-time-string)))
-;;
-;;   (setq global-mode-string '(:eval (display-time-bottom-right)))
-;;    (display-time-mode)
+  ;;   (setq display-time-format "%+4Y-%m-%d %H:%M"
+  ;;         display-time-default-load-average nil)
+  ;;
+  ;;   (defun display-time-bottom-right ()
+  ;;     (and (equal (cddr (window-pixel-edges))
+  ;;                 (cddr (window-pixel-edges (frame-root-window))))
+  ;;          '(#(" " 0 1 (display (space :align-to (- right 38))))
+  ;;            " "display-time-string)))
+  ;;
+  ;;   (setq global-mode-string '(:eval (display-time-bottom-right)))
+  ;;    (display-time-mode)
 
 #+end_src
 
@@ -698,7 +698,7 @@ Window management
     :straight t
     :init
     (marginalia-mode))
-  #+end_src
+#+end_src
 
 ** Yasnippet
 #+begin_src emacs-lisp
@@ -1115,97 +1115,97 @@ Always follow symlinks
 ** Version control
 *** Git gutter
 #+begin_src emacs-lisp
-    (use-package git-gutter-fringe
-      :straight t
-      :config
-      (setq git-gutter:update-timer 1)
-      (if (string-match-p "modus" (prin1-to-string custom-enabled-themes))
-    	  (progn (set-face-attribute 'git-gutter-fr:added    nil :foreground (face-attribute 'modus-themes-fg-green-intense :foreground) :background 'unspecified )
+  (use-package git-gutter-fringe
+    :straight t
+    :config
+    (setq git-gutter:update-timer 1)
+    (if (string-match-p "modus" (prin1-to-string custom-enabled-themes))
+  	  (progn (set-face-attribute 'git-gutter-fr:added    nil :foreground (face-attribute 'modus-themes-fg-green-intense :foreground) :background 'unspecified )
                (set-face-attribute 'git-gutter-fr:modified nil :foreground (face-attribute 'modus-themes-fg-blue          :foreground) :background 'unspecified)
                (set-face-attribute 'git-gutter-fr:deleted  nil :foreground (face-attribute 'modus-themes-fg-red-intense   :foreground) :background 'unspecified)))
 
-      (fringe-helper-define 'git-gutter-fr:added nil
-        ".X.."
-        "X..X"
-        "..X."
-        ".X.."
-        "X..X"
-        "..X."
-        ".X.."
-        "X..X"
-        "..X."
-        ".X.."
-        "X..X"
-        "..X."
-        ".X.."
-        "X..X"
-        "..X."
-        ".X.."
-        "X..X"
-        "..X."
-        ".X.."
-        "X..X"
-        "..X."
-        ".X.."
-        "X..X"
-        "..X."
-        ".X..")
+    (fringe-helper-define 'git-gutter-fr:added nil
+      ".X.."
+      "X..X"
+      "..X."
+      ".X.."
+      "X..X"
+      "..X."
+      ".X.."
+      "X..X"
+      "..X."
+      ".X.."
+      "X..X"
+      "..X."
+      ".X.."
+      "X..X"
+      "..X."
+      ".X.."
+      "X..X"
+      "..X."
+      ".X.."
+      "X..X"
+      "..X."
+      ".X.."
+      "X..X"
+      "..X."
+      ".X..")
 
-      (fringe-helper-define 'git-gutter-fr:deleted nil
-        ".X.."
-        "X..X"
-        "..X."
-        ".X.."
-        "X..X"
-        "..X."
-        ".X.."
-        "X..X"
-        "..X."
-        ".X.."
-        "X..X"
-        "..X."
-        ".X.."
-        "X..X"
-        "..X."
-        ".X.."
-        "X..X"
-        "..X."
-        ".X.."
-        "X..X"
-        "..X."
-        ".X.."
-        "X..X"
-        "..X."
-        ".X..")
+    (fringe-helper-define 'git-gutter-fr:deleted nil
+      ".X.."
+      "X..X"
+      "..X."
+      ".X.."
+      "X..X"
+      "..X."
+      ".X.."
+      "X..X"
+      "..X."
+      ".X.."
+      "X..X"
+      "..X."
+      ".X.."
+      "X..X"
+      "..X."
+      ".X.."
+      "X..X"
+      "..X."
+      ".X.."
+      "X..X"
+      "..X."
+      ".X.."
+      "X..X"
+      "..X."
+      ".X..")
 
-      (fringe-helper-define 'git-gutter-fr:modified nil
-        ".X.."
-        "X..X"
-        "..X."
-        ".X.."
-        "X..X"
-        "..X."
-        ".X.."
-        "X..X"
-        "..X."
-        ".X.."
-        "X..X"
-        "..X."
-        ".X.."
-        "X..X"
-        "..X."
-        ".X.."
-        "X..X"
-        "..X."
-        ".X.."
-        "X..X"
-        "..X."
-        ".X.."
-        "X..X"
-        "..X."
-        ".X..")
+    (fringe-helper-define 'git-gutter-fr:modified nil
+      ".X.."
+      "X..X"
+      "..X."
+      ".X.."
+      "X..X"
+      "..X."
+      ".X.."
+      "X..X"
+      "..X."
+      ".X.."
+      "X..X"
+      "..X."
+      ".X.."
+      "X..X"
+      "..X."
+      ".X.."
+      "X..X"
+      "..X."
+      ".X.."
+      "X..X"
+      "..X."
+      ".X.."
+      "X..X"
+      "..X."
+      ".X..")
 
-      (global-git-gutter-mode 1))
+    (global-git-gutter-mode 1))
 #+end_src
 
 *** Magit
@@ -1293,15 +1293,15 @@ Always follow symlinks
   (advice-add 'term-handle-exit :after 'my-term-handle-exit)
 
   (defun niva/font-lock-comment-annotations () (interactive)
-    (font-lock-add-keywords
-     nil
-     '(("\\<\\(.*ERR.*\\)"     1 'compilation-error   t)
-       ("\\<\\(.*INFO.*\\)"    1 'compilation-info    t)
-       ("\\<\\(.*DEBUG.*\\)"   1 'compilation-info    t)
-       ("\\<\\(.*WARN.*\\)"    1 'compilation-warning t)
-       ("\\<\\(.*DEBUG: --- CMD: POLL(60) REPLY: ISTATR(49) ---.*\\)" 1 'completions-common-part t)
-       ("\\<\\(.*DEBUG: --- CMD: OUT(68) REPLY: ACK(40) ---.*\\)"     1 'completions-common-part t)
-       )))
+         (font-lock-add-keywords
+          nil
+          '(("\\<\\(.*ERR.*\\)"     1 'compilation-error   t)
+            ("\\<\\(.*INFO.*\\)"    1 'compilation-info    t)
+            ("\\<\\(.*DEBUG.*\\)"   1 'compilation-info    t)
+            ("\\<\\(.*WARN.*\\)"    1 'compilation-warning t)
+            ("\\<\\(.*DEBUG: --- CMD: POLL(60) REPLY: ISTATR(49) ---.*\\)" 1 'completions-common-part t)
+            ("\\<\\(.*DEBUG: --- CMD: OUT(68) REPLY: ACK(40) ---.*\\)"     1 'completions-common-part t)
+            )))
   (add-hook 'eshell-mode-hook 'font-lock-comment-annotations)
 #+end_src
 
@@ -1504,8 +1504,8 @@ Only use variable-pitch if explicitly called.
                 elfeed-protocol-fever-maxsize 150
                 elfeed-protocol-fever-fetch-category-as-tag t
                 elfeed-protocol-feeds (list (list niva/elfeed-fever-url
-                                :api-url niva/elfeed-api-url
-                                :password (niva/lookup-password :host "fever")))))
+                                                  :api-url niva/elfeed-api-url
+                                                  :password (niva/lookup-password :host "fever")))))
 
         (elfeed-protocol-enable)
 
@@ -1525,10 +1525,10 @@ Only use variable-pitch if explicitly called.
     (olivetti-mode)
     (elfeed-show-refresh))
 
-        (defun niva/elfeed-toggle-images ()
-          (interactive)
-          (setq-local shr-inhibit-images (not shr-inhibit-images))
-          (elfeed-show-refresh))
+  (defun niva/elfeed-toggle-images ()
+    (interactive)
+    (setq-local shr-inhibit-images (not shr-inhibit-images))
+    (elfeed-show-refresh))
 #+end_src
 
 #+begin_src emacs-lisp
