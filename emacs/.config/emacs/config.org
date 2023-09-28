@@ -970,6 +970,22 @@ Always follow symlinks
                                   "-background-index-priority=background"
                                   "-j=8"
                                   "--log=error"))
+#+end_src
+** Python
+#+begin_src emacs-lisp
+  (use-package lsp-pyright
+    :straight t)
+
+  (defun lsp-python-ms-format-buffer ()
+    (interactive)
+    (when (and (executable-find "yapf") buffer-file-name)
+      (call-process "yapf" nil nil nil "-i" buffer-file-name)))
+  (add-hook 'python-mode-hook (lambda () (add-hook 'after-save-hook #'lsp-python-ms-format-buffer t t)))
+
+#+end_src
+** Language server
+*** LSP
+#+begin_src emacs-lisp
   (setq use-dialog-box nil)
   (setq use-system-tooltips t)
 
@@ -978,7 +994,9 @@ Always follow symlinks
     :hook ((lsp-mode . lsp-enable-which-key-integration)
            (c-mode . lsp)
            (c++-mode . lsp)
-           (c++-ts-mode . lsp))
+           (c++-ts-mode . lsp)
+           (python-mode . lsp)
+           (python-ts-mode . lsp))
     :commands lsp
     :config
     (setq lsp-headerline-breadcrumb-enable nil
