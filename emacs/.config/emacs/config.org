@@ -1544,9 +1544,10 @@ Only use variable-pitch if explicitly called.
     (setq-local feed-title (when feed (or (elfeed-meta feed :title) (elfeed-feed-title feed))))
     (setq-local feed-ln (string-width feed-title))
     (setq-local tags (mapcar #'symbol-name (elfeed-entry-tags entry)))
-    (setq-local tags (delete "star" (delete "unread" tags)))
-    (setq-local tags-str (format (concat "%" (format "%ss" (- 40 feed-ln))) tags))
     (setq-local star (if (member "star" tags) "*" " "))
+
+    (setq-local tags (remove "star" (delete "unread" tags)))
+    (setq-local tags-str (format (concat "%" (format "%ss" (- 40 feed-ln))) (mapconcat 'identity tags " ")))
 
     (let* ((date (elfeed-search-format-date (elfeed-entry-date entry)))
            (title (or (elfeed-meta entry :title) (elfeed-entry-title entry) ""))
