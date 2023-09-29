@@ -1329,9 +1329,11 @@ Always follow symlinks
   (use-package olivetti
     :straight t
     :config
-    (setq olivetti-body-width 100
-          olivetti-minimum-body-width 100))
-#+end_src
+    (add-hook 'olivetti-mode-hook
+              (lambda ()
+                (setq olivetti-body-width 120
+                      olivetti-minimum-body-width 120))))
+                #+end_src
 *** Mixed-pitch
 #+begin_src disabled
   (use-package mixed-pitch
@@ -1495,11 +1497,6 @@ Only use variable-pitch if explicitly called.
  #+end_src
 *** Custom functions
 #+begin_src emacs-lisp
-  (defun elfeed-olivetti (buff)
-    (switch-to-buffer buff)
-    (olivetti-mode)
-    (elfeed-show-refresh))
-
   (defun niva/elfeed-toggle-images ()
     (interactive)
     (setq-local shr-inhibit-images (not shr-inhibit-images))
@@ -1524,7 +1521,8 @@ Only use variable-pitch if explicitly called.
     (interactive)
     (let ((w (split-window-below)))
       (select-window w))
-    (switch-to-buffer buff))
+    (switch-to-buffer buff)
+    (olivetti-mode))
 
   (defun elfeed-kill-buffer ()
     (interactive)
