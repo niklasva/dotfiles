@@ -1564,24 +1564,21 @@ Only use variable-pitch if explicitly called.
     (elfeed-kill-buffer)
     (quit-window))
   ))
-#+end_src
 
-#+begin_src emacs-lisp
   (defun niva/elfeed-search-print-entry (entry)
+
+    (setq-local feed (elfeed-entry-feed entry))
+    (setq-local feed-title (when feed (or (elfeed-meta feed :title) (elfeed-feed-title feed))))
+    (setq-local feed-ln (string-width feed-title))
     (setq-local tags (mapcar #'symbol-name (elfeed-entry-tags entry)))
-    (delete "unread" tags)
+    (setq-local tags (delete "star" (delete "unread" tags)))
+    (setq-local tags-str (format (concat "%" (format "%ss" (- 40 feed-ln))) tags))
+    (setq-local star (if (member "star" tags) "*" " "))
 
     (let* ((date (elfeed-search-format-date (elfeed-entry-date entry)))
            (title (or (elfeed-meta entry :title) (elfeed-entry-title entry) ""))
            (title-faces (elfeed-search--faces (elfeed-entry-tags entry)))
-           (feed (elfeed-entry-feed entry))
-           (feed-title
-            (when feed
-              (or (elfeed-meta feed :title) (elfeed-feed-title feed))))
 
-           (tags-str (mapconcat
-                      (lambda (s) (propertize s 'face 'elfeed-search-tag-face))
-                      tags " "))
            (title-width (- (window-width) 20 elfeed-search-trailing-width))
            (title-column (elfeed-format-column
                           title (elfeed-clamp
@@ -1589,10 +1586,12 @@ Only use variable-pitch if explicitly called.
                                  title-width
                                  elfeed-search-title-max-width)
                           :left)))
+
       (insert (propertize date 'face 'elfeed-search-title-face) " ")
+      (insert (propertize star 'face 'elfeed-search-tag-face) " ")
       (insert (propertize title-column 'face title-faces 'kbd-help title) " ")
       (when feed-title (insert (propertize feed-title 'face 'elfeed-search-feed-face) " "))
-      (when tags (insert "(" tags-str ")"))))
+      (when tags (insert (propertize tags-str 'face 'elfeed-search-tag-face) " "))))
 
   (setq elfeed-search-title-max-width 80
         elfeed-search-print-entry-function #'niva/elfeed-search-print-entry)
