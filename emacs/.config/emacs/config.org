@@ -1373,36 +1373,13 @@ Always follow symlinks
 
 
 ** Set up
-#+begin_src disabled
+#+begin_src emacs-lisp
   (use-package org
     :straight t
     :config
-    (setq org-ellipsis " .."
-          org-hide-emphasis-markers t
-          org-fontify-quote-and-verse-blocks t)
-
-    (dolist (mode '(org-mode-hook text-mode-hook prog-mode-hook conf-mode-hook))
-      (add-hook mode (lambda () (org-indent-mode 1))))
-
-    (set-face-attribute 'org-quote nil :inherit 'font-lock-comment-face :slant 'oblique)
-
-    (add-hook 'org-font-lock-hook #'org-indent-quotes)
-    (defun org-indent-quotes (limit)
-      (let ((case-fold-search t))
-        (while (search-forward-regexp "^[ \t]*#\\+begin_quote" limit t) (let ((beg (1+ (match-end 0))))
-                                                                          (when (search-forward-regexp "^[ \t]*#\\+end_quote" nil t)
-                                                                            (let ((end (1- (match-beginning 0)))
-                                                                                  (indent (propertize "    " 'face 'org-hide)))
-                                                                              (add-text-properties beg end (list 'line-prefix indent 'wrap-prefix indent))))))))
-    ;;)
-
-    (use-package org-superstar
-      :straight t
-      :after org
-      :hook (org-mode . org-superstar-mode)
-      :custom
-      (org-superstar-remove-leading-stars t)
-      (org-superstar-headline-bullets-list '("◉" "○" "●" "○" "●" "○" "●")))
+    (setq org-hide-emphasis-markers t
+          org-fontify-quote-and-verse-blocks t
+          org-startup-indented t))
 #+end_src
 
 Only use variable-pitch if explicitly called.
