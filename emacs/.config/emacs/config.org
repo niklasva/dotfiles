@@ -1509,8 +1509,6 @@ Only use variable-pitch if explicitly called.
 
         (elfeed-protocol-enable)
 
-        ;; (advice-add 'elfeed-show-visit :around #'suppress-messages)
-
         (evil-define-key 'normal 'elfeed-show "I" #'niva/elfeed-toggle-images)
         (define-key elfeed-show-mode-map (kbd "j") 'elfeed-show-next)
         (define-key elfeed-show-mode-map (kbd "k") 'elfeed-show-prev)
@@ -1596,13 +1594,16 @@ Only use variable-pitch if explicitly called.
   (setq elfeed-search-title-max-width 80
         elfeed-search-print-entry-function #'niva/elfeed-search-print-entry)
 
-  (defun my-elfeed-tag-sort (a b)
-    (let* ((a-tags (format "%s" (elfeed-entry-tags a)))
+  (defun niva/elfeed-sort-by-tags-and-feed (a b)
+    (let* ((a-title (format "%s" (elfeed-entry-feed a)))
+           (b-title (format "%s" (elfeed-entry-feed b)))
+           (a-tags (format "%s" (elfeed-entry-tags a)))
            (b-tags (format "%s" (elfeed-entry-tags b))))
-      (if (string= a-tags b-tags)
-          (< (elfeed-entry-date b) (elfeed-entry-date a)))
-      (string< a-tags b-tags)))
+      (if (and (string= a-tags b-tags) (string= a-title b-title))
+          (< (elfeed-entry-date b) (elfeed-entry-date a))
+        (if (string= a-tags b-tags)
+            (string> a-title b-title)
+          (string< a-tags b-tags)))))
 
-  (setf elfeed-search-sort-function #'my-elfeed-tag-sort)
-
+  (setf elfeed-search-sort-function #'niva/elfeed-sort-by-tags-and-feed)
 #+end_src
