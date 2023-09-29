@@ -293,6 +293,7 @@ Prevent accidental close.
   (use-package ample-theme     :straight t)
   (use-package cyberpunk-theme :straight t)
   (use-package stimmung-themes :straight t)
+  (use-package color-theme-modern :straight t)
   #+end_src
 
 *** Modus
