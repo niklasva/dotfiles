@@ -1529,24 +1529,22 @@ Only use variable-pitch if explicitly called.
     (interactive)
     (setq-local shr-inhibit-images (not shr-inhibit-images))
     (elfeed-show-refresh))
-#+end_src
 
-#+begin_src emacs-lisp
   (defun elfeed-search-format-date (date)
+    (setq-local dom-yesterday (number-to-string (- (string-to-number (format-time-string "%d"))1)))
+    (setq-local date-yesterday (concat (format-time-string "%Y%m") dom-yesterday))
+
     (if (string= (format-time-string "%Y%m%d") (format-time-string "%Y%m%d" (seconds-to-time date)))
         (format-time-string "      Today %H:%M" (seconds-to-time date))
-      (progn
+      (if (string= date-yesterday (format-time-string "%Y%m%d" (seconds-to-time date)))
+          (format-time-string "  Yesterday %H:%M" (seconds-to-time date))
         (if (string= (format-time-string "%Y") (format-time-string "%Y" (seconds-to-time date)))
             (format-time-string " %a %d %b %H:%M" (seconds-to-time date))
-          (format-time-string " %a %d %b %Y" (seconds-to-time date))))
-      ))
+          (format-time-string "  %a %d %b %Y" (seconds-to-time date))))))
 
   (defun elfeed-entry-buffer ()
     (get-buffer-create "*elfeed-entry*"))
-#+end_src
 
-Display article in split window below the elfeed search buffer
-#+begin_src emacs-lisp
   (defun niva/elfeed-split (buff)
     (interactive)
     (let ((w (split-window-below)))
