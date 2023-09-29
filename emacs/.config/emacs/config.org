@@ -1649,4 +1649,15 @@ Only use variable-pitch if explicitly called.
 
 
   #+end_src
+* AI
+** ChatGPT
+#+begin_src emacs-lisp
+  (use-package gptel
+    :straight t
+    :config
+    (setq gptel-default-mode #'org-mode
+          gptel-model "gpt-3.5-turbo"
+          gptel-prompt-prefix-alist '((markdown-mode . "# ")
+                                     (org-mode . "* ")
+                                     (text-mode . "> "))))
 #+end_src
