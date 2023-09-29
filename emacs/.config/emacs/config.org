@@ -24,8 +24,8 @@
 ** gpg
 #+begin_src emacs-lisp
   (use-package pinentry
-  :straight t
-  :config (pinentry-start))
+    :straight t
+    :config (pinentry-start))
 #+end_src
 
 * Imports
@@ -47,7 +47,7 @@
    completion-cycle-threshold 3
    tab-always-indent 'complete
    tab-width 4)
-   #+end_src
+#+end_src
 
 #+begin_src emacs-lisp
   (setq-default scroll-preserve-screen-position t
@@ -307,7 +307,7 @@ Prevent accidental close.
   (use-package cyberpunk-theme :straight t)
   (use-package stimmung-themes :straight t)
   (use-package color-theme-modern :straight t)
-  #+end_src
+#+end_src
 
 *** Modus
 #+begin_src emacs-lisp
@@ -361,7 +361,7 @@ Prevent accidental close.
 *** Load theme
 #+begin_src emacs-lisp
   (setq custom-safe-themes t)
-  (load-theme 'kaolin-shiva t)
+  (load-theme 'kaolin-bubblegum t)
 #+end_src
 
 ** Compilaton mode
@@ -423,7 +423,7 @@ Prevent accidental close.
 
   ;; (set-face-attribute 'mode-line-active nil :height 0.9)
   ;; (set-face-attribute 'mode-line-inactive nil :height 0.9)
-                    #+end_src
+#+end_src
 
 *** Display time
 
@@ -1346,7 +1346,7 @@ Always follow symlinks
               (lambda ()
                 (setq olivetti-body-width 120
                       olivetti-minimum-body-width 120))))
-                #+end_src
+#+end_src
 *** Mixed-pitch
 #+begin_src disabled
   (use-package mixed-pitch
@@ -1507,7 +1507,7 @@ Only use variable-pitch if explicitly called.
         (define-key elfeed-show-mode-map (kbd "I") #'niva/elfeed-toggle-images)
         (define-key elfeed-search-mode-map (kbd "I") #'niva/elfeed-toggle-images)
         (define-key elfeed-search-mode-map (kbd "r") 'elfeed-update)
- #+end_src
+#+end_src
 *** Custom functions
 #+begin_src emacs-lisp
   (defun niva/elfeed-toggle-images ()
@@ -1661,7 +1661,7 @@ Only use variable-pitch if explicitly called.
         shr-external-rendering-functions '((img . +rss-render-image-tag-without-underline-fn)))
 
 
-  #+end_src
+#+end_src
 * AI
 ** ChatGPT
 #+begin_src emacs-lisp
@@ -1671,6 +1671,6 @@ Only use variable-pitch if explicitly called.
     (setq gptel-default-mode #'org-mode
           gptel-model "gpt-3.5-turbo"
           gptel-prompt-prefix-alist '((markdown-mode . "# ")
-                                     (org-mode . "* ")
-                                     (text-mode . "> "))))
+                                      (org-mode . "* ")
+                                      (text-mode . "> "))))
 #+end_src
