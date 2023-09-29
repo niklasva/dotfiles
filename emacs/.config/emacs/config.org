@@ -168,6 +168,19 @@ Scroll compilation buffer
   (add-hook 'prog-mode-hook 'show-trailing-whitespace-hook)
 #+end_src
 
+#+begin_src emacs-lisp
+  (defun niva/format-all-elisp-code-blocks ()
+    (interactive)
+    (org-element-map (org-element-parse-buffer) 'src-block
+      (lambda (src-block)
+        (when (string= "emacs-lisp" (org-element-property :language src-block))
+          (let* ((begin (org-element-property :begin src-block))
+                 (end (org-element-property :end src-block)))
+            (indent-region begin end)
+            (message "Formatted code block from %d to %d" begin end)))))
+    (message "Formatted all Emacs Lisp code blocks in the buffer."))
+#+end_src
+
 ** Hide buffers
 
 Hide buffers by prepending space to buffer name.
