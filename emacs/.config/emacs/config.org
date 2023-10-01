@@ -20,7 +20,7 @@
 #+end_src
 
 * Encryption
-** gpg
+** pinentry
 #+begin_src emacs-lisp
   (use-package pinentry
     :straight t
@@ -39,25 +39,23 @@
   (setq-default c-basic-offset 4
                 c-default-style "linux"
                 create-lockfiles nil
-                evil-auto-indent t
-                indent-line-function 'evil-indent-line
-                indent-tabs-mode nil
-                completion-cycle-threshold 3
-                tab-always-indent 'complete
-                tab-width 4)
+                completion-cycle-threshold 3)
 #+end_src
 
 #+begin_src emacs-lisp
-  (setq-default scroll-preserve-screen-position t
-                scroll-conservatively 5
-                maximum-scroll-margin 0.5
-                scroll-margin 4)
+  (setq confirm-kill-emacs 'y-or-n-p)
 #+end_src
 
 #+begin_src emacs-lisp
   (setq ring-bell-function 'ignore)
 #+end_src
 
+Show only one active window when opening multiple files at the same time.
+#+begin_src emacs-lisp
+  (add-hook 'window-setup-hook 'delete-other-windows)
+#+end_src
+
+** electric-pair
 #+begin_src emacs-lisp
   (defun prog-pair-hook ()
     (setq electric-pair-inhibit-predicate
@@ -76,7 +74,15 @@
     (electric-pair-mode 1))
 #+end_src
 
+** Indentation rules
 #+begin_src emacs-lisp
+  (setq evil-auto-indent t
+        indent-line-function 'evil-indent-line
+        indent-tabs-mode nil
+        tab-always-indent 'complete
+        tab-width 4
+        org-src-tab-acts-natively t)
+
   (defun indent-tabs-hook ()
     (setq tab-width 4
           indent-tabs-mode t
@@ -89,11 +95,18 @@
   (add-hook 'c-ts-mode-hook   'indent-tabs-hook)
 #+end_src
 
+** Clean up trailing whitespace
 #+begin_src emacs-lisp
-  (setq org-src-strip-leading-and-trailing-blank-lines t
-        org-src-tab-acts-natively t)
+  (setq org-src-strip-leading-and-trailing-blank-lines t)
+
+  (defun show-trailing-whitespace-hook ()
+    (setq show-trailing-whitespace t))
+
+  (add-hook 'prog-mode-hook   'show-trailing-whitespace-hook)
+  (add-hook 'before-save-hook 'delete-trailing-whitespace)
 #+end_src
 
+** desktop-save-mode (disabled)
 #+begin_src disabled
   (desktop-save-mode 1)
   (setq desktop-path (list user-emacs-directory)
@@ -113,13 +126,14 @@
   (add-to-list 'desktop-modes-not-to-save 'special-mode)
 #+end_src
 
+** recentf
 #+begin_src emacs-lisp
   (recentf-mode 1)
   (setq history-length 9999
         history-delete-duplicates t)
 #+end_src
 
-Enable line numbers for some modes
+** Line numbers (disabled)
 #+begin_src disabled
   (setq-default display-line-numbers-width 4)
 
@@ -129,35 +143,20 @@ Enable line numbers for some modes
   ;; Override some modes which derive from the above
 
   (dolist (mode '(org-mode-hook)) (add-hook mode (lambda () (display-line-numbers-mode 0))))
-#+end_src
-
-Show only one active window when opening multiple files at the same time.
-#+begin_src emacs-lisp
-  (add-hook 'window-setup-hook 'delete-other-windows)
-#+end_src
+  #+end_src
 
 #+begin_src emacs-lisp
   (fset 'yes-or-no-p 'y-or-n-p)
 #+end_src
 
-Always move cursor to help window
-#+begin_src emacs-lisp
-  (setq help-window-select t)
-#+end_src
 
-Remove trailing spaces
+** Scrolling behavior
 #+begin_src emacs-lisp
-  (add-hook 'before-save-hook 'delete-trailing-whitespace)
-#+end_src
-
-Scroll compilation buffer
-#+begin_src emacs-lisp
-  (setq compilation-scroll-output t)
-#+end_src
-
-#+begin_src emacs-lisp
-  (defun show-trailing-whitespace-hook () (setq show-trailing-whitespace t))
-  (add-hook 'prog-mode-hook 'show-trailing-whitespace-hook)
+  (setq-default maximum-scroll-margin 0.5
+                scroll-conservatively 5
+                scroll-margin 4
+                compilation-scroll-output t
+                scroll-preserve-screen-position t)
 #+end_src
 
 ** Hide buffers
@@ -218,6 +217,7 @@ Prevent emacs from contaminating system clipboard.
                 right-fringe-width 3)
 #+end_src
 
+*** Window management
 #+begin_src emacs-lisp
   (setq window-divider-default-places t
         window-divider-default-bottom-width 1
@@ -231,12 +231,19 @@ Prevent emacs from contaminating system clipboard.
         ns-antialias-text nil
         ns-use-mwheel-acceleration t
         frame-resize-pixelwise t)
+#+end_src
 
-  (use-package tab-bar-echo-area
-    :straight t
-    :config
-    (tab-bar-echo-area-mode 1))
+Always move cursor to help window.
+#+begin_src emacs-lisp
+  (setq help-window-select t)
+#+end_src
 
+**** winner-mode
+#+begin_src emacs-lisp
+  (winner-mode 1)
+#+end_src
+** Tabs
+#+begin_src emacs-lisp
   (defun niva/tab-bar-config ()
     (setq tab-bar-show nil
           tab-bar-auto-width-max '(120 . 20)
@@ -264,14 +271,12 @@ Prevent emacs from contaminating system clipboard.
   (blink-cursor-mode 1)
 #+end_src
 
+*** tab-bar-echo-area
 #+begin_src emacs-lisp
-  (winner-mode 1)
-#+end_src
-
-Prevent accidental close.
-
-#+begin_src emacs-lisp
-  (setq confirm-kill-emacs 'y-or-n-p)
+  (use-package tab-bar-echo-area
+    :straight t
+    :config
+    (tab-bar-echo-area-mode 1))
 #+end_src
 
 ** Theme
@@ -419,6 +424,7 @@ Prevent accidental close.
 
 * Controls
 ** Evil mode
+*** evil-mode
 #+begin_src emacs-lisp
   (use-package evil
     :straight t
@@ -431,9 +437,10 @@ Prevent accidental close.
           evil-undo-system 'undo-redo
           evil-scroll-count 8)
     (evil-mode))
+#+end_src
 
-  (use-package transpose-frame :straight t)
-
+*** general
+#+begin_src emacs-lisp
   (use-package general
     :straight t
     :config (general-evil-setup t))
@@ -456,6 +463,11 @@ Prevent accidental close.
     (savehist-mode))
 #+end_src
 
+** Window management
+*** transpose-frame
+#+begin_src emacs-lisp
+  (use-package transpose-frame :straight t)
+#+end_src
 ** Keybindings
 
 #+begin_src emacs-lisp
@@ -711,16 +723,16 @@ Window management
     "Send completion candidate when inside comint/eshell."
     (cond
      ((and (derived-mode-p 'eshell-mode) (fboundp 'eshell-send-input))
-    	(eshell-send-input))
+      (eshell-send-input))
      ((and (derived-mode-p 'comint-mode)  (fboundp 'comint-send-input))
-    	(comint-send-input))))
+      (comint-send-input))))
 
   (use-package orderless
     :straight t
     :init
     (setq completion-styles '(orderless basic)
-    	    completion-category-defaults nil
-    		completion-category-overrides '((file (styles . (partial-completion))))))
+    	completion-category-defaults nil
+    	completion-category-overrides '((file (styles . (partial-completion))))))
 
   (use-package cape
     :straight t
@@ -750,7 +762,6 @@ Window management
 #+end_src
 * File management
 ** Projectile
-
 #+begin_src emacs-lisp
   (use-package projectile
     :straight t
@@ -1035,7 +1046,7 @@ Window management
   (add-hook 'c++-ts-mode-hook #'format-on-save-hook)
 #+end_src
 
-** Tree-sitter == Disabled ==
+** Tree-sitter (disabled)
 *** treesit
 #+begin_src disabled
   (use-package treesit
@@ -1088,7 +1099,7 @@ Window management
     (setq git-gutter:update-timer 1)
 
     (if (string-match-p "modus" (prin1-to-string custom-enabled-themes))
-  	  (progn (set-face-attribute 'git-gutter-fr:added    nil :foreground (face-attribute 'modus-themes-fg-green-intense :foreground) :background 'unspecified)
+        (progn (set-face-attribute 'git-gutter-fr:added    nil :foreground (face-attribute 'modus-themes-fg-green-intense :foreground) :background 'unspecified)
                (set-face-attribute 'git-gutter-fr:modified nil :foreground (face-attribute 'modus-themes-fg-blue          :foreground) :background 'unspecified)
                (set-face-attribute 'git-gutter-fr:deleted  nil :foreground (face-attribute 'modus-themes-fg-red-intense   :foreground) :background 'unspecified)))
 #+end_src
@@ -1372,26 +1383,6 @@ Only use variable-pitch if explicitly called.
   (add-to-list 'org-structure-template-alist '("cpp"  . "src cpp"))
 #+end_src
 
-** org-roam
-#+begin_src emacs-lisp
-  (use-package org-roam
-    :after org
-    :straight t
-    :init
-    (setq org-roam-directory "~/Library/Mobile Documents/com~apple~CloudDocs/Roam"
-          org-roam-database-connector 'sqlite-builtin)
-    :config
-    (org-roam-setup)
-    :bind (("C-c n f" . org-roam-node-find)
-           ("C-c n r" . org-roam-node-random)
-           (:map org-mode-map
-                 (("C-c n i" . org-roam-node-insert)
-                  ("C-c n o" . org-id-get-create)
-                  ("C-c n t" . org-roam-tag-add)
-                  ("C-c n a" . org-roam-alias-add)
-                  ("C-c n l" . org-roam-buffer-toggle)))))
-#+end_src
-
 * Web
 ** shr
 #+begin_src emacs-lisp
@@ -1399,26 +1390,26 @@ Only use variable-pitch if explicitly called.
     (if (display-graphic-p)
         (let* ((size (cdr (assq 'size flags)))
                (data (if (consp spec)
-                     	   (car spec)
-                     	 spec))
+                         (car spec)
+                       spec))
                (content-type (and (consp spec)
-                     				(cadr spec)))
+                     		(cadr spec)))
                (start (point))
                (image (cond
-                     	 ((eq size 'original)
-                     	  (create-image data nil t :ascent 100
-                     				    :format content-type))
-                     	 ((eq content-type 'image/svg+xml)
+                       ((eq size 'original)
+                        (create-image data nil t :ascent 100
+                     		    :format content-type))
+                       ((eq content-type 'image/svg+xml)
                         (when (image-type-available-p 'svg)
-                     		(create-image data 'svg t :ascent 100)))
-                     	 ((eq size 'full)
-                     	  (ignore-errors
-                     		(shr-rescale-image data content-type
+                     	(create-image data 'svg t :ascent 100)))
+                       ((eq size 'full)
+                        (ignore-errors
+                     	(shr-rescale-image data content-type
                                              (plist-get flags :width)
                                              (plist-get flags :height))))
-                     	 (t
-                     	  (ignore-errors
-                     		(shr-rescale-image data content-type
+                       (t
+                        (ignore-errors
+                     	(shr-rescale-image data content-type
                                              (plist-get flags :width)
                                              (plist-get flags :height)))))))
           (when image
