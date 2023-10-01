@@ -447,7 +447,6 @@ Prevent accidental close.
 #+end_src
 
 ** Font
-Remove font weight on some faces
 #+begin_src emacs-lisp
   (defun niva/remove-font-weight ()
     (interactive)
@@ -793,14 +792,11 @@ Window management
     		completion-category-overrides '((file (styles . (partial-completion))))))
 
   (use-package cape
-    ;; Bind dedicated completion commands
-    ;; Alternative prefix keys: C-c p, M-p, M-+, ...
     :straight t
     :config
     (add-to-list 'completion-at-point-functions #'cape-dabbrev)
     (add-to-list 'completion-at-point-functions #'cape-file)
-    (add-to-list 'completion-at-point-functions #'cape-keyword)
-    )
+    (add-to-list 'completion-at-point-functions #'cape-keyword))
 
 #+end_src
 ** buffer-move
@@ -890,13 +886,11 @@ Window management
 #+end_src
 
 *** Lock files
-Disable lock files.
 #+begin_src emacs-lisp
   (setq create-lockfiles nil)
 #+end_src
 
 ** Other
-Always follow symlinks
 #+begin_src emacs-lisp
   (global-auto-revert-mode t)
   (setq vc-follow-symlinks t)
@@ -921,7 +915,6 @@ Always follow symlinks
 
 #+begin_src emacs-lisp
   (defun niva/garbage-collect ()
-    "Run `garbage-collect' and print stats about memory usage."
     (interactive)
     (message (cl-loop for (type size used free) in (garbage-collect)
                       for used = (* used size)
@@ -1596,14 +1589,7 @@ Only use variable-pitch if explicitly called.
 
   (setf elfeed-search-sort-function #'niva/elfeed-sort-by-tags-and-feed)
 
-  ;;  (defun insert-image (image &optional alt _area _slice)
-  ;;    (let ((height (cdr (image-size image t))))
-  ;;      (insert-sliced-image image alt nil (max 1 (/ height 20.0)) 1)))
-
   (defun shr-put-image (spec alt &optional flags)
-    "Insert image SPEC with a string ALT.  Return image.
-               SPEC is either an image data blob, or a list where the first
-               element is the data blob and the second element is the content-type."
     (if (display-graphic-p)
         (let* ((size (cdr (assq 'size flags)))
                (data (if (consp spec)
@@ -1630,11 +1616,6 @@ Only use variable-pitch if explicitly called.
                                              (plist-get flags :width)
                                              (plist-get flags :height)))))))
           (when image
-            ;; When inserting big-ish pictures, put them at the
-            ;; beginning of the line.
-            ;; (when (and (> (current-column) 0)
-            ;;            (> (car (image-size image t)) 400))
-            ;;   (insert "\n"))
             (let ((image-pos (point)))
               (if (eq size 'original)
                	(insert-sliced-image image (or alt "*") nil 20 1)
