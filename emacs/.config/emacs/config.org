@@ -1495,12 +1495,9 @@ Only use variable-pitch if explicitly called.
 
         (elfeed-protocol-enable)
 
-        (evil-define-key 'normal 'elfeed-show "I" #'niva/elfeed-toggle-images)
-        (define-key elfeed-show-mode-map (kbd "j") 'elfeed-show-next)
-        (define-key elfeed-show-mode-map (kbd "k") 'elfeed-show-prev)
-        (define-key elfeed-show-mode-map (kbd "I") #'niva/elfeed-toggle-images)
+        (evil-define-key 'normal elfeed-show-mode-map "I" #'niva/elfeed-toggle-images)
         (define-key elfeed-search-mode-map (kbd "I") #'niva/elfeed-toggle-images)
-        (define-key elfeed-search-mode-map (kbd "r") 'elfeed-update)
+        (evil-define-key 'normal elfeed-search-mode-map "r" 'elfeed-update)
 #+end_src
 *** Custom functions
 #+begin_src emacs-lisp
@@ -1554,7 +1551,7 @@ Only use variable-pitch if explicitly called.
     (setq-local star (if (member "star" tags) "*" " "))
 
     (setq-local tags (remove "star" (delete "unread" tags)))
-    (setq-local tags-str (format (concat "%" (format "%ss" (- 40 feed-ln))) (mapconcat 'identity tags " ")))
+    (setq-local tags-str (format (concat "%" (format "%ss" (- 30 feed-ln))) (mapconcat 'identity tags " ")))
 
     (let* ((date (elfeed-search-format-date (elfeed-entry-date entry)))
            (title (or (elfeed-meta entry :title) (elfeed-entry-title entry) ""))
