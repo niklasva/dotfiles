@@ -1,4 +1,4 @@
-#+PROPERTY: header-args : tangle "~/.config/emacs/config.el" :results silent
+#+PROPERTY: header-args
 #+OPTIONS: toc:2
 #+STARTUP: overview
 
@@ -701,16 +701,6 @@ Window management
     (corfu-auto-prefix 1)
 
     :hook ((prog-mode . corfu-mode))
-
-    :bind
-    (:map corfu-map
-    		("TAB"     . corfu-next)
-    		("C-SPC"   . corfu-next)
-    		([tab]     . corfu-next)
-    		("S-TAB"   . corfu-previous)
-    		("C-S-SPC" . corfu-previous)
-    		([backtab] . corfu-previous))
-
     :init
     (corfu-popupinfo-mode t)
 
@@ -868,26 +858,24 @@ Window management
                       for free = (file-size-human-readable free)
                       concat (format "%s: %s + %s = %s\n" type used free total))))
 #+end_src
-** Byte compile on exit
-#+begin_src emacs-lisp
-  (defun niva/compile-config ()
-    (interactive)
-    (org-babel-tangle-file
-     (expand-file-name "config.org" user-emacs-directory)
-     (expand-file-name "config.el" user-emacs-directory))
-
-    (byte-compile-file
-     (expand-file-name "config.el" user-emacs-directory)
-     (expand-file-name "config.elc" user-emacs-directory)))
-
-  (add-to-list 'org-babel-default-header-args
-               '(:noweb . "yes"))
-#+end_src
-
 ** Profiling
 #+begin_src emacs-lisp
   (use-package esup
     :straight t)
+#+end_src
+** Byte-compile config on save
+#+begin_src emacs-lisp
+  (defun niva/compile-config ()
+    (interactive)
+    (when (and (buffer-file-name)
+               (string= (file-name-nondirectory (buffer-file-name)) "config.org"))
+      (org-babel-tangle-file
+       (expand-file-name "config.org" user-emacs-directory)
+       (expand-file-name "config.el" user-emacs-directory) "emacs-lisp")
+
+      (byte-compile-file (expand-file-name "config.el" user-emacs-directory))))
+
+  (add-hook 'after-save-hook 'niva/compile-config)
 #+end_src
 * Development
 ** Elisp
@@ -1310,10 +1298,14 @@ Window management
 ** Org-mode appearance
 *** Base
 #+begin_src emacs-lisp
-  (set-face-attribute 'org-level-1 nil :height 'unspecified :weight 'unspecified)
-  (set-face-attribute 'org-level-2 nil :height 'unspecified :weight 'unspecified)
-  (set-face-attribute 'org-level-3 nil :height 'unspecified :weight 'unspecified)
-  (set-face-attribute 'org-level-4 nil :height 'unspecified :weight 'unspecified)
+  (use-package org
+    :straight t
+    :config
+    (set-face-attribute 'org-level-1 nil :height 'unspecified :weight 'unspecified)
+    (set-face-attribute 'org-level-2 nil :height 'unspecified :weight 'unspecified)
+    (set-face-attribute 'org-level-3 nil :height 'unspecified :weight 'unspecified)
+    (set-face-attribute 'org-level-4 nil :height 'unspecified :weight 'unspecified)
+    )
 #+end_src
 
 *** olivetti
