@@ -17,7 +17,6 @@
         (goto-char (point-max))
         (eval-print-last-sexp)))
     (load bootstrap-file nil 'nomessage))
-  ;; (straight-use-package 'org)
 #+end_src
 
 * Encryption
@@ -180,8 +179,6 @@ Hide buffers by prepending space to buffer name.
   (defun remove-messages-buffer ()
     (niva/hide-buffer "*Messages*"))
 
-  ;; (add-hook 'after-change-major-mode-hook 'remove-messages-buffer)
-
   (defun niva/hide-lsp-buffers ()
     (interactive)
     (setq-default message-log-max nil)
@@ -189,7 +186,6 @@ Hide buffers by prepending space to buffer name.
     (niva/hide-buffer "*clangd::stderr*")
     (niva/hide-buffer "*pyright*")
     (niva/hide-buffer "*pyright::stderr*"))
-  ;; (add-hook 'after-change-major-mode-hook 'hide-lsp-buffers)
 #+end_src
 
 Don't show *Buffer list* when opening multiple files at the same time.
@@ -325,16 +321,6 @@ Prevent accidental close.
           kaolin-themes-underline t
           kaolin-themes-modeline-border nil))
 #+end_src
-*** Window divider fix
-#+begin_src emacs-lisp
-  (defun niva/fix-window-divider-color ()
-    "Correct window divider after switching theme"
-    (interactive)
-    (set-face-foreground 'window-divider (face-attribute 'default :background))
-    (set-face-foreground 'window-divider-first-pixel (face-attribute 'default :background))
-    (set-face-foreground 'window-divider-last-pixel (face-attribute 'default :background)))
-#+end_src
-
 *** Solaire
 #+begin_src emacs-lisp
   (use-package solaire-mode
@@ -401,32 +387,11 @@ Prevent accidental close.
                              (setq repository-name "")
 
                              (if buffer-file-name
-                                 (progn (setq repository-name (vc-git-repository-url buffer-file-name)) (setq repository-name (replace-regexp-in-string ".git" "" (replace-regexp-in-string "git@github.com:" "" repository-name)))
-                                        )
+                                 (progn (setq repository-name (vc-git-repository-url buffer-file-name)) (setq repository-name (replace-regexp-in-string ".git" "" (replace-regexp-in-string "git@github.com:" "" repository-name))))
                                )repository-name)
-                            " | %l:%c" ))
+                            " | %l:%c"))
                     ;; Right.
                     (quote (" " global-mode-string))))))
-
-  ;; (set-face-attribute 'mode-line-active nil :height 0.9)
-  ;; (set-face-attribute 'mode-line-inactive nil :height 0.9)
-#+end_src
-
-*** Display time
-
-#+begin_src emacs-lisp
-  ;;   (setq display-time-format "%+4Y-%m-%d %H:%M"
-  ;;         display-time-default-load-average nil)
-  ;;
-  ;;   (defun display-time-bottom-right ()
-  ;;     (and (equal (cddr (window-pixel-edges))
-  ;;                 (cddr (window-pixel-edges (frame-root-window))))
-  ;;          '(#(" " 0 1 (display (space :align-to (- right 38))))
-  ;;            " "display-time-string)))
-  ;;
-  ;;   (setq global-mode-string '(:eval (display-time-bottom-right)))
-  ;;    (display-time-mode)
-
 #+end_src
 
 #+begin_src emacs-lisp
@@ -763,15 +728,6 @@ Window management
      ((and (derived-mode-p 'comint-mode)  (fboundp 'comint-send-input))
     	(comint-send-input))))
 
-  (use-package kind-icon
-    :straight t
-    :after corfu
-    :custom
-    (kind-icon-use-icons nil)
-    :config
-    (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
-
-  ;; Optionally use the `orderless' completion style.
   (use-package orderless
     :straight t
     :init
