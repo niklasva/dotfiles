@@ -169,10 +169,14 @@ Hide buffers by prepending space to buffer name.
     (if (get-buffer bufname)
         (with-current-buffer bufname
           (rename-buffer (concat " " bufname)))))
+#+end_src
 
+#+begin_src emacs-lisp
   (defun remove-messages-buffer ()
     (niva/hide-buffer "*Messages*"))
+#+end_src
 
+#+begin_src emacs-lisp
   (defun niva/hide-lsp-buffers ()
     (interactive)
     (setq-default message-log-max nil)
@@ -200,7 +204,6 @@ Prevent emacs from contaminating system clipboard.
 
 * Customization
 ** GUI settings
-
 #+begin_src emacs-lisp
   (setq inhibit-startup-message t
         inhibit-startup-echo-area-message t)
@@ -923,6 +926,7 @@ Window management
                                   "--log=error"))
 #+end_src
 ** Python
+*** Pyright
 #+begin_src emacs-lisp
   (use-package lsp-pyright
     :straight t)
@@ -937,6 +941,7 @@ Window management
 #+end_src
 ** Language server
 *** LSP
+**** lsp-mode
 #+begin_src emacs-lisp
   (setq use-dialog-box nil)
   (setq use-system-tooltips t)
@@ -962,7 +967,10 @@ Window management
           lsp-eldoc-enable-signature-help t
           lsp-eldoc-prefer-signature-help t
           lsp-completion-provider :none))
+#+end_src
 
+**** Format on save
+#+begin_src emacs-lisp
   (defun lsp-c-save-hooks ()
     (add-hook 'before-save-hook #'lsp-format-buffer t t))
 
@@ -970,7 +978,10 @@ Window management
   (add-hook 'c-ts-mode-hook #'lsp-c-save-hooks)
   (add-hook 'c++-mode-hook #'lsp-c-save-hooks)
   (add-hook 'c++-ts-mode-hook #'lsp-c-save-hooks)
+#+end_src
 
+**** lsp-ui
+#+begin_src emacs-lisp
   (use-package lsp-ui
     :straight t
     :config
@@ -990,16 +1001,19 @@ Window management
    '(eldoc-box-border               ((t (:inherit corfu-border))))
    '(eldoc-box-body                 ((t (:inherit corfu-default))))
    '(lsp-ui-doc-background          ((t (:inherit corfu-default)))))
-
 #+end_src
 
 *** Flycheck
+**** flycheck
 #+begin_src emacs-lisp
   (use-package flycheck
     :straight t
     :config
     (setq flycheck-indication-mode nil))
+#+end_src
 
+**** flycheck-popup-tip
+#+begin_src emacs-lisp
   (use-package flycheck-popup-tip
     :after flycheck
     :straight t
@@ -1021,7 +1035,7 @@ Window management
 #+end_src
 
 ** Tree-sitter == Disabled ==
-*** Setup
+*** treesit
 #+begin_src disabled
   (use-package treesit
     :straight (:type built-in)
@@ -1061,10 +1075,11 @@ Window management
                     ("\\.clang-format\\'" . yaml-ts-mode)
                     ("\\.clang-tidy\\'"   . yaml-ts-mode)))
       (push pair auto-mode-alist)))
-                    #+end_src
+#+end_src
 
 ** Version control
 *** Git gutter
+**** git-gutter-fringe
 #+begin_src emacs-lisp
   (use-package git-gutter-fringe
     :straight t
@@ -1075,92 +1090,95 @@ Window management
   	  (progn (set-face-attribute 'git-gutter-fr:added    nil :foreground (face-attribute 'modus-themes-fg-green-intense :foreground) :background 'unspecified)
                (set-face-attribute 'git-gutter-fr:modified nil :foreground (face-attribute 'modus-themes-fg-blue          :foreground) :background 'unspecified)
                (set-face-attribute 'git-gutter-fr:deleted  nil :foreground (face-attribute 'modus-themes-fg-red-intense   :foreground) :background 'unspecified)))
-
-    (fringe-helper-define 'git-gutter-fr:added nil
-      ".X.."
-      "X..X"
-      "..X."
-      ".X.."
-      "X..X"
-      "..X."
-      ".X.."
-      "X..X"
-      "..X."
-      ".X.."
-      "X..X"
-      "..X."
-      ".X.."
-      "X..X"
-      "..X."
-      ".X.."
-      "X..X"
-      "..X."
-      ".X.."
-      "X..X"
-      "..X."
-      ".X.."
-      "X..X"
-      "..X."
-      ".X..")
-
-    (fringe-helper-define 'git-gutter-fr:deleted nil
-      ".X.."
-      "X..X"
-      "..X."
-      ".X.."
-      "X..X"
-      "..X."
-      ".X.."
-      "X..X"
-      "..X."
-      ".X.."
-      "X..X"
-      "..X."
-      ".X.."
-      "X..X"
-      "..X."
-      ".X.."
-      "X..X"
-      "..X."
-      ".X.."
-      "X..X"
-      "..X."
-      ".X.."
-      "X..X"
-      "..X."
-      ".X..")
-
-    (fringe-helper-define 'git-gutter-fr:modified nil
-      ".X.."
-      "X..X"
-      "..X."
-      ".X.."
-      "X..X"
-      "..X."
-      ".X.."
-      "X..X"
-      "..X."
-      ".X.."
-      "X..X"
-      "..X."
-      ".X.."
-      "X..X"
-      "..X."
-      ".X.."
-      "X..X"
-      "..X."
-      ".X.."
-      "X..X"
-      "..X."
-      ".X.."
-      "X..X"
-      "..X."
-      ".X..")
-
-    (global-git-gutter-mode 1))
 #+end_src
 
-*** Magit
+***** Graphics
+#+begin_src emacs-lisp
+  (fringe-helper-define 'git-gutter-fr:added nil
+    ".X.."
+    "X..X"
+    "..X."
+    ".X.."
+    "X..X"
+    "..X."
+    ".X.."
+    "X..X"
+    "..X."
+    ".X.."
+    "X..X"
+    "..X."
+    ".X.."
+    "X..X"
+    "..X."
+    ".X.."
+    "X..X"
+    "..X."
+    ".X.."
+    "X..X"
+    "..X."
+    ".X.."
+    "X..X"
+    "..X."
+    ".X..")
+
+  (fringe-helper-define 'git-gutter-fr:deleted nil
+    ".X.."
+    "X..X"
+    "..X."
+    ".X.."
+    "X..X"
+    "..X."
+    ".X.."
+    "X..X"
+    "..X."
+    ".X.."
+    "X..X"
+    "..X."
+    ".X.."
+    "X..X"
+    "..X."
+    ".X.."
+    "X..X"
+    "..X."
+    ".X.."
+    "X..X"
+    "..X."
+    ".X.."
+    "X..X"
+    "..X."
+    ".X..")
+
+  (fringe-helper-define 'git-gutter-fr:modified nil
+    ".X.."
+    "X..X"
+    "..X."
+    ".X.."
+    "X..X"
+    "..X."
+    ".X.."
+    "X..X"
+    "..X."
+    ".X.."
+    "X..X"
+    "..X."
+    ".X.."
+    "X..X"
+    "..X."
+    ".X.."
+    "X..X"
+    "..X."
+    ".X.."
+    "X..X"
+    "..X."
+    ".X.."
+    "X..X"
+    "..X."
+    ".X..")
+
+  (global-git-gutter-mode 1))
+#+end_src
+
+*** magit
 #+begin_src emacs-lisp
   (use-package magit
     :straight t
@@ -1175,7 +1193,7 @@ Window management
   (advice-add 'ediff-quit :around #'disable-y-or-n-p)
 #+end_src
 ** Documentation
-*** Devdocs
+*** devdocs
 #+begin_src emacs-lisp
   (use-package devdocs
     :straight t
@@ -1235,16 +1253,25 @@ Window management
                                'face 'mode-line-highlight)
                    (propertize (current-time-string)
                                'face 'font-lock-keyword-face))))
+#+end_src
 
+*** eshell-syntax-highlighting
+#+begin_src emacs-lisp
   (use-package eshell-syntax-highlighting
     :straight t
     :hook (eshell-mode . eshell-syntax-highlighting-mode))
+#+end_src
 
+*** Kill buffer on quit
+#+begin_src emacs-lisp
   (defun my-term-handle-exit (&optional process-name msg)
     (kill-buffer (current-buffer)))
 
   (advice-add 'term-handle-exit :after 'my-term-handle-exit)
+#+end_src
 
+*** Log coloring
+#+begin_src emacs-lisp
   (defun niva/font-lock-comment-annotations ()
     (interactive)
     (font-lock-add-keywords
@@ -1277,7 +1304,7 @@ Window management
   (set-face-attribute 'org-level-4 nil :height 'unspecified :weight 'unspecified)
 #+end_src
 
-*** Olivetti
+*** olivetti
 #+begin_src emacs-lisp
   (use-package olivetti
     :straight t
@@ -1312,7 +1339,7 @@ Window management
 #+end_src
 
 
-** Set up
+** org
 #+begin_src emacs-lisp
   (use-package org
     :straight t
@@ -1365,6 +1392,46 @@ Only use variable-pitch if explicitly called.
 #+end_src
 
 * Web
+** shr
+#+begin_src emacs-lisp
+  (defun shr-put-image (spec alt &optional flags)
+    (if (display-graphic-p)
+        (let* ((size (cdr (assq 'size flags)))
+               (data (if (consp spec)
+                     	   (car spec)
+                     	 spec))
+               (content-type (and (consp spec)
+                     				(cadr spec)))
+               (start (point))
+               (image (cond
+                     	 ((eq size 'original)
+                     	  (create-image data nil t :ascent 100
+                     				    :format content-type))
+                     	 ((eq content-type 'image/svg+xml)
+                        (when (image-type-available-p 'svg)
+                     		(create-image data 'svg t :ascent 100)))
+                     	 ((eq size 'full)
+                     	  (ignore-errors
+                     		(shr-rescale-image data content-type
+                                             (plist-get flags :width)
+                                             (plist-get flags :height))))
+                     	 (t
+                     	  (ignore-errors
+                     		(shr-rescale-image data content-type
+                                             (plist-get flags :width)
+                                             (plist-get flags :height)))))))
+          (when image
+            (let ((image-pos (point)))
+              (if (eq size 'original)
+                  (insert-sliced-image image (or alt "*") nil 20 1)
+                (insert-image image (or alt "*")))
+              (put-text-property start (point) 'image-size size)
+              (when (and shr-image-animate
+                         (cdr (image-multi-frame-p image)))
+                (image-animate image nil 60 image-pos))))
+          image)
+      (insert (or alt ""))))
+#+end_src
 ** eww
 #+begin_src emacs-lisp
   (setq-default browse-url-browser-function 'eww-browse-url
@@ -1392,7 +1459,9 @@ Only use variable-pitch if explicitly called.
     (set-face-attribute 'fixed-pitch-serif nil         :height 'unspecified :weight 'unspecified :family 'unspecified :inherit 'default)
     (set-face-attribute 'info-menu-header nil          :height 'unspecified :weight 'unspecified :family 'unspecified :inherit 'default)
     (set-face-attribute 'eww-valid-certificate nil     :weight 'unspecified :inherit 'default :foreground (face-attribute 'font-lock-preprocessor-face :foreground)))
+#+end_src
 
+#+begin_src emacs-lisp
   (defun niva/eww-toggle-images ()
     (interactive)
     (setq-local shr-inhibit-images (not shr-inhibit-images))
@@ -1400,11 +1469,13 @@ Only use variable-pitch if explicitly called.
 #+end_src
 
 ** elfeed
+
 #+begin_src emacs-lisp
   (if niva/elfeed-enabled
       (progn
 #+end_src
 
+*** elfeed
 #+begin_src emacs-lisp
   (use-package elfeed
     :straight t
@@ -1414,6 +1485,7 @@ Only use variable-pitch if explicitly called.
           elfeed-show-entry-switch #'niva/elfeed-split))
 #+end_src
 
+*** elfeed-protocol
 #+begin_src emacs-lisp
   (use-package elfeed-protocol
     :straight t
@@ -1438,28 +1510,7 @@ Only use variable-pitch if explicitly called.
   (evil-define-key 'normal elfeed-search-mode-map "r" 'elfeed-update)
 #+end_src
 
-*** Custom functions
-#+begin_src emacs-lisp
-  (defun niva/elfeed-toggle-images ()
-    (interactive)
-    (setq-local shr-inhibit-images (not shr-inhibit-images))
-    (elfeed-show-refresh))
-#+end_src
-
-#+begin_src emacs-lisp
-  (defun elfeed-search-format-date (date)
-    (setq-local dom-yesterday (number-to-string (- (string-to-number (format-time-string "%d"))1))
-                date-yesterday (concat (format-time-string "%Y%m") dom-yesterday))
-
-    (if (string= (format-time-string "%Y%m%d") (format-time-string "%Y%m%d" (seconds-to-time date)))
-        (format-time-string "      Today %H:%M" (seconds-to-time date))
-      (if (string= date-yesterday (format-time-string "%Y%m%d" (seconds-to-time date)))
-          (format-time-string "  Yesterday %H:%M" (seconds-to-time date))
-        (if (string= (format-time-string "%Y") (format-time-string "%Y" (seconds-to-time date)))
-            (format-time-string " %a %d %b %H:%M" (seconds-to-time date))
-          (format-time-string "  %a %d %b %Y" (seconds-to-time date))))))
-#+end_src
-
+*** Window handling
 #+begin_src emacs-lisp
   (defun elfeed-entry-buffer ()
     (get-buffer-create "*elfeed-entry*"))
@@ -1489,6 +1540,21 @@ Only use variable-pitch if explicitly called.
     (elfeed-db-save)
     (elfeed-kill-buffer)
     (quit-window))))
+#+end_src
+
+*** Customization
+#+begin_src emacs-lisp
+  (defun elfeed-search-format-date (date)
+    (setq-local dom-yesterday (number-to-string (- (string-to-number (format-time-string "%d"))1))
+                date-yesterday (concat (format-time-string "%Y%m") dom-yesterday))
+
+    (if (string= (format-time-string "%Y%m%d") (format-time-string "%Y%m%d" (seconds-to-time date)))
+        (format-time-string "      Today %H:%M" (seconds-to-time date))
+      (if (string= date-yesterday (format-time-string "%Y%m%d" (seconds-to-time date)))
+          (format-time-string "  Yesterday %H:%M" (seconds-to-time date))
+        (if (string= (format-time-string "%Y") (format-time-string "%Y" (seconds-to-time date)))
+            (format-time-string " %a %d %b %H:%M" (seconds-to-time date))
+          (format-time-string "  %a %d %b %Y" (seconds-to-time date))))))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1539,44 +1605,12 @@ Only use variable-pitch if explicitly called.
   (setf elfeed-search-sort-function #'niva/elfeed-sort-by-tags-and-feed)
 #+end_src
 
+*** Graphics handling
 #+begin_src emacs-lisp
-  (defun shr-put-image (spec alt &optional flags)
-    (if (display-graphic-p)
-        (let* ((size (cdr (assq 'size flags)))
-               (data (if (consp spec)
-                     	   (car spec)
-                     	 spec))
-               (content-type (and (consp spec)
-                     				(cadr spec)))
-               (start (point))
-               (image (cond
-                     	 ((eq size 'original)
-                     	  (create-image data nil t :ascent 100
-                     				    :format content-type))
-                     	 ((eq content-type 'image/svg+xml)
-                        (when (image-type-available-p 'svg)
-                     		(create-image data 'svg t :ascent 100)))
-                     	 ((eq size 'full)
-                     	  (ignore-errors
-                     		(shr-rescale-image data content-type
-                                             (plist-get flags :width)
-                                             (plist-get flags :height))))
-                     	 (t
-                     	  (ignore-errors
-                     		(shr-rescale-image data content-type
-                                             (plist-get flags :width)
-                                             (plist-get flags :height)))))))
-          (when image
-            (let ((image-pos (point)))
-              (if (eq size 'original)
-                  (insert-sliced-image image (or alt "*") nil 20 1)
-                (insert-image image (or alt "*")))
-              (put-text-property start (point) 'image-size size)
-              (when (and shr-image-animate
-                         (cdr (image-multi-frame-p image)))
-                (image-animate image nil 60 image-pos))))
-          image)
-      (insert (or alt ""))))
+  (defun niva/elfeed-toggle-images ()
+    (interactive)
+    (setq-local shr-inhibit-images (not shr-inhibit-images))
+    (elfeed-show-refresh))
 #+end_src
 
 
@@ -1598,8 +1632,10 @@ Only use variable-pitch if explicitly called.
 
 
 #+end_src
+
 * AI
 ** ChatGPT
+*** gptel
 #+begin_src emacs-lisp
   (use-package gptel
     :straight t
