@@ -1403,43 +1403,53 @@ Only use variable-pitch if explicitly called.
 #+begin_src emacs-lisp
   (if niva/elfeed-enabled
       (progn
-        (use-package elfeed
-          :straight t
-          :hook (elfeed-search-mode . elfeed-update)
-          :config
-          (setq elfeed-search-filter "+unread"
-                elfeed-show-entry-switch #'niva/elfeed-split))
-
-        (use-package elfeed-protocol
-          :straight t
-          :after elfeed
-          :config
-          (setq elfeed-use-curl t
-                elfeed-sort-order 'descending
-                elfeed-protocol-enabled-protocols '(fever)
-                elfeed-protocol-fever-update-unread-only t
-                elfeed-protocol-fever-maxsize 150
-                elfeed-protocol-fever-fetch-category-as-tag t
-                elfeed-protocol-feeds (list (list niva/elfeed-fever-url
-                                                  :api-url niva/elfeed-api-url
-                                                  :password (niva/lookup-password :host "fever")))))
-
-        (elfeed-protocol-enable)
-
-        (evil-define-key 'normal elfeed-show-mode-map "I" #'niva/elfeed-toggle-images)
-        (define-key elfeed-search-mode-map (kbd "I") #'niva/elfeed-toggle-images)
-        (evil-define-key 'normal elfeed-search-mode-map "r" 'elfeed-update)
 #+end_src
+
+#+begin_src emacs-lisp
+  (use-package elfeed
+    :straight t
+    :hook (elfeed-search-mode . elfeed-update)
+    :config
+    (setq elfeed-search-filter "+unread"
+          elfeed-show-entry-switch #'niva/elfeed-split))
+#+end_src
+
+#+begin_src emacs-lisp
+  (use-package elfeed-protocol
+    :straight t
+    :after elfeed
+    :config
+    (setq elfeed-use-curl t
+          elfeed-sort-order 'descending
+          elfeed-protocol-enabled-protocols '(fever)
+          elfeed-protocol-fever-update-unread-only t
+          elfeed-protocol-fever-maxsize 150
+          elfeed-protocol-fever-fetch-category-as-tag t
+          elfeed-protocol-feeds (list (list niva/elfeed-fever-url
+                                            :api-url niva/elfeed-api-url
+                                            :password (niva/lookup-password :host "fever")))))
+#+end_src
+
+#+begin_src emacs-lisp
+  (elfeed-protocol-enable)
+
+  (evil-define-key 'normal elfeed-show-mode-map "I" #'niva/elfeed-toggle-images)
+  (define-key elfeed-search-mode-map (kbd "I") #'niva/elfeed-toggle-images)
+  (evil-define-key 'normal elfeed-search-mode-map "r" 'elfeed-update)
+#+end_src
+
 *** Custom functions
 #+begin_src emacs-lisp
   (defun niva/elfeed-toggle-images ()
     (interactive)
     (setq-local shr-inhibit-images (not shr-inhibit-images))
     (elfeed-show-refresh))
+#+end_src
 
+#+begin_src emacs-lisp
   (defun elfeed-search-format-date (date)
-    (setq-local dom-yesterday (number-to-string (- (string-to-number (format-time-string "%d"))1)))
-    (setq-local date-yesterday (concat (format-time-string "%Y%m") dom-yesterday))
+    (setq-local dom-yesterday (number-to-string (- (string-to-number (format-time-string "%d"))1))
+                date-yesterday (concat (format-time-string "%Y%m") dom-yesterday))
 
     (if (string= (format-time-string "%Y%m%d") (format-time-string "%Y%m%d" (seconds-to-time date)))
         (format-time-string "      Today %H:%M" (seconds-to-time date))
@@ -1448,33 +1458,41 @@ Only use variable-pitch if explicitly called.
         (if (string= (format-time-string "%Y") (format-time-string "%Y" (seconds-to-time date)))
             (format-time-string " %a %d %b %H:%M" (seconds-to-time date))
           (format-time-string "  %a %d %b %Y" (seconds-to-time date))))))
+#+end_src
 
+#+begin_src emacs-lisp
   (defun elfeed-entry-buffer ()
     (get-buffer-create "*elfeed-entry*"))
+#+end_src
 
+#+begin_src emacs-lisp
   (defun niva/elfeed-split (buff)
     (interactive)
     (let ((w (split-window-below)))
       (select-window w))
     (switch-to-buffer buff)
     (olivetti-mode))
+#+end_src
 
+#+begin_src emacs-lisp
   (defun elfeed-kill-buffer ()
     (interactive)
     (let* ((buff (get-buffer "*elfeed-entry*"))
            (window (get-buffer-window buff)))
       (kill-buffer buff)
       (delete-window window)))
+#+end_src
 
+#+begin_src emacs-lisp
   (defun elfeed-search-quit-window ()
     (interactive)
     (elfeed-db-save)
     (elfeed-kill-buffer)
-    (quit-window))
-  ))
+    (quit-window))))
+#+end_src
 
+#+begin_src emacs-lisp
   (defun niva/elfeed-search-print-entry (entry)
-
     (setq-local feed (elfeed-entry-feed entry))
     (setq-local feed-title (when feed (or (elfeed-meta feed :title) (elfeed-feed-title feed))))
     (setq-local feed-ln (string-width feed-title))
@@ -1504,7 +1522,9 @@ Only use variable-pitch if explicitly called.
 
   (setq elfeed-search-title-max-width 80
         elfeed-search-print-entry-function #'niva/elfeed-search-print-entry)
+#+end_src
 
+#+begin_src emacs-lisp
   (defun niva/elfeed-sort-by-tags-and-feed (a b)
     (let* ((a-title (format "%s" (elfeed-entry-feed a)))
            (b-title (format "%s" (elfeed-entry-feed b)))
@@ -1517,37 +1537,39 @@ Only use variable-pitch if explicitly called.
           (string< a-tags b-tags)))))
 
   (setf elfeed-search-sort-function #'niva/elfeed-sort-by-tags-and-feed)
+#+end_src
 
+#+begin_src emacs-lisp
   (defun shr-put-image (spec alt &optional flags)
     (if (display-graphic-p)
         (let* ((size (cdr (assq 'size flags)))
                (data (if (consp spec)
-               		   (car spec)
-               		 spec))
+                     	   (car spec)
+                     	 spec))
                (content-type (and (consp spec)
-               				    (cadr spec)))
+                     				(cadr spec)))
                (start (point))
                (image (cond
-               		 ((eq size 'original)
-               		  (create-image data nil t :ascent 100
-               				        :format content-type))
-               		 ((eq content-type 'image/svg+xml)
+                     	 ((eq size 'original)
+                     	  (create-image data nil t :ascent 100
+                     				    :format content-type))
+                     	 ((eq content-type 'image/svg+xml)
                         (when (image-type-available-p 'svg)
-               		    (create-image data 'svg t :ascent 100)))
-               		 ((eq size 'full)
-               		  (ignore-errors
-               			(shr-rescale-image data content-type
+                     		(create-image data 'svg t :ascent 100)))
+                     	 ((eq size 'full)
+                     	  (ignore-errors
+                     		(shr-rescale-image data content-type
                                              (plist-get flags :width)
                                              (plist-get flags :height))))
-               		 (t
-               		  (ignore-errors
-               			(shr-rescale-image data content-type
+                     	 (t
+                     	  (ignore-errors
+                     		(shr-rescale-image data content-type
                                              (plist-get flags :width)
                                              (plist-get flags :height)))))))
           (when image
             (let ((image-pos (point)))
               (if (eq size 'original)
-               	(insert-sliced-image image (or alt "*") nil 20 1)
+                  (insert-sliced-image image (or alt "*") nil 20 1)
                 (insert-image image (or alt "*")))
               (put-text-property start (point) 'image-size size)
               (when (and shr-image-animate
@@ -1555,13 +1577,17 @@ Only use variable-pitch if explicitly called.
                 (image-animate image nil 60 image-pos))))
           image)
       (insert (or alt ""))))
+#+end_src
 
 
+#+begin_src emacs-lisp
   (defun niva/insert-indented-image (spec alt &optional flags)
     (insert "\n        ")
     (shr-put-image spec alt flags)
     (insert "\n\n"))
+#+end_src
 
+#+begin_src emacs-lisp
   (defun +rss-render-image-tag-without-underline-fn (dom &optional url)
     (let ((start (point)))
       (shr-tag-img dom url)
