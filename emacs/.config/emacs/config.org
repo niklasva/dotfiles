@@ -36,16 +36,15 @@
 * Text edit settings
 ** Defaults
 #+begin_src emacs-lisp
-  (setq-default
-   c-basic-offset 4
-   c-default-style "linux"
-   create-lockfiles nil
-   evil-auto-indent t
-   indent-line-function 'evil-indent-line
-   indent-tabs-mode nil
-   completion-cycle-threshold 3
-   tab-always-indent 'complete
-   tab-width 4)
+  (setq-default c-basic-offset 4
+                c-default-style "linux"
+                create-lockfiles nil
+                evil-auto-indent t
+                indent-line-function 'evil-indent-line
+                indent-tabs-mode nil
+                completion-cycle-threshold 3
+                tab-always-indent 'complete
+                tab-width 4)
 #+end_src
 
 #+begin_src emacs-lisp
@@ -720,7 +719,7 @@ Window management
     :straight t
     :init
     (setq completion-styles '(orderless basic)
-    		completion-category-defaults nil
+    	    completion-category-defaults nil
     		completion-category-overrides '((file (styles . (partial-completion))))))
 
   (use-package cape
@@ -755,10 +754,12 @@ Window management
 #+begin_src emacs-lisp
   (use-package projectile
     :straight t
-    :init (setq projectile-enable-caching t)
-    :bind (:map projectile-mode-map
-                ("s-p" . projectile-command-map)
-                ("C-c p" . projectile-command-map))
+    :init
+    (setq projectile-enable-caching t)
+    :bind
+    (:map projectile-mode-map
+          ("s-p" . projectile-command-map)
+          ("C-c p" . projectile-command-map))
     :config
     (add-to-list 'projectile-globally-ignored-directories ".cache")
     (add-to-list 'projectile-globally-ignored-directories ".DS_Store")
