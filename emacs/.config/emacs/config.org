@@ -29,8 +29,11 @@
 
 * Imports
 #+begin_src emacs-lisp
-  (setq-local import-file (expand-file-name (concat user-emacs-directory "private/config.el")))
-  (if (file-readable-p import-file) (load import-file))
+  (defvar import-file
+    (expand-file-name "private/config.el" user-emacs-directory))
+
+  (when (file-readable-p import-file)
+    (load import-file))
 #+end_src
 
 * Text edit settings
@@ -70,22 +73,21 @@ Show only one active window when opening multiple files at the same time.
           evil-auto-indent t
           c-basic-offset 4))
 
-
-  (add-hook 'c++-mode-hook    'indent-tabs-hook)
-  (add-hook 'c-mode-hook      'indent-tabs-hook)
-  (add-hook 'c++-ts-mode-hook 'indent-tabs-hook)
-  (add-hook 'c-ts-mode-hook   'indent-tabs-hook)
+  (dolist (hook '(c++-mode-hook
+  		c-mode-hook
+  		c++-ts-mode-hook
+                  c-ts-mode-hook))
+    (add-hook hook 'indent-tabs-hook))
 #+end_src
 
 ** Clean up trailing whitespace
 #+begin_src emacs-lisp
   (setq org-src-strip-leading-and-trailing-blank-lines t)
 
-  (defun show-trailing-whitespace-hook ()
-    (setq show-trailing-whitespace t))
-
-  (add-hook 'prog-mode-hook   'show-trailing-whitespace-hook)
-  (add-hook 'before-save-hook 'delete-trailing-whitespace)
+  (add-hook 'prog-mode-hook
+            (lambda ()
+              (setq show-trailing-whitespace t)
+              (add-hook 'before-save-hook 'delete-trailing-whitespace)))
 #+end_src
 
 ** desktop-save-mode (disabled)
@@ -97,14 +99,15 @@ Show only one active window when opening multiple files at the same time.
         desktop-restore-eager 10)
 
 
-  (add-to-list 'desktop-globals-to-save   '(extended-command-history . 1000))
-  (add-to-list 'desktop-globals-to-save   '(kill-ring . 1000))
+  (add-to-list 'desktop-globals-to-save '(extended-command-history . 1000)
+               '(kill-ring . 1000))
 
-  (add-to-list 'desktop-modes-not-to-save 'Info-mode)
-  (add-to-list 'desktop-modes-not-to-save 'compilation-mode)
-  (add-to-list 'desktop-modes-not-to-save 'dired-mode)
-  (add-to-list 'desktop-modes-not-to-save 'fundamental-mode)
-  (add-to-list 'desktop-modes-not-to-save 'info-lookup-mode)
+  (dolist (mode '(Info-mode
+                  compilation-mode
+                  dired-mode
+                  fundamental-mode
+                  info-lookup-mode
+                  special-mode))
   (add-to-list 'desktop-modes-not-to-save 'special-mode)
 #+end_src
 
@@ -907,8 +910,7 @@ Always move cursor to help window.
 ** Language server
 *** LSP
 #+begin_src emacs-lisp
-  (setq lsp-clients-clangd-args '(
-                                  "--clang-tidy"
+  (setq lsp-clients-clangd-args '("--clang-tidy"
                                   "--completion-style=detailed"
                                   "--header-insertion=never"
                                   "--pch-storage=memory"
@@ -1296,8 +1298,7 @@ Always move cursor to help window.
     (set-face-attribute 'org-level-1 nil :height 'unspecified :weight 'unspecified)
     (set-face-attribute 'org-level-2 nil :height 'unspecified :weight 'unspecified)
     (set-face-attribute 'org-level-3 nil :height 'unspecified :weight 'unspecified)
-    (set-face-attribute 'org-level-4 nil :height 'unspecified :weight 'unspecified)
-    )
+    (set-face-attribute 'org-level-4 nil :height 'unspecified :weight 'unspecified))
 #+end_src
 
 *** olivetti
@@ -1605,8 +1606,6 @@ Only use variable-pitch if explicitly called.
 
   (setq shr-put-image-function #'niva/insert-indented-image
         shr-external-rendering-functions '((img . +rss-render-image-tag-without-underline-fn)))
-
-
 #+end_src
 
 * AI
@@ -1622,6 +1621,8 @@ Only use variable-pitch if explicitly called.
           gptel-prompt-prefix-alist '((markdown-mode . "# ")
                                       (org-mode . "* ")
                                       (text-mode . "> ")))
+    (with-eval-after-load 'gptel
+      (evil-define-key 'normal gptel-mode-map "q" 'delete-window)))
+          #+end_src
 
-    (evil-define-key 'normal gptel-mode-map "q" 'delete-window))
 #+end_src
