@@ -619,6 +619,7 @@ Window management
 
     "elf"   '(elfeed                     :which-key "elfeed")
     "eww"   '(eww                        :which-key "eww")
+    "gpt"   '(gptel                      :which-key "gptel")
     "rec"   '(recentf-open               :which-key "devdocs-lookup")
     "rip"   '(consult-ripgrep            :which-key "consult-ripgrep")
 
@@ -1648,8 +1649,11 @@ Only use variable-pitch if explicitly called.
     :straight t
     :config
     (setq gptel-default-mode #'org-mode
-          gptel-model "gpt-3.5-turbo"
           gptel-prompt-prefix-alist '((markdown-mode . "# ")
                                       (org-mode . "* ")
-                                      (text-mode . "> "))))
+                                      (text-mode . "> "))
+          gptel-model "gpt-3.5-turbo"
+          gptel-max-tokens 200)
+
+    (evil-define-key 'normal gptel-mode-map "q" 'delete-window))
 #+end_src
