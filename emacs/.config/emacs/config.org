@@ -59,13 +59,15 @@ Show only one active window when opening multiple files at the same time.
 #+end_src
 
 ** Indentation rules
+
 #+begin_src emacs-lisp
-  (setq evil-auto-indent t
-        indent-line-function 'evil-indent-line
-        indent-tabs-mode nil
-        tab-always-indent 'complete
-        tab-width 4
-        org-src-tab-acts-natively t)
+  (setq-default evil-auto-indent t
+                indent-line-function 'evil-indent-line
+                evil-indent-convert-tabs nil
+                indent-tabs-mode nil
+                tab-always-indent 'complete
+                tab-width 4
+                org-src-tab-acts-natively t)
 
   (defun indent-tabs-hook ()
     (setq tab-width 4
@@ -74,8 +76,8 @@ Show only one active window when opening multiple files at the same time.
           c-basic-offset 4))
 
   (dolist (hook '(c++-mode-hook
-  		c-mode-hook
-  		c++-ts-mode-hook
+                  c-mode-hook
+                  c++-ts-mode-hook
                   c-ts-mode-hook))
     (add-hook hook 'indent-tabs-hook))
 #+end_src
@@ -108,7 +110,7 @@ Show only one active window when opening multiple files at the same time.
                   fundamental-mode
                   info-lookup-mode
                   special-mode))
-  (add-to-list 'desktop-modes-not-to-save 'special-mode)
+    (add-to-list 'desktop-modes-not-to-save 'special-mode)
 #+end_src
 
 ** recentf
@@ -128,7 +130,7 @@ Show only one active window when opening multiple files at the same time.
   ;; Override some modes which derive from the above
 
   (dolist (mode '(org-mode-hook)) (add-hook mode (lambda () (display-line-numbers-mode 0))))
-  #+end_src
+#+end_src
 
 #+begin_src emacs-lisp
   (fset 'yes-or-no-p 'y-or-n-p)
@@ -354,34 +356,34 @@ Always move cursor to help window.
 
   (defun niva/git-branch-name ()
     (let* ((noback (replace-regexp-in-string
-                  (format "^ %s" (vc-backend buffer-file-name)) " " vc-mode))
-         (face (cond ((string-match "^ -" noback) 'mode-line-vc)
-                     ((string-match "^ [:@]" noback) 'mode-line-vc-edit)
-                     ((string-match "^ [!\\?]" noback) 'mode-line-vc-modified))))
+                    (format "^ %s" (vc-backend buffer-file-name)) " " vc-mode))
+           (face (cond ((string-match "^ -" noback) 'mode-line-vc)
+                       ((string-match "^ [:@]" noback) 'mode-line-vc-edit)
+                       ((string-match "^ [!\\?]" noback) 'mode-line-vc-modified))))
       (format "%s" (substring noback 2))))
 
   (defun niva/git-repository-name ()
-      (setq repository-name (vc-git-repository-url buffer-file-name))
+    (setq repository-name (vc-git-repository-url buffer-file-name))
     (s-replace ".git" "" (s-replace "git@github.com:" "" repository-name)))
 
   (setq-default mode-line-format '((:eval
-  				  (niva/display-mode-line
-  				   ;; Left.
-  				   (quote ("%e "
-                				   (:eval
-  					    (if (and buffer-file-name (buffer-modified-p))
-  						`(:propertize "%b" face (:slant nil))
-  					      "%b"))
-  					   (:eval
-  					    (if vc-mode
-  						(format " |  %s | %s%s"
-  							(niva/git-repository-name)
-    							(niva/git-state-symbol)
-  							(niva/git-branch-name))))
-  					   " | %l:%c"))
-  				   ;; Right.
-  				   (quote (" " global-mode-string))))))
-                                   #+end_src
+                                    (niva/display-mode-line
+                                     ;; Left.
+                                     (quote ("%e "
+                                             (:eval
+                                              (if (and buffer-file-name (buffer-modified-p))
+                                                  `(:propertize "%b" face (:slant nil))
+                                                "%b"))
+                                             (:eval
+                                              (if vc-mode
+                                                  (format " |  %s | %s%s"
+                                                          (niva/git-repository-name)
+                                                          (niva/git-state-symbol)
+                                                          (niva/git-branch-name))))
+                                             " | %l:%c"))
+                                     ;; Right.
+                                     (quote (" " global-mode-string))))))
+#+end_src
 
 #+begin_src emacs-lisp
   (setq inhibit-compacting-font-caches t)
@@ -406,7 +408,7 @@ Always move cursor to help window.
     (set-face-attribute 'help-key-binding   nil :weight 'unspecified)
     (set-face-attribute 'tooltip            nil :inherit 'default))
   (niva/remove-font-weight)
-    #+end_src
+#+end_src
 
 ** Ligatures
 #+begin_src emacs-lisp
@@ -415,7 +417,7 @@ Always move cursor to help window.
     :config
     (global-ligature-mode t)
     (ligature-set-ligatures 'prog-mode '("==" "!=" "<-" "<--" "->" "-->")))
-    #+end_src
+#+end_src
 
 * Controls
 ** Evil mode
@@ -715,8 +717,8 @@ Always move cursor to help window.
     :straight t
     :init
     (setq completion-styles '(orderless basic)
-    	completion-category-defaults nil
-    	completion-category-overrides '((file (styles . (partial-completion))))))
+          completion-category-defaults nil
+          completion-category-overrides '((file (styles . (partial-completion))))))
 
   (use-package cape
     :straight t
@@ -874,21 +876,31 @@ Always move cursor to help window.
 #+end_src
 * Development
 ** Elisp
+
 #+begin_src emacs-lisp
+
   (defun niva/format-all-elisp-code-blocks ()
     (interactive)
-    (let ((message-log-max nil) (inhibit-message t) (inhibit-redisplay t))
+    (setq-local indent-tabs-mode nil)
+    (save-excursion
+      (let ((message-log-max nil)
+            (inhibit-message t)
+            (inhibit-redisplay t))
 
-      (org-element-map (org-element-parse-buffer) 'src-block
-        (lambda (src-block)
-          (when (string= "emacs-lisp" (org-element-property :language src-block))
-            (let* ((begin (org-element-property :begin src-block))
-                   (end (org-element-property :end src-block)))
-              (indent-region begin end)))))))
+        (org-element-map (org-element-parse-buffer) 'src-block
+          (lambda (src-block)
+            (when (string= "emacs-lisp" (org-element-property :language src-block))
+              (let* ((begin (org-element-property :begin src-block))
+                     (end (org-element-property :end src-block)))
+                (indent-region begin end nil)
+                (untabify begin end))))))
+      (replace-regexp "\n *#\\+end_src"   "\n#+end_src")
+      (replace-regexp "\n *#\\+begin_src" "\n#+begin_src")
+      (replace-regexp "#\\+begin_src\n" "#+begin_src\n")
+      ))
   (add-hook 'before-save-hook 'niva/format-all-elisp-code-blocks)
 #+end_src
 
-** C/C++
 #+begin_src emacs-lisp
   (setq cc-other-file-alist '(("\\.cc\\'" (".hh" ".h"))
                               ("\\.hh\\'" (".cc" ".C" ".CC" ".cxx" ".cpp" ".c++"))
@@ -1378,23 +1390,23 @@ Only use variable-pitch if explicitly called.
                          (car spec)
                        spec))
                (content-type (and (consp spec)
-                     		(cadr spec)))
+                                  (cadr spec)))
                (start (point))
                (image (cond
                        ((eq size 'original)
                         (create-image data nil t :ascent 100
-                     		    :format content-type))
+                                      :format content-type))
                        ((eq content-type 'image/svg+xml)
                         (when (image-type-available-p 'svg)
-                     	(create-image data 'svg t :ascent 100)))
+                          (create-image data 'svg t :ascent 100)))
                        ((eq size 'full)
                         (ignore-errors
-                     	(shr-rescale-image data content-type
+                          (shr-rescale-image data content-type
                                              (plist-get flags :width)
                                              (plist-get flags :height))))
                        (t
                         (ignore-errors
-                     	(shr-rescale-image data content-type
+                          (shr-rescale-image data content-type
                                              (plist-get flags :width)
                                              (plist-get flags :height)))))))
           (when image
@@ -1523,11 +1535,11 @@ Only use variable-pitch if explicitly called.
 #+begin_src emacs-lisp
   (defun elfeed-search-format-date (date)
     (let* ((current-date (format-time-string "%Y%m%d"))
-  	 (current-year (format-time-string "%Y"))
-  	 (yesterday    (format-time-string "%Y%m%d" (time-subtract (current-time) (days-to-time 1))))
-  	 (date-str     (format-time-string "%Y%m%d" (seconds-to-time date)))
-  	 (date-year    (format-time-string "%Y" (seconds-to-time date)))
-  	 (format-string (cond
+           (current-year (format-time-string "%Y"))
+           (yesterday    (format-time-string "%Y%m%d" (time-subtract (current-time) (days-to-time 1))))
+           (date-str     (format-time-string "%Y%m%d" (seconds-to-time date)))
+           (date-year    (format-time-string "%Y" (seconds-to-time date)))
+           (format-string (cond
                            ((string= current-date date-str) "      Today %H:%M")
                            ((string= yesterday date-str) "  Yesterday %H:%M")
                            ((string= current-year date-year) " %a %d %b %H:%M")
@@ -1539,11 +1551,11 @@ Only use variable-pitch if explicitly called.
 #+begin_src emacs-lisp
   (defun niva/elfeed-search-print-entry (entry)
     (let* ((feed (elfeed-entry-feed entry))
-  	 (feed-title (when feed (or (elfeed-meta feed :title) (elfeed-feed-title feed))))
-  	 (tags (delete "unread" (mapcar #'symbol-name (elfeed-entry-tags entry))))
-  	 (star (if (member "star" tags) "*" " "))
-  	 (tags-str (format "%%%ds" (- 30 (string-width feed-title))))
-  	 (date (elfeed-search-format-date (elfeed-entry-date entry)))
+           (feed-title (when feed (or (elfeed-meta feed :title) (elfeed-feed-title feed))))
+           (tags (delete "unread" (mapcar #'symbol-name (elfeed-entry-tags entry))))
+           (star (if (member "star" tags) "*" " "))
+           (tags-str (format "%%%ds" (- 30 (string-width feed-title))))
+           (date (elfeed-search-format-date (elfeed-entry-date entry)))
            (title (or (elfeed-meta entry :title) (elfeed-entry-title entry) ""))
            (title-faces (elfeed-search--faces (elfeed-entry-tags entry)))
            (title-width (- (window-width) 20 elfeed-search-trailing-width))
@@ -1552,12 +1564,12 @@ Only use variable-pitch if explicitly called.
                                  elfeed-search-title-min-width
                                  title-width
                                  elfeed-search-title-max-width)
-  			:left))
-  	 (formatted-date (propertize date 'face 'elfeed-search-title-face))
-  	 (formatted-star (propertize star 'face 'elfeed-search-tag-face))
-  	 (formatted-title (propertize title-column 'face title-faces 'kbd-help title))
-  	 (formatted-feed-title (and feed-title (propertize feed-title 'face 'elfeed-search-feed-face)))
-  	 (formatted-tags (and tags (propertize (format tags-str (mapconcat 'identity tags " ")) 'face 'elfeed-search-tag-face))))
+                          :left))
+           (formatted-date (propertize date 'face 'elfeed-search-title-face))
+           (formatted-star (propertize star 'face 'elfeed-search-tag-face))
+           (formatted-title (propertize title-column 'face title-faces 'kbd-help title))
+           (formatted-feed-title (and feed-title (propertize feed-title 'face 'elfeed-search-feed-face)))
+           (formatted-tags (and tags (propertize (format tags-str (mapconcat 'identity tags " ")) 'face 'elfeed-search-tag-face))))
 
       (mapc #'insert (list formatted-date " " formatted-star " " formatted-title " " formatted-feed-title " " formatted-tags))))
 
@@ -1621,6 +1633,4 @@ Only use variable-pitch if explicitly called.
                                       (text-mode . "> ")))
     (with-eval-after-load 'gptel
       (evil-define-key 'normal gptel-mode-map "q" 'delete-window)))
-          #+end_src
-
 #+end_src
