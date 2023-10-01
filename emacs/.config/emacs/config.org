@@ -89,6 +89,7 @@ Show only one active window when opening multiple files at the same time.
           evil-auto-indent t
           c-basic-offset 4))
 
+
   (add-hook 'c++-mode-hook    'indent-tabs-hook)
   (add-hook 'c-mode-hook      'indent-tabs-hook)
   (add-hook 'c++-ts-mode-hook 'indent-tabs-hook)
@@ -504,7 +505,6 @@ Always move cursor to help window.
   (define-key evil-normal-state-map (kbd "C-b C-b") 'evil-switch-to-windows-last-buffer)
 #+end_src
 
-Window management
 #+begin_src emacs-lisp
   (define-key evil-normal-state-map (kbd "C-w n")     'tab-next)
   (define-key evil-normal-state-map (kbd "C-w c")     'tab-new)
@@ -873,9 +873,10 @@ Window management
        (expand-file-name "config.org" user-emacs-directory)
        (expand-file-name "config.el" user-emacs-directory) "emacs-lisp")
 
-      (byte-compile-file (expand-file-name "config.el" user-emacs-directory))))
+      (byte-compile-file "~/.config/emacs/config.el")
 
-  (add-hook 'after-save-hook 'niva/compile-config)
+      (message "File 'config.org' saved. Custom function executed.")))
+  (add-hook 'after-save-hook 'niva/compile-config nil 'make-it-local)
 #+end_src
 * Development
 ** Elisp
