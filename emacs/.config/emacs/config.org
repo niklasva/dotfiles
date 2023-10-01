@@ -75,12 +75,6 @@
                        (char-equal c ?\")
                        (char-equal c ?\<))))
     (electric-pair-mode 1))
-
-  ;; (add-hook 'c-mode-hook      'c-pair-hook)
-  ;; (add-hook 'c++-mode-hook    'c-pair-hook)
-  ;; (add-hook 'c-ts-mode-hook   'c-pair-hook)
-  ;; (add-hook 'c++-ts-mode-hook 'c-pair-hook)
-  ;; (add-hook 'python-mode-hook 'prog-pair-hook)
 #+end_src
 
 #+begin_src emacs-lisp
@@ -329,12 +323,11 @@ Prevent accidental close.
     (solaire-global-mode +1)
     (solaire-mode-reset))
   (add-hook 'eshell-mode-hook (lambda () (solaire-mode-reset)))
-  ;; (add-hook 'compilation-mode-hook (solaire-mode-reset))
 #+end_src
 *** Load theme
 #+begin_src emacs-lisp
   (setq custom-safe-themes t)
-  (load-theme 'kaolin-bubblegum t)
+  (load-theme 'kaolin-shiva t)
 #+end_src
 
 ** Compilaton mode
@@ -348,13 +341,7 @@ Prevent accidental close.
 
 ** Mode line
 *** Mode line format
-
 #+begin_src emacs-lisp
-  ;; (mu4e-alert-enable-mode-line-display)
-
-  ;; (setq display-time-format "  %+4Y-%m-%d %H:%M"
-  ;;       display-time-default-load-average nil)
-
   (defun simple-mode-line-render (left right)
     "Return a string of `window-width' length.
            Containing LEFT, and RIGHT aligned respectively."
@@ -412,11 +399,10 @@ Prevent accidental close.
      '(font-lock-comment-face            ((t (:weight     unspecified))))
      '(error nil                         ((t (:weight     unspecified)))))
 
-    (set-face-attribute 'bold nil :weight 'unspecified)
-    (set-face-attribute 'buffer-menu-buffer nil :weight 'unspecified)
-    (set-face-attribute 'help-key-binding nil    :weight 'unspecified)
-
-    (set-face-attribute 'tooltip nil :inherit 'default))
+    (set-face-attribute 'bold               nil :weight 'unspecified)
+    (set-face-attribute 'buffer-menu-buffer nil  :weight 'unspecified)
+    (set-face-attribute 'help-key-binding   nil :weight 'unspecified)
+    (set-face-attribute 'tooltip            nil :inherit 'default))
   (niva/remove-font-weight)
 #+end_src
 
@@ -424,7 +410,8 @@ Prevent accidental close.
 #+begin_src emacs-lisp
   (use-package ligature
     :straight t
-    :config (global-ligature-mode t)
+    :config
+    (global-ligature-mode t)
     (ligature-set-ligatures 'prog-mode '("==" "!=" "<-" "<--" "->" "-->")))
 #+end_src
 
@@ -451,7 +438,6 @@ Prevent accidental close.
 #+end_src
 
 *** Evil collection
-
 #+begin_src emacs-lisp
   (use-package evil-collection
     :after evil
@@ -483,8 +469,8 @@ Prevent accidental close.
 #+end_src
 
 #+begin_src emacs-lisp
-  (global-set-key                   (kbd "€") (kbd "$"))
-  (global-set-key                   (kbd "<f13>") 'evil-invert-char)
+  (global-set-key                   (kbd "€")       (kbd "$"))
+  (global-set-key                   (kbd "<f13>")   'evil-invert-char)
   (define-key evil-insert-state-map (kbd "C-c C-e") 'comment-line)
   (define-key evil-visual-state-map (kbd "C-c C-e") 'comment-line)
 
@@ -679,8 +665,7 @@ Window management
     (c-ts-mode . yas-minor-mode)
     :config
     (setq yas-snippet-dirs
-          `(,(concat user-emacs-directory (file-name-as-directory "snippets"))))
-    )
+          `(,(concat user-emacs-directory (file-name-as-directory "snippets")))))
 
   (use-package yasnippet-snippets
     :straight t
@@ -789,14 +774,14 @@ Window management
     (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
 
     (projectile-register-project-type 'has-command-at-point '(".mbed")
-                                      :compile "build-target" :src-dir "src/")
-    )
+                                      :compile "build-target" :src-dir "src/"))
 #+end_src
 
 ** File-related keybindings
 #+begin_src emacs-lisp
   (nvmap :states '(normal visual) :keymaps 'override :prefix "SPC"
-    "."     '(lambda () (interactive)
+    "."     '(lambda ()
+               (interactive)
                (setq-local tmpdir default-directory)
                (cd "~")
                (call-interactively 'find-file)
@@ -892,15 +877,16 @@ Window management
 * Development
 ** Elisp
 #+begin_src emacs-lisp
-  (defun niva/format-all-elisp-code-blocks () (interactive)
-         (let ((message-log-max nil) (inhibit-message t) (inhibit-redisplay t))
+  (defun niva/format-all-elisp-code-blocks ()
+    (interactive)
+    (let ((message-log-max nil) (inhibit-message t) (inhibit-redisplay t))
 
-           (org-element-map (org-element-parse-buffer) 'src-block
-             (lambda (src-block)
-               (when (string= "emacs-lisp" (org-element-property :language src-block))
-                 (let* ((begin (org-element-property :begin src-block))
-                        (end (org-element-property :end src-block)))
-                   (indent-region begin end)))))))
+      (org-element-map (org-element-parse-buffer) 'src-block
+        (lambda (src-block)
+          (when (string= "emacs-lisp" (org-element-property :language src-block))
+            (let* ((begin (org-element-property :begin src-block))
+                   (end (org-element-property :end src-block)))
+              (indent-region begin end)))))))
   (add-hook 'before-save-hook 'niva/format-all-elisp-code-blocks)
 #+end_src
 
@@ -945,6 +931,7 @@ Window management
     (interactive)
     (when (and (executable-find "yapf") buffer-file-name)
       (call-process "yapf" nil nil nil "-i" buffer-file-name)))
+
   (add-hook 'python-mode-hook (lambda () (add-hook 'after-save-hook #'lsp-python-ms-format-buffer t t)))
 
 #+end_src
@@ -974,8 +961,7 @@ Window management
           lsp-eldoc-enable-hover t
           lsp-eldoc-enable-signature-help t
           lsp-eldoc-prefer-signature-help t
-          )
-    (setq lsp-completion-provider :none))
+          lsp-completion-provider :none))
 
   (defun lsp-c-save-hooks ()
     (add-hook 'before-save-hook #'lsp-format-buffer t t))
@@ -995,18 +981,18 @@ Window management
           lsp-ui-doc-delay 0.5
           lsp-ui-doc-include-signature t
           lsp-ui-doc-border (face-background 'corfu-border)
-          lsp-ui-sideline-enable nil))
+          lsp-ui-sideline-enable nil
+          markdown-list-item-bullets '("-")
+          lsp-modeline-code-action-fallback-icon ""))
 
   (custom-set-faces
    '(markdown-code-face             ((t (:background unspecified))))
    '(eldoc-box-border               ((t (:inherit corfu-border))))
    '(eldoc-box-body                 ((t (:inherit corfu-default))))
    '(lsp-ui-doc-background          ((t (:inherit corfu-default)))))
-  (setq markdown-list-item-bullets '("-"))
-  (setq lsp-modeline-code-action-fallback-icon "")
-#+end_src
 
 #+end_src
+
 *** Flycheck
 #+begin_src emacs-lisp
   (use-package flycheck
@@ -1034,14 +1020,14 @@ Window management
   (add-hook 'c++-ts-mode-hook #'format-on-save-hook)
 #+end_src
 
-** Tree-sitter
+** Tree-sitter == Disabled ==
 *** Setup
 #+begin_src disabled
   (use-package treesit
     :straight (:type built-in)
     :config
-    (setq treesit-font-lock-level 1)
-    (setq treesit-language-source-alist
+    (setq treesit-font-lock-level
+          treesit-language-source-alist
           '((bash         "https://github.com/tree-sitter/tree-sitter-bash")
             (c            "https://github.com/tree-sitter/tree-sitter-c")
             (cpp          "https://github.com/tree-sitter/tree-sitter-cpp")
@@ -1056,26 +1042,26 @@ Window management
             (typescript   "https://github.com/tree-sitter/tree-sitter-typescript")
             (yaml         "https://github.com/ikatyang/tree-sitter-yaml")))
 
-  (dolist (pair '(("\\.sh\\'"           . bash-ts-mode)
-                  ("\\.c\\'"            . c-ts-mode)
-                  ("\\.h\\'"            . c-ts-mode)
-                  ("\\.cpp\\'"          . c++-ts-mode)
-                  ("\\.hpp\\'"          . c++-ts-mode)
-                  ("\\.tpp\\'"          . c++-ts-mode)
-                  ("\\.java\\'"         . java-ts-mode)
-                  ("\\.js\\'"           . js-ts-mode)
-                  ("\\.json\\'"         . json-ts-mode)
-                  ("\\.ts\\'"           . typescript-ts-mode)
-                  ("\\.tsx\\'"          . tsx-ts-mode)
-                  ("\\.css\\'"          . css-ts-mode)
-                  ("\\.py\\'"           . python-ts-mode)
-                  ("\\.yaml\\'"         . yaml-ts-mode)
-                  ("\\.clangd\\'"       . yaml-ts-mode)
-                  ("\\.yml\\'"          . yaml-ts-mode)
-                  ("\\.clang-format\\'" . yaml-ts-mode)
-                  ("\\.clang-tidy\\'"   . yaml-ts-mode)))
-    (push pair auto-mode-alist)))
-#+end_src
+    (dolist (pair '(("\\.sh\\'"           . bash-ts-mode)
+                    ("\\.c\\'"            . c-ts-mode)
+                    ("\\.h\\'"            . c-ts-mode)
+                    ("\\.cpp\\'"          . c++-ts-mode)
+                    ("\\.hpp\\'"          . c++-ts-mode)
+                    ("\\.tpp\\'"          . c++-ts-mode)
+                    ("\\.java\\'"         . java-ts-mode)
+                    ("\\.js\\'"           . js-ts-mode)
+                    ("\\.json\\'"         . json-ts-mode)
+                    ("\\.ts\\'"           . typescript-ts-mode)
+                    ("\\.tsx\\'"          . tsx-ts-mode)
+                    ("\\.css\\'"          . css-ts-mode)
+                    ("\\.py\\'"           . python-ts-mode)
+                    ("\\.yaml\\'"         . yaml-ts-mode)
+                    ("\\.clangd\\'"       . yaml-ts-mode)
+                    ("\\.yml\\'"          . yaml-ts-mode)
+                    ("\\.clang-format\\'" . yaml-ts-mode)
+                    ("\\.clang-tidy\\'"   . yaml-ts-mode)))
+      (push pair auto-mode-alist)))
+                    #+end_src
 
 ** Version control
 *** Git gutter
@@ -1084,8 +1070,9 @@ Window management
     :straight t
     :config
     (setq git-gutter:update-timer 1)
+
     (if (string-match-p "modus" (prin1-to-string custom-enabled-themes))
-  	  (progn (set-face-attribute 'git-gutter-fr:added    nil :foreground (face-attribute 'modus-themes-fg-green-intense :foreground) :background 'unspecified )
+  	  (progn (set-face-attribute 'git-gutter-fr:added    nil :foreground (face-attribute 'modus-themes-fg-green-intense :foreground) :background 'unspecified)
                (set-face-attribute 'git-gutter-fr:modified nil :foreground (face-attribute 'modus-themes-fg-blue          :foreground) :background 'unspecified)
                (set-face-attribute 'git-gutter-fr:deleted  nil :foreground (face-attribute 'modus-themes-fg-red-intense   :foreground) :background 'unspecified)))
 
@@ -1211,7 +1198,8 @@ Window management
         (add-hook hook `(lambda () (setq-local devdocs-current-docs (list ,doc))))))
 
     (define-key evil-normal-state-map (kbd "SPC g d")
-                (lambda () (interactive)
+                (lambda ()
+                  (interactive)
                   (devdocs-lookup nil (thing-at-point 'symbol t)))))
 #+end_src
 
@@ -1257,16 +1245,17 @@ Window management
 
   (advice-add 'term-handle-exit :after 'my-term-handle-exit)
 
-  (defun niva/font-lock-comment-annotations () (interactive)
-         (font-lock-add-keywords
-          nil
-          '(("\\<\\(.*ERR.*\\)"     1 'compilation-error   t)
-            ("\\<\\(.*INFO.*\\)"    1 'compilation-info    t)
-            ("\\<\\(.*DEBUG.*\\)"   1 'compilation-info    t)
-            ("\\<\\(.*WARN.*\\)"    1 'compilation-warning t)
-            ("\\<\\(.*DEBUG: --- CMD: POLL(60) REPLY: ISTATR(49) ---.*\\)" 1 'completions-common-part t)
-            ("\\<\\(.*DEBUG: --- CMD: OUT(68) REPLY: ACK(40) ---.*\\)"     1 'completions-common-part t)
-            )))
+  (defun niva/font-lock-comment-annotations ()
+    (interactive)
+    (font-lock-add-keywords
+     nil
+     '(("\\<\\(.*ERR.*\\)"     1 'compilation-error   t)
+       ("\\<\\(.*INFO.*\\)"    1 'compilation-info    t)
+       ("\\<\\(.*DEBUG.*\\)"   1 'compilation-info    t)
+       ("\\<\\(.*WARN.*\\)"    1 'compilation-warning t)
+       ("\\<\\(.*DEBUG: --- CMD: POLL(60) REPLY: ISTATR(49) ---.*\\)" 1 'completions-common-part t)
+       ("\\<\\(.*DEBUG: --- CMD: OUT(68) REPLY: ACK(40) ---.*\\)"     1 'completions-common-part t))))
+
   (add-hook 'eshell-mode-hook 'font-lock-comment-annotations)
 #+end_src
 
@@ -1298,41 +1287,26 @@ Window management
                 (setq olivetti-body-width 120
                       olivetti-minimum-body-width 120))))
 #+end_src
-*** Mixed-pitch
-#+begin_src disabled
-  (use-package mixed-pitch
-  :hook
-  (text-mode . mixed-pitch-mode))
-#+end_src
 
 *** TeX style
 #+begin_src emacs-lisp
   (defun niva/org-tex-style()
     (interactive)
-    (setq org-hidden-keywords '(title))
+    (setq org-hidden-keywords '(title)
+          org-cycle-level-faces nil
+          org-n-level-faces 4)
 
-    (set-face-attribute 'org-document-title nil
-                        :height 2.0
-                        :weight 'regular
-                        :font "CMU Serif"
-                        :foreground nil
-                        )
-
-    ;; set basic title font
-    (set-face-attribute 'org-level-8 nil :weight 'bold :inherit 'default)
-    ;; Low levels are unimportant = no scalinkjukjg
+    (set-face-attribute 'org-level-8 nil :inhherit 'default :weight 'bold)
     (set-face-attribute 'org-level-7 nil :inherit 'org-level-8)
     (set-face-attribute 'org-level-6 nil :inherit 'org-level-8)
-
     (set-face-attribute 'org-level-5 nil :inherit 'org-level-8)
     (set-face-attribute 'org-level-4 nil :inherit 'org-level-8)
-    ;; Top ones get scaled the same as in LaTeX (\large, \Large, \LARGE)
     (set-face-attribute 'org-level-3 nil :inherit 'org-level-8 :height 1.2 :weight 'bold) ;\large
     (set-face-attribute 'org-level-2 nil :inherit 'org-level-8 :height 1.4 :weight 'bold) ;\Large
     (set-face-attribute 'org-level-1 nil :inherit 'org-level-8 :height 1.5 :weight 'bold) ;\LARGE
-    ;; Only use the first 4 styles and do not cycle.
-    (setq org-cycle-level-faces nil)
-    (setq org-n-level-faces 4)
+
+    (set-face-attribute 'org-document-title nil :height 2.0 :weight 'regular :font "CMU Serif" :foreground nil)
+
     (variable-pitch-mode 1)
     (niva/variable-pitch-on))
 #+end_src
@@ -1395,8 +1369,8 @@ Only use variable-pitch if explicitly called.
 #+begin_src emacs-lisp
   (setq-default browse-url-browser-function 'eww-browse-url
                 shr-use-fonts nil
-                shr-use-colors nil
-                shr-indentation 4
+                shr-use-colors t
+                ;; shr-indentation 4
                 eww-search-prefix "https://html.duckduckgo.com/html?q=")
 
   (ignore-errors
@@ -1605,11 +1579,11 @@ Only use variable-pitch if explicitly called.
     :straight t
     :config
     (setq gptel-default-mode #'org-mode
+          gptel-model "gpt-3.5-turbo"
+          gptel-max-tokens 200
           gptel-prompt-prefix-alist '((markdown-mode . "# ")
                                       (org-mode . "* ")
-                                      (text-mode . "> "))
-          gptel-model "gpt-3.5-turbo"
-          gptel-max-tokens 200)
+                                      (text-mode . "> ")))
 
     (evil-define-key 'normal gptel-mode-map "q" 'delete-window))
 #+end_src
