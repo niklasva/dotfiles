@@ -350,44 +350,54 @@ Always move cursor to help window.
 ** Mode line
 *** Mode line format
 #+begin_src emacs-lisp
-  (defun simple-mode-line-render (left right)
-    "Return a string of `window-width' length.
-           Containing LEFT, and RIGHT aligned respectively."
-    (let ((available-width
-           (- (window-total-width)
-              (+ (length (format-mode-line left))
-                 (length (format-mode-line right))))))
+  (defun niva/display-mode-line (left right)
+    (let ((available-width (- (window-total-width)
+                              (+ (length (format-mode-line left))
+                                 (length (format-mode-line right))))))
       (append left
               (list (format (format "%%%ds" available-width) ""))
               right)))
 
-  (setq-default mode-line-format
-                '((:eval
-                   (simple-mode-line-render
-                    ;; Left.
-                    (quote ("%e "
-                            (:eval (if (and buffer-file-name (buffer-modified-p))
-                                       (propertize "%b" 'face `(:slant nil))
-                                     "%b"))
-                            (:eval
-                             (if vc-mode
-                                 (let*
-                                     ((noback (replace-regexp-in-string
-                                               (format "^ %s" (vc-backend buffer-file-name)) " " vc-mode))
-                                      (face (cond ((string-match "^ -" noback) 'mode-line-vc)
-                                                  ((string-match "^ [:@]" noback) 'mode-line-vc-edit)
-                                                  ((string-match "^ [!\\?]" noback) 'mode-line-vc-modified))))
-                                   (format " |  %s" (substring noback 2)))))
-                            (:eval
-                             (setq repository-name "")
+  (defun niva/git-state-symbol ()
+    (pcase (vc-git-state (buffer-file-name))
+      ('ignored ".")
+      ('unregistered ".")
+      ('removed "-")
+      ('edited "*")
+      ('added "+")
+      ('conflict "‼")
+      (_ "")))
 
-                             (if buffer-file-name
-                                 (progn (setq repository-name (vc-git-repository-url buffer-file-name)) (setq repository-name (replace-regexp-in-string ".git" "" (replace-regexp-in-string "git@github.com:" "" repository-name))))
-                               )repository-name)
-                            " | %l:%c"))
-                    ;; Right.
-                    (quote (" " global-mode-string))))))
-#+end_src
+  (defun niva/git-branch-name ()
+    (let* ((noback (replace-regexp-in-string
+                  (format "^ %s" (vc-backend buffer-file-name)) " " vc-mode))
+         (face (cond ((string-match "^ -" noback) 'mode-line-vc)
+                     ((string-match "^ [:@]" noback) 'mode-line-vc-edit)
+                     ((string-match "^ [!\\?]" noback) 'mode-line-vc-modified))))
+      (format "%s" (substring noback 2))))
+
+  (defun niva/git-repository-name ()
+      (setq repository-name (vc-git-repository-url buffer-file-name))
+    (s-replace ".git" "" (s-replace "git@github.com:" "" repository-name)))
+
+  (setq-default mode-line-format '((:eval
+  				  (niva/display-mode-line
+  				   ;; Left.
+  				   (quote ("%e "
+                				   (:eval
+  					    (if (and buffer-file-name (buffer-modified-p))
+  						`(:propertize "%b" face (:slant nil))
+  					      "%b"))
+  					   (:eval
+  					    (if vc-mode
+  						(format " |  %s | %s%s"
+  							(niva/git-repository-name)
+    							(niva/git-state-symbol)
+  							(niva/git-branch-name))))
+  					   " | %l:%c"))
+  				   ;; Right.
+  				   (quote (" " global-mode-string))))))
+                                   #+end_src
 
 #+begin_src emacs-lisp
   (setq inhibit-compacting-font-caches t)
@@ -412,7 +422,7 @@ Always move cursor to help window.
     (set-face-attribute 'help-key-binding   nil :weight 'unspecified)
     (set-face-attribute 'tooltip            nil :inherit 'default))
   (niva/remove-font-weight)
-#+end_src
+    #+end_src
 
 ** Ligatures
 #+begin_src emacs-lisp
@@ -421,7 +431,7 @@ Always move cursor to help window.
     :config
     (global-ligature-mode t)
     (ligature-set-ligatures 'prog-mode '("==" "!=" "<-" "<--" "->" "-->")))
-#+end_src
+    #+end_src
 
 * Controls
 ** Evil mode
