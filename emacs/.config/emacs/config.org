@@ -55,25 +55,6 @@ Show only one active window when opening multiple files at the same time.
   (add-hook 'window-setup-hook 'delete-other-windows)
 #+end_src
 
-** electric-pair
-#+begin_src emacs-lisp
-  (defun prog-pair-hook ()
-    (setq electric-pair-inhibit-predicate
-          (lambda (c) (or
-                       (char-equal c ?\()
-                       (or
-                        (char-equal c ?\")
-                        (char-equal c ?\<)))))
-    (electric-pair-mode 1))
-
-  (defun c-pair-hook ()
-    (setq electric-pair-inhibit-predicate
-          (lambda (c) (or
-                       (char-equal c ?\")
-                       (char-equal c ?\<))))
-    (electric-pair-mode 1))
-#+end_src
-
 ** Indentation rules
 #+begin_src emacs-lisp
   (setq evil-auto-indent t
