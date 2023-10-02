@@ -336,14 +336,6 @@ Always move cursor to help window.
 ** Mode line
 *** Mode line format
 #+begin_src emacs-lisp
-  (defun niva/display-mode-line (left right)
-    (let ((available-width (- (window-total-width)
-                              (+ (length (format-mode-line left))
-                                 (length (format-mode-line right))))))
-      (append left
-              (list (format (format "%%%ds" available-width) ""))
-              right)))
-
   (defun niva/git-state-symbol ()
     (pcase (vc-git-state (buffer-file-name))
       ('ignored ".")
@@ -363,26 +355,23 @@ Always move cursor to help window.
       (format "%s" (substring noback 2))))
 
   (defun niva/git-repository-name ()
-    (setq repository-name (vc-git-repository-url buffer-file-name))
-    (s-replace ".git" "" (s-replace "git@github.com:" "" repository-name)))
+    (let ((repository-name (vc-git-repository-url buffer-file-name)))
+      (s-replace ".git" "" (s-replace "git@github.com:" "" repository-name))))
 
-  (setq-default mode-line-format '((:eval
-                                    (niva/display-mode-line
-                                     ;; Left.
-                                     (quote ("%e "
-                                             (:eval
-                                              (if (and buffer-file-name (buffer-modified-p))
-                                                  `(:propertize "%b" face (:slant nil))
-                                                "%b"))
-                                             (:eval
-                                              (if vc-mode
-                                                  (format " |  %s | %s%s"
-                                                          (niva/git-repository-name)
-                                                          (niva/git-state-symbol)
-                                                          (niva/git-branch-name))))
-                                             " | %l:%c"))
-                                     ;; Right.
-                                     (quote (" " global-mode-string))))))
+  (defun niva/bottom-right-window-p ()
+    (let* ((frame (selected-frame))
+           (frame-width (frame-width frame))
+           (frame-height (frame-height frame)))
+      (eq (selected-window)
+          (window-at (- frame-width 1) (- frame-height 1)))))
+
+  (setq-default mode-line-format
+                '((:eval (if (and buffer-file-name (buffer-modified-p)) "*%b" " %b"))
+                  (:eval (if vc-mode (format " |  %s%s" (niva/git-state-symbol) (niva/git-branch-name))))
+                  " | %l:%c"
+                  (:eval (propertize " " 'display (list 'space :align-to (- (window-total-width) 15))))
+                  (:eval (if (niva/bottom-right-window-p)
+                             (format "%3d   %s" niva-elfeed-unread-count (format-time-string "%R"))))))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1497,6 +1486,18 @@ Only use variable-pitch if explicitly called.
   (evil-define-key 'normal elfeed-show-mode-map "I" #'niva/elfeed-toggle-images)
   (define-key elfeed-search-mode-map (kbd "I") #'niva/elfeed-toggle-images)
   (evil-define-key 'normal elfeed-search-mode-map "r" 'elfeed-update)
+#+end_src
+
+*** Count unreads
+#+begin_src emacs-lisp
+  (defun niva/elfeed-update-unread-count ()
+    (interactive)
+    (setq niva-elfeed-unread-count
+          (cl-loop for entry in elfeed-search-entries
+                   count (memq 'unread (elfeed-entry-tags entry)))))
+
+  (add-hook 'elfeed-db-update-hook 'niva/elfeed-update-unread-count)
+  (add-hook 'elfeed-search-update-hook 'niva/elfeed-update-unread-count)
 #+end_src
 
 *** Window handling
