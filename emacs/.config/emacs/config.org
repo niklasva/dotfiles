@@ -393,8 +393,8 @@ Always move cursor to help window.
      '(error nil                         ((t (:weight     unspecified)))))
 
     (set-face-attribute 'bold               nil :weight 'unspecified)
-    (set-face-attribute 'buffer-menu-buffer nil  :weight 'unspecified)
-    (set-face-attribute 'help-key-binding   nil :weight 'unspecified)
+    (set-face-attribute 'buffer-menu-buffer nil :weight 'unspecified)
+    (set-face-attribute 'help-key-binding   nil :weight 'unspecified :family 'unspecified :box 'unspecified :inherit 'default)
     (set-face-attribute 'tooltip            nil :inherit 'default))
   (niva/remove-font-weight)
 #+end_src
@@ -848,6 +848,7 @@ Always move cursor to help window.
   (use-package esup
     :straight t)
 #+end_src
+
 ** Byte-compile config on save
 #+begin_src emacs-lisp
   (defun niva/compile-config ()
@@ -858,16 +859,14 @@ Always move cursor to help window.
        (expand-file-name "config.org" user-emacs-directory)
        (expand-file-name "config.el" user-emacs-directory) "emacs-lisp")
 
-      (byte-compile-file "~/.config/emacs/config.el")
+      (byte-compile-file (expand-file-name "config.el" user-emacs-directory))))
 
-      (message "File 'config.org' saved. Custom function executed.")))
-  (add-hook 'after-save-hook 'niva/compile-config nil 'make-it-local)
+  (add-hook 'after-save-hook 'niva/compile-config)
 #+end_src
 * Development
 ** Elisp
 
 #+begin_src emacs-lisp
-
   (defun niva/format-all-elisp-code-blocks ()
     (interactive)
     (setq-local indent-tabs-mode nil)
@@ -884,9 +883,7 @@ Always move cursor to help window.
                 (indent-region begin end nil)
                 (untabify begin end))))))
       (replace-regexp "\n *#\\+end_src"   "\n#+end_src")
-      (replace-regexp "\n *#\\+begin_src" "\n#+begin_src")
-      (replace-regexp "#\\+begin_src\n" "#+begin_src\n")
-      ))
+      (replace-regexp "\n *#\\+begin_src" "\n#+begin_src")))
   (add-hook 'before-save-hook 'niva/format-all-elisp-code-blocks)
 #+end_src
 
@@ -1259,10 +1256,10 @@ Always move cursor to help window.
 
 *** Kill buffer on quit
 #+begin_src emacs-lisp
-  (defun my-term-handle-exit (&optional process-name msg)
+  (defun niva/term-handle-exit (&optional process-name msg)
     (kill-buffer (current-buffer)))
 
-  (advice-add 'term-handle-exit :after 'my-term-handle-exit)
+  (advice-add 'term-handle-exit :after 'niva/term-handle-exit)
 #+end_src
 
 *** Log coloring
@@ -1296,11 +1293,16 @@ Always move cursor to help window.
   (use-package org
     :straight t
     :config
-    (set-face-attribute 'org-level-1 nil :height 'unspecified :weight 'unspecified)
-    (set-face-attribute 'org-level-2 nil :height 'unspecified :weight 'unspecified)
-    (set-face-attribute 'org-level-3 nil :height 'unspecified :weight 'unspecified)
-    (set-face-attribute 'org-level-4 nil :height 'unspecified :weight 'unspecified))
+    (dolist (face '(org-level-1
+                    org-level-2
+                    org-level-3
+                    org-level-4
+                    org-block-begin-line
+                    org-block-end-line))
+      (set-face-attribute face nil :height 'unspecified :weight 'unspecified)))
 #+end_src
+
+This way, you don't need to repeat the =set-face-attribute= form for each level.#+end_src
 
 *** olivetti
 #+begin_src emacs-lisp
@@ -1415,7 +1417,6 @@ Only use variable-pitch if explicitly called.
   (setq-default browse-url-browser-function 'eww-browse-url
                 shr-use-fonts nil
                 shr-use-colors t
-                ;; shr-indentation 4
                 eww-search-prefix "https://html.duckduckgo.com/html?q=")
 
   (ignore-errors
