@@ -127,7 +127,6 @@ Show only one active window when opening multiple files at the same time.
   (dolist (mode '(org-mode-hook text-mode-hook prog-mode-hook conf-mode-hook))
     (add-hook mode (lambda ()
                      (display-line-numbers-mode 1))))
-  ;; Override some modes which derive from the above
 
   (dolist (mode '(org-mode-hook)) (add-hook mode (lambda () (display-line-numbers-mode 0))))
 #+end_src
@@ -296,7 +295,6 @@ Always move cursor to help window.
   (setq modus-themes-completions '((matches . (background minimal))
                                    (selection . (background minimal))
                                    (popup . (background minimal))))
-
 #+end_src
 
 *** Kaolin
@@ -577,7 +575,6 @@ Always move cursor to help window.
     "conf"  '((lambda () (interactive) (find-file "~/.config/emacs/config.org"))                      :which-key "Open config.org")
     "vconf" '((lambda () (interactive) (split-window-right) (find-file "~/.config/emacs/config.org")) :which-key "Open config.org")
     "sconf" '((lambda () (interactive) (split-window-below) (find-file "~/.config/emacs/config.org")) :which-key "Open config.org"))
-
 #+end_src
 
 ** m-x
@@ -669,7 +666,6 @@ Always move cursor to help window.
   (use-package yasnippet-snippets
     :straight t
     :after yasnippet)
-
 #+end_src
 ** Corfu
 #+begin_src emacs-lisp
@@ -715,11 +711,11 @@ Always move cursor to help window.
     (add-to-list 'completion-at-point-functions #'cape-dabbrev)
     (add-to-list 'completion-at-point-functions #'cape-file)
     (add-to-list 'completion-at-point-functions #'cape-keyword))
-
 #+end_src
 ** buffer-move
 #+begin_src emacs-lisp
-  (use-package buffer-move :straight t)
+  (use-package buffer-move
+    :straight t)
 #+end_src
 
 ** Hydra
@@ -881,9 +877,11 @@ Always move cursor to help window.
               (let* ((begin (org-element-property :begin src-block))
                      (end (org-element-property :end src-block)))
                 (indent-region begin end nil)
-                (untabify begin end))))))
-      (replace-regexp "\n *#\\+end_src"   "\n#+end_src")
-      (replace-regexp "\n *#\\+begin_src" "\n#+begin_src")))
+                (untabify begin end)
+                (replace-regexp-in-region "\n\n*#\\+end_src" "\n#+end_src" begin end)
+                (replace-regexp-in-region "#\\+begin_src emacs-lisp\n\n*" "#+begin_src emacs-lisp\n" begin end)
+                (replace-regexp-in-region "\n *#\\+end_src"   "\n#+end_src" begin end)
+                (replace-regexp-in-region "\n *#\\+begin_src" "\n#+begin_src" begin end))))))))
   (add-hook 'before-save-hook 'niva/format-all-elisp-code-blocks)
 #+end_src
 
@@ -929,7 +927,6 @@ Always move cursor to help window.
       (call-process "yapf" nil nil nil "-i" buffer-file-name)))
 
   (add-hook 'python-mode-hook (lambda () (add-hook 'after-save-hook #'lsp-python-ms-format-buffer t t)))
-
 #+end_src
 ** Language server
 *** LSP
