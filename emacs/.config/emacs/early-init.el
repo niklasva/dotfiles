@@ -12,7 +12,7 @@
                  '(tool-bar-lines          . 0)
                  '(ns-transparent-titlebar . t)
                  '(ns-appearance           . dark)
-                 '(font                    . "Terminus (TTF) 16"))))
+                 '(font                    . "Unifont 16"))))
 
 (setq lexical-binding t)
 (require 'use-package-core)
