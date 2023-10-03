@@ -24,7 +24,9 @@
 #+begin_src emacs-lisp
   (use-package pinentry
     :straight t
-    :config (pinentry-start))
+    :config
+    (fset 'epg-wait-for-status 'ignore)
+    (pinentry-start))
 #+end_src
 
 * Imports
@@ -319,7 +321,7 @@ Always move cursor to help window.
 *** Load theme
 #+begin_src emacs-lisp
   (setq custom-safe-themes t)
-  (load-theme 'kaolin-shiva t)
+  (load-theme 'doom-tomorrow-night t)
 #+end_src
 
 ** Compilaton mode
@@ -560,6 +562,7 @@ Always move cursor to help window.
     "n"     '(flycheck-next-error        :which-key "flycheck-next-error")
     "o a"   '(org-agenda                 :which-key "Org agenda")
     "p e"   '(projectile-recentf         :which-key "projectile-recentf")
+    "r o"   '(read-only-mode             :which-key "read-only-mode")
     "s h"   '(git-gutter:stage-hunk      :which-key "git-gutter:stage-hunk")
     "t t"   '(toggle-truncate-lines      :which-key "Toggle truncate lines")
     "w U"   '(winner-redo                :which-key "winner-redo")
@@ -1459,6 +1462,12 @@ Only use variable-pitch if explicitly called.
     :config
     (setq elfeed-search-filter "+unread"
           elfeed-show-entry-switch #'niva/elfeed-split))
+
+  (defun niva/clear-elfeed ()
+    (interactive)
+    (setq elfeed-db-directory (expand-file-name "~/.elfeed"))
+    (delete-directory elfeed-db-directory t)
+    (message "Elfeed database cleared. Restart Elfeed to initialize a new database."))
 #+end_src
 
 *** elfeed-protocol
@@ -1617,6 +1626,36 @@ Only use variable-pitch if explicitly called.
         shr-external-rendering-functions '((img . +rss-render-image-tag-without-underline-fn)))
 #+end_src
 
+** irc
+#+begin_src emacs-lisp
+  (use-package circe
+    :straight t
+    :config
+    (setq
+     lui-fill-column 80
+     lui-time-stamp-position 'right
+     lui-time-stamp-only-when-changed-p t
+     lui-time-stamp-format "\n --- %a %d %b %H:%M  ---"
+     lui-fill-type nil
+
+     circe-reduce-lurker-spam t
+     circe-server-buffer-name "{network}"
+     circe-default-nick "niklas"
+     circe-default-realname "niklas"
+     circe-format-server-topic "{new-topic}"
+     circe-format-say "{nick}\n{body}\n"
+     circe-default-part-message nil
+     circe-default-quit-message nil
+     circe-chat-buffer-name " irc:{target}"
+     circe-network-defaults nil)
+
+    (niva/setup-irc-config)
+
+    (enable-circe-display-images)
+    (enable-circe-color-nicks)
+
+    (add-hook 'circe-channel-mode-hook 'read-only-mode))
+#+end_src
 * AI
 ** ChatGPT
 *** gptel
