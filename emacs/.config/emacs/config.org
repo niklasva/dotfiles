@@ -366,13 +366,21 @@ Always move cursor to help window.
       (eq (selected-window)
           (window-at (- frame-width 1) (- frame-height 1)))))
 
-  (setq-default mode-line-format
-                '((:eval (if (and buffer-file-name (buffer-modified-p)) "*%b" " %b"))
-                  (:eval (if vc-mode (format " |  %s%s" (niva/git-state-symbol) (niva/git-branch-name))))
-                  " | %l:%c"
-                  (:eval (propertize " " 'display (list 'space :align-to (- (window-total-width) 15))))
-                  (:eval (if (niva/bottom-right-window-p)
-                             (format "%3d   %s" niva-elfeed-unread-count (format-time-string "%R"))))))
+  (setq-default niva-irc-notification "")
+  (setq mode-line-format
+        '((:eval (if (and buffer-file-name (buffer-modified-p)) "*%b" " %b"))
+          (:eval (if vc-mode (format " |  %s%s" (niva/git-state-symbol) (niva/git-branch-name))))
+          " | %l:%c"
+          (:eval (propertize " " 'display (list 'space :align-to (- (window-total-width) 19))))
+          "   "
+          (:eval (when (niva/bottom-right-window-p)
+                   (format "%s %s %s"
+                           (if (= niva-elfeed-unread-count 0)
+                               "    "
+                             (format " %-2d" niva-elfeed-unread-count))
+                           (format-time-string "%R")
+                           niva-irc-notification
+                           )))))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -579,6 +587,7 @@ Always move cursor to help window.
     "gpt"   '(gptel                      :which-key "gptel")
     "rec"   '(recentf-open               :which-key "devdocs-lookup")
     "rip"   '(consult-ripgrep            :which-key "consult-ripgrep")
+    "cir"   '(circe                      :which-key "circe")
 
     "time"  '((lambda () (interactive) (message (format-time-string "%H:%M | %a %d %b | v%W")))       :which-key "Display current time")
     "conf"  '((lambda () (interactive) (find-file "~/.config/emacs/config.org"))                      :which-key "Open config.org")
@@ -1640,15 +1649,16 @@ Only use variable-pitch if explicitly called.
      lui-fill-column 80
      lui-time-stamp-position 'right
      lui-time-stamp-only-when-changed-p t
-     lui-time-stamp-format "\n --- %a %d %b %H:%M  ---"
-     lui-fill-type nil
+     lui-time-stamp-format "[%H:%M]"
+     lui-fill-type " > "
 
      circe-reduce-lurker-spam t
      circe-server-buffer-name "{network}"
      circe-default-nick "niklas"
      circe-default-realname "niklas"
      circe-format-server-topic "{new-topic}"
-     circe-format-say "{nick}\n{body}\n"
+     circe-format-say "{nick:-16s}: {body}"
+     circe-format-self-say circe-format-say
      circe-default-part-message nil
      circe-default-quit-message nil
      circe-chat-buffer-name " irc:{target}"
@@ -1656,10 +1666,22 @@ Only use variable-pitch if explicitly called.
 
     (niva/setup-irc-config)
 
-    (enable-circe-display-images)
     (enable-circe-color-nicks)
 
-    (add-hook 'circe-channel-mode-hook 'read-only-mode))
+    (add-hook 'circe-channel-mode-hook 'read-only-mode)
+
+    (circe-set-display-handler "353" 'circe-display-ignore)
+    (circe-set-display-handler "366" 'circe-display-ignore)
+
+    (defun niva/privmsg (nick userhost _command target text)
+      (message nick)
+      (setq niva-irc-notification "•"))
+    (advice-add 'circe-display-PRIVMSG :after 'niva/privmsg)
+
+    (defun niva/reset-irc-notification ()
+      (when (eq major-mode 'circe-channel-mode)
+        (setq niva-irc-notification " ")))
+    (add-hook 'buffer-list-update-hook 'niva/reset-irc-notification))
 #+end_src
 * AI
 ** ChatGPT
