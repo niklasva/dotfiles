@@ -457,6 +457,11 @@ Always move cursor to help window.
 ** Keybindings
 
 #+begin_src emacs-lisp
+  (use-package bind-key
+    :straight t)
+#+end_src
+
+#+begin_src emacs-lisp
   (setq mac-escape-modifier nil
         mac-option-modifier nil
         mac-right-command-modifier 'meta
