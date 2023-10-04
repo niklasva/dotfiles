@@ -1500,6 +1500,7 @@ Only use variable-pitch if explicitly called.
 
 *** Count unreads
 #+begin_src emacs-lisp
+  (setq-default niva-elfeed-unread-count 0)
   (defun niva/elfeed-update-unread-count ()
     (interactive)
     (setq niva-elfeed-unread-count
