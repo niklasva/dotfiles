@@ -912,17 +912,6 @@ Always move cursor to help window.
                               ("\\.hxx\\'" (".cxx"))))
 #+end_src
 ** Language server
-*** LSP
-#+begin_src emacs-lisp
-  (setq lsp-clients-clangd-args '("--clang-tidy"
-                                  "--completion-style=detailed"
-                                  "--header-insertion=never"
-                                  "--pch-storage=memory"
-                                  "--query-driver=/Applications/ARM/**/*"
-                                  "-background-index-priority=background"
-                                  "-j=8"
-                                  "--log=error"))
-#+end_src
 ** Python
 *** Pyright
 #+begin_src emacs-lisp
@@ -963,7 +952,16 @@ Always move cursor to help window.
           lsp-eldoc-enable-hover t
           lsp-eldoc-enable-signature-help t
           lsp-eldoc-prefer-signature-help t
-          lsp-completion-provider :none))
+          lsp-completion-provider :none)
+
+    (setq lsp-clients-clangd-args '("--clang-tidy"
+                                    "--completion-style=detailed"
+                                    "--header-insertion=never"
+                                    "--pch-storage=memory"
+                                    "--query-driver=/Applications/ARM/**/*"
+                                    "-background-index-priority=background"
+                                    "-j=8"
+                                    "--log=error")))
 #+end_src
 
 **** Format on save
