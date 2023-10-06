@@ -519,6 +519,21 @@ Always move cursor to help window.
   (define-key evil-normal-state-map (kbd "C-<tab>")   'tab-next)
   (define-key evil-normal-state-map (kbd "C-S-<tab>") 'tab-previous)
 
+  (define-key evil-normal-state-map (kbd "C-S-U") (lambda() (interactive) (pixel-scroll-down 8)))
+  (define-key evil-normal-state-map (kbd "C-S-D") (lambda() (interactive) (pixel-scroll-up 8)))
+#+end_src
+
+
+#+begin_src emacs-lisp
+  (global-set-key (kbd "s-q")        'save-buffers-kill-terminal)
+  (global-set-key (kbd "s-<return>") 'toggle-frame-fullscreen)
+  (global-set-key (kbd "s-t")        'tab-new)
+  (global-set-key (kbd "s-w")        'tab-close)
+  (global-set-key (kbd "s-z")        nil)
+#+end_src
+
+*** Window management
+#+begin_src emacs-lisp
   (define-key evil-normal-state-map (kbd "C-w -")   'evil-window-split)
   (define-key evil-normal-state-map (kbd "C-w |")   'evil-window-vsplit)
   (define-key evil-normal-state-map (kbd "C-w C--") 'evil-window-vsplit)
@@ -533,19 +548,21 @@ Always move cursor to help window.
   (define-key evil-normal-state-map (kbd "M->") 'ns-prev-frame)
   (define-key evil-normal-state-map (kbd "s-<") 'ns-next-frame)
   (define-key evil-normal-state-map (kbd "s->") 'ns-prev-frame)
-
-  (define-key evil-normal-state-map (kbd "C-S-U") (lambda() (interactive) (pixel-scroll-down 8)))
-  (define-key evil-normal-state-map (kbd "C-S-D") (lambda() (interactive) (pixel-scroll-up 8)))
 #+end_src
+
+**** Move to next frame if windmove fails
 
 #+begin_src emacs-lisp
-  (global-set-key (kbd "s-q")        'save-buffers-kill-terminal)
-  (global-set-key (kbd "s-<return>") 'toggle-frame-fullscreen)
-  (global-set-key (kbd "s-t")        'tab-new)
-  (global-set-key (kbd "s-w")        'tab-close)
-  (global-set-key (kbd "s-z")        nil)
-#+end_src
+  (define-key evil-normal-state-map (kbd "C-w h") (lambda() (interactive)
+                                                    (condition-case nil
+                                                        (windmove-left)
+                                                      (error (ns-next-frame)))))
 
+  (define-key evil-normal-state-map (kbd "C-w l") (lambda() (interactive)
+                                                    (condition-case nil
+                                                        (windmove-right)
+                                                      (error (ns-prev-frame)))))
+#+end_src
 ** which-key
 
 #+begin_src emacs-lisp
