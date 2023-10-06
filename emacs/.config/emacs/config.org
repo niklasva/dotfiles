@@ -962,89 +962,71 @@ Always move cursor to help window.
   (add-hook 'python-mode-hook (lambda () (add-hook 'after-save-hook #'lsp-python-ms-format-buffer t t)))
 #+end_src
 ** Language server
-*** LSP
-**** lsp-mode
+*** Eglot
 #+begin_src emacs-lisp
-  (setq use-dialog-box nil)
-  (setq use-system-tooltips t)
-
-  (use-package lsp-mode
+  (use-package eglot
     :straight t
-    :hook ((lsp-mode . lsp-enable-which-key-integration)
-           (c-mode . lsp)
-           (c++-mode . lsp)
-           (c++-ts-mode . lsp)
-           (python-mode . lsp)
-           (python-ts-mode . lsp))
-    :commands lsp
     :config
-    (setq lsp-headerline-breadcrumb-enable nil
-          lsp-keymap-prefix "C-c l"
-          lsp-signature-auto-activate nil
-          lsp-enable-symbol-highlighting nil
-          lsp-file-watch-threshold 15000
-          lsp-enable-links t
-          lsp-enable-snippet t
-          lsp-eldoc-enable-hover t
-          lsp-eldoc-enable-signature-help t
-          lsp-eldoc-prefer-signature-help t
-          lsp-completion-provider :none)
+    (add-to-list 'eglot-server-programs '((c-mode c++-mode c++-ts-mode) . ("clangd"
+                                                                           "--query-driver=/Applications/ARM/**/*"
+                                                                           "--clang-tidy"
+                                                                           "--completion-style=detailed"
+                                                                           "--pch-storage=memory"
+                                                                           "--header-insertion=never"
+                                                                           "-background-index-priority=background"
+                                                                           "-j=8"
+                                                                           "--log=error"
+                                                                           "--function-arg-placeholders"))))
+  (dolist (hook '(c-mode-hook c++-mode-hook c-ts-mode-hook c++-ts-mode-hook))
+    (add-hook hook 'eglot-ensure))
 
-    (setq lsp-clients-clangd-args '("--clang-tidy"
-                                    "--completion-style=detailed"
-                                    "--header-insertion=never"
-                                    "--pch-storage=memory"
-                                    "--query-driver=/Applications/ARM/**/*"
-                                    "-background-index-priority=background"
-                                    "-j=8"
-                                    "--log=error")))
+
+  (setq eldoc-idle-delay 0.25)
+  (setq eldoc-echo-area-use-multiline-p t)
+
+  (with-eval-after-load 'eglot
+
+    (add-hook 'eglot-managed-mode-hook
+              (lambda ()
+                (setq eldoc-documentation-functions
+                      (cons #'flymake-eldoc-function
+                            (remove #'flymake-eldoc-function eldoc-documentation-functions)))
+                (setq eldoc-documentation-strategy #'eldoc-documentation-compose))))
 #+end_src
 
 **** Format on save
 #+begin_src emacs-lisp
-  (defun lsp-c-save-hooks ()
-    (add-hook 'before-save-hook #'lsp-format-buffer t t))
+  (defun eglot-c-save-hooks ()
+    (add-hook 'before-save-hook #'eglot-format-buffer))
 
-  (add-hook 'c-mode-hook #'lsp-c-save-hooks)
-  (add-hook 'c-ts-mode-hook #'lsp-c-save-hooks)
-  (add-hook 'c++-mode-hook #'lsp-c-save-hooks)
-  (add-hook 'c++-ts-mode-hook #'lsp-c-save-hooks)
+  (add-hook 'c-mode-hook      #'eglot-c-save-hooks)
+  (add-hook 'c-ts-mode-hook   #'eglot-c-save-hooks)
+  (add-hook 'c++-mode-hook    #'eglot-c-save-hooks)
+  (add-hook 'c++-ts-mode-hook #'eglot-c-save-hooks)
 #+end_src
 
-**** lsp-ui
+**** Flymake
+
 #+begin_src emacs-lisp
-  (use-package lsp-ui
+  (use-package flymake
     :straight t
     :config
-    (setq lsp-ui-doc-show-with-cursor t
-          lsp-ui-doc-show-with-mouse t
-          lsp-ui-doc-position 'bottom
-          lsp-ui-doc-alignment 'window
-          lsp-ui-doc-delay 0.5
-          lsp-ui-doc-include-signature t
-          lsp-ui-doc-border (face-background 'corfu-border)
-          lsp-ui-sideline-enable nil
-          markdown-list-item-bullets '("-")
-          lsp-modeline-code-action-fallback-icon ""))
-
-  (custom-set-faces
-   '(markdown-code-face             ((t (:background unspecified))))
-   '(eldoc-box-border               ((t (:inherit corfu-border))))
-   '(eldoc-box-body                 ((t (:inherit corfu-default))))
-   '(lsp-ui-doc-background          ((t (:inherit corfu-default)))))
+    (setq flymake-start-on-save-buffer t
+          flymake-no-changes-timeout 1
+          flymake-fringe-indicator-position 'right-fringe
+          flymake-mode-line-lighter ""))
 #+end_src
-
-*** Flycheck
+*** Flycheck (disabled)
 **** flycheck
-#+begin_src emacs-lisp
+#+begin_src disabled
   (use-package flycheck
     :straight t
     :config
     (setq flycheck-indication-mode nil))
-#+end_src
+    #+end_src
 
 **** flycheck-popup-tip
-#+begin_src emacs-lisp
+#+begin_src disabled
   (use-package flycheck-popup-tip
     :after flycheck
     :straight t
@@ -1054,38 +1036,24 @@ Always move cursor to help window.
           flycheck-display-errors-delay 0.2))
 #+end_src
 
-*** Format on save
-#+begin_src emacs-lisp
-  (defun format-on-save-hook ()
-    (add-hook 'before-save-hook #'lsp-format-buffer t t))
-
-  (add-hook 'c-mode-hook #'format-on-save-hook)
-  (add-hook 'c-ts-mode-hook #'format-on-save-hook)
-  (add-hook 'c++-mode-hook #'format-on-save-hook)
-  (add-hook 'c++-ts-mode-hook #'format-on-save-hook)
-#+end_src
-
-** Tree-sitter (disabled)
+** Tree-sitter
 *** treesit
-#+begin_src disabled
+#+begin_src emacs-lisp
   (use-package treesit
     :straight (:type built-in)
     :config
-    (setq treesit-font-lock-level
-          treesit-language-source-alist
-          '((bash         "https://github.com/tree-sitter/tree-sitter-bash")
-            (c            "https://github.com/tree-sitter/tree-sitter-c")
-            (cpp          "https://github.com/tree-sitter/tree-sitter-cpp")
-            (cmake        "https://github.com/uyha/tree-sitter-cmake")
-            (common-lisp  "https://github.com/theHamsta/tree-sitter-commonlisp")
-            (css          "https://github.com/tree-sitter/tree-sitter-css")
-            (elisp        "https://github.com/Wilfred/tree-sitter-elisp")
-            (js           "https://github.com/tree-sitter/tree-sitter-javascript")
-            (json         "https://github.com/tree-sitter/tree-sitter-json")
-            (python       "https://github.com/tree-sitter/tree-sitter-python")
-            (tsx          "https://github.com/tree-sitter/tree-sitter-typescript")
-            (typescript   "https://github.com/tree-sitter/tree-sitter-typescript")
-            (yaml         "https://github.com/ikatyang/tree-sitter-yaml")))
+    (setq treesit-font-lock-level 1
+          c-ts-mode-indent-offset 4
+          treesit-language-source-alist '((bash         "https://github.com/tree-sitter/tree-sitter-bash")
+                                          (c            "https://github.com/tree-sitter/tree-sitter-c")
+                                          (cpp          "https://github.com/tree-sitter/tree-sitter-cpp")
+                                          (cmake        "https://github.com/uyha/tree-sitter-cmake")
+                                          (js           "https://github.com/tree-sitter/tree-sitter-javascript")
+                                          (json         "https://github.com/tree-sitter/tree-sitter-json")
+                                          (python       "https://github.com/tree-sitter/tree-sitter-python")
+                                          (tsx          "https://github.com/tree-sitter/tree-sitter-typescript")
+                                          (typescript   "https://github.com/tree-sitter/tree-sitter-typescript")
+                                          (yaml         "https://github.com/ikatyang/tree-sitter-yaml")))
 
     (dolist (pair '(("\\.sh\\'"           . bash-ts-mode)
                     ("\\.c\\'"            . c-ts-mode)
