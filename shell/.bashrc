@@ -1,5 +1,4 @@
 set -o vi
-
 eval "$(/opt/homebrew/bin/brew shellenv)"
 eval `gdircolors -b $HOME/.dircolors`
 export BASH_SILENCE_DEPRECATION_WARNING=1

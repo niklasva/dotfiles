@@ -368,20 +368,20 @@ Always move cursor to help window.
           (window-at (- frame-width 1) (- frame-height 1)))))
 
   (setq-default niva-irc-notification "")
-  (setq mode-line-format
-        '((:eval (if (and buffer-file-name (buffer-modified-p)) "*%b" " %b"))
-          (:eval (if vc-mode (format " |  %s%s" (niva/git-state-symbol) (niva/git-branch-name))))
-          " | %l:%c"
-          (:eval (propertize " " 'display (list 'space :align-to (- (window-total-width) 19))))
-          "   "
-          (:eval (when (niva/bottom-right-window-p)
-                   (format "%s %s %s"
-                           (if (= niva-elfeed-unread-count 0)
-                               "    "
-                             (format " %-2d" niva-elfeed-unread-count))
-                           (format-time-string "%R")
-                           niva-irc-notification
-                           )))))
+  (setq-default mode-line-format
+                '((:eval (if (and buffer-file-name (buffer-modified-p)) "*%b" " %b"))
+                  (:eval (if vc-mode (format " |  %s%s" (niva/git-state-symbol) (niva/git-branch-name))))
+                  " | %l:%c"
+                  (:eval (propertize " " 'display (list 'space :align-to (- (window-total-width) 19))))
+                  "   "
+                  (:eval (when (niva/bottom-right-window-p)
+                           (format "%s %s %s"
+                                   (if (= niva-elfeed-unread-count 0)
+                                       "    "
+                                     (format " %-2d" niva-elfeed-unread-count))
+                                   (format-time-string "%R")
+                                   niva-irc-notification
+                                   )))))
 #+end_src
 
 #+begin_src emacs-lisp
