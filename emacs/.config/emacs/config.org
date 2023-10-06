@@ -321,8 +321,9 @@ Always move cursor to help window.
 *** Load theme
 #+begin_src emacs-lisp
   (setq custom-safe-themes t)
-  (load-theme 'doom-acario-light t)
+  (load-theme 'doom-miramare t)
   (set-face-attribute 'internal-border nil :background 'unspecified)
+  (set-face-attribute 'link nil :foreground 'unspecified)
 #+end_src
 
 ** Compilaton mode

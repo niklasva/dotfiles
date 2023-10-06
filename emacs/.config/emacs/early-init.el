@@ -12,7 +12,7 @@
                  '(tool-bar-lines          . 0)
                  '(ns-transparent-titlebar . t)
                  '(ns-appearance           . dark)
-                 '(font                    . "UnifontExMono 16"))))
+                 '(font                    . "Monaco 13"))))
 
 (setq lexical-binding t)
 (require 'use-package-core)
