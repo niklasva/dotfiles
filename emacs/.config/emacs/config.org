@@ -388,6 +388,7 @@ Always move cursor to help window.
 #+end_src
 
 ** Font
+*** Remove font weight
 #+begin_src emacs-lisp
   (defun niva/remove-font-weight ()
     (interactive)
@@ -507,7 +508,6 @@ Always move cursor to help window.
   (define-key evil-normal-state-map (kbd "B V")     'org-babel-mark-block)
   (define-key evil-normal-state-map (kbd "SPC e b") 'org-babel-execute-src-block-maybe)
 
-
   (define-key evil-normal-state-map (kbd "C-b n")   'evil-next-buffer)
   (define-key evil-normal-state-map (kbd "C-b p")   'evil-previous-buffer)
   (define-key evil-normal-state-map (kbd "C-b C-b") 'evil-switch-to-windows-last-buffer)
@@ -575,10 +575,9 @@ Always move cursor to help window.
   (nvmap :keymaps 'override :prefix "SPC"
     "SPC"   '(execute-extended-command :which-key "M-x")
     "B"     '(project-switch-to-buffer   :which-key "Switch buffer")
-    "N"     '(flycheck-previous-error    :which-key "flycheck-previous-error")
     "b"     '(ido-switch-buffer          :which-key "Switch buffer")
     "c C"   '(recompile                  :which-key "Recompile")
-    "c a"   '(lsp-execute-code-action    :which-key "lsp-execute-code-action")
+    "c a"   '(eglot-code-actions         :which-key "eglot-code-actions")
     "c c"   '(projectile-compile-project :which-key "Compile project")
     "c t"   '(projectile-test-project    :which-key "Test project")
     "d l"   '(devdocs-lookup             :which-key "devdocs-lookup")
@@ -599,7 +598,6 @@ Always move cursor to help window.
     "m o"   '(org-set-property           :which-key "Org set property")
     "m t"   '(org-todo                   :which-key "Org todo")
     "m x"   '(org-toggle-checkbox        :which-key "Org toggle checkbox")
-    "n"     '(flycheck-next-error        :which-key "flycheck-next-error")
     "o a"   '(org-agenda                 :which-key "Org agenda")
     "p e"   '(projectile-recentf         :which-key "projectile-recentf")
     "r o"   '(read-only-mode             :which-key "read-only-mode")
@@ -773,7 +771,12 @@ Always move cursor to help window.
       ("C-j" (lambda () (interactive) (evil-window-decrease-height 4)))
       ("C-k" (lambda () (interactive) (evil-window-increase-height 4)))
       ("C-h" (lambda () (interactive) (evil-window-decrease-width 8)))
-      ("C-l" (lambda () (interactive) (evil-window-increase-width 8)))))
+      ("C-l" (lambda () (interactive) (evil-window-increase-width 8))))
+
+    (defhydra hydra-flymake-error (evil-normal-state-map "SPC fm")
+      "Flymake go to error"
+      ("n"   flymake-goto-next-error)
+      ("N" flymake-goto-prev-error)))
 #+end_src
 * File management
 ** Projectile
@@ -947,7 +950,6 @@ Always move cursor to help window.
                               ("\\.cxx\\'" (".hxx" ".hh" ".h"))
                               ("\\.hxx\\'" (".cxx"))))
 #+end_src
-** Language server
 ** Python
 *** Pyright
 #+begin_src emacs-lisp
@@ -1016,26 +1018,6 @@ Always move cursor to help window.
           flymake-fringe-indicator-position 'right-fringe
           flymake-mode-line-lighter ""))
 #+end_src
-*** Flycheck (disabled)
-**** flycheck
-#+begin_src disabled
-  (use-package flycheck
-    :straight t
-    :config
-    (setq flycheck-indication-mode nil))
-    #+end_src
-
-**** flycheck-popup-tip
-#+begin_src disabled
-  (use-package flycheck-popup-tip
-    :after flycheck
-    :straight t
-    :hook ((prog-mode . flycheck-popup-tip-mode))
-    :config
-    (setq flycheck-popup-tip-error-prefix " "
-          flycheck-display-errors-delay 0.2))
-#+end_src
-
 ** Tree-sitter
 *** treesit
 #+begin_src emacs-lisp
