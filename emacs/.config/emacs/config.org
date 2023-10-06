@@ -1366,43 +1366,25 @@ Only use variable-pitch if explicitly called.
 * Web
 ** shr
 #+begin_src emacs-lisp
-  (defun shr-put-image (spec alt &optional flags)
-    (if (display-graphic-p)
-        (let* ((size (cdr (assq 'size flags)))
-               (data (if (consp spec)
-                         (car spec)
-                       spec))
-               (content-type (and (consp spec)
-                                  (cadr spec)))
-               (start (point))
-               (image (cond
-                       ((eq size 'original)
-                        (create-image data nil t :ascent 100
-                                      :format content-type))
-                       ((eq content-type 'image/svg+xml)
-                        (when (image-type-available-p 'svg)
-                          (create-image data 'svg t :ascent 100)))
-                       ((eq size 'full)
-                        (ignore-errors
-                          (shr-rescale-image data content-type
-                                             (plist-get flags :width)
-                                             (plist-get flags :height))))
-                       (t
-                        (ignore-errors
-                          (shr-rescale-image data content-type
-                                             (plist-get flags :width)
-                                             (plist-get flags :height)))))))
-          (when image
-            (let ((image-pos (point)))
-              (if (eq size 'original)
-                  (insert-sliced-image image (or alt "*") nil 20 1)
-                (insert-image image (or alt "*")))
-              (put-text-property start (point) 'image-size size)
-              (when (and shr-image-animate
-                         (cdr (image-multi-frame-p image)))
-                (image-animate image nil 60 image-pos))))
-          image)
-      (insert (or alt ""))))
+  (defun niva/insert-image (image &optional alt _area _slice)
+    (let ((height (cdr (image-size image t))))
+      (insert-sliced-image image alt nil (max 1 (/ height 20.0)) 1)))
+
+  (defun niva/put-sliced-image (spec alt &optional flags)
+    (niva/insert-image spec alt)
+    (shr-put-image spec alt flags))
+
+  (defun niva/render-image-tag-without-underline (dom &optional url)
+    (let ((start (point)))
+      (shr-tag-img dom url)
+      (put-text-property start (point) 'face '(:underline nil))))
+
+  (defun niva/setup-image-rendering ()
+    (interactive)
+    (setf shr-put-image-function #'niva/+rss-put-sliced-image-fn
+          shr-external-rendering-functions '((img . niva/+rss-render-image-tag-without-underline-fn))))
+
+  (add-hook 'elfeed-show-mode-hook 'niva/setup-image-rendering)
 #+end_src
 ** eww
 #+begin_src emacs-lisp
@@ -1624,43 +1606,54 @@ Only use variable-pitch if explicitly called.
   (use-package circe
     :straight t
     :config
-    (setq
-     lui-fill-column 80
-     lui-time-stamp-position 'right
-     lui-time-stamp-only-when-changed-p t
-     lui-time-stamp-format "[%H:%M]"
-     lui-fill-type " > "
+    (setq lui-fill-column 80
+          lui-time-stamp-position 'right
+          lui-time-stamp-only-when-changed-p t
+          lui-time-stamp-format "[%H:%M]"
+          lui-fill-type "                "
 
-     circe-reduce-lurker-spam t
-     circe-server-buffer-name "{network}"
-     circe-default-nick "niklas"
-     circe-default-realname "niklas"
-     circe-format-server-topic "{new-topic}"
-     circe-format-say "{nick:-16s}: {body}"
-     circe-format-self-say circe-format-say
-     circe-default-part-message nil
-     circe-default-quit-message nil
-     circe-chat-buffer-name " irc:{target}"
-     circe-network-defaults nil)
+          circe-reduce-lurker-spam t
+          circe-server-buffer-name "{network}"
+          circe-default-nick "niklas@niklas/irc"
+          circe-default-realname "niklas"
+          circe-format-server-topic "{new-topic}"
+          circe-format-say "{nick:-16s}{body}"
+          circe-format-self-say circe-format-say
+          circe-default-part-message nil
+          circe-default-quit-message nil
+          circe-chat-buffer-name " {target}"
+          circe-network-defaults nil
+          lui-logging-file-format "{buffer}/%Y-%m-%d.txt")
 
+    (enable-lui-logging-globally)
+    (enable-lui-track)
     (niva/setup-irc-config)
-
     (enable-circe-color-nicks)
 
     (add-hook 'circe-channel-mode-hook 'read-only-mode)
-
     (circe-set-display-handler "353" 'circe-display-ignore)
     (circe-set-display-handler "366" 'circe-display-ignore)
 
     (defun niva/privmsg (nick userhost _command target text)
-      (message nick)
+      (message (format " %s@%s" nick target))
       (setq niva-irc-notification "•"))
     (advice-add 'circe-display-PRIVMSG :after 'niva/privmsg)
 
     (defun niva/reset-irc-notification ()
       (when (eq major-mode 'circe-channel-mode)
         (setq niva-irc-notification " ")))
-    (add-hook 'buffer-list-update-hook 'niva/reset-irc-notification))
+    (add-hook 'buffer-list-update-hook 'niva/reset-irc-notification)
+
+    (setq lui-time-stamp-position 'right-margin
+          lui-fill-type nil)
+
+    (defun my-lui-setup ()
+      (setq fringes-outside-margins t
+            right-margin-width 7
+            word-wrap t;
+            wrap-prefix "            ")
+      (setf (cdr (assoc 'continuation fringe-indicator-alist)) nil))
+    (add-hook 'lui-mode-hook 'my-lui-setup))
 #+end_src
 * AI
 ** ChatGPT
