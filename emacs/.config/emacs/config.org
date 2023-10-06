@@ -1071,7 +1071,7 @@ Always move cursor to help window.
     (if (string-match-p "modus" (prin1-to-string custom-enabled-themes))
         (progn (set-face-attribute 'git-gutter-fr:added    nil :foreground (face-attribute 'modus-themes-fg-green-intense :foreground) :background 'unspecified)
                (set-face-attribute 'git-gutter-fr:modified nil :foreground (face-attribute 'modus-themes-fg-blue          :foreground) :background 'unspecified)
-               (set-face-attribute 'git-gutter-fr:deleted  nil :foreground (face-attribute 'modus-themes-fg-red-intense   :foreground) :background 'unspecified)))
+               (set-face-attribute 'git-gutter-fr:deleted  nil :foreground (face-attribute 'modus-themes-fg-red-intense   :foreground) :background 'unspecified))
 #+end_src
 
 ***** Graphics
@@ -1157,7 +1157,7 @@ Always move cursor to help window.
     "..X."
     ".X..")
 
-  (global-git-gutter-mode 1))
+  (global-git-gutter-mode 1)))
 #+end_src
 
 *** magit
