@@ -408,6 +408,15 @@ Always move cursor to help window.
   (niva/remove-font-weight)
 #+end_src
 
+*** Enable chinese characters
+
+#+begin_src emacs-lisp
+  (use-package cnfonts
+    :straight t
+    :config
+    (setq cnfonts-use-face-font-rescale t))
+#+end_src
+
 ** Ligatures
 #+begin_src emacs-lisp
   (use-package ligature
