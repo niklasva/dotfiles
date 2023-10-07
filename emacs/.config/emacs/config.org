@@ -160,12 +160,15 @@ Prevent emacs from contaminating system clipboard.
   (setq inhibit-startup-message t
         inhibit-startup-echo-area-message t)
 
+
   (scroll-bar-mode -1)
   (tool-bar-mode -1)
   (tooltip-mode nil)
   (menu-bar-mode 1)
   (set-fringe-mode 1)
   (global-visual-line-mode t)
+  (global-hl-line-mode -1)
+  (blink-cursor-mode 1)
 
   (setq-default left-fringe-width 16
                 right-fringe-width 3)
@@ -196,33 +199,13 @@ Always move cursor to help window.
 #+begin_src emacs-lisp
   (winner-mode 1)
 #+end_src
-** Tabs
+
+*** Tabs
 #+begin_src emacs-lisp
-  (defun niva/tab-bar-config ()
-    (setq tab-bar-show nil
-          tab-bar-auto-width-max '(120 . 20)
-          tab-bar-close-button-show nil
-          tab-bar-close-tab-select 'recent
-          tab-bar-new-button-show nil
-          tab-bar-new-tab-to 'right
-          tab-bar-position nil
-          tab-bar-tab-name-function 'tab-bar-tab-name-current)
-
-    (set-face-attribute 'tab-bar nil
-                        :box nil
-                        :background (face-attribute 'default :background))
-    (set-face-attribute 'tab-bar-tab nil
-                        :box nil
-                        :background (face-attribute 'default :background)
-                        :foreground (face-attribute 'font-lock-keyword-face :foreground))
-    (set-face-attribute 'tab-bar-tab-inactive nil
-                        :box nil
-                        :background (face-attribute 'default :background)
-                        :foreground (face-attribute 'font-lock-comment-face :foreground)))
-  (niva/tab-bar-config)
-
-  (global-hl-line-mode -1)
-  (blink-cursor-mode 1)
+  (use-package tab-bar-echo-area
+    :straight t
+    :config
+    (tab-bar-echo-area-mode 1))
 #+end_src
 
 *** tab-bar-echo-area
@@ -313,6 +296,7 @@ Always move cursor to help window.
       ('added "+")
       ('conflict "‼")
       (_ "")))
+
 
   (defun niva/git-branch-name ()
     (let* ((noback (replace-regexp-in-string
