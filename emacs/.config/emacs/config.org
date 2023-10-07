@@ -705,6 +705,7 @@ Always move cursor to help window.
     (add-to-list 'completion-at-point-functions #'cape-file)
     (add-to-list 'completion-at-point-functions #'cape-keyword))
 #+end_src
+
 ** buffer-move
 #+begin_src emacs-lisp
   (use-package buffer-move
@@ -729,6 +730,7 @@ Always move cursor to help window.
       ("n"   flymake-goto-next-error)
       ("N" flymake-goto-prev-error)))
 #+end_src
+
 * File management
 ** Projectile
 #+begin_src emacs-lisp
@@ -1307,16 +1309,15 @@ Only use variable-pitch if explicitly called.
 
 ** org-tempo
 #+begin_src emacs-lisp
-  (require 'org-tempo)
-  (add-to-list 'org-structure-template-alist '("sh"   . "src sh"))
-  (add-to-list 'org-structure-template-alist '("el"   . "src emacs-lisp"))
-  (add-to-list 'org-structure-template-alist '("sc"   . "src scheme"))
-  (add-to-list 'org-structure-template-alist '("ts"   . "src typescript"))
-  (add-to-list 'org-structure-template-alist '("py"   . "src python"))
-  (add-to-list 'org-structure-template-alist '("go"   . "src go"))
-  (add-to-list 'org-structure-template-alist '("yaml" . "src yaml"))
-  (add-to-list 'org-structure-template-alist '("json" . "src json"))
-  (add-to-list 'org-structure-template-alist '("cpp"  . "src cpp"))
+  (dolist (pair '(("sh"   . "src sh")
+                  ("el"   . "src emacs-lisp")
+                  ("sc"   . "src scheme")
+                  ("ts"   . "src typescript")
+                  ("py"   . "src python")
+                  ("go"   . "src go")
+                  ("yaml" . "src yaml")
+                  ("json" . "src json")
+                  ("cpp"  . "src cpp"))))
 #+end_src
 
 * Web
