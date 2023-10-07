@@ -1312,25 +1312,72 @@ Only use variable-pitch if explicitly called.
 * Web
 ** shr
 #+begin_src emacs-lisp
-  (defun niva/insert-image (image &optional alt _area _slice)
-    (let ((height (cdr (image-size image t))))
-      (insert-sliced-image image alt nil (max 1 (/ height 20.0)) 1)))
+  (use-package shr
+    :straight t
+    :config
+    ;; (setq shr-inhibit-images t)
+    ;; Don't use proportional fonts for text
+    (setq shr-use-fonts nil)
+    (setq shr-width 75)
+    ;; https://github.com/thanhvg/emacs-hnreader/tree/master#recommended-settings-for-eww
+    ;; improve pictures srolling
+    (defun shr-put-image (spec alt &optional flags)
+      "Insert image SPEC with a string ALT.  Return image.
+  SPEC is either an image data blob, or a list where the first
+  element is the data blob and the second element is the content-type.
+  Hack to use `insert-sliced-image' to avoid jerky image scrolling."
+      (if (display-graphic-p)
+          (let* ((size (cdr (assq 'size flags)))
+                 (data (if (consp spec)
+                           (car spec)
+                         spec))
+                 (content-type (and (consp spec)
+                                    (cadr spec)))
+                 (start (point))
+                 (image (cond
+                         ((eq size 'original)
+                          (create-image data nil t :ascent 100
+                                        :format content-type))
+                         ((eq content-type 'image/svg+xml)
+                          (create-image data 'svg t :ascent 100))
+                         ((eq size 'full)
+                          (ignore-errors
+                            (shr-rescale-image data content-type
+                                               (plist-get flags :width)
+                                               (plist-get flags :height))))
+                         (t
+                          (ignore-errors
+                            (shr-rescale-image data content-type
+                                               (plist-get flags :width)
+                                               (plist-get flags :height)))))))
+            (when image
+              (let* ((image-pixel-cons (image-size image t))
+                     (image-pixel-width (car image-pixel-cons))
+                     (image-pixel-height (cdr image-pixel-cons))
+                     (image-scroll-rows (round (/ image-pixel-height (default-font-height)))))
+                ;; When inserting big-ish pictures, put them at the
+                ;; beginning of the line.
+                (when (and (> (current-column) 0)
+                           (> (car (image-size image t)) 400))
+                  (insert "\n"))
 
-  (defun niva/put-sliced-image (spec alt &optional flags)
-    (niva/insert-image spec alt)
-    (shr-put-image spec alt flags))
+                (insert-sliced-image image (or alt "*") nil image-scroll-rows 1)
+                ;; (if (eq size 'original)
+                ;;     (insert-sliced-image image (or alt "*") nil image-scroll-rows 1)
+                ;;   (insert-image image (or alt "*")))
 
-  (defun niva/render-image-tag-without-underline (dom &optional url)
-    (let ((start (point)))
-      (shr-tag-img dom url)
-      (put-text-property start (point) 'face '(:underline nil))))
-
-  (defun niva/setup-image-rendering ()
-    (interactive)
-    (setf shr-put-image-function #'niva/+rss-put-sliced-image-fn
-          shr-external-rendering-functions '((img . niva/+rss-render-image-tag-without-underline-fn))))
-
-  (add-hook 'elfeed-show-mode-hook 'niva/setup-image-rendering)
+                (put-text-property start (point) 'image-size size)
+                (when (and shr-image-animate
+                           (cond ((fboundp 'image-multi-frame-p)
+                                  ;; Only animate multi-frame things that specify a
+                                  ;; delay; eg animated gifs as opposed to
+                                  ;; multi-page tiffs.  FIXME?
+                                  (cdr (image-multi-frame-p image)))
+                                 ((fboundp 'image-animated-p)
+                                  (image-animated-p image))))
+                  (image-animate image nil 60))))
+            image)
+        (insert (or alt "")))))
 #+end_src
 ** eww
 #+begin_src emacs-lisp
@@ -1535,16 +1582,6 @@ Only use variable-pitch if explicitly called.
     (insert "\n        ")
     (shr-put-image spec alt flags)
     (insert "\n\n"))
-#+end_src
-
-#+begin_src emacs-lisp
-  (defun +rss-render-image-tag-without-underline-fn (dom &optional url)
-    (let ((start (point)))
-      (shr-tag-img dom url)
-      (put-text-property start (point) 'face '(:underline nil))))
-
-  (setq shr-put-image-function #'niva/insert-indented-image
-        shr-external-rendering-functions '((img . +rss-render-image-tag-without-underline-fn)))
 #+end_src
 
 ** irc
