@@ -1617,15 +1617,16 @@ Only use variable-pitch if explicitly called.
     (circe-set-display-handler "353" 'circe-display-ignore)
     (circe-set-display-handler "366" 'circe-display-ignore)
 
-    (defun niva/privmsg (nick userhost _command target text)
-      (message (format " %s@%s" nick target))
-      (setq niva-irc-notification "•"))
-    (advice-add 'circe-display-PRIVMSG :after 'niva/privmsg)
+    (defvar niva-irc-notification "")
 
-    (defun niva/reset-irc-notification ()
-      (when (eq major-mode 'circe-channel-mode)
-        (setq niva-irc-notification " ")))
-    (add-hook 'buffer-list-update-hook 'niva/reset-irc-notification)
+    (defun niva/privmsg (nick userhost _command target text)
+      (setq niva-irc-notification (format "%s@%s: \"%s\"" nick target (substring text 0 12)))
+      (run-with-timer 3 nil
+                      (lambda ()
+                        (setq niva-irc-notification "")
+                        (force-mode-line-update))))
+
+    (advice-add 'circe-display-PRIVMSG :after #'niva/privmsg)
 
     (setq lui-time-stamp-position 'right-margin
           lui-fill-type nil)
