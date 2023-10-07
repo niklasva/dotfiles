@@ -1392,26 +1392,30 @@ Only use variable-pitch if explicitly called.
                 shr-use-colors t
                 eww-search-prefix "https://html.duckduckgo.com/html?q=")
 
-  (ignore-errors
-    (set-face-attribute 'shr-h1 nil                    :height 'unspecified :weight 'bold)
-    (set-face-attribute 'shr-text nil                  :height 'unspecified :inherit 'default)
-    (set-face-attribute 'shr-code nil                  :height 'unspecified :inherit 'default)
-    (set-face-attribute 'variable-pitch-text nil       :height 'unspecified)
-    (set-face-attribute 'gnus-header nil               :height 'unspecified)
-    (set-face-attribute 'info-title-1 nil              :height 'unspecified)
-    (set-face-attribute 'info-title-2 nil              :height 'unspecified)
-    (set-face-attribute 'info-title-3 nil              :height 'unspecified)
-    (set-face-attribute 'info-title-4 nil              :height 'unspecified)
-    (set-face-attribute 'help-for-help-header nil      :height 'unspecified :weight 'bold)
-    (set-face-attribute 'variable-pitch nil            :height 'unspecified :family 'unspecified)
-    (set-face-attribute 'variable-pitch-text nil       :height 'unspecified :family 'unspecified)
-    (set-face-attribute 'read-multiple-choice-face nil :height 'unspecified :weight 'unspecified)
-    (set-face-attribute 'help-key-binding nil          :height 'unspecified :weight 'unspecified :family 'unspecified)
-    (set-face-attribute 'fixed-pitch nil               :height 'unspecified :weight 'unspecified :family 'unspecified :inherit 'default)
-    (set-face-attribute 'fixed-pitch-serif nil         :height 'unspecified :weight 'unspecified :family 'unspecified :inherit 'default)
-    (set-face-attribute 'info-menu-header nil          :height 'unspecified :weight 'unspecified :family 'unspecified :inherit 'default)
-    (set-face-attribute 'eww-valid-certificate nil     :weight 'unspecified :inherit 'default :foreground (face-attribute 'font-lock-preprocessor-face :foreground)))
-#+end_src
+  (dolist (face '(shr-h1
+                  shr-text
+                  shr-code
+                  variable-pitch-text
+                  gnus-header
+                  info-title-1
+                  info-title-2
+                  info-title-3
+                  info-title-4
+                  help-for-help-header
+                  variable-pitch
+                  variable-pitch-text
+                  read-multiple-choice-face
+                  help-key-binding
+                  fixed-pitch
+                  fixed-pitch-serif
+                  info-menu-header))
+    (ignore-errors
+      (set-face-attribute face nil
+                          :height 'unspecified
+                          :inherit 'default
+                          :family 'unspecified
+                          :weight 'unspecified)))
+  #+end_src
 
 #+begin_src emacs-lisp
   (defun niva/eww-toggle-images ()
