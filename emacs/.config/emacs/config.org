@@ -796,6 +796,11 @@ Always move cursor to help window.
 #+begin_src emacs-lisp
   (setq auto-save-list-file-prefix "/tmp/auto-saves/sessions/"
         auto-save-file-name-transforms `((".*" ,"/tmp/auto-saves/" t)))
+
+  (add-hook 'kill-emacs-hook
+            (lambda ()
+              (dolist (file (directory-files temporary-file-directory t "\\`auto-save-file-name-p\\'"))
+                (delete-file file))))
 #+end_src
 
 *** Lock files
