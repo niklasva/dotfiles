@@ -94,27 +94,6 @@ Show only one active window when opening multiple files at the same time.
               (add-hook 'before-save-hook 'delete-trailing-whitespace)))
 #+end_src
 
-** desktop-save-mode (disabled)
-#+begin_src disabled
-  (desktop-save-mode 1)
-  (setq desktop-path (list user-emacs-directory)
-        desktop-files-not-to-save "\\(\\`/[^/:]*:\\|(ftp)\\'\\|\\.gpg\\'\\)"
-        desktop-auto-save-timeout 600
-        desktop-restore-eager 10)
-
-
-  (add-to-list 'desktop-globals-to-save '(extended-command-history . 1000)
-               '(kill-ring . 1000))
-
-  (dolist (mode '(Info-mode
-                  compilation-mode
-                  dired-mode
-                  fundamental-mode
-                  info-lookup-mode
-                  special-mode))
-    (add-to-list 'desktop-modes-not-to-save 'special-mode)
-#+end_src
-
 ** recentf
 #+begin_src emacs-lisp
   (recentf-mode 1)
@@ -122,21 +101,9 @@ Show only one active window when opening multiple files at the same time.
         history-delete-duplicates t)
 #+end_src
 
-** Line numbers (disabled)
-#+begin_src disabled
-  (setq-default display-line-numbers-width 4)
-
-  (dolist (mode '(org-mode-hook text-mode-hook prog-mode-hook conf-mode-hook))
-    (add-hook mode (lambda ()
-                     (display-line-numbers-mode 1))))
-
-  (dolist (mode '(org-mode-hook)) (add-hook mode (lambda () (display-line-numbers-mode 0))))
-#+end_src
-
 #+begin_src emacs-lisp
   (fset 'yes-or-no-p 'y-or-n-p)
 #+end_src
-
 
 ** Scrolling behavior
 #+begin_src emacs-lisp
