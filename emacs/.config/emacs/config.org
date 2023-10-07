@@ -314,24 +314,27 @@ Always move cursor to help window.
            (frame-width (frame-width frame))
            (frame-height (frame-height frame)))
       (eq (selected-window)
-          (window-at (- frame-width 1) (- frame-height 1)))))
+          (window-at (- frame-width 3) (- frame-height 3)))))
 
-  (setq-default niva-irc-notification "")
+  (defun niva/format-right-mode-line ()
+    (format "%s %s %s %s "
+            niva-irc-notification
+            (if (= niva-elfeed-unread-count 0)
+                ""
+              (format "  %-2d" niva-elfeed-unread-count))
+            (format-time-string "%R")
+            " "
+            ))
+
+
   (setq-default mode-line-format
-                '((:eval (if (and buffer-file-name (buffer-modified-p)) "*%b" " %b"))
+                `((:eval (if (and buffer-file-name (buffer-modified-p)) "*%b" " %b"))
                   (:eval (if vc-mode (format " |  %s%s" (niva/git-state-symbol) (niva/git-branch-name))))
                   " | %l:%c"
-                  (:eval (propertize " " 'display (list 'space :align-to (- (window-total-width) 19))))
-                  "   "
-                  (:eval (when (niva/bottom-right-window-p)
-                           (format "%s %s %s"
-                                   (if (= niva-elfeed-unread-count 0)
-                                       "    "
-                                     (format " %-2d" niva-elfeed-unread-count))
-                                   (format-time-string "%R")
-                                   niva-irc-notification
-                                   )))))
+                  (:eval (propertize " " 'display (list 'space :align-to (- (window-total-width) (length (niva/format-right-mode-line))))))
+                  (:eval (if (niva/bottom-right-window-p) (niva/format-right-mode-line)))))
 #+end_src
+
 
 #+begin_src emacs-lisp
   (setq inhibit-compacting-font-caches t)
@@ -875,7 +878,8 @@ Always move cursor to help window.
                 (replace-regexp-in-region "\n\n*#\\+end_src" "\n#+end_src" begin end)
                 (replace-regexp-in-region "#\\+begin_src emacs-lisp\n\n*" "#+begin_src emacs-lisp\n" begin end)
                 (replace-regexp-in-region "\n *#\\+end_src"   "\n#+end_src" begin end)
-                (replace-regexp-in-region "\n *#\\+begin_src" "\n#+begin_src" begin end))))))))
+                (replace-regexp-in-region "\n *#\\+begin_src" "\n#+begin_src" begin end)))))))
+    (font-lock-fontify-block))
   (add-hook 'before-save-hook 'niva/format-all-elisp-code-blocks)
 #+end_src
 
