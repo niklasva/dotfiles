@@ -160,7 +160,6 @@ Prevent emacs from contaminating system clipboard.
   (setq inhibit-startup-message t
         inhibit-startup-echo-area-message t)
 
-
   (scroll-bar-mode -1)
   (tool-bar-mode -1)
   (tooltip-mode nil)
@@ -469,9 +468,6 @@ Always move cursor to help window.
   (define-key evil-normal-state-map (kbd "C-w c")     'tab-new)
   (define-key evil-normal-state-map (kbd "C-<tab>")   'tab-next)
   (define-key evil-normal-state-map (kbd "C-S-<tab>") 'tab-previous)
-
-  (define-key evil-normal-state-map (kbd "C-S-U") (lambda() (interactive) (pixel-scroll-down 8)))
-  (define-key evil-normal-state-map (kbd "C-S-D") (lambda() (interactive) (pixel-scroll-up 8)))
 #+end_src
 
 
