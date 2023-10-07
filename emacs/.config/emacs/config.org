@@ -131,7 +131,6 @@ Hide buffers by prepending space to buffer name.
 
 #+begin_src emacs-lisp
   (defun niva/hide-lsp-buffers ()
-    (interactive)
     (setq-default message-log-max nil)
     (niva/hide-buffer "*clangd*")
     (niva/hide-buffer "*clangd::stderr*")
