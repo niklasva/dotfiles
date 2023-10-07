@@ -1670,5 +1670,7 @@ Only use variable-pitch if explicitly called.
                                       (org-mode . "* ")
                                       (text-mode . "> ")))
     (with-eval-after-load 'gptel
-      (evil-define-key 'normal gptel-mode-map "q" 'delete-window)))
+      (evil-define-key 'normal gptel-mode-map "q" 'delete-window))
+
+    (add-to-list 'display-buffer-alist '("ChatGPT" display-buffer-same-window)))
 #+end_src
