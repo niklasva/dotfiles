@@ -1601,6 +1601,18 @@ Only use variable-pitch if explicitly called.
       (setf (cdr (assoc 'continuation fringe-indicator-alist)) nil))
     (add-hook 'lui-mode-hook 'my-lui-setup))
 #+end_src
+
+*** List IRC buffers
+#+begin_src emacs-lisp
+  (defun niva/switch-irc-buffers ()
+    (interactive)
+    (let ((hash-buffers (seq-filter (lambda (buf)
+                                      (string-prefix-p " #" (buffer-name buf)))
+                                    (buffer-list))))
+      (if hash-buffers
+          (completing-read "Switch to buffer: " (mapcar 'buffer-name hash-buffers))
+        (message "No buffers matching ' #' found."))))
+#+end_src
 * AI
 ** ChatGPT
 *** gptel
