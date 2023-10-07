@@ -562,6 +562,7 @@ Always move cursor to help window.
     "rec"   '(recentf-open               :which-key "devdocs-lookup")
     "rip"   '(consult-ripgrep            :which-key "consult-ripgrep")
     "cir"   '(circe                      :which-key "circe")
+    "scr"   '(scratch-buffer             :which-key "scratch-buffer")
 
     "time"  '((lambda () (interactive) (message (format-time-string "%H:%M | %a %d %b | v%W")))       :which-key "Display current time")
     "conf"  '((lambda () (interactive) (find-file "~/.config/emacs/config.org"))                      :which-key "Open config.org")
