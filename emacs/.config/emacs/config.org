@@ -269,7 +269,7 @@ Always move cursor to help window.
 *** Load theme
 #+begin_src emacs-lisp
   (setq custom-safe-themes t)
-  (load-theme 'doom-miramare t)
+  (load-theme 'doom-bluloco-dark t)
   (set-face-attribute 'internal-border nil :background 'unspecified)
   (set-face-attribute 'link nil :foreground 'unspecified)
 #+end_src
@@ -318,14 +318,13 @@ Always move cursor to help window.
 
   (defun niva/format-right-mode-line ()
     (format "%s %s %s %s "
-            niva-irc-notification
+            niva--irc-notification
             (if (= niva-elfeed-unread-count 0)
                 ""
               (format "  %-2d" niva-elfeed-unread-count))
             (format-time-string "%R")
             " "
             ))
-
 
   (setq-default mode-line-format
                 `((:eval (if (and buffer-file-name (buffer-modified-p)) "*%b" " %b"))
@@ -562,7 +561,7 @@ Always move cursor to help window.
     "rec"   '(recentf-open               :which-key "devdocs-lookup")
     "rip"   '(consult-ripgrep            :which-key "consult-ripgrep")
     "cir"   '(circe                      :which-key "circe")
-    "irc"   '(niva/switch-irc-buffers    :which-key "niva/switch-irc-buffers")
+    "ir"    '(niva/switch-irc-buffers    :which-key "niva/switch-irc-buffers")
     "scr"   '(scratch-buffer             :which-key "scratch-buffer")
 
     "time"  '((lambda () (interactive) (message (format-time-string "%H:%M | %a %d %b | v%W")))       :which-key "Display current time")
@@ -1244,13 +1243,15 @@ Always move cursor to help window.
   (use-package org
     :straight t
     :config
-    (dolist (face '(org-level-1
-                    org-level-2
-                    org-level-3
-                    org-level-4
-                    org-block-begin-line
-                    org-block-end-line))
-      (set-face-attribute face nil :height 'unspecified :weight 'unspecified)))
+    (defun niva/disable-org-font-height ()
+      (interactive)
+      (dolist (face '(org-level-1
+                      org-level-2
+                      org-level-3
+                      org-level-4
+                      org-block-begin-line
+                      org-block-end-line))
+        (set-face-attribute face nil :height 'unspecified :weight 'unspecified))))
 #+end_src
 
 *** olivetti
@@ -1594,28 +1595,28 @@ Only use variable-pitch if explicitly called.
 #+end_src
 
 ** irc
+*** circe
 #+begin_src emacs-lisp
   (use-package circe
     :straight t
     :config
-    (setq lui-fill-column 80
-          lui-time-stamp-position 'right
+    (setq lui-fill-column                    80
+          lui-time-stamp-position            'right
           lui-time-stamp-only-when-changed-p t
-          lui-time-stamp-format "[%H:%M]"
-          lui-fill-type "                "
-
-          circe-reduce-lurker-spam t
-          circe-server-buffer-name "{network}"
-          circe-default-nick "niklas@niklas/irc"
-          circe-default-realname "niklas"
-          circe-format-server-topic "{new-topic}"
-          circe-format-say "{nick:-16s}{body}"
-          circe-format-self-say circe-format-say
-          circe-default-part-message nil
-          circe-default-quit-message nil
-          circe-chat-buffer-name " {target}"
-          circe-network-defaults nil
-          lui-logging-file-format "{buffer}/%Y-%m-%d.txt")
+          lui-time-stamp-format              "[%H:%M]"
+          lui-fill-type                      "                "
+          circe-reduce-lurker-spam           t
+          circe-server-buffer-name           "{network}"
+          circe-default-nick                  "niklas"
+          circe-default-realname              "niklas"
+          circe-format-server-topic           "{new-topic}"
+          circe-format-say                    "{nick:-16s}{body}"
+          circe-format-self-say               circe-format-say
+          circe-default-part-message          nil
+          circe-default-quit-message          nil
+          circe-chat-buffer-name              " irc://{target}"
+          circe-network-defaults              nil
+          lui-logging-file-format             "{buffer}/%Y-%m-%d.txt")
 
     (enable-lui-logging-globally)
     (enable-lui-track)
@@ -1626,17 +1627,6 @@ Only use variable-pitch if explicitly called.
     (circe-set-display-handler "353" 'circe-display-ignore)
     (circe-set-display-handler "366" 'circe-display-ignore)
 
-    (defvar niva-irc-notification "")
-
-    (defun niva/privmsg (nick userhost _command target text)
-      (setq niva-irc-notification (format "%s@%s: \"%s\"" nick target (substring text 0 12)))
-      (run-with-timer 3 nil
-                      (lambda ()
-                        (setq niva-irc-notification "")
-                        (force-mode-line-update))))
-
-    (advice-add 'circe-display-PRIVMSG :after #'niva/privmsg)
-
     (setq lui-time-stamp-position 'right-margin
           lui-fill-type nil)
 
@@ -1644,9 +1634,40 @@ Only use variable-pitch if explicitly called.
       (setq fringes-outside-margins t
             right-margin-width 7
             word-wrap t;
-            wrap-prefix "            ")
+            wrap-prefix "              ")
       (setf (cdr (assoc 'continuation fringe-indicator-alist)) nil))
     (add-hook 'lui-mode-hook 'my-lui-setup))
+#+end_src
+
+*** IRC notifications
+#+begin_src emacs-lisp
+  (with-eval-after-load 'circe
+    (defvar niva--irc-notification "")
+
+    (defvar niva--irc-busy nil)
+    (defun niva/privmsg (nick userhost _command target text)
+      (unless niva--irc-busy
+        (setq niva--irc-busy t)
+        (setq niva--irc-notification (substring (format "%s@%s: \"%s\"" nick target text) 0 20))
+        (run-with-timer 3 nil
+                        (lambda ()
+                          (setq niva--irc-notification "")
+                          (force-mode-line-update)
+                          (setq niva--irc-busy nil))
+                        )))
+
+    (advice-add 'circe-display-PRIVMSG :after #'niva/privmsg)
+
+    (defun niva/remove-irc-notification-if-read (orig-func buffer-or-name &rest args)
+      (let ((buf (get-buffer buffer-or-name)))
+        (when (and buf (with-current-buffer buf (derived-mode-p 'circe-channel-mode)))
+          (setq niva--irc-notification ""))
+        (apply orig-func buffer-or-name args)))
+
+    (advice-add 'switch-to-buffer :around #'niva/remove-irc-notification-if-read))
+#+end_src
+
+#+begin_src emacs-lisp
 #+end_src
 
 *** List IRC buffers
@@ -1655,7 +1676,7 @@ Only use variable-pitch if explicitly called.
     (interactive)
     (let ((original-buffer (current-buffer)))
       (let ((irc-buffers (seq-filter (lambda (buf)
-                                       (string-prefix-p " #" (buffer-name buf)))
+                                       (string-prefix-p " irc://" (buffer-name buf)))
                                      (buffer-list))))
         (if irc-buffers
             (switch-to-buffer (completing-read "Switch to buffer: " (mapcar 'buffer-name irc-buffers)))
