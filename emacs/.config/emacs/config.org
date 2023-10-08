@@ -1645,18 +1645,20 @@ Only use variable-pitch if explicitly called.
   (with-eval-after-load 'circe
     (defvar niva--irc-notification "")
 
-    (defvar niva--irc-busy nil)
+    (defvar niva--irc-busynil)
     (defun niva/privmsg (nick userhost _command target text)
-      (niva/log-to-buffer " irc://history" (format "[%s] %s <%s> %s" (format-time-string "%R") target nick text))
+      (niva/log-to-buffer " irc://history" (format "%s %s\n%s %s\n"
+                                                   (propertize (format-time-string "[%H:%M:%S]") 'face 'font-lock-comment-face)
+                                                   (propertize target 'face 'lui-irc-colors-fg-10-face)
+                                                   (propertize (format "%s:" nick) 'face 'font-lock-string-face)
+                                                   text))
       (unless niva--irc-busy
         (setq niva--irc-busy t)
         (setq niva--irc-notification (substring (format "%s@%s: \"%s\"" nick target text) 0 20))
-        (run-with-timer 3 nil
-                        (lambda ()
-                          (setq niva--irc-notification "")
-                          (force-mode-line-update)
-                          (setq niva--irc-busy nil))
-                        )))
+        (run-with-timer 3 nil (lambda ()
+                                (setq niva--irc-notification "")
+                                (force-mode-line-update t)
+                                (setq niva--irc-busy nil)))))
 
     (advice-add 'circe-display-PRIVMSG :after #'niva/privmsg)
 
@@ -1672,8 +1674,9 @@ Only use variable-pitch if explicitly called.
 #+begin_src emacs-lisp
   (defun niva/log-to-buffer (buffer text)
     (with-current-buffer (get-buffer-create buffer)
-      (goto-char (point-max)) ; Move point to the end of the buffer
-      (insert (concat text "\n"))))
+      (with-temp-buffer
+        (insert (concat text "\n"))
+        (append-to-buffer buffer (point-min) (point-max)))))
 #+end_src
 
 *** List IRC buffers
