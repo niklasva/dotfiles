@@ -1678,6 +1678,7 @@ Only use variable-pitch if explicitly called.
 
 *** List IRC buffers
 #+begin_src emacs-lisp
+  (defvar niva--switch-irc-buffers-times 0)
   (defun niva/switch-irc-buffers ()
     (interactive)
     (let ((original-buffer (current-buffer)))
@@ -1687,11 +1688,15 @@ Only use variable-pitch if explicitly called.
         (if irc-buffers
             (switch-to-buffer (completing-read "Switch to buffer: " (mapcar 'buffer-name irc-buffers)))
           (progn
-            (message "Starting circe.")
-            (circe "znc")
-            (switch-to-buffer original-buffer)
-            (sit-for 3)
-            (niva/switch-irc-buffers))))))
+            (if (= 0 niva--switch-irc-buffers-times)
+                (progn
+                  (setq niva--switch-irc-buffers-times 1)
+                  (message "Starting Circe...")
+                  (circe "znc")
+                  (switch-to-buffer original-buffer)
+                  (sit-for 3)
+                  (niva/switch-irc-buffers))
+              (message "Circe timed out.")))))))
 #+end_src
 * AI
 ** ChatGPT
