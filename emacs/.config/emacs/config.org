@@ -1600,13 +1600,14 @@ Only use variable-pitch if explicitly called.
   (use-package circe
     :straight t
     :config
-    (setq lui-fill-column                    80
-          lui-time-stamp-position            'right
-          lui-time-stamp-only-when-changed-p t
-          lui-time-stamp-format              "[%H:%M]"
-          lui-fill-type                      "                "
-          circe-reduce-lurker-spam           t
-          circe-server-buffer-name           "{network}"
+    (setq lui-fill-column                     80
+          lui-time-stamp-position             'right
+          lui-time-stamp-only-when-changed-p  t
+          lui-time-stamp-format               "[%H:%M]"
+          lui-fill-type                       "                "
+          circe-reduce-lurker-spam            t
+          circe-server-buffer-name            "{network}"
+          circe-server-max-reconnect-attempts 2
           circe-default-nick                  "niklas"
           circe-default-realname              "niklas"
           circe-format-server-topic           "{new-topic}"
@@ -1646,6 +1647,7 @@ Only use variable-pitch if explicitly called.
 
     (defvar niva--irc-busy nil)
     (defun niva/privmsg (nick userhost _command target text)
+      (niva/log-to-buffer " irc://history" (format "[%s] %s <%s> %s" (format-time-string "%R") target nick text))
       (unless niva--irc-busy
         (setq niva--irc-busy t)
         (setq niva--irc-notification (substring (format "%s@%s: \"%s\"" nick target text) 0 20))
@@ -1668,6 +1670,10 @@ Only use variable-pitch if explicitly called.
 #+end_src
 
 #+begin_src emacs-lisp
+  (defun niva/log-to-buffer (buffer text)
+    (with-current-buffer (get-buffer-create buffer)
+      (goto-char (point-max)) ; Move point to the end of the buffer
+      (insert (concat text "\n"))))
 #+end_src
 
 *** List IRC buffers
