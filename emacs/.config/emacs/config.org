@@ -1645,7 +1645,7 @@ Only use variable-pitch if explicitly called.
   (with-eval-after-load 'circe
     (defvar niva--irc-notification "")
 
-    (defvar niva--irc-busynil)
+    (defvar niva--irc-busy nil)
     (defun niva/privmsg (nick userhost _command target text)
       (niva/log-to-buffer " irc://history" (format "%s %s\n%s %s\n"
                                                    (propertize (format-time-string "[%H:%M:%S]") 'face 'font-lock-comment-face)
