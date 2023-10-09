@@ -748,7 +748,6 @@ Always move cursor to help window.
     (add-to-list 'projectile-globally-ignored-directories ".vscode")
     (add-to-list 'projectile-globally-ignored-directories "BUILD")
     (projectile-mode +1)
-    (projectile-global-mode 1)
     (setq projectile-globally-ignored-file-suffixes '(".elc" ".pyc" ".o" ".swp" ".so" ".a" ".d" ".ld")
           projectile-globally-ignored-files '("TAGS" "tags" ".DS_Store" ".cache")
           projectile-ignored-projects `("~/.pyenv/")
@@ -1667,9 +1666,7 @@ Only use variable-pitch if explicitly called.
       (let ((buf (get-buffer buffer-or-name)))
         (when (and buf (with-current-buffer buf (derived-mode-p 'circe-channel-mode)))
           (setq niva--irc-notification ""))
-        (apply orig-func buffer-or-name args)))
-
-    (advice-add 'switch-to-buffer :around #'niva/remove-irc-notification-if-read))
+        (apply orig-func buffer-or-name args))))
 #+end_src
 
 #+begin_src emacs-lisp
