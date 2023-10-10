@@ -264,8 +264,10 @@ Always move cursor to help window.
     :config
     (solaire-global-mode +1)
     (solaire-mode-reset))
-  (add-hook 'eshell-mode-hook (lambda () (solaire-mode-reset)))
-#+end_src
+  (add-hook 'eshell-mode-hook (lambda () (solaire-mode t) (solaire-mode-reset)))
+  (add-hook 'gptel-mode-hook (lambda () (solaire-mode t) (solaire-mode-reset)))
+  (add-hook 'read-only-mode-hook (lambda () (solaire-mode t) (solaire-mode-reset)))
+  #+end_src
 *** Load theme
 #+begin_src emacs-lisp
   (setq custom-safe-themes t)
