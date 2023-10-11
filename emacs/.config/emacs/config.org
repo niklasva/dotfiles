@@ -267,11 +267,11 @@ Always move cursor to help window.
   (add-hook 'eshell-mode-hook (lambda () (solaire-mode t) (solaire-mode-reset)))
   (add-hook 'gptel-mode-hook (lambda () (solaire-mode t) (solaire-mode-reset)))
   (add-hook 'read-only-mode-hook (lambda () (solaire-mode t) (solaire-mode-reset)))
-  #+end_src
+#+end_src
 *** Load theme
 #+begin_src emacs-lisp
   (setq custom-safe-themes t)
-  (load-theme 'doom-bluloco-dark t)
+  (load-theme 'doom-tomorrow-night t)
   (set-face-attribute 'internal-border nil :background 'unspecified)
   (set-face-attribute 'link nil :foreground 'unspecified)
 #+end_src
@@ -1238,24 +1238,7 @@ Always move cursor to help window.
 #+end_src
 
 * Org
-** Org-mode appearance
-*** Base
-#+begin_src emacs-lisp
-  (use-package org
-    :straight t
-    :config
-    (defun niva/disable-org-font-height ()
-      (interactive)
-      (dolist (face '(org-level-1
-                      org-level-2
-                      org-level-3
-                      org-level-4
-                      org-block-begin-line
-                      org-block-end-line))
-        (set-face-attribute face nil :height 'unspecified :weight 'unspecified))))
-#+end_src
-
-*** olivetti
+** olivetti
 #+begin_src emacs-lisp
   (use-package olivetti
     :straight t
@@ -1265,30 +1248,6 @@ Always move cursor to help window.
                 (setq olivetti-body-width 120
                       olivetti-minimum-body-width 120))))
 #+end_src
-
-*** TeX style
-#+begin_src emacs-lisp
-  (defun niva/org-tex-style()
-    (interactive)
-    (setq org-hidden-keywords '(title)
-          org-cycle-level-faces nil
-          org-n-level-faces 4)
-
-    (set-face-attribute 'org-level-8 nil :inhherit 'default :weight 'bold)
-    (set-face-attribute 'org-level-7 nil :inherit 'org-level-8)
-    (set-face-attribute 'org-level-6 nil :inherit 'org-level-8)
-    (set-face-attribute 'org-level-5 nil :inherit 'org-level-8)
-    (set-face-attribute 'org-level-4 nil :inherit 'org-level-8)
-    (set-face-attribute 'org-level-3 nil :inherit 'org-level-8 :height 1.2 :weight 'bold)
-    (set-face-attribute 'org-level-2 nil :inherit 'org-level-8 :height 1.4 :weight 'bold)
-    (set-face-attribute 'org-level-1 nil :inherit 'org-level-8 :height 1.5 :weight 'bold)
-
-    (set-face-attribute 'org-document-title nil :height 2.0 :weight 'regular :font "CMU Serif" :foreground nil)
-
-    (variable-pitch-mode 1)
-    (niva/variable-pitch-on))
-#+end_src
-
 
 ** org
 #+begin_src emacs-lisp
