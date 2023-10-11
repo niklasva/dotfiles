@@ -1253,10 +1253,74 @@ Always move cursor to help window.
 #+begin_src emacs-lisp
   (use-package org
     :straight t
+    :hook (org-mode . niva/org-mode-setup)
     :config
     (setq org-hide-emphasis-markers t
           org-fontify-quote-and-verse-blocks t
-          org-startup-indented t))
+          org-startup-indented t)
+
+    ;; Custom faces for fancy org files
+    (defface niva-org-level-1 '((t :inherit 'outline-1 :weight light :height 1.60)) nil :group nil)
+    (defface niva-org-level-2 '((t :inherit 'outline-2 :weight light :height 1.40)) nil :group nil)
+    (defface niva-org-level-3 '((t :inherit 'outline-3 :weight light :height 1.25)) nil :group nil)
+    (defface niva-org-level-4 '((t :inherit 'outline-4 :weight light :height 1.15)) nil :group nil)
+    (defface niva-org-level-5 '((t :inherit 'outline-5 :weight light :height 1.12)) nil :group nil)
+    (defface niva-org-level-6 '((t :inherit 'outline-6 :weight light :height 1.1))  nil :group nil)
+    (defface niva-org-level-7 '((t :inherit 'outline-7 :weight light :height 1.1))  nil :group nil)
+    (defface niva-org-level-8 '((t :inherit 'outline-8 :weight light :height 1.1))  nil :group nil))
+
+  (use-package org-superstar
+    :straight t)
+
+  (defun niva/org-remove-stars ()
+    (font-lock-add-keywords
+     nil
+     '(("^\\*+ "
+        (0
+         (prog1 nil
+           (put-text-property (match-beginning 0) (match-end 0)
+                              'invisible t)))))))
+
+  (defun niva/org-mode-setup ()
+    (unless (string= (buffer-name) "config.org")
+      (let ((variable-pitch-font "Helvetica")
+            (variable-pitch-height 180)
+            (fixed-pitch-font "Monaco")
+            (fixed-pitch-height 130)
+            (org-hide-leading-stars t)
+            (evil-auto-indent nil))
+
+        (chunyang-org-mode-remove-stars)
+
+        (setq-local org-level-faces '(niva-org-level-1
+                                      niva-org-level-2
+                                      niva-org-level-3
+                                      niva-org-level-4
+                                      niva-org-level-5
+                                      niva-org-level-6
+                                      niva-org-level-7
+                                      niva-org-level-8))
+
+        (set-face-attribute 'variable-pitch nil :family variable-pitch-font :height variable-pitch-height)
+        (set-face-attribute 'fixed-pitch    nil :family fixed-pitch-font    :height fixed-pitch-height)
+
+                                          ;, (dolist (face '((org-block                 . fixed-pitch)
+                                          ;,                 (org-code                  . fixed-pitch)
+                                          ;,                 (org-document-info-keyword . fixed-pitch)
+                                          ;,                 (org-indent                . (org-hide fixed-pitch))
+                                          ;,                 (org-meta-line             . (font-lock-comment-face fixed-pitch))
+                                          ;,                 (org-property-value        . fixed-pitch)
+                                          ;,                 (org-special-keyword       . (font-lock-comment-face fixed-pitch))
+                                          ;,                 (org-table                 . fixed-pitch)
+                                          ;,                 (org-tag                   . (shadow fixed-pitch))
+                                          ;,                 (org-verbatim              . (shadow fixed-pitch)))
+                                          ;,               (set-face-attribute (car face) nil :inherit (cdr face))))
+
+        (olivetti-mode 1)
+        (org-indent-mode 1)
+        (variable-pitch-mode 1)
+        (auto-fill-mode 0)
+        (visual-line-mode 1))))
 #+end_src
 
 Only use variable-pitch if explicitly called.
@@ -1362,12 +1426,12 @@ Only use variable-pitch if explicitly called.
                   info-title-3
                   info-title-4
                   help-for-help-header
-                  variable-pitch
-                  variable-pitch-text
+                  ;; variable-pitch
+                  ;; variable-pitch-text
                   read-multiple-choice-face
                   help-key-binding
-                  fixed-pitch
-                  fixed-pitch-serif
+                  ;; fixed-pitch
+                  ;; fixed-pitch-serif
                   info-menu-header))
     (ignore-errors
       (set-face-attribute face nil
