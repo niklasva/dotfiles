@@ -1647,13 +1647,15 @@ Only use variable-pitch if explicitly called.
   (with-eval-after-load 'circe
     (defvar niva--irc-notification "")
 
+    (defun niva/irc-log-face (target)
+      (setq-local niva--irc-log-face
+                  (if (string-prefix-p "#yos" target)
+                      'font-lock-type-face
+                    'font-lock-string-face)))
+
     (defvar niva--irc-busy nil)
     (defun niva/privmsg (nick userhost _command target text)
-      (niva/log-to-buffer " irc://history" (format "%s %s\n%s %s\n"
-                                                   (propertize (format-time-string "[%H:%M:%S]") 'face 'font-lock-comment-face)
-                                                   (propertize target 'face 'lui-irc-colors-fg-10-face)
-                                                   (propertize (format "%s:" nick) 'face 'font-lock-string-face)
-                                                   text))
+      (niva/log-to-buffer " irc://history" target nick text)
       (unless niva--irc-busy
         (setq niva--irc-busy t)
         (setq niva--irc-notification (substring (format "%s@%s: \"%s\"" nick target text) 0 20))
@@ -1671,12 +1673,29 @@ Only use variable-pitch if explicitly called.
         (apply orig-func buffer-or-name args))))
 #+end_src
 
+*** IRC log window
 #+begin_src emacs-lisp
-  (defun niva/log-to-buffer (buffer text)
-    (with-current-buffer (get-buffer-create buffer)
-      (with-temp-buffer
-        (insert (concat text "\n"))
-        (append-to-buffer buffer (point-min) (point-max)))))
+  (defun niva/log-to-buffer (buffer nick target text)
+    (setq my-buffer (get-buffer-create buffer))
+    (with-current-buffer my-buffer
+      (funcall 'niva/irc-log-mode)
+      (setq buffer-read-only nil)
+      (goto-char (point-max))
+      (insert (format "%s %s %s %s\n"
+                      (propertize (format-time-string "[%H:%M]") 'face 'font-lock-comment-face)
+                      (propertize target 'face (niva/irc-log-face target))
+                      (propertize (format "%s" nick) 'face 'circe-highlight-nick-face)
+                      text))
+      (goto-char (point-max))))
+  (setq buffer-read-only t)
+#+end_src
+
+#+begin_src emacs-lisp
+  (define-derived-mode niva/irc-log-mode prog-mode ()
+    (setq window-point-insertion-type t)
+    (solaire-mode 1)
+    (read-only-mode t)
+    )
 #+end_src
 
 *** List IRC buffers
