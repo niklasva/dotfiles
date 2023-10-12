@@ -288,6 +288,12 @@ Always move cursor to help window.
 ** Mode line
 *** Mode line format
 #+begin_src emacs-lisp
+  (defun is-vc-file ()
+    (let ((backend (vc-backend (buffer-file-name))))
+      (if backend
+          t
+        nil)))
+
   (defun niva/git-state-symbol ()
     (pcase (vc-git-state (buffer-file-name))
       ('ignored ".")
@@ -298,14 +304,15 @@ Always move cursor to help window.
       ('conflict "‼")
       (_ "")))
 
+  (defvar-local niva--git-mode-line "")
+  (make-variable-buffer-local 'niva--git-mode-line)
+  (defun niva/update-git-branch-name ()
+    (interactive)
+    (if vc-mode
+        (setq niva--git-mode-line (format " |  %s%s" (niva/git-state-symbol) (substring vc-mode 5)))
+      (setq niva--git-mode-line "")))
 
-  (defun niva/git-branch-name ()
-    (let* ((noback (replace-regexp-in-string
-                    (format "^ %s" (vc-backend buffer-file-name)) " " vc-mode))
-           (face (cond ((string-match "^ -" noback) 'mode-line-vc)
-                       ((string-match "^ [:@]" noback) 'mode-line-vc-edit)
-                       ((string-match "^ [!\\?]" noback) 'mode-line-vc-modified))))
-      (format "%s" (substring noback 2))))
+  (setq my-git-branch-name-timer (run-with-timer 0 5 'niva/update-git-branch-name))
 
   (defun niva/git-repository-name ()
     (let ((repository-name (vc-git-repository-url buffer-file-name)))
@@ -321,16 +328,13 @@ Always move cursor to help window.
   (defun niva/format-right-mode-line ()
     (format "%s %s %s %s "
             niva--irc-notification
-            (if (= niva-elfeed-unread-count 0)
-                ""
+            (if (= niva-elfeed-unread-count 0) ""
               (format "  %-2d" niva-elfeed-unread-count))
-            (format-time-string "%R")
-            " "
-            ))
+            (format-time-string "%R") " "))
 
   (setq-default mode-line-format
                 `((:eval (if (and buffer-file-name (buffer-modified-p)) "*%b" " %b"))
-                  (:eval (if vc-mode (format " |  %s%s" (niva/git-state-symbol) (niva/git-branch-name))))
+                  (:eval (if vc-mode niva--git-mode-line))
                   " | %l:%c"
                   (:eval (propertize " " 'display (list 'space :align-to (- (window-total-width) (length (niva/format-right-mode-line))))))
                   (:eval (if (niva/bottom-right-window-p) (niva/format-right-mode-line)))))
