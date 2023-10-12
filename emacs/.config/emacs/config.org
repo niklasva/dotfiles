@@ -550,6 +550,7 @@ Always move cursor to help window.
     "m t"   '(org-todo                   :which-key "Org todo")
     "m x"   '(org-toggle-checkbox        :which-key "Org toggle checkbox")
     "o a"   '(org-agenda                 :which-key "Org agenda")
+    "o h"   '(consult-org-heading        :which-key "consult-org-heading")
     "p e"   '(projectile-recentf         :which-key "projectile-recentf")
     "r o"   '(read-only-mode             :which-key "read-only-mode")
     "s h"   '(git-gutter:stage-hunk      :which-key "git-gutter:stage-hunk")
