@@ -1315,13 +1315,13 @@ Always move cursor to help window.
   (defun niva/org-mode-setup ()
     (unless (string= (buffer-name) "config.org")
       (let ((variable-pitch-font "Helvetica")
-            (variable-pitch-height 180)
+            (variable-pitch-height 140)
             (fixed-pitch-font "Monaco")
             (fixed-pitch-height 130)
             (org-hide-leading-stars t)
             (evil-auto-indent nil))
 
-        (chunyang-org-mode-remove-stars)
+        (niva/org-remove-stars)
 
         (setq-local org-level-faces '(niva-org-level-1
                                       niva-org-level-2
@@ -1335,21 +1335,17 @@ Always move cursor to help window.
         (set-face-attribute 'variable-pitch nil :family variable-pitch-font :height variable-pitch-height)
         (set-face-attribute 'fixed-pitch    nil :family fixed-pitch-font    :height fixed-pitch-height)
 
-                                          ;, (dolist (face '((org-block                 . fixed-pitch)
-                                          ;,                 (org-code                  . fixed-pitch)
-                                          ;,                 (org-document-info-keyword . fixed-pitch)
-                                          ;,                 (org-indent                . (org-hide fixed-pitch))
-                                          ;,                 (org-meta-line             . (font-lock-comment-face fixed-pitch))
-                                          ;,                 (org-property-value        . fixed-pitch)
-                                          ;,                 (org-special-keyword       . (font-lock-comment-face fixed-pitch))
-                                          ;,                 (org-table                 . fixed-pitch)
-                                          ;,                 (org-tag                   . (shadow fixed-pitch))
-                                          ;,                 (org-verbatim              . (shadow fixed-pitch)))
-                                          ;,               (set-face-attribute (car face) nil :inherit (cdr face))))
+        (set-face-attribute 'org-block      nil :inherit 'fixed-pitch)
+        (set-face-attribute 'org-table      nil :inherit 'fixed-pitch)
+        (set-face-attribute 'org-code       nil :inherit 'fixed-pitch)
+        (set-face-attribute 'org-block      nil :inherit 'fixed-pitch)
 
-        (olivetti-mode 1)
+        (setq-local visual-fill-column-width 80
+                    visual-fill-column-center-text t)
+        ;; (olivetti-mode 1)
         (org-indent-mode 1)
         (variable-pitch-mode 1)
+        (visual-fill-column-mode)
         (auto-fill-mode 0)
         (visual-line-mode 1))))
 #+end_src
@@ -1364,6 +1360,8 @@ Only use variable-pitch if explicitly called.
 
 ** org-tempo
 #+begin_src emacs-lisp
+  (require 'org-tempo)
+  (add-to-list 'org-modules 'org-tempo)
   (dolist (pair '(("sh"   . "src sh")
                   ("el"   . "src emacs-lisp")
                   ("sc"   . "src scheme")
@@ -1372,9 +1370,68 @@ Only use variable-pitch if explicitly called.
                   ("go"   . "src go")
                   ("yaml" . "src yaml")
                   ("json" . "src json")
-                  ("cpp"  . "src cpp"))))
+                  ("cpp"  . "src cpp")))
+    (add-to-list 'org-structure-template-alist pair))
 #+end_src
 
+
+** org code blocks
+#+begin_src emacs-lisp
+  (defun narrow-to-region-indirect (start end)
+    "Restrict editing in this buffer to the current region, indirectly."
+    (interactive "r")
+    (deactivate-mark)
+    (let ((buf (clone-indirect-buffer nil nil)))
+      (with-current-buffer buf
+        (narrow-to-region start end))
+      (switch-to-buffer buf)))
+#+end_src
+** org-roam
+#+begin_src emacs-lisp
+  (use-package org-roam
+    :straight t
+    :config
+    (when (fboundp 'niva/setup-org-roam)
+      (niva/setup-org-roam))
+
+    (org-roam-db-autosync-enable))
+
+  (use-package websocket
+    :straight t
+    :after org-roam)
+
+  (use-package org-roam-ui
+    :straight t
+    :after org-roam
+    :hook (after-init . org-roam-ui-mode)
+    :config
+    (setq org-roam-ui-sync-theme t
+          org-roam-ui-follow t
+          org-roam-ui-update-on-save t))
+
+  (setq org-roam-file-exclude-regexp (concat (regexp-quote "logseq/bak") "\\|" (regexp-quote "logseq/.recycle")))
+  (setq org-roam-dailies-directory "journals/")
+
+  (setq org-roam-capture-templates
+        '(("d"
+           "default"
+           plain
+           "%?"
+           :target (file+head "pages/${slug}.org" "#+title: ${title}\n")
+           :unnarrowed t)))
+
+  (setq org-roam-dailies-capture-templates
+        '(("d"
+           "default"
+           entry
+           "* %?"
+           :target (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n\n"))))
+#+end_src
+** visual-fill-column
+#+begin_src emacs-lisp
+  (use-package visual-fill-column
+    :straight t)
+#+end_src
 * Web
 ** shr
 #+begin_src emacs-lisp
