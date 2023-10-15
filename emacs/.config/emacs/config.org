@@ -67,7 +67,7 @@ Show only one active window when opening multiple files at the same time.
                 indent-line-function 'evil-indent-line
                 evil-indent-convert-tabs nil
                 indent-tabs-mode nil
-                tab-always-indent 'complete
+                tab-always-indent t
                 tab-width 2
                 org-src-tab-acts-natively t)
 
@@ -710,6 +710,7 @@ Always move cursor to help window.
     (setq corfu-popupinfo-delay '(0.5 . 0.2)))
 
   (add-hook 'eshell-mode-hook (lambda () (setq-local corfu-auto nil) (corfu-mode)))
+  (add-hook 'org-mode-hook (lambda () (corfu-mode)))
 
   (defun corfu-send-shell (&rest _)
     "Send completion candidate when inside comint/eshell."
@@ -731,6 +732,7 @@ Always move cursor to help window.
     :config
     (add-to-list 'completion-at-point-functions #'cape-dabbrev)
     (add-to-list 'completion-at-point-functions #'cape-file)
+    (add-to-list 'completion-at-point-functions #'cape-elisp-block)
     (add-to-list 'completion-at-point-functions #'cape-keyword))
 #+end_src
 
