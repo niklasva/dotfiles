@@ -574,6 +574,9 @@ Always move cursor to help window.
     "m o"   '(org-set-property           :which-key "Org set property")
     "m t"   '(org-todo                   :which-key "Org todo")
     "m x"   '(org-toggle-checkbox        :which-key "Org toggle checkbox")
+    "n f"   '(org-roam-node-find         :which-key "Find Org-roam node")
+    "n i"   '(org-roam-node-insert       :which-key "Insert Org-roam node")
+    "n u"   '(org-roam-ui-open           :which-key "Open Org-roam UI")
     "o a"   '(org-agenda                 :which-key "Org agenda")
     "o h"   '(consult-org-heading        :which-key "consult-org-heading")
     "p e"   '(projectile-recentf         :which-key "projectile-recentf")
@@ -1476,6 +1479,12 @@ Only use variable-pitch if explicitly called.
     (eww-reload))
 #+end_src
 
+** webkit
+#+begin_src emacs-lisp
+  (setq browse-url-browser-function (lambda (url session)
+                                      (other-window 1)
+                                      (xwidget-webkit-browse-url url)))
+#+end_src
 ** elfeed
 
 #+begin_src emacs-lisp
