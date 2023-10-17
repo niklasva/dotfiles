@@ -393,7 +393,8 @@ Always move cursor to help window.
   (use-package cnfonts
     :straight t
     :config
-    (setq cnfonts-use-face-font-rescale t)
+    (setq cnfonts-use-face-font-rescale t
+          cnfonts-default-fontsize 16)
     (cnfonts-mode 1))
 #+end_src
 
@@ -925,7 +926,7 @@ Always move cursor to help window.
                 (replace-regexp-in-region "\n *#\\+end_src"   "\n#+end_src" begin end)
                 (replace-regexp-in-region "\n *#\\+begin_src" "\n#+begin_src" begin end)))))))
     (font-lock-fontify-block))
-  (add-hook 'before-save-hook 'niva/format-all-elisp-code-blocks)
+  ;; (add-hook 'before-save-hook 'niva/format-all-elisp-code-blocks)
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1216,22 +1217,23 @@ Always move cursor to help window.
                 (define-key eshell-mode-map      (kbd "C-r")     'eshell-isearch-backward)
                 (define-key eshell-mode-map      (kbd "C-u")     'eshell-kill-input)))
 
-    (setq eshell-hist-ignoredups t
-          eshell-ask-to-save-history 'always
-          eshell-cmpl-cycle-completions t
-          eshell-cmpl-ignore-case t
-          eshell-error-if-no-glob t
-          eshell-glob-case-insensitive t
-          eshell-input-filter (lambda (input) (not (string-match-p "\\`\\s-+" input)))
-          eshell-kill-processes-on-exit t
-          eshell-scroll-to-bottom-on-input 'all
-          eshell-scroll-to-bottom-on-output nil
+    (setq eshell-ask-to-save-history 'always
           eshell-banner-message
           '(format "%s %s\n"
                    (propertize (format " %s " (string-trim (buffer-name)))
                                'face 'mode-line-highlight)
                    (propertize (current-time-string)
-                               'face 'font-lock-keyword-face))))
+                               'face 'font-lock-keyword-face))
+          eshell-cmpl-cycle-completions t
+          eshell-cmpl-ignore-case t
+          eshell-destroy-buffer-when-process-dies nil
+          eshell-error-if-no-glob t
+          eshell-glob-case-insensitive t
+          eshell-hist-ignoredups t
+          eshell-input-filter (lambda (input) (not (string-match-p "\\`\\s-+" input)))
+          eshell-kill-processes-on-exit t
+          eshell-scroll-to-bottom-on-input 'all
+          eshell-scroll-to-bottom-on-output nil))
 #+end_src
 
 *** eshell-syntax-highlighting
@@ -1312,22 +1314,22 @@ Always move cursor to help window.
         (face-spec-reset-face face)
         (set-face-foreground face (face-attribute 'default :background)))
       (set-face-background 'fringe (face-attribute 'default :background))
-      (setq
-       ;; Edit settings
-       org-auto-align-tags nil
-       org-tags-column 0
-       org-catch-invisible-edits 'show-and-error
-       org-special-ctrl-a/e t
-       org-insert-heading-respect-content t
 
-       ;; Org styling, hide markup etc.
-       org-hide-emphasis-markers t
-       org-pretty-entities t
-       org-ellipsis "…")
+      (setq org-auto-align-tags nil
+            org-tags-column 0
+            org-catch-invisible-edits 'show-and-error
+            org-special-ctrl-a/e t
+            org-insert-heading-respect-content t
+            org-hide-emphasis-markers t
+            org-pretty-entities t
+            org-ellipsis "…"
+            org-modern-star '("*"))
+
       (org-modern-mode))
 
     (add-hook 'org-mode-hook #'niva/setup-org-modern))
 #+end_src
+
 #+begin_src disabled
   (setf (cdr (assoc 'file org-link-frame-setup)) 'find-file)
 
@@ -1389,6 +1391,7 @@ Always move cursor to help window.
         (visual-fill-column-mode)
         (auto-fill-mode 0)
         (visual-line-mode 1))))
+
 #+end_src
 
 Only use variable-pitch if explicitly called.
@@ -1434,8 +1437,15 @@ Only use variable-pitch if explicitly called.
     :config
     (when (fboundp 'niva/setup-org-roam)
       (niva/setup-org-roam))
-
     (org-roam-db-autosync-enable))
+
+  (defun my/org-roam-open-link ()
+    (interactive)
+    (if (and (eq major-mode 'org-mode) (string-match-p org-link-any-re (thing-at-point 'line)))
+        (call-interactively #'org-roam-node-find)
+      (evil-ret)))
+
+  (evil-define-key 'normal org-mode-map (kbd "RET") #'my/org-roam-open-link)
 #+end_src
 
 *** websocket
@@ -1807,8 +1817,8 @@ Only use variable-pitch if explicitly called.
             right-margin-width 7
             word-wrap t;
             wrap-prefix "              ")
-      (setf (cdr (assoc 'continuation fringe-indicator-alist)) nil))
-    (add-hook 'lui-mode-hook 'my-lui-setup))
+      (setf (cdr (assoc 'continuation fringe-indicator-alist)) nil)
+      (add-hook 'lui-mode-hook 'my-lui-setup)))
 #+end_src
 
 *** IRC notifications
