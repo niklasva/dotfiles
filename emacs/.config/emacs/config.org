@@ -247,7 +247,6 @@ Always move cursor to help window.
   (use-package ample-theme     :straight t)
   (use-package cyberpunk-theme :straight t)
   (use-package stimmung-themes :straight t)
-  (use-package color-theme-modern :straight t)
 #+end_src
 
 *** Modus
@@ -292,7 +291,7 @@ Always move cursor to help window.
 *** Load theme
 #+begin_src emacs-lisp
   (setq custom-safe-themes t)
-  (load-theme 'doom-tomorrow-night t)
+  (load-theme 'kaolin-blossom t)
   (set-face-attribute 'internal-border nil :background 'unspecified)
   (set-face-attribute 'link nil :foreground 'unspecified)
 #+end_src
@@ -394,7 +393,8 @@ Always move cursor to help window.
   (use-package cnfonts
     :straight t
     :config
-    (setq cnfonts-use-face-font-rescale t))
+    (setq cnfonts-use-face-font-rescale t)
+    (cnfonts-mode 1))
 #+end_src
 
 ** Ligatures
@@ -421,6 +421,9 @@ Always move cursor to help window.
           evil-undo-system 'undo-redo
           evil-scroll-count 8)
     (evil-mode))
+
+  (with-eval-after-load 'evil-maps
+    (define-key evil-motion-state-map (kbd "RET") nil))
 #+end_src
 
 *** general
@@ -550,50 +553,52 @@ Always move cursor to help window.
 
   (nvmap :keymaps 'override :prefix "SPC"
     "SPC"   '(execute-extended-command :which-key "M-x")
-    "B"     '(project-switch-to-buffer   :which-key "Switch buffer")
-    "b"     '(ido-switch-buffer          :which-key "Switch buffer")
-    "c C"   '(recompile                  :which-key "Recompile")
-    "c a"   '(eglot-code-actions         :which-key "eglot-code-actions")
-    "c c"   '(projectile-compile-project :which-key "Compile project")
-    "c t"   '(projectile-test-project    :which-key "Test project")
-    "d l"   '(devdocs-lookup             :which-key "devdocs-lookup")
-    "d u"   '(magit-diff-unstaged        :which-key "magit-diff-unstaged")
-    "e r"   '(eval-region                :which-key "eval-region")
-    "h p"   '(projectile-find-other-file :which-key "projectile-find-other-file")
-    "m *"   '(org-ctrl-c-star            :which-key "Org-ctrl-c-star")
-    "m +"   '(org-ctrl-c-minus           :which-key "Org-ctrl-c-minus")
-    "m ."   '(counsel-org-goto           :which-key "Counsel org goto")
-    "m B"   '(org-babel-tangle           :which-key "Org babel tangle")
-    "m I"   '(org-toggle-inline-images   :which-key "Org toggle inline imager")
-    "m T"   '(org-todo-list              :which-key "Org todo list")
-    "m e"   '(org-export-dispatch        :which-key "Org export dispatch")
-    "m f"   '(org-footnote-new           :which-key "Org footnote new")
-    "m h"   '(org-toggle-heading         :which-key "Org toggle heading")
-    "m i"   '(org-toggle-item            :which-key "Org toggle item")
-    "m n"   '(org-store-link             :which-key "Org store link")
-    "m o"   '(org-set-property           :which-key "Org set property")
-    "m t"   '(org-todo                   :which-key "Org todo")
-    "m x"   '(org-toggle-checkbox        :which-key "Org toggle checkbox")
-    "n f"   '(org-roam-node-find         :which-key "Find Org-roam node")
-    "n i"   '(org-roam-node-insert       :which-key "Insert Org-roam node")
-    "n u"   '(org-roam-ui-open           :which-key "Open Org-roam UI")
-    "o a"   '(org-agenda                 :which-key "Org agenda")
-    "o h"   '(consult-org-heading        :which-key "consult-org-heading")
-    "p e"   '(projectile-recentf         :which-key "projectile-recentf")
-    "r o"   '(read-only-mode             :which-key "read-only-mode")
-    "s h"   '(git-gutter:stage-hunk      :which-key "git-gutter:stage-hunk")
-    "t t"   '(toggle-truncate-lines      :which-key "Toggle truncate lines")
-    "w U"   '(winner-redo                :which-key "winner-redo")
-    "w u"   '(winner-undo                :which-key "winner-undo")
+    "B"     '(project-switch-to-buffer       :which-key "Switch buffer")
+    "b"     '(ido-switch-buffer              :which-key "Switch buffer")
+    "c C"   '(recompile                      :which-key "Recompile")
+    "c a"   '(eglot-code-actions             :which-key "eglot-code-actions")
+    "c c"   '(projectile-compile-project     :which-key "Compile project")
+    "c t"   '(projectile-test-project        :which-key "Test project")
+    "d l"   '(devdocs-lookup                 :which-key "devdocs-lookup")
+    "d u"   '(magit-diff-unstaged            :which-key "magit-diff-unstaged")
+    "e r"   '(eval-region                    :which-key "eval-region")
+    "h p"   '(projectile-find-other-file     :which-key "projectile-find-other-file")
+    "m *"   '(org-ctrl-c-star                :which-key "Org-ctrl-c-star")
+    "m +"   '(org-ctrl-c-minus               :which-key "Org-ctrl-c-minus")
+    "m ."   '(counsel-org-goto               :which-key "Counsel org goto")
+    "m B"   '(org-babel-tangle               :which-key "Org babel tangle")
+    "m I"   '(org-toggle-inline-images       :which-key "Org toggle inline imager")
+    "m T"   '(org-todo-list                  :which-key "Org todo list")
+    "m e"   '(org-export-dispatch            :which-key "Org export dispatch")
+    "m f"   '(org-footnote-new               :which-key "Org footnote new")
+    "m h"   '(org-toggle-heading             :which-key "Org toggle heading")
+    "m i"   '(org-toggle-item                :which-key "Org toggle item")
+    "m n"   '(org-store-link                 :which-key "Org store link")
+    "m o"   '(org-set-property               :which-key "Org set property")
+    "m t"   '(org-todo                       :which-key "Org todo")
+    "m x"   '(org-toggle-checkbox            :which-key "Org toggle checkbox")
+    "n c"   '(org-roam-dailies-capture-today :which-key "Capture today's daily note")
+    "n N"   '(org-roam-dailies-find-today    :which-key "Open today's daily note")
+    "n n"   '(org-roam-node-find             :which-key "Find Org-roam node")
+    "n i"   '(org-roam-node-insert           :which-key "Insert Org-roam node")
+    "n u"   '(org-roam-ui-open               :which-key "Open Org-roam UI")
+    "o a"   '(org-agenda                     :which-key "Org agenda")
+    "o h"   '(consult-org-heading            :which-key "consult-org-heading")
+    "p e"   '(projectile-recentf             :which-key "projectile-recentf")
+    "r o"   '(read-only-mode                 :which-key "read-only-mode")
+    "s h"   '(git-gutter:stage-hunk          :which-key "git-gutter:stage-hunk")
+    "t t"   '(toggle-truncate-lines          :which-key "Toggle truncate lines")
+    "w U"   '(winner-redo                    :which-key "winner-redo")
+    "w u"   '(winner-undo                    :which-key "winner-undo")
 
-    "elf"   '(elfeed                     :which-key "elfeed")
-    "eww"   '(eww                        :which-key "eww")
-    "gpt"   '(gptel                      :which-key "gptel")
-    "rec"   '(recentf-open               :which-key "devdocs-lookup")
-    "rip"   '(consult-ripgrep            :which-key "consult-ripgrep")
-    "cir"   '(circe                      :which-key "circe")
-    "ir"    '(niva/switch-irc-buffers    :which-key "niva/switch-irc-buffers")
-    "scr"   '(scratch-buffer             :which-key "scratch-buffer")
+    "elf"   '(elfeed                         :which-key "elfeed")
+    "eww"   '(eww                            :which-key "eww")
+    "gpt"   '(gptel                          :which-key "gptel")
+    "rec"   '(recentf-open                   :which-key "devdocs-lookup")
+    "rip"   '(consult-ripgrep                :which-key "consult-ripgrep")
+    "cir"   '(circe                          :which-key "circe")
+    "ir"    '(niva/switch-irc-buffers        :which-key "niva/switch-irc-buffers")
+    "scr"   '(scratch-buffer                 :which-key "scratch-buffer")
 
     "time"  '((lambda () (interactive) (message (format-time-string "%H:%M | %a %d %b | v%W")))       :which-key "Display current time")
     "conf"  '((lambda () (interactive) (find-file "~/.config/emacs/config.org"))                      :which-key "Open config.org")
@@ -1284,21 +1289,57 @@ Always move cursor to help window.
 #+begin_src emacs-lisp
   (use-package org
     :straight t
-    :hook (org-mode . niva/org-mode-setup)
     :config
     (setq org-hide-emphasis-markers t
           org-fontify-quote-and-verse-blocks t
-          org-startup-indented t)
+          org-startup-indented t
+          org-return-follows-link t
+          org-pretty-entities t
+          org-ellipsis "…"))
+#+end_src
 
-    ;; Custom faces for fancy org files
-    (defface niva-org-level-1 '((t :inherit 'outline-1 :weight light :height 1.60)) nil :group nil)
-    (defface niva-org-level-2 '((t :inherit 'outline-2 :weight light :height 1.40)) nil :group nil)
-    (defface niva-org-level-3 '((t :inherit 'outline-3 :weight light :height 1.25)) nil :group nil)
-    (defface niva-org-level-4 '((t :inherit 'outline-4 :weight light :height 1.15)) nil :group nil)
-    (defface niva-org-level-5 '((t :inherit 'outline-5 :weight light :height 1.12)) nil :group nil)
-    (defface niva-org-level-6 '((t :inherit 'outline-6 :weight light :height 1.1))  nil :group nil)
-    (defface niva-org-level-7 '((t :inherit 'outline-7 :weight light :height 1.1))  nil :group nil)
-    (defface niva-org-level-8 '((t :inherit 'outline-8 :weight light :height 1.1))  nil :group nil))
+** org-modern
+#+begin_src emacs-lisp
+  (use-package org-modern
+    :straight t
+    :after org
+    :config
+
+    (defun niva/setup-org-modern ()
+      (dolist (face '(window-divider
+                      window-divider-first-pixel
+                      window-divider-last-pixel))
+        (face-spec-reset-face face)
+        (set-face-foreground face (face-attribute 'default :background)))
+      (set-face-background 'fringe (face-attribute 'default :background))
+      (setq
+       ;; Edit settings
+       org-auto-align-tags nil
+       org-tags-column 0
+       org-catch-invisible-edits 'show-and-error
+       org-special-ctrl-a/e t
+       org-insert-heading-respect-content t
+
+       ;; Org styling, hide markup etc.
+       org-hide-emphasis-markers t
+       org-pretty-entities t
+       org-ellipsis "…")
+      (org-modern-mode))
+
+    (add-hook 'org-mode-hook #'niva/setup-org-modern))
+#+end_src
+#+begin_src disabled
+  (setf (cdr (assoc 'file org-link-frame-setup)) 'find-file)
+
+  ;; Custom faces for fancy org files
+  (defface niva-org-level-1 '((t :inherit 'outline-1 :weight light :height 1.40)) nil :group nil)
+  (defface niva-org-level-2 '((t :inherit 'outline-2 :weight light :height 1.20)) nil :group nil)
+  (defface niva-org-level-3 '((t :inherit 'outline-3 :weight light :height 1.15)) nil :group nil)
+  (defface niva-org-level-4 '((t :inherit 'outline-4 :weight light :height 1.13)) nil :group nil)
+  (defface niva-org-level-5 '((t :inherit 'outline-5 :weight light :height 1.12)) nil :group nil)
+  (defface niva-org-level-6 '((t :inherit 'outline-6 :weight light :height 1.1))  nil :group nil)
+  (defface niva-org-level-7 '((t :inherit 'outline-7 :weight light :height 1.1))  nil :group nil)
+  (defface niva-org-level-8 '((t :inherit 'outline-8 :weight light :height 1.1))  nil :group nil))
 
   (use-package org-superstar
     :straight t)
@@ -1321,7 +1362,7 @@ Always move cursor to help window.
             (org-hide-leading-stars t)
             (evil-auto-indent nil))
 
-        (niva/org-remove-stars)
+        ;; (niva/org-remove-stars)
 
         (setq-local org-level-faces '(niva-org-level-1
                                       niva-org-level-2
@@ -1395,38 +1436,49 @@ Only use variable-pitch if explicitly called.
       (niva/setup-org-roam))
 
     (org-roam-db-autosync-enable))
+#+end_src
 
+*** websocket
+
+#+begin_src emacs-lisp
   (use-package websocket
     :straight t
     :after org-roam)
+#+end_src
 
+*** org-roam-ui
+#+begin_src emacs-lisp
   (use-package org-roam-ui
     :straight t
     :after org-roam
-    :hook (after-init . org-roam-ui-mode)
+    ;; :hook (after-init . org-roam-ui-mode)
     :config
     (setq org-roam-ui-sync-theme t
           org-roam-ui-follow t
+          org-roam-ui-open-on-start nil
           org-roam-ui-update-on-save t))
-
-  (setq org-roam-file-exclude-regexp (concat (regexp-quote "logseq/bak") "\\|" (regexp-quote "logseq/.recycle")))
-  (setq org-roam-dailies-directory "journals/")
-
-  (setq org-roam-capture-templates
-        '(("d"
-           "default"
-           plain
-           "%?"
-           :target (file+head "pages/${slug}.org" "#+title: ${title}\n")
-           :unnarrowed t)))
-
-  (setq org-roam-dailies-capture-templates
-        '(("d"
-           "default"
-           entry
-           "* %?"
-           :target (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n\n"))))
 #+end_src
+
+*** logseq
+#+begin_src emacs-lisp
+  (use-package org-roam-logseq
+    :straight (:host github :repo "idanov/org-roam-logseq.el"))
+
+  (setq org-roam-dailies-directory "journals/"
+        org-roam-file-exclude-regexp "\\.st[^/]*\\|logseq/.*$")
+
+  (setq org-roam-capture-templates '(("d" "default"
+                                      plain
+                                      "%?"
+                                      :target (file+head "pages/${slug}.org" "#+title: ${title}\n")
+                                      :unnarrowed t)))
+
+  (setq org-roam-dailies-capture-templates '(("d" "default"
+                                              entry
+                                              "* %?"
+                                              :target (file+head "%<%Y_%m_%d>.org" "#+title: %<%Y-%m-%d>\n"))))
+#+end_src
+
 ** visual-fill-column
 #+begin_src emacs-lisp
   (use-package visual-fill-column
@@ -1803,16 +1855,15 @@ Only use variable-pitch if explicitly called.
                       (propertize target 'face (niva/irc-log-face target))
                       (propertize (format "%s" nick) 'face 'circe-highlight-nick-face)
                       text))
-      (goto-char (point-max))))
-  (setq buffer-read-only t)
+      (goto-char (point-max)))
+    (setq buffer-read-only t))
 #+end_src
 
 #+begin_src emacs-lisp
   (define-derived-mode niva/irc-log-mode prog-mode ()
     (setq window-point-insertion-type t)
     (solaire-mode 1)
-    (read-only-mode t)
-    )
+    (read-only-mode t))
 #+end_src
 
 *** List IRC buffers
@@ -1847,9 +1898,12 @@ Only use variable-pitch if explicitly called.
     (setq gptel-default-mode #'org-mode
           gptel-model "gpt-3.5-turbo"
           gptel-max-tokens 200
-          gptel-prompt-prefix-alist '((markdown-mode . "# ")
-                                      (org-mode . "* ")
-                                      (text-mode . "> ")))
+          gptel-prompt-prefix-alist '((org-mode . ""))
+          gptel-default-session "Chat"
+          gptel-stream t)
+
+    (add-hook 'gptel-pre-response-hook (lambda () (interactive) (end-of-buffer) (newline) (previous-line)))
+
     (with-eval-after-load 'gptel
       (evil-define-key 'normal gptel-mode-map "q" 'delete-window))
 
