@@ -184,7 +184,7 @@ Prevent emacs from contaminating system clipboard.
   (setq ns-use-thin-smoothing nil
         ns-use-proxy-icon nil
         ns-use-mwheel-momentum t
-        ns-antialias-text nil
+        ns-antialias-text t
         ns-use-mwheel-acceleration t
         frame-resize-pixelwise t)
 #+end_src
@@ -329,7 +329,7 @@ Always move cursor to help window.
   (defun niva/update-git-branch-name ()
     (interactive)
     (if vc-mode
-        (setq niva--git-mode-line (format " |  %s%s" (niva/git-state-symbol) (substring vc-mode 5)))
+        (setq niva--git-mode-line (format " |  %s" (substring vc-mode 5)))
       (setq niva--git-mode-line "")))
 
   (setq my-git-branch-name-timer (run-with-timer 0 5 'niva/update-git-branch-name))
@@ -346,11 +346,13 @@ Always move cursor to help window.
           (window-at (- frame-width 3) (- frame-height 3)))))
 
   (defun niva/format-right-mode-line ()
-    (format "%s %s %s %s "
-            niva--irc-notification
-            (if (= niva-elfeed-unread-count 0) ""
-              (format "  %-2d" niva-elfeed-unread-count))
-            (format-time-string "%R") " "))
+    (propertize
+     (format "%s %s %s %s "
+             niva--irc-notification
+             (if (= niva-elfeed-unread-count 0) ""
+               (format "  %-2d" niva-elfeed-unread-count))
+             (format-time-string "%R") " ")
+     'face 'mode-line))
 
   (setq-default mode-line-format
                 `((:eval (if (and buffer-file-name (buffer-modified-p)) "*%b" " %b"))
@@ -390,12 +392,12 @@ Always move cursor to help window.
 *** Enable chinese characters
 
 #+begin_src emacs-lisp
-  (use-package cnfonts
-    :straight t
-    :config
-    (setq cnfonts-use-face-font-rescale t
-          cnfonts-default-fontsize 16)
-    (cnfonts-mode 1))
+  ;; (use-package cnfonts
+  ;;   :straight t
+  ;;   :config
+  ;;   (setq cnfonts-use-face-font-rescale t
+  ;;         cnfonts-default-fontsize 16)
+  ;;   (cnfonts-mode 1))
 #+end_src
 
 ** Ligatures
@@ -553,7 +555,7 @@ Always move cursor to help window.
     (which-key-mode))
 
   (nvmap :keymaps 'override :prefix "SPC"
-    "SPC"   '(execute-extended-command :which-key "M-x")
+    "SPC"   '(execute-extended-command       :which-key "M-x")
     "B"     '(project-switch-to-buffer       :which-key "Switch buffer")
     "b"     '(ido-switch-buffer              :which-key "Switch buffer")
     "c C"   '(recompile                      :which-key "Recompile")
@@ -926,7 +928,7 @@ Always move cursor to help window.
                 (replace-regexp-in-region "\n *#\\+end_src"   "\n#+end_src" begin end)
                 (replace-regexp-in-region "\n *#\\+begin_src" "\n#+begin_src" begin end)))))))
     (font-lock-fontify-block))
-  ;; (add-hook 'before-save-hook 'niva/format-all-elisp-code-blocks)
+  (add-hook 'before-save-hook 'niva/format-all-elisp-code-blocks)
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1294,7 +1296,7 @@ Always move cursor to help window.
     :config
     (setq org-hide-emphasis-markers t
           org-fontify-quote-and-verse-blocks t
-          org-startup-indented t
+          ;; org-startup-indented t
           org-return-follows-link t
           org-pretty-entities t
           org-ellipsis "…"))
@@ -1322,6 +1324,7 @@ Always move cursor to help window.
             org-insert-heading-respect-content t
             org-hide-emphasis-markers t
             org-pretty-entities t
+            org-modern-block-fringe 8
             org-ellipsis "…"
             org-modern-star '("*"))
 
@@ -1386,7 +1389,7 @@ Always move cursor to help window.
         (setq-local visual-fill-column-width 80
                     visual-fill-column-center-text t)
         ;; (olivetti-mode 1)
-        (org-indent-mode 1)
+        ;; (org-indent-mode 1)
         (variable-pitch-mode 1)
         (visual-fill-column-mode)
         (auto-fill-mode 0)

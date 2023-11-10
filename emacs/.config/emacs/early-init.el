@@ -12,7 +12,7 @@
                  '(tool-bar-lines          . 0)
                  '(ns-transparent-titlebar . t)
                  '(ns-appearance           . dark)
-                 '(font                    . "Monaco 13"))))
+                 '(font                    . "Ubuntu Mono 13"))))
 
 (setq lexical-binding t)
 (require 'use-package-core)
