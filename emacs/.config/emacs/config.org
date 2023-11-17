@@ -1428,6 +1428,13 @@ Only use variable-pitch if explicitly called.
         (narrow-to-region start end))
       (switch-to-buffer buf)))
 #+end_src
+
+#+begin_src emacs-lisp
+  ;; Disable < matching with (
+  (modify-syntax-entry ?< ".")
+  (modify-syntax-entry ?> ".")
+#+end_src
+
 ** org-roam
 #+begin_src emacs-lisp
   (use-package org-roam
