@@ -1647,6 +1647,15 @@ Only use variable-pitch if explicitly called.
           elfeed-protocol-feeds (list (list niva/elfeed-fever-url
                                             :api-url niva/elfeed-api-url
                                             :password (niva/lookup-password :host "fever")))))
+
+  (defun niva/elfeed-refresh ()
+    (interactive)
+    (mark-whole-buffer)
+    (cl-loop for entry in (elfeed-search-selected)
+             do (elfeed-untag-1 entry 'unread))
+    (elfeed-search-update--force)
+    (message niva/elfeed-fever-url)
+    (elfeed-protocol-fever-reinit niva/elfeed-api-url))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1720,12 +1729,14 @@ Only use variable-pitch if explicitly called.
 #+end_src
 
 #+begin_src emacs-lisp
+  (setq widest-tag 0)
+  (setq widest-feed-title 0)
   (defun niva/elfeed-search-print-entry (entry)
     (let* ((feed (elfeed-entry-feed entry))
            (feed-title (when feed (or (elfeed-meta feed :title) (elfeed-feed-title feed))))
-           (tags (delete "unread" (mapcar #'symbol-name (elfeed-entry-tags entry))))
-           (star (if (member "star" tags) "*" " "))
-           (tags-str (format "%%%ds" (- 30 (string-width feed-title))))
+           (star (if (member "star" (mapcar #'symbol-name (elfeed-entry-tags entry))) "*" " "))
+           (tags (delete "unread" (delete "star" (mapcar #'symbol-name (elfeed-entry-tags entry)))))
+           (tags-str "%s")
            (date (elfeed-search-format-date (elfeed-entry-date entry)))
            (title (or (elfeed-meta entry :title) (elfeed-entry-title entry) ""))
            (title-faces (elfeed-search--faces (elfeed-entry-tags entry)))
@@ -1738,15 +1749,24 @@ Only use variable-pitch if explicitly called.
                           :left))
            (formatted-date (propertize date 'face 'elfeed-search-title-face))
            (formatted-star (propertize star 'face 'elfeed-search-tag-face))
-           (formatted-title (propertize title-column 'face title-faces 'kbd-help title))
-           (formatted-feed-title (and feed-title (propertize feed-title 'face 'elfeed-search-feed-face)))
-           (formatted-tags (and tags (propertize (format tags-str (mapconcat 'identity tags " ")) 'face 'elfeed-search-tag-face))))
+           (formatted-tags (and tags (propertize (format tags-str (mapconcat 'identity tags " ")) 'face 'elfeed-search-tag-face)))
+           (formatted-feed-title (and feed-title (propertize (format "%s" feed-title) 'face 'elfeed-search-feed-face)))
+           (formatted-title (propertize (format "%s " title-column) 'face title-faces 'kbd-help title)))
 
-      (mapc #'insert (list formatted-date " " formatted-star " " formatted-title " " formatted-feed-title " " formatted-tags))))
+      (if (< widest-tag (string-width formatted-tags))
+          (setq widest-tag (string-width formatted-tags)))
+
+      (if (< widest-feed-title (string-width formatted-feed-title))
+          (setq widest-feed-title (string-width formatted-feed-title)))
+
+      (setq tag-padding (format "%%-%ds" widest-tag))
+      (setq feed-padding (format "%%-%ds" widest-feed-title))
+
+      (mapc #'insert (list formatted-date " " formatted-star " " (format tag-padding formatted-tags) " " (format feed-padding formatted-feed-title) " " formatted-title))))
 
   (setq elfeed-search-title-min-width 30
         elfeed-search-title-max-width 120
-        elfeed-search-print-entry-functjon #'niva/elfeed-search-print-entry)
+        elfeed-search-print-entry-function #'niva/elfeed-search-print-entry)
 #+end_src
 
 #+begin_src emacs-lisp
