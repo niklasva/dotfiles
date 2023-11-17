@@ -1310,11 +1310,6 @@ Always move cursor to help window.
     :config
 
     (defun niva/setup-org-modern ()
-      (dolist (face '(window-divider
-                      window-divider-first-pixel
-                      window-divider-last-pixel))
-        (face-spec-reset-face face)
-        (set-face-foreground face (face-attribute 'default :background)))
       (set-face-background 'fringe (face-attribute 'default :background))
 
       (setq org-auto-align-tags nil
