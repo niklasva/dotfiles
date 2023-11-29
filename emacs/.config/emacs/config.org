@@ -1318,11 +1318,17 @@ Always move cursor to help window.
     :config
 
     (defun niva/setup-org-modern ()
+      (dolist (face '(window-divider
+                      window-divider-first-pixel
+                      window-divider-last-pixel))
+        (face-spec-reset-face face)
+        (set-face-foreground face (face-attribute 'default :background)))
       (set-face-background 'fringe (face-attribute 'default :background))
 
       (setq org-auto-align-tags nil
             org-tags-column 0
             org-catch-invisible-edits 'show-and-error
+            org-modern-table-vertical 2
             org-special-ctrl-a/e t
             org-insert-heading-respect-content t
             org-hide-emphasis-markers t
@@ -1336,7 +1342,7 @@ Always move cursor to help window.
     (add-hook 'org-mode-hook #'niva/setup-org-modern))
 #+end_src
 
-#+begin_src disabled
+#+begin_src emacs-lisp
   (setf (cdr (assoc 'file org-link-frame-setup)) 'find-file)
 
   ;; Custom faces for fancy org files
@@ -1347,7 +1353,7 @@ Always move cursor to help window.
   (defface niva-org-level-5 '((t :inherit 'outline-5 :weight light :height 1.12)) nil :group nil)
   (defface niva-org-level-6 '((t :inherit 'outline-6 :weight light :height 1.1))  nil :group nil)
   (defface niva-org-level-7 '((t :inherit 'outline-7 :weight light :height 1.1))  nil :group nil)
-  (defface niva-org-level-8 '((t :inherit 'outline-8 :weight light :height 1.1))  nil :group nil))
+  (defface niva-org-level-8 '((t :inherit 'outline-8 :weight light :height 1.1))  nil :group nil)
 
   (use-package org-superstar
     :straight t)
@@ -1362,6 +1368,7 @@ Always move cursor to help window.
                               'invisible t)))))))
 
   (defun niva/org-mode-setup ()
+    (interactive)
     (unless (string= (buffer-name) "config.org")
       (let ((variable-pitch-font "Helvetica")
             (variable-pitch-height 140)
@@ -1389,7 +1396,7 @@ Always move cursor to help window.
         (set-face-attribute 'org-code       nil :inherit 'fixed-pitch)
         (set-face-attribute 'org-block      nil :inherit 'fixed-pitch)
 
-        (setq-local visual-fill-column-width 80
+        (setq-local visual-fill-column-width 120
                     visual-fill-column-center-text t)
         ;; (olivetti-mode 1)
         ;; (org-indent-mode 1)
@@ -1397,7 +1404,7 @@ Always move cursor to help window.
         (visual-fill-column-mode)
         (auto-fill-mode 0)
         (visual-line-mode 1))))
-
+  (niva/org-mode-setup)
 #+end_src
 
 Only use variable-pitch if explicitly called.
