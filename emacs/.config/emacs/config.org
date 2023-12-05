@@ -281,6 +281,7 @@ Always move cursor to help window.
     :straight t
     :config
     (setq kaolin-themes-bold nil
+          kaolin-themes-comments-style 'contrast
           kaolin-themes-italic t
           kaolin-themes-underline t
           kaolin-themes-modeline-border nil))
@@ -360,7 +361,7 @@ Always move cursor to help window.
              (if (= niva-elfeed-unread-count 0) ""
                (format "  %-2d" niva-elfeed-unread-count))
              (format-time-string "%R") " ")
-     'face 'mode-line))
+     'face 'font-lock-string-face))
 
   (setq-default mode-line-format
                 `((:eval (if (and buffer-file-name (buffer-modified-p)) "*%b" " %b"))
@@ -1031,7 +1032,7 @@ Always move cursor to help window.
   (use-package treesit
     :straight (:type built-in)
     :config
-    (setq treesit-font-lock-level 1
+    (setq treesit-font-lock-level 2
           c-ts-mode-indent-offset 2
           treesit-language-source-alist '((bash         "https://github.com/tree-sitter/tree-sitter-bash")
                                           (c            "https://github.com/tree-sitter/tree-sitter-c")
@@ -1293,8 +1294,8 @@ Always move cursor to help window.
     :config
     (add-hook 'olivetti-mode-hook
               (lambda ()
-                (setq olivetti-body-width 120
-                      olivetti-minimum-body-width 120))))
+                (setq olivetti-body-width 100
+                      olivetti-minimum-body-width 100))))
 #+end_src
 
 ** org
@@ -1311,24 +1312,18 @@ Always move cursor to help window.
 #+end_src
 
 ** org-modern
-#+begin_src emacs-lisp
+#+begin_src disabled
   (use-package org-modern
     :straight t
     :after org
     :config
 
     (defun niva/setup-org-modern ()
-      (dolist (face '(window-divider
-                      window-divider-first-pixel
-                      window-divider-last-pixel))
-        (face-spec-reset-face face)
-        (set-face-foreground face (face-attribute 'default :background)))
       (set-face-background 'fringe (face-attribute 'default :background))
 
       (setq org-auto-align-tags nil
             org-tags-column 0
             org-catch-invisible-edits 'show-and-error
-            org-modern-table-vertical 2
             org-special-ctrl-a/e t
             org-insert-heading-respect-content t
             org-hide-emphasis-markers t
@@ -1353,7 +1348,7 @@ Always move cursor to help window.
   (defface niva-org-level-5 '((t :inherit 'outline-5 :weight light :height 1.12)) nil :group nil)
   (defface niva-org-level-6 '((t :inherit 'outline-6 :weight light :height 1.1))  nil :group nil)
   (defface niva-org-level-7 '((t :inherit 'outline-7 :weight light :height 1.1))  nil :group nil)
-  (defface niva-org-level-8 '((t :inherit 'outline-8 :weight light :height 1.1))  nil :group nil)
+  (defface niva-org-level-8 '((t :inherit 'outline-8 :weight light :height 1.1))  nil :group nil))
 
   (use-package org-superstar
     :straight t)
@@ -1368,11 +1363,10 @@ Always move cursor to help window.
                               'invisible t)))))))
 
   (defun niva/org-mode-setup ()
-    (interactive)
     (unless (string= (buffer-name) "config.org")
       (let ((variable-pitch-font "Helvetica")
             (variable-pitch-height 140)
-            (fixed-pitch-font "Monaco")
+            (fixed-pitch-font "Ubuntu Mono")
             (fixed-pitch-height 130)
             (org-hide-leading-stars t)
             (evil-auto-indent nil))
@@ -1396,7 +1390,7 @@ Always move cursor to help window.
         (set-face-attribute 'org-code       nil :inherit 'fixed-pitch)
         (set-face-attribute 'org-block      nil :inherit 'fixed-pitch)
 
-        (setq-local visual-fill-column-width 120
+        (setq-local visual-fill-column-width 80
                     visual-fill-column-center-text t)
         ;; (olivetti-mode 1)
         ;; (org-indent-mode 1)
@@ -1404,7 +1398,6 @@ Always move cursor to help window.
         (visual-fill-column-mode)
         (auto-fill-mode 0)
         (visual-line-mode 1))))
-  (niva/org-mode-setup)
 #+end_src
 
 Only use variable-pitch if explicitly called.
@@ -1491,22 +1484,22 @@ Only use variable-pitch if explicitly called.
 
 *** logseq
 #+begin_src emacs-lisp
-  (use-package org-roam-logseq
-    :straight (:host github :repo "idanov/org-roam-logseq.el"))
+  ;; (use-package org-roam-logseq
+  ;;   :straight (:host github :repo "idanov/org-roam-logseq.el"))
 
-  (setq org-roam-dailies-directory "journals/"
-        org-roam-file-exclude-regexp "\\.st[^/]*\\|logseq/.*$")
+  ;; (setq org-roam-dailies-directory "journals/"
+  ;;       org-roam-file-exclude-regexp "\\.st[^/]*\\|logseq/.*$")
 
-  (setq org-roam-capture-templates '(("d" "default"
-                                      plain
-                                      "%?"
-                                      :target (file+head "pages/${slug}.org" "#+title: ${title}\n")
-                                      :unnarrowed t)))
+  ;; (setq org-roam-capture-templates '(("d" "default"
+  ;;                                     plain
+  ;;                                     "%?"
+  ;;                                     :target (file+head "pages/${slug}.org" "#+title: ${title}\n")
+  ;;                                     :unnarrowed t)))
 
-  (setq org-roam-dailies-capture-templates '(("d" "default"
-                                              entry
-                                              "* %?"
-                                              :target (file+head "%<%Y_%m_%d>.org" "#+title: %<%Y-%m-%d>\n"))))
+  ;; (setq org-roam-dailies-capture-templates '(("d" "default"
+  ;;                                             entry
+  ;;                                             "* %?"
+  ;;                                             :target (file+head "%<%Y_%m_%d>.org" "#+title: %<%Y-%m-%d>\n"))))
 #+end_src
 
 ** visual-fill-column
