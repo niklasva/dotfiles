@@ -527,7 +527,8 @@ Always move cursor to help window.
 #+begin_src emacs-lisp
   (define-key evil-normal-state-map (kbd "C-w -")   'evil-window-split)
   (define-key evil-normal-state-map (kbd "C-w |")   'evil-window-vsplit)
-  (define-key evil-normal-state-map (kbd "C-w C--") 'evil-window-vsplit)
+  (define-key evil-normal-state-map (kbd "C-w _")   'evil-window-vsplit)
+  (define-key evil-normal-state-map (kbd "C-w S--") 'evil-window-vsplit)
   (define-key evil-normal-state-map (kbd "C-w SPC") 'transpose-frame)
 
   (define-key evil-normal-state-map (kbd "C-w H") 'buf-move-left)
@@ -571,9 +572,12 @@ Always move cursor to help window.
     "c a"   '(eglot-code-actions             :which-key "eglot-code-actions")
     "c c"   '(projectile-compile-project     :which-key "Compile project")
     "c t"   '(projectile-test-project        :which-key "Test project")
+    "p d"   '(projectile-dired               :which-key "projectile-dired")
+    "d d"   '(dired                          :which-key "dired")
     "d l"   '(devdocs-lookup                 :which-key "devdocs-lookup")
     "d u"   '(magit-diff-unstaged            :which-key "magit-diff-unstaged")
     "e r"   '(eval-region                    :which-key "eval-region")
+    "e i"   '(eglot-inlay-hints-mode         :which-key "eglot-inlay-hints-mode")
     "h p"   '(projectile-find-other-file     :which-key "projectile-find-other-file")
     "m *"   '(org-ctrl-c-star                :which-key "Org-ctrl-c-star")
     "m +"   '(org-ctrl-c-minus               :which-key "Org-ctrl-c-minus")
@@ -782,6 +786,14 @@ Always move cursor to help window.
 #+end_src
 
 * File management
+** Dired
+#+begin_src emacs-lisp
+  (use-package dired+
+    :straight t
+    :config
+    (setq dired-hide-details-mode nil))
+#+end_src
+
 ** Projectile
 #+begin_src emacs-lisp
   (use-package projectile
