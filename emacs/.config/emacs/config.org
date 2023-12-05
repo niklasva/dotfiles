@@ -1646,13 +1646,26 @@ Only use variable-pitch if explicitly called.
     :hook (elfeed-search-mode . elfeed-update)
     :config
     (setq elfeed-search-filter "+unread"
-          elfeed-show-entry-switch #'niva/elfeed-split))
+          elfeed-show-truncate-long-urls nil))
+  ;; elfeed-show-entry-switch #'niva/elfeed-split))
+
+  (defun elfeed-olivetti (buff)
+    (switch-to-buffer buff)
+    (olivetti-mode)
+    (elfeed-show-refresh))
+  (setq elfeed-show-entry-switch 'elfeed-olivetti)
 
   (defun niva/clear-elfeed ()
     (interactive)
     (setq elfeed-db-directory (expand-file-name "~/.elfeed"))
     (delete-directory elfeed-db-directory t)
     (message "Elfeed database cleared. Restart Elfeed to initialize a new database."))
+  (niva/clear-elfeed)
+
+  (defun niva/elfeed-update-loop ()
+    (interactive)
+    (message "Updating elfeed")
+    (elfeed-update))
 #+end_src
 
 *** elfeed-protocol
@@ -1664,7 +1677,7 @@ Only use variable-pitch if explicitly called.
     (setq elfeed-use-curl t
           elfeed-sort-order 'descending
           elfeed-protocol-enabled-protocols '(fever)
-          elfeed-protocol-fever-update-unread-only t
+          elfeed-protocol-fever-update-unread-only nil
           elfeed-protocol-fever-maxsize 150
           elfeed-protocol-fever-fetch-category-as-tag t
           elfeed-protocol-feeds (list (list niva/elfeed-fever-url
@@ -1704,34 +1717,35 @@ Only use variable-pitch if explicitly called.
 
 *** Window handling
 #+begin_src emacs-lisp
-  (defun elfeed-entry-buffer ()
-    (get-buffer-create "*elfeed-entry*"))
+  ;; (defun elfeed-entry-buffer ()
+  ;;   (get-buffer-create "*elfeed-entry*"))
 #+end_src
 
 #+begin_src emacs-lisp
-  (defun niva/elfeed-split (buff)
-    (interactive)
-    (let ((w (split-window-below)))
-      (select-window w))
-    (switch-to-buffer buff)
-    (olivetti-mode))
+  ;; (defun niva/elfeed-split (buff)
+  ;;   (interactive)
+  ;;   (let ((w (split-window-below)))
+  ;;     (select-window w))
+  ;;   (switch-to-buffer buff)
+  ;;   (olivetti-mode))
 #+end_src
 
 #+begin_src emacs-lisp
-  (defun elfeed-kill-buffer ()
-    (interactive)
-    (let* ((buff (get-buffer "*elfeed-entry*"))
-           (window (get-buffer-window buff)))
-      (kill-buffer buff)
-      (delete-window window)))
+  ;; (defun elfeed-kill-buffer ()
+  ;;   (interactive)
+  ;;   (let* ((buff (get-buffer "*elfeed-entry*"))
+  ;;          (window (get-buffer-window buff)))
+  ;;     (kill-buffer buff)
+  ;;     (delete-window window)))
 #+end_src
 
 #+begin_src emacs-lisp
-  (defun elfeed-search-quit-window ()
-    (interactive)
-    (elfeed-db-save)
-    (elfeed-kill-buffer)
-    (quit-window))))
+  ;; (defun elfeed-search-quit-window ()
+  ;;   (interactive)
+  ;;   (elfeed-db-save)
+  ;;   (elfeed-kill-buffer)
+  ;;   (quit-window))
+  ))
 #+end_src
 
 *** Customization
