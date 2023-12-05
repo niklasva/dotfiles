@@ -971,17 +971,17 @@ Always move cursor to help window.
                               ("\\.hxx\\'" (".cxx"))))
 #+end_src
 ** Python
-*** Pyright
+
 #+begin_src emacs-lisp
-  (use-package lsp-pyright
-    :straight t)
+  (use-package yapfify
+    :straight t
+    :hook ((python-mode python-ts-mode) . yapf-mode)
+    :config
+    (defun python-save-hooks ()
+      (add-hook 'before-save-hook #'yapfify-buffer))
 
-  (defun lsp-python-ms-format-buffer ()
-    (interactive)
-    (when (and (executable-find "yapf") buffer-file-name)
-      (call-process "yapf" nil nil nil "-i" buffer-file-name)))
-
-  (add-hook 'python-mode-hook (lambda () (add-hook 'after-save-hook #'lsp-python-ms-format-buffer t t)))
+    (add-hook 'python-mode-hook      #'python-save-hooks)
+    (add-hook 'python-ts-mode-hook   #'python-save-hooks))
 #+end_src
 ** Language server
 *** Eglot
@@ -989,6 +989,7 @@ Always move cursor to help window.
   (use-package eglot
     :straight t
     :config
+    (add-to-list 'eglot-server-programs '((python-mode python-ts-mode) . ("pyright-langserver" "--stdio")))
     (add-to-list 'eglot-server-programs '((c-mode c++-mode c++-ts-mode) . ("clangd"
                                                                            "--query-driver=/Applications/ARM/**/*"
                                                                            "--clang-tidy"
@@ -999,15 +1000,17 @@ Always move cursor to help window.
                                                                            "-j=8"
                                                                            "--log=error"
                                                                            "--function-arg-placeholders"))))
-  (dolist (hook '(c-mode-hook c++-mode-hook c-ts-mode-hook c++-ts-mode-hook))
-    (add-hook hook 'eglot-ensure))
 
+  (dolist (hook '(c-mode-hook c++-mode-hook c-ts-mode-hook c++-ts-mode-hook python-mode-hook python-ts-mode-hook))
+    (add-hook hook 'eglot-ensure))
 
   (setq eldoc-idle-delay 0.25)
   (setq eldoc-echo-area-use-multiline-p t)
+  (setq eglot-events-buffer-size 0)
+
+  (set-face-attribute 'eglot-inlay-hint-face nil :height 0.8 :slant 'italic)
 
   (with-eval-after-load 'eglot
-
     (add-hook 'eglot-managed-mode-hook
               (lambda ()
                 (setq eldoc-documentation-functions
@@ -1349,7 +1352,7 @@ Always move cursor to help window.
     (add-hook 'org-mode-hook #'niva/setup-org-modern))
 #+end_src
 
-#+begin_src emacs-lisp
+#+begin_src disabled
   (setf (cdr (assoc 'file org-link-frame-setup)) 'find-file)
 
   ;; Custom faces for fancy org files
