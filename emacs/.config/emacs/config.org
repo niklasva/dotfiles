@@ -1961,23 +1961,24 @@ Only use variable-pitch if explicitly called.
               (message "Circe timed out.")))))))
 #+end_src
 * AI
-** ChatGPT
-*** gptel
+** gptel
 #+begin_src emacs-lisp
   (use-package gptel
-    :straight t
+    :straight (gptel
+               :host github
+               :repo "karthink/gptel")
     :config
-    (setq gptel-default-mode #'org-mode
-          gptel-model "gpt-3.5-turbo"
-          gptel-max-tokens 200
-          gptel-prompt-prefix-alist '((org-mode . ""))
-          gptel-default-session "Chat"
-          gptel-stream t)
+    (setq-default gptel-default-mode #'org-mode
+                  gptel-max-tokens 200
+                  gptel-prompt-prefix-alist '((org-mode . ""))
+                  gptel-stream t
+                  gptel-model "mistral:latest"
+                  gptel-default-session "gptel"
+                  gptel-backend (gptel-make-ollama "Ollama" :host "localhost:11434" :stream t))
 
     (add-hook 'gptel-pre-response-hook (lambda () (interactive) (end-of-buffer) (newline) (previous-line)))
 
     (with-eval-after-load 'gptel
-      (evil-define-key 'normal gptel-mode-map "q" 'delete-window))
-
-    (add-to-list 'display-buffer-alist '("ChatGPT" display-buffer-same-window)))
+      (evil-define-key 'normal gptel-mode-map "q" 'switch-to-prev-buffer))
+    (add-to-list 'display-buffer-alist '("gptel" display-buffer-same-window)))
 #+end_src
