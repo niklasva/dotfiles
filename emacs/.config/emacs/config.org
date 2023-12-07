@@ -1095,10 +1095,12 @@ Always move cursor to help window.
     :config
     (setq git-gutter:update-timer 1)
 
+    (defun niva/modus-gutter () (interactive)
+           (set-face-attribute 'git-gutter-fr:added    nil :foreground (face-attribute 'modus-themes-fg-green-intense :foreground) :background 'unspecified)
+           (set-face-attribute 'git-gutter-fr:modified nil :foreground (face-attribute 'modus-themes-fg-blue          :foreground) :background 'unspecified)
+           (set-face-attribute 'git-gutter-fr:deleted  nil :foreground (face-attribute 'modus-themes-fg-red-intense   :foreground) :background 'unspecified)
     (if (string-match-p "modus" (prin1-to-string custom-enabled-themes))
-        (progn (set-face-attribute 'git-gutter-fr:added    nil :foreground (face-attribute 'modus-themes-fg-green-intense :foreground) :background 'unspecified)
-               (set-face-attribute 'git-gutter-fr:modified nil :foreground (face-attribute 'modus-themes-fg-blue          :foreground) :background 'unspecified)
-               (set-face-attribute 'git-gutter-fr:deleted  nil :foreground (face-attribute 'modus-themes-fg-red-intense   :foreground) :background 'unspecified))
+        (niva/modus-gutter))
 #+end_src
 
 ***** Graphics
