@@ -181,7 +181,7 @@ Prevent emacs from contaminating system clipboard.
 
   (window-divider-mode 1)
 
-  (setq ns-use-thin-smoothing nil
+  (setq ns-use-thin-smoothing t
         ns-use-proxy-icon nil
         ns-use-mwheel-momentum t
         ns-antialias-text t
@@ -792,6 +792,10 @@ Always move cursor to help window.
     :straight t
     :config
     (setq dired-hide-details-mode nil))
+#+end_src
+*** dired-preview
+#+begin_src emacs-lisp
+  (use-package dired-preview :straight t)
 #+end_src
 
 ** Projectile
