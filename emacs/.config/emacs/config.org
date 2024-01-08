@@ -1693,6 +1693,14 @@ Only use variable-pitch if explicitly called.
   (use-package visual-fill-column
     :straight t)
 #+end_src
+* Tetris
+#+begin_src emacs-lisp
+  (setq-default tetris-use-color t
+                tetris-use-glyphs nil
+                tetris-border 4)
+  (add-hook 'tetris-mode-hook (lambda ()
+                                (set-face-attribute 'gamegrid-face-*Tetris* nil :font "Monaco")))
+#+end_src
 * Web
 ** shr
 #+begin_src emacs-lisp
