@@ -259,9 +259,51 @@ Always move cursor to help window.
           doom-city-lights-brighter-comments     t
           doom-monokai-machine-brighter-comments t))
 
-  (use-package ample-theme     :straight t)
-  (use-package cyberpunk-theme :straight t)
-  (use-package stimmung-themes :straight t)
+  (use-package ample-theme              :straight t)
+  (use-package avk-emacs-themes         :straight t)
+  (use-package basic-theme              :straight t)
+  (use-package brutalist-theme          :straight t)
+  (use-package chyla-theme              :straight t)
+  (use-package cloud-theme              :straight t)
+  (use-package color-theme-modern       :straight t)
+  (use-package colorless-themes         :straight t)
+  (use-package cyberpunk-theme          :straight t)
+  (use-package dakrone-light-theme      :straight t)
+  (use-package dakrone-theme            :straight t)
+  (use-package eink-theme               :straight t)
+  ;;(use-package emacs-color-themes       :straight t)
+  (use-package farmhouse-themes         :straight t)
+  (use-package flatui-theme             :straight t)
+  (use-package flucui-themes            :straight t)
+  (use-package gandalf-theme            :straight t)
+  (use-package github-modern-theme      :straight t)
+  (use-package github-theme             :straight t)
+  (use-package goose-theme              :straight t)
+  (use-package greymatters-theme        :straight t)
+  (use-package habamax-theme            :straight t)
+  (use-package hemera-theme             :straight t)
+  (use-package humanoid-themes          :straight t)
+  (use-package intellij-theme           :straight t)
+  (use-package modus-themes             :straight t)
+  (use-package naga-theme               :straight t)
+  (use-package naysayer-theme           :straight t)
+  (use-package night-owl-theme          :straight t)
+  (use-package nofrils-acme-theme       :straight t)
+  (use-package northcode-theme          :straight t)
+  (use-package one-themes               :straight t)
+  (use-package paper-theme              :straight t)
+  (use-package pastelmac-theme          :straight t)
+  (use-package plan9-theme              :straight t)
+  (use-package professional-theme       :straight t)
+  (use-package rebecca-theme            :straight t)
+  (use-package silkworm-theme           :straight t)
+  (use-package soft-morning-theme       :straight t)
+  (use-package soft-stone-theme         :straight t)
+  (use-package sunny-day-theme          :straight t)
+  (use-package timu-caribbean-theme     :straight t)
+  (use-package timu-rouge-theme         :straight t)
+  (use-package timu-spacegrey-theme     :straight t)
+  (use-package vs-light-theme           :straight t)
 #+end_src
 
 *** Modus
@@ -280,6 +322,23 @@ Always move cursor to help window.
   (setq modus-themes-completions '((matches . (background minimal))
                                    (selection . (background minimal))
                                    (popup . (background minimal))))
+
+
+  (add-hook 'modus-themes-after-load-theme-hook
+            (lambda ()
+              (set-face-attribute 'solaire-default-face nil
+                                  :inherit 'default
+                                  :background (car (cdr (assoc 'bg-dim modus-operandi-palette)))
+                                  :foreground (car (cdr (assoc 'fg-dim modus-operandi-palette))))
+              (set-face-attribute 'solaire-line-number-face nil
+                                  :inherit 'solaire-default-face
+                                  :foreground (car (cdr (assoc 'fg-unfocused modus-operandi-palette))))
+              (set-face-attribute 'solaire-hl-line-face nil
+                                  :background (car (cdr (assoc 'bg-active modus-operandi-palette))))
+              (set-face-attribute 'solaire-org-hide-face nil
+                                  :background (car (cdr (assoc 'bg-dim modus-operandi-palette)))
+                                  :foreground (car (cdr (assoc 'bg-dim modus-operandi-palette))))
+              ))
 #+end_src
 
 *** Kaolin
@@ -298,20 +357,24 @@ Always move cursor to help window.
   (use-package solaire-mode
     :straight t
     :config
-    (solaire-global-mode +1)
+    (solaire-global-mode t)
     (solaire-mode-reset))
+  (setq solaire-global-mode-hook nil)
+
+  (add-hook 'compilation-mode-hook (lambda () (solaire-mode t) (solaire-mode-reset)))
   (add-hook 'eshell-mode-hook (lambda () (solaire-mode t) (solaire-mode-reset)))
   (add-hook 'gptel-mode-hook (lambda () (solaire-mode t) (solaire-mode-reset)))
   (add-hook 'read-only-mode-hook (lambda () (solaire-mode t) (solaire-mode-reset)))
 #+end_src
 *** Load theme
 #+begin_src emacs-lisp
-  (setq custom-safe-themes t)
-  (load-theme 'kaolin-blossom t)
-  (set-face-attribute 'internal-border nil :background 'unspecified)
-  (set-face-attribute 'link nil :foreground 'unspecified)
+  (load-theme 'naysayer)
 #+end_src
-
+*** Faces
+#+begin_src emacs-lisp
+  (set-face-attribute 'internal-border nil :background 'unspecified)
+  (set-face-attribute 'fringe nil :background 'unspecified)
+#+end_src
 ** Compilaton mode
 #+begin_src emacs-lisp
   (use-package xterm-color :straight t)
@@ -1034,20 +1097,28 @@ Always move cursor to help window.
 
   (dolist (hook '(c-mode-hook c++-mode-hook c-ts-mode-hook c++-ts-mode-hook python-mode-hook python-ts-mode-hook))
     (add-hook hook 'eglot-ensure))
-
-  (setq eldoc-idle-delay 0.25)
-  (setq eldoc-echo-area-use-multiline-p t)
   (setq eglot-events-buffer-size 0)
 
-  (set-face-attribute 'eglot-inlay-hint-face nil :height 0.8 :slant 'italic)
+  (advice-add 'eglot--mode-line-format :override (lambda () ""))
+
+  (set-face-attribute 'eglot-inlay-hint-face nil
+                      :slant 'italic
+                      :weight 'light
+                      ;; :foreground (face-attribute 'font-lock-variable-name-face :foreground)
+                      :family (face-attribute 'variable-pitch :family))
+
+
+  (set-face-attribute 'eglot-highlight-symbol-face nil :underline t :weight 'regular)
 
   (with-eval-after-load 'eglot
     (add-hook 'eglot-managed-mode-hook
               (lambda ()
+                (eglot-inlay-hints-mode -1)
                 (setq eldoc-documentation-functions
                       (cons #'flymake-eldoc-function
                             (remove #'flymake-eldoc-function eldoc-documentation-functions)))
                 (setq eldoc-documentation-strategy #'eldoc-documentation-compose))))
+  (set-face-attribute 'eglot-mode-line nil :inherit 'unspecified)
 #+end_src
 
 **** Format on save
@@ -1069,8 +1140,12 @@ Always move cursor to help window.
     :config
     (setq flymake-start-on-save-buffer t
           flymake-no-changes-timeout 1
-          flymake-fringe-indicator-position 'right-fringe
-          flymake-mode-line-lighter ""))
+          flymake-fringe-indicator-position 'right-fringe))
+
+  (set-face-attribute 'error nil               :weight 'unspecified)
+  (set-face-attribute 'compilation-error nil   :weight 'unspecified)
+  (set-face-attribute 'compilation-warning nil :weight 'unspecified)
+  (set-face-attribute 'warning nil             :weight 'unspecified)
 #+end_src
 ** Tree-sitter
 *** treesit
@@ -1114,6 +1189,28 @@ Always move cursor to help window.
 
 ** Version control
 *** Git gutter
+  (use-package git-gutter
+    :straight t
+    :diminish
+    :config
+    (setq git-gutter:update-interval 0.02
+          git-gutter:added-sign    "+"
+          git-gutter:modified-sign "="
+          git-gutter:deleted-sign  "-")
+    ;; (add-hook 'git-gutter-mode-hook (lambda ()
+    ;;                                   (set-face-attribute 'git-gutter:added nil :height 0.9 :weight 'thin :foreground (face-attribute 'default :foreground))
+    ;;                                   (set-face-attribute 'git-gutter:modified nil :height 0.9 :weight 'thin :foreground (face-attribute 'default :foreground))
+    ;;                                   (set-face-attribute 'git-gutter:deleted nil :height 0.9 :weight 'thin :foreground (face-attribute 'default :foreground))))
+
+    (defun niva/modus-gutter () (interactive)
+           (set-face-attribute 'git-gutter:added    nil :foreground (face-attribute 'modus-themes-fg-green-intense :foreground) :background 'unspecified)
+           (set-face-attribute 'git-gutter:modified nil :foreground (face-attribute 'modus-themes-fg-blue          :foreground) :background 'unspecified)
+           (set-face-attribute 'git-gutter:deleted  nil :foreground (face-attribute 'modus-themes-fg-red-intense   :foreground) :background 'unspecified))
+
+    (if (string-match-p "modus" (prin1-to-string custom-enabled-themes))
+        (niva/modus-gutter)))
+#+end_src
+
 **** git-gutter-fringe
 #+begin_src emacs-lisp
   (use-package git-gutter-fringe
@@ -1121,100 +1218,80 @@ Always move cursor to help window.
     :delight
     :diminish git-gutter-mode
     :config
-    (setq git-gutter:update-timer 1)
+    (global-git-gutter-mode +1)
+    (setq git-gutter-fr:side 'left-fringe))
 
-    (defun niva/modus-gutter () (interactive)
-           (set-face-attribute 'git-gutter-fr:added    nil :foreground (face-attribute 'modus-themes-fg-green-intense :foreground) :background 'unspecified)
-           (set-face-attribute 'git-gutter-fr:modified nil :foreground (face-attribute 'modus-themes-fg-blue          :foreground) :background 'unspecified)
-           (set-face-attribute 'git-gutter-fr:deleted  nil :foreground (face-attribute 'modus-themes-fg-red-intense   :foreground) :background 'unspecified)
-    (if (string-match-p "modus" (prin1-to-string custom-enabled-themes))
-        (niva/modus-gutter))
-#+end_src
+  (defun niva/modus-gutter () (interactive)
+         (set-face-attribute 'git-gutter-fr:added    nil :foreground (face-attribute 'modus-themes-fg-green-intense :foreground) :background 'unspecified)
+         (set-face-attribute 'git-gutter-fr:modified nil :foreground (face-attribute 'modus-themes-fg-blue          :foreground) :background 'unspecified)
+         (set-face-attribute 'git-gutter-fr:deleted  nil :foreground (face-attribute 'modus-themes-fg-red-intense   :foreground) :background 'unspecified))
+  (if (string-match-p "modus" (prin1-to-string custom-enabled-themes))
+      (niva/modus-gutter))
+  ;; (set-face-foreground 'git-gutter-fr:added (face-attribute 'ansi-color-green :foreground))
+  ;; (set-face-foreground 'git-gutter-fr:modified (face-attribute 'ansi-color-blue :foreground))
+  ;; (set-face-foreground 'git-gutter-fr:deleted (face-attribute 'ansi-color-red :foreground))
 
-***** Graphics
-#+begin_src emacs-lisp
+  (defun niva/naysayer-faces () (interactive)
+         (set-face-attribute 'highlight              nil :background "#335533")
+         (set-face-attribute 'compilation-info       nil :foreground "#2ec09c")
+         (set-face-attribute 'region                 nil :background "#335533")
+         (set-face-attribute 'git-gutter-fr:added    nil :foreground "#5e8203")
+         (set-face-attribute 'git-gutter-fr:modified nil :foreground "#00638a")
+         (set-face-attribute 'git-gutter-fr:deleted  nil :foreground "#d0372d"))
+
+  (if (string-match-p "naysayer" (prin1-to-string custom-enabled-themes))
+      (niva/naysayer-faces))
+
   (fringe-helper-define 'git-gutter-fr:added nil
-    ".X.."
-    "X..X"
-    "..X."
-    ".X.."
-    "X..X"
-    "..X."
-    ".X.."
-    "X..X"
-    "..X."
-    ".X.."
-    "X..X"
-    "..X."
-    ".X.."
-    "X..X"
-    "..X."
-    ".X.."
-    "X..X"
-    "..X."
-    ".X.."
-    "X..X"
-    "..X."
-    ".X.."
-    "X..X"
-    "..X."
-    ".X..")
+    "X......."
+    "........"
+    "........"
+    "X......."
+    "........"
+    "........"
+    "X......."
+    "........"
+    "........"
+    "X......."
+    "........"
+    "........"
+    "X......."
+    "........"
+    "........")
 
   (fringe-helper-define 'git-gutter-fr:deleted nil
-    ".X.."
-    "X..X"
-    "..X."
-    ".X.."
-    "X..X"
-    "..X."
-    ".X.."
-    "X..X"
-    "..X."
-    ".X.."
-    "X..X"
-    "..X."
-    ".X.."
-    "X..X"
-    "..X."
-    ".X.."
-    "X..X"
-    "..X."
-    ".X.."
-    "X..X"
-    "..X."
-    ".X.."
-    "X..X"
-    "..X."
-    ".X..")
+    "X......."
+    "........"
+    "........"
+    "X......."
+    "........"
+    "........"
+    "X......."
+    "........"
+    "........"
+    "X......."
+    "........"
+    "........"
+    "X......."
+    "........"
+    "........")
 
   (fringe-helper-define 'git-gutter-fr:modified nil
-    ".X.."
-    "X..X"
-    "..X."
-    ".X.."
-    "X..X"
-    "..X."
-    ".X.."
-    "X..X"
-    "..X."
-    ".X.."
-    "X..X"
-    "..X."
-    ".X.."
-    "X..X"
-    "..X."
-    ".X.."
-    "X..X"
-    "..X."
-    ".X.."
-    "X..X"
-    "..X."
-    ".X.."
-    "X..X"
-    "..X."
-    ".X..")
-
-  (global-git-gutter-mode 1)))
+    "X......."
+    "........"
+    "........"
+    "X......."
+    "........"
+    "........"
+    "X......."
+    "........"
+    "........"
+    "X......."
+    "........"
+    "........"
+    "X......."
+    "........"
+    "........")
 #+end_src
 
 *** magit
@@ -1318,10 +1395,10 @@ Always move cursor to help window.
     (interactive)
     (font-lock-add-keywords
      nil
-     '(("\\<\\(.*ERR.*\\)"     1 'compilation-error   t)
-       ("\\<\\(.*INFO.*\\)"    1 'compilation-info    t)
-       ("\\<\\(.*DEBUG.*\\)"   1 'compilation-info    t)
-       ("\\<\\(.*WARN.*\\)"    1 'compilation-warning t)
+     '(("\\<\\(.*ERR.*\\)"                                            1 'compilation-error   t)
+       ("\\<\\(.*INFO.*\\)"                                           1 'compilation-info    t)
+       ("\\<\\(.*DEBUG.*\\)"                                          1 'compilation-info    t)
+       ("\\<\\(.*WARN.*\\)"                                           1 'compilation-warning t)
        ("\\<\\(.*DEBUG: --- CMD: POLL(60) REPLY: ISTATR(49) ---.*\\)" 1 'completions-common-part t)
        ("\\<\\(.*DEBUG: --- CMD: OUT(68) REPLY: ACK(40) ---.*\\)"     1 'completions-common-part t))))
 
