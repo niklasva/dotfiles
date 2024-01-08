@@ -579,7 +579,6 @@ Always move cursor to help window.
   (define-key evil-insert-state-map (kbd "C-c C-e") 'comment-line)
   (define-key evil-visual-state-map (kbd "C-c C-e") 'comment-line)
 
-  (define-key evil-normal-state-map (kbd "U")       'evil-redo)
 
   (define-key evil-normal-state-map (kbd "C-a C-x") 'kill-this-buffer)
   (define-key help-mode-map         (kbd "C-a C-x") 'evil-delete-buffer)
@@ -600,7 +599,6 @@ Always move cursor to help window.
   (define-key evil-normal-state-map (kbd "C-<tab>")   'tab-next)
   (define-key evil-normal-state-map (kbd "C-S-<tab>") 'tab-previous)
 #+end_src
-
 
 #+begin_src emacs-lisp
   (global-set-key (kbd "s-q")        'save-buffers-kill-terminal)
@@ -708,6 +706,30 @@ Always move cursor to help window.
     "conf"  '((lambda () (interactive) (find-file "~/.config/emacs/config.org"))                      :which-key "Open config.org")
     "vconf" '((lambda () (interactive) (split-window-right) (find-file "~/.config/emacs/config.org")) :which-key "Open config.org")
     "sconf" '((lambda () (interactive) (split-window-below) (find-file "~/.config/emacs/config.org")) :which-key "Open config.org"))
+#+end_src
+
+** Undo
+*** undo-fu
+#+begin_src emacs-lisp
+  (use-package undo-fu
+    :straight t
+    :bind
+    (("s-z" . undo-fu-only-undo)
+     ("s-Z" . undo-fu-only-redo)
+     :map evil-normal-state-map
+     ("u"   . undo-fu-only-undo)
+     ("U"   . undo-fu-only-redo))
+    :custom
+    (undo-fu-allow-undo-in-region t))
+#+end_src
+
+*** undo-fu-session
+#+begin_src emacs-lisp
+  (use-package undo-fu-session
+    :straight t
+    :config
+    (setq undo-fu-session-incompatible-files '("/COMMIT_EDITMSG\\'" "/git-rebase-todo\\'"))
+    (global-undo-fu-session-mode))
 #+end_src
 
 ** m-x
