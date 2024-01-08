@@ -115,9 +115,9 @@ Show only one active window when opening multiple files at the same time.
 #+begin_src emacs-lisp
   (setq-default maximum-scroll-margin 0.5
                 scroll-conservatively 5
-                scroll-margin 4
                 compilation-scroll-output t
                 scroll-preserve-screen-position t)
+  (pixel-scroll-precision-mode t)
 #+end_src
 
 ** Hide buffers
