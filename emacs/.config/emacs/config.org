@@ -1005,25 +1005,17 @@ Always move cursor to help window.
 #+begin_src emacs-lisp
   (use-package gcmh
     :straight t
-    :demand
-    :custom
-    (gcmh-idle-delay 100)
-    (gcmh-high-cons-threshold 104857600)
+    :diminish
+    :delight
+    :hook
+    (focus-out-hook . gcmh-idle-garbage-collect)
     :config
-    (gcmh-mode +1))
+    (setq gcmh-idle-delay 10
+          garbage-collection-messages t
+          gcmh-high-cons-threshold 104857600
+          gcmh-mode +1))
 #+end_src
 
-#+begin_src emacs-lisp
-  (defun niva/garbage-collect ()
-    (interactive)
-    (message (cl-loop for (type size used free) in (garbage-collect)
-                      for used = (* used size)
-                      for free = (* (or free 0) size)
-                      for total = (file-size-human-readable (+ used free))
-                      for used = (file-size-human-readable used)
-                      for free = (file-size-human-readable free)
-                      concat (format "%s: %s + %s = %s\n" type used free total))))
-#+end_src
 ** Profiling
 #+begin_src emacs-lisp
   (use-package esup
@@ -1031,7 +1023,7 @@ Always move cursor to help window.
 #+end_src
 
 ** Byte-compile config on save
-#+begin_src emacs-lisp
+#+begin_src disabled
   (defun niva/compile-config ()
     (interactive)
     (when (and (buffer-file-name)
