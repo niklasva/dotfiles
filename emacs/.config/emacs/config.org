@@ -1621,8 +1621,12 @@ Only use variable-pitch if explicitly called.
 
 #+begin_src emacs-lisp
   ;; Disable < matching with (
-  (modify-syntax-entry ?< ".")
-  (modify-syntax-entry ?> ".")
+  (defun niva/org-syntax-remove-angle-bracket-match ()
+    (interactive)
+    (modify-syntax-entry ?< "." org-mode-syntax-table)
+    (modify-syntax-entry ?> "." org-mode-syntax-table))
+
+  (add-hook 'org-mode-hook #'org-syntax-table-modify)
 #+end_src
 
 ** org-roam
