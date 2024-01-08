@@ -1773,7 +1773,6 @@ Only use variable-pitch if explicitly called.
     :config
     (setq elfeed-search-filter "+unread"
           elfeed-show-truncate-long-urls nil))
-  ;; elfeed-show-entry-switch #'niva/elfeed-split))
 
   (defun elfeed-olivetti (buff)
     (switch-to-buffer buff)
@@ -1949,12 +1948,12 @@ Only use variable-pitch if explicitly called.
 
 *** Graphics handling
 #+begin_src emacs-lisp
+  (setq shr-inhibit-images t)
   (defun niva/elfeed-toggle-images ()
     (interactive)
     (setq-local shr-inhibit-images (not shr-inhibit-images))
     (elfeed-show-refresh))
 #+end_src
-
 
 #+begin_src emacs-lisp
   (defun niva/insert-indented-image (spec alt &optional flags)
