@@ -19,6 +19,11 @@
     (load bootstrap-file nil 'nomessage))
 #+end_src
 
+** diminish
+#+begin_src emacs-lisp
+  (use-package diminish
+    :straight t)
+#+end_src
 * Encryption
 ** pinentry
 #+begin_src emacs-lisp
@@ -91,6 +96,7 @@ Show only one active window when opening multiple files at the same time.
   (add-hook 'prog-mode-hook
             (lambda ()
               (setq show-trailing-whitespace t)
+              (diminish 'eldoc-mode)
               (add-hook 'before-save-hook 'delete-trailing-whitespace)))
 #+end_src
 
@@ -166,11 +172,12 @@ Prevent emacs from contaminating system clipboard.
   (menu-bar-mode 1)
   (set-fringe-mode 1)
   (global-visual-line-mode t)
+  (diminish 'visual-line-mode)
   (global-hl-line-mode -1)
   (blink-cursor-mode 1)
 
-  (setq-default left-fringe-width 16
-                right-fringe-width 3)
+  (setq-default left-fringe-width 12
+                right-fringe-width 12)
 #+end_src
 
 *** Window management
@@ -450,8 +457,13 @@ Always move cursor to help window.
   (use-package evil-collection
     :after evil
     :straight t
+    :diminish evil-collection-unimpaired-mode
+    :delight
     :config
+    (setq evil-collection-setup-minibuffer t)
     (evil-collection-init))
+
+  (evil-set-initial-state 'dired-mode 'normal)
 #+end_src
 
 *** savehist
@@ -560,6 +572,7 @@ Always move cursor to help window.
 #+begin_src emacs-lisp
   (use-package which-key
     :straight t
+    :diminish
     :config
     (setq which-key-popup-type 'minibuffer)
     (which-key-mode))
@@ -696,20 +709,23 @@ Always move cursor to help window.
 ** Yasnippet
 #+begin_src emacs-lisp
   (use-package yasnippet
-    :straight   t
+    :straight t
+    :delight t
+    :diminish
     :commands (yas-recompile-all yas-reload-all yas-minor-mode)
-
     :hook
     (c++-ts-mode . yas-minor-mode)
     (c++-mode . yas-minor-mode)
     (c-mode . yas-minor-mode)
     (c-ts-mode . yas-minor-mode)
     :config
+    (diminish 'yas-minor-mode)
     (setq yas-snippet-dirs
           `(,(concat user-emacs-directory (file-name-as-directory "snippets")))))
 
   (use-package yasnippet-snippets
     :straight t
+    :diminish
     :after yasnippet)
 #+end_src
 ** Corfu
@@ -801,6 +817,7 @@ Always move cursor to help window.
 ** Projectile
 #+begin_src emacs-lisp
   (use-package projectile
+    :diminish
     :straight t
     :init
     (setq projectile-enable-caching t)
@@ -991,6 +1008,15 @@ Always move cursor to help window.
 ** Language server
 *** Eglot
 #+begin_src emacs-lisp
+  (use-package eldoc
+    :straight t
+    :diminish
+    :config
+    (setq eldoc-idle-delay 0.1)
+    (setq eldoc-echo-area-use-multiline-p t)
+    (diminish 'eldoc-mode))
+  (diminish 'abbrev-mode)
+
   (use-package eglot
     :straight t
     :config
@@ -1092,6 +1118,8 @@ Always move cursor to help window.
 #+begin_src emacs-lisp
   (use-package git-gutter-fringe
     :straight t
+    :delight
+    :diminish git-gutter-mode
     :config
     (setq git-gutter:update-timer 1)
 
