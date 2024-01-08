@@ -80,7 +80,7 @@ Show only one active window when opening multiple files at the same time.
     (setq tab-width 2
           indent-tabs-mode t
           evil-auto-indent t
-          c-basic-offset 4))
+          c-basic-offset 2))
 
   (dolist (hook '(c++-mode-hook
                   c-mode-hook
@@ -1165,8 +1165,9 @@ Always move cursor to help window.
   (use-package treesit
     :straight (:type built-in)
     :config
-    (setq treesit-font-lock-level 2
-          c-ts-mode-indent-offset 2
+    (setq treesit-font-lock-level    2
+          c-ts-mode-indent-offset    2
+          json-ts-mode-indent-offset 4
           treesit-language-source-alist '((bash         "https://github.com/tree-sitter/tree-sitter-bash")
                                           (c            "https://github.com/tree-sitter/tree-sitter-c")
                                           (cpp          "https://github.com/tree-sitter/tree-sitter-cpp")
@@ -1186,6 +1187,7 @@ Always move cursor to help window.
                     ("\\.tpp\\'"          . c++-ts-mode)
                     ("\\.java\\'"         . java-ts-mode)
                     ("\\.js\\'"           . js-ts-mode)
+                    ("\\.md\\'"           . json-ts-mode)
                     ("\\.json\\'"         . json-ts-mode)
                     ("\\.ts\\'"           . typescript-ts-mode)
                     ("\\.tsx\\'"          . tsx-ts-mode)
