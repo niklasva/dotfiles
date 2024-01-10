@@ -1,52 +1,9 @@
-"********* Plugins *********
-if empty(glob('~/.vim/autoload/plug.vim'))
-    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-endif
-
-call plug#begin('~/.vim/plugged')
-Plug 'Asheq/close-buffers.vim'
-Plug 'Shougo/vimproc.vim'
-Plug 'Xuyuanp/nerdtree-git-plugin'
-Plug 'chriskempson/base16-vim'
-Plug 'preservim/nerdtree'
-Plug 'rbong/vim-flog'
-Plug 'rhysd/vim-clang-format'
-Plug 'tpope/vim-fugitive'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-Plug 'vim-autoformat/vim-autoformat'
-Plug 'Yazeed1s/oh-lucy.nvim'
-
-if has('nvim')
-    Plug 'lewis6991/gitsigns.nvim'
-    Plug 'nvim-lua/plenary.nvim'
-    Plug 'nvim-telescope/telescope.nvim'
-    Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' }
-    Plug 'nvim-telescope/telescope-ui-select.nvim'
-    Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-    Plug 'windwp/nvim-autopairs'
-    " LSP
-    Plug 'Asheq/close-buffers.vim'
-    Plug 'hrsh7th/cmp-buffer'
-    Plug 'hrsh7th/cmp-cmdline'
-    Plug 'hrsh7th/cmp-nvim-lsp'
-    Plug 'hrsh7th/cmp-path'
-    Plug 'hrsh7th/cmp-vsnip'
-    Plug 'hrsh7th/nvim-cmp'
-    Plug 'hrsh7th/vim-vsnip'
-    Plug 'neovim/nvim-lspconfig'
-    Plug 'olimorris/persisted.nvim'
-    Plug 'theHamsta/nvim-semantic-tokens'
-endif
-
-call plug#end()
-"*********************************************
-
 filetype on
 syntax on
 
-let base16colorspace=256
-colorscheme base16-base
+" colorscheme base16-base
+
+hi LineNr ctermbg=none ctermfg=1
 
 set autoindent
 set autoread
@@ -85,9 +42,6 @@ let &t_Ce = "\e[4:0m"
 let semhighlight=1
  
 let mapleader = " "
-nnoremap <silent> <leader><leader>e :NERDTreeToggle<CR>
-nnoremap <silent> <leader>hi        :syntax on<CR>:TSEnable highlight<CR>
-nnoremap <silent> <leader>nohi      :syntax off<CR>:TSDisable highlight<CR>
 nnoremap <silent> <leader>nonum     :set nonumber<CR>
 nnoremap <silent> <leader>num       :set number<CR>
 nnoremap <silent> <leader>ws        :call TrimWhitespace()<CR>
@@ -102,77 +56,9 @@ nnoremap <silent> <C-i> :bn<cr>
 nnoremap <silent> <S-Tab> :bp<cr>
 nnoremap <silent> <Tab> :bn<cr>
 
-nnoremap <leader>fb <cmd>lua require('telescope.builtin').buffers()<cr>
-nnoremap <leader>ff <cmd>lua require('telescope.builtin').find_files()<cr>
-nnoremap <leader>fg <cmd>lua require('telescope.builtin').live_grep()<cr>
-nnoremap <leader>fh <cmd>lua require('telescope.builtin').help_tags()<cr>
-
 autocmd BufRead */notes* nnoremap <silent> <SPACE> :call Check_mark()<CR>
 autocmd BufRead */notes* set tabstop=4 | set shiftwidth=4
 autocmd BufRead */tmpaaab* set syntax=config
-autocmd BufWrite *.cpp,*.hpp :Autoformat
-autocmd FileType c,cpp setlocal equalprg=clang-format
-
-hi Comment                  cterm=italic
-hi DiagnosticSignError      ctermbg=none    ctermfg=160 cterm=none
-hi DiagnosticSignWarn       ctermbg=none    ctermfg=208 cterm=none
-hi DiagnosticUnderlineError cterm=undercurl guisp=Red
-hi DiagnosticUnderlineWarn  cterm=undercurl guisp=Orange
-hi NormalFloat              ctermbg=none
-hi FloatBorder              ctermbg=none
-hi GitGutterAdd             ctermbg=none    ctermfg=143
-hi GitGutterChange          ctermbg=none    ctermfg=31
-hi GitGutterChangeDelete    ctermbg=none    ctermfg=124
-hi GitGutterDelete          ctermbg=none    ctermfg=124
-hi Keyword                  cterm=italic
-hi LineNr                   ctermbg=none
-hi SignColumn               ctermbg=none
-hi StatusLine               ctermbg=none
-hi String                   cterm=italic
-hi VertSplit                ctermbg=none
-"hi Warning                  ctermbg=none    ctermfg=21
-hi link ALEError Error
-hi link ALEWarning Warning
-
-let g:python3_host_prog="/usr/local/bin/python3"
-
-let NERDTreeMapActivateNode='za'
-let NERDTreeMinimalUI = 1
-let NERDTreeWinSize=45
-let g:NERDTreeDirArrowCollapsible = '-'
-let g:NERDTreeDirArrowExpandable = '+'
-let g:NERDTreeGitStatusConcealBrackets = 1 " default: 0
-let g:NERDTreeStatusline = '%#NonText#'
-let g:nvim_tree_show_icons = {'git': 1, 'folders': 1, 'files': 1, 'folder_arrows': 0}
-let g:NERDTreeGitStatusIndicatorMapCustom = {
-            \ 'Modified'  :'*',
-            \ 'Staged'    :'+',
-            \ 'Untracked' :'~',
-            \ 'Renamed'   :' ',
-            \ 'Unmerged'  :' ',
-            \ 'Deleted'   :' ',
-            \ 'Dirty'     :'*',
-            \ 'Ignored'   :' ',
-            \ 'Clean'     :' ',
-            \ 'Unknown'   :' ',
-            \ }
-
-" Airline settings
-
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#formatter = 'unique_tail'
-let g:airline#extensions#tabline#show_close_button = 0
-let g:airline#extensions#whitespace#show_message = 0
-let g:airline_left_alt_sep=''
-let g:airline_left_sep=''
-let g:airline_powerline_fonts = 1
-let g:airline_right_alt_sep=''
-let g:airline_right_sep=''
-let g:airline_section_a = ''
-let g:airline_section_c = '%t'
-let g:airline_section_z = "%l:%c"
-let g:airline_theme='monochrome'
-let g:airline_experimental = 1
 
 function! HeaderToggle()
     let filename = expand("%:t")
@@ -202,13 +88,3 @@ function! TrimWhitespace()
     keeppatterns %s/\s\+$//e
     call winrestview(l:save)
 endfun
-
-lua require('plugins/autopairs-config')
-lua require('plugins/cmp-config')
-lua require('plugins/gitsigns-config')
-lua require('plugins/lsp-config')
-lua require('plugins/persisted-config')
-lua require('plugins/telescope-config')
-lua require('plugins/treesitter-config')
-
-
