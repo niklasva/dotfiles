@@ -578,6 +578,7 @@ Always move cursor to help window.
   (global-set-key                   (kbd "<f13>")   'evil-invert-char)
   (define-key evil-insert-state-map (kbd "C-c C-e") 'comment-line)
   (define-key evil-visual-state-map (kbd "C-c C-e") 'comment-line)
+  (define-key evil-normal-state-map (kbd "<return>") "")
 
 
   (define-key evil-normal-state-map (kbd "C-a C-x") 'kill-this-buffer)
