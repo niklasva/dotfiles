@@ -1374,6 +1374,16 @@ Always move cursor to help window.
                   (devdocs-lookup nil (thing-at-point 'symbol t)))))
 #+end_src
 
+** Running tests
+#+begin_src emacs-lisp
+  (defun niva/run-test-command ()
+    (interactive)
+    (let* ((command-history (symbol-value 'my-run-test-project-command-history))
+           (last-command (car command-history))
+           (command (read-shell-command "Test command: " last-command 'my-run-test-project-command-history)))
+      (compile command)))
+  (defvar niva/run-test-command-history nil)
+#+end_src
 * Terminal
 ** eshell
 #+begin_src emacs-lisp
