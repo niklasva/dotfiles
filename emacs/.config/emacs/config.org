@@ -374,7 +374,7 @@ Always move cursor to help window.
 #+end_src
 *** Load theme
 #+begin_src emacs-lisp
-  (load-theme 'naysayer)
+  (load-theme 'ef-day)
 #+end_src
 *** Faces
 #+begin_src emacs-lisp
@@ -1305,6 +1305,30 @@ Always move cursor to help window.
     ".X....")
 #+end_src
 
+#+begin_src emacs-lisp
+  (fringe-helper-define 'exlamation-mark nil
+    ".XXX.."
+    ".XXX.."
+    ".XXX.."
+    ".XXX.."
+    ".XXX.."
+    "..X..."
+    "......"
+    ".XXX.."
+    ".XXX.."
+    "......")
+
+  (fringe-helper-define 'flymake-double-exclamation-mark nil
+    "........."
+    ".XX...XX"
+    "..XX.XX."
+    "...XXX.."
+    "....X..."
+    "...XXX.."
+    "..XX.XX."
+    ".XX...XX"
+    ".........")
+#+end_src
 *** magit
 #+begin_src emacs-lisp
   (use-package magit
