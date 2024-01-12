@@ -259,10 +259,12 @@ Always move cursor to help window.
           doom-city-lights-brighter-comments     t
           doom-monokai-machine-brighter-comments t))
 
+  (use-package almost-mono-themes       :straight t)
   (use-package ample-theme              :straight t)
   (use-package avk-emacs-themes         :straight t)
   (use-package basic-theme              :straight t)
   (use-package brutalist-theme          :straight t)
+  (use-package cherry-blossom-theme     :straight t)
   (use-package chyla-theme              :straight t)
   (use-package cloud-theme              :straight t)
   (use-package color-theme-modern       :straight t)
@@ -270,18 +272,17 @@ Always move cursor to help window.
   (use-package cyberpunk-theme          :straight t)
   (use-package dakrone-light-theme      :straight t)
   (use-package dakrone-theme            :straight t)
+  (use-package ef-themes                :straight t)
   (use-package eink-theme               :straight t)
-  ;;(use-package emacs-color-themes       :straight t)
   (use-package farmhouse-themes         :straight t)
-  (use-package flatui-theme             :straight t)
-  (use-package flucui-themes            :straight t)
   (use-package gandalf-theme            :straight t)
-  (use-package github-modern-theme      :straight t)
   (use-package github-theme             :straight t)
   (use-package goose-theme              :straight t)
+  (use-package grandshell-theme         :straight t)
   (use-package greymatters-theme        :straight t)
   (use-package habamax-theme            :straight t)
   (use-package hemera-theme             :straight t)
+  (use-package hemisu-theme             :straight t)
   (use-package humanoid-themes          :straight t)
   (use-package intellij-theme           :straight t)
   (use-package modus-themes             :straight t)
@@ -296,9 +297,14 @@ Always move cursor to help window.
   (use-package plan9-theme              :straight t)
   (use-package professional-theme       :straight t)
   (use-package rebecca-theme            :straight t)
+  (use-package reverse-theme              :straight t)
+  (use-package seti-theme               :straight t)
+  (use-package sexy-monochrome-theme    :straight t)
   (use-package silkworm-theme           :straight t)
   (use-package soft-morning-theme       :straight t)
   (use-package soft-stone-theme         :straight t)
+  (use-package soothe-theme             :straight t)
+  (use-package standard-themes          :straight t)
   (use-package sunny-day-theme          :straight t)
   (use-package timu-caribbean-theme     :straight t)
   (use-package timu-rouge-theme         :straight t)
@@ -919,7 +925,6 @@ Always move cursor to help window.
                                    "\\|^.cache$"
                                    "\\|^.git$"
                                    "\\|^.mypy_cache"
-                                   "\\|^.projectile$"
                                    "\\|^.pytest_cache"
                                    "\\|^.vscode"
                                    "\\|^__pycache__")))
