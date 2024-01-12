@@ -1245,6 +1245,7 @@ Always move cursor to help window.
 
 ** Version control
 *** Git gutter
+#+begin_src emacs-lisp
   (use-package git-gutter
     :straight t
     :diminish
@@ -1253,10 +1254,6 @@ Always move cursor to help window.
           git-gutter:added-sign    "+"
           git-gutter:modified-sign "="
           git-gutter:deleted-sign  "-")
-    ;; (add-hook 'git-gutter-mode-hook (lambda ()
-    ;;                                   (set-face-attribute 'git-gutter:added nil :height 0.9 :weight 'thin :foreground (face-attribute 'default :foreground))
-    ;;                                   (set-face-attribute 'git-gutter:modified nil :height 0.9 :weight 'thin :foreground (face-attribute 'default :foreground))
-    ;;                                   (set-face-attribute 'git-gutter:deleted nil :height 0.9 :weight 'thin :foreground (face-attribute 'default :foreground))))
 
     (defun niva/modus-gutter () (interactive)
            (set-face-attribute 'git-gutter:added    nil :foreground (face-attribute 'modus-themes-fg-green-intense :foreground) :background 'unspecified)
@@ -1277,15 +1274,15 @@ Always move cursor to help window.
     (global-git-gutter-mode +1)
     (setq git-gutter-fr:side 'left-fringe))
 
+  (add-hook 'prog-mode-hook
+            (lambda () (git-gutter-mode +1)))
+
   (defun niva/modus-gutter () (interactive)
          (set-face-attribute 'git-gutter-fr:added    nil :foreground (face-attribute 'modus-themes-fg-green-intense :foreground) :background 'unspecified)
          (set-face-attribute 'git-gutter-fr:modified nil :foreground (face-attribute 'modus-themes-fg-blue          :foreground) :background 'unspecified)
          (set-face-attribute 'git-gutter-fr:deleted  nil :foreground (face-attribute 'modus-themes-fg-red-intense   :foreground) :background 'unspecified))
   (if (string-match-p "modus" (prin1-to-string custom-enabled-themes))
       (niva/modus-gutter))
-  ;; (set-face-foreground 'git-gutter-fr:added (face-attribute 'ansi-color-green :foreground))
-  ;; (set-face-foreground 'git-gutter-fr:modified (face-attribute 'ansi-color-blue :foreground))
-  ;; (set-face-foreground 'git-gutter-fr:deleted (face-attribute 'ansi-color-red :foreground))
 
   (defun niva/naysayer-faces () (interactive)
          (set-face-attribute 'highlight              nil :background "#335533")
@@ -1299,55 +1296,49 @@ Always move cursor to help window.
       (niva/naysayer-faces))
 
   (fringe-helper-define 'git-gutter-fr:added nil
-    "X......."
-    "........"
-    "........"
-    "X......."
-    "........"
-    "........"
-    "X......."
-    "........"
-    "........"
-    "X......."
-    "........"
-    "........"
-    "X......."
-    "........"
-    "........")
+    ".X...."
+    "..X..."
+    "X....."
+    ".X...."
+    "..X..."
+    "X....."
+    ".X...."
+    "..X..."
+    "X....."
+    ".X...."
+    "..X..."
+    "X....."
+    ".X....")
 
   (fringe-helper-define 'git-gutter-fr:deleted nil
-    "X......."
-    "........"
-    "........"
-    "X......."
-    "........"
-    "........"
-    "X......."
-    "........"
-    "........"
-    "X......."
-    "........"
-    "........"
-    "X......."
-    "........"
-    "........")
+    ".X...."
+    "..X..."
+    "X....."
+    ".X...."
+    "..X..."
+    "X....."
+    ".X...."
+    "..X..."
+    "X....."
+    ".X...."
+    "..X..."
+    "X....."
+    ".X....")
 
   (fringe-helper-define 'git-gutter-fr:modified nil
-    "X......."
-    "........"
-    "........"
-    "X......."
-    "........"
-    "........"
-    "X......."
-    "........"
-    "........"
-    "X......."
-    "........"
-    "........"
-    "X......."
-    "........"
-    "........")
+    ".X...."
+    "..X..."
+    "X....."
+    ".X...."
+    "..X..."
+    "X....."
+    ".X...."
+    "..X..."
+    "X....."
+    ".X...."
+    "..X..."
+    "X....."
+    ".X....")
 #+end_src
 
 *** magit
