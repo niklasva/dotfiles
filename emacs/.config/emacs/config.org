@@ -629,7 +629,6 @@ Always move cursor to help window.
 #+end_src
 
 **** Move to next frame if windmove fails
-
 #+begin_src emacs-lisp
   (define-key evil-normal-state-map (kbd "C-w h") (lambda() (interactive)
                                                     (condition-case nil
@@ -641,6 +640,12 @@ Always move cursor to help window.
                                                         (windmove-right)
                                                       (error (ns-prev-frame)))))
 #+end_src
+
+**** Project
+#+begin_src emacs-lisp
+  (setq project-switch-commands 'project-find-file)
+#+end_src
+
 ** which-key
 
 #+begin_src emacs-lisp
@@ -657,15 +662,16 @@ Always move cursor to help window.
     "b"     '(ido-switch-buffer              :which-key "Switch buffer")
     "c C"   '(recompile                      :which-key "Recompile")
     "c a"   '(eglot-code-actions             :which-key "eglot-code-actions")
-    "c c"   '(projectile-compile-project     :which-key "Compile project")
-    "c t"   '(projectile-test-project        :which-key "Test project")
-    "p d"   '(projectile-dired               :which-key "projectile-dired")
+    "c c"   '(compile                        :which-key "compile")
+    "c T"   '(niva/run-test-command          :which-key "niva/run-test-command")
+    "p d"   '(project-dired                  :which-key "project-dired")
     "d d"   '(dired                          :which-key "dired")
     "d l"   '(devdocs-lookup                 :which-key "devdocs-lookup")
     "d u"   '(magit-diff-unstaged            :which-key "magit-diff-unstaged")
     "e r"   '(eval-region                    :which-key "eval-region")
     "e i"   '(eglot-inlay-hints-mode         :which-key "eglot-inlay-hints-mode")
-    "h p"   '(projectile-find-other-file     :which-key "projectile-find-other-file")
+    "f f"   '(find-file                      :which-key "Find file")
+    "h p"   '(ff-get-other-file              :which-key "ff-get-other-file")
     "m *"   '(org-ctrl-c-star                :which-key "Org-ctrl-c-star")
     "m +"   '(org-ctrl-c-minus               :which-key "Org-ctrl-c-minus")
     "m ."   '(counsel-org-goto               :which-key "Counsel org goto")
@@ -687,7 +693,8 @@ Always move cursor to help window.
     "n u"   '(org-roam-ui-open               :which-key "Open Org-roam UI")
     "o a"   '(org-agenda                     :which-key "Org agenda")
     "o h"   '(consult-org-heading            :which-key "consult-org-heading")
-    "p e"   '(projectile-recentf             :which-key "projectile-recentf")
+    "p p"   '(project-switch-project         :which-key "project-switch-project")
+    "p f"   '(project-find-file              :which-key "project-find-file")
     "r o"   '(read-only-mode                 :which-key "read-only-mode")
     "s h"   '(git-gutter:stage-hunk          :which-key "git-gutter:stage-hunk")
     "t t"   '(toggle-truncate-lines          :which-key "Toggle truncate lines")
@@ -937,61 +944,6 @@ Always move cursor to help window.
     (dired-preview-global-mode 1))
 #+end_src
 
-** Projectile
-#+begin_src emacs-lisp
-  (use-package projectile
-    :diminish
-    :straight t
-    :init
-    (setq projectile-enable-caching t)
-    :bind
-    (:map projectile-mode-map
-          ("s-p" . projectile-command-map)
-          ("C-c p" . projectile-command-map))
-    :config
-    (add-to-list 'projectile-globally-ignored-directories ".cache")
-    (add-to-list 'projectile-globally-ignored-directories ".DS_Store")
-    (add-to-list 'projectile-globally-ignored-directories ".vscode")
-    (add-to-list 'projectile-globally-ignored-directories "BUILD")
-    (projectile-mode +1)
-    (setq projectile-globally-ignored-file-suffixes '(".elc" ".pyc" ".o" ".swp" ".so" ".a" ".d" ".ld")
-          projectile-globally-ignored-files '("TAGS" "tags" ".DS_Store" ".cache")
-          projectile-ignored-projects `("~/.pyenv/")
-          projectile-mode-line-function #'(lambda () (format " [%s]" (projectile-project-name)))
-          projectile-enable-caching t
-          projectile-indexing-method 'native
-          projectile-file-exists-remote-cache-expire nil)
-
-    (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-
-    (projectile-register-project-type 'has-command-at-point '(".mbed")
-                                      :compile "build-target" :src-dir "src/"))
-#+end_src
-
-** File-related keybindings
-#+begin_src emacs-lisp
-  (nvmap :states '(normal visual) :keymaps 'override :prefix "SPC"
-    "."     '(lambda ()
-               (interactive)
-               (setq-local tmpdir default-directory)
-               (cd "~")
-               (call-interactively 'find-file)
-               (cd tmpdir)
-               :which-key "find ~/file")
-    "f f"   '(find-file :which-key "Find file")
-    "p f"   '(projectile-find-file :which-key "projectile-find-file")
-    "p i"   '(projectile-invalidate-cache :which-key "projectile-invalidate-cache")
-    "p p"   '(projectile-switch-project :which-key "projectile-switch-project")
-    "f r"   '(counsel-recentf :which-key "Recent files")
-    "f s"   '(save-buffer :which-key "Save file")
-    "f u"   '(sudo-edit-find-file :which-key "Sudo find file")
-    "f y"   '(dt/show-and-copy-buffer-path :which-key "Yank file path")
-    "f C"   '(copy-file :which-key "Copy file")
-    "f D"   '(delete-file :which-key "Delete file")
-    "f R"   '(rename-file :which-key "Rename file")
-    "f S"   '(write-file :which-key "Save file as...")
-    "f U"   '(sudo-edit :which-key "Sudo edit file"))
-#+end_src
 
 ** Emacs system-files
 *** Backup files
@@ -1088,27 +1040,6 @@ Always move cursor to help window.
     (font-lock-fontify-block))
   (add-hook 'before-save-hook 'niva/format-all-elisp-code-blocks)
 #+end_src
-
-#+begin_src emacs-lisp
-  (setq projectile-other-file-alist '(("cpp" "h" "hpp" "tpp")
-                                      ("tpp" "h" "hpp" "cpp")
-                                      ("hpp" "h" "ipp" "cpp")
-                                      ("cxx" "hxx" "txx")
-                                      ("ixx" "cxx" "hxx")
-                                      ("hxx" "txx" "cxx")
-                                      ("c" "h")
-                                      ("m" "h")
-                                      ("mm" "h")
-                                      ("h" "c" "cpp" "tpp" "hpp" "m" "mm")
-                                      ("cc" "hh")
-                                      ("hh" "cc")
-                                      ("vert" "frag")
-                                      ("frag" "vert")
-                                      (nil "lock" "gpg")
-                                      ("lock" "")
-                                      ("gpg" "")
-                                      ("js" "css" "html")))
-#+end_src
 ** Python
 
 #+begin_src emacs-lisp
@@ -1122,6 +1053,23 @@ Always move cursor to help window.
     (add-hook 'python-mode-hook      #'python-save-hooks)
     (add-hook 'python-ts-mode-hook   #'python-save-hooks))
 #+end_src
+** C++
+#+begin_src emacs-lisp
+  (setq cc-other-file-alist
+        '(("\\.cpp\\'" (".h" ".hpp" ".ipp" ".tpp"))
+          ("\\.h\\'" (".cpp" ".cc" ".c" ".C"))
+          ("\\.hh\\'" (".cpp" ".cc" ".c" ".C"))
+          ("\\.c\\'" (".h"))
+          ("\\.C\\'" (".h"))
+          ("\\.cc\\'" (".h" ".hh"))
+          ("\\.ipp\\'" (".hpp" ".cpp" ".tpp"))
+          ("\\.hpp\\'" (".ipp" ".cpp" ".tpp"))
+          ("\\.tpp\\'" (".hpp" ".cpp" ".ipp"))
+          ("\\.ixx\\'" (".hxx" ".cxx"))
+          ("\\.hxx\\'" (".ixx" ".cxx"))
+          ("\\.tcc$" (".h"))))
+#+end_src
+
 ** Language server
 *** Eglot
 #+begin_src emacs-lisp
