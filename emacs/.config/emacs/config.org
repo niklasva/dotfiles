@@ -1184,6 +1184,16 @@ Always move cursor to help window.
   (add-hook 'c-ts-mode-hook   #'eglot-c-save-hooks)
   (add-hook 'c++-mode-hook    #'eglot-c-save-hooks)
   (add-hook 'c++-ts-mode-hook #'eglot-c-save-hooks)
+
+  (defun niva/delete-empty-lines-at-top ()
+    (interactive)
+    (save-excursion
+      (goto-char (point-min))
+      (while (looking-at-p "^$")
+        (message "Removing empty first line")
+        (delete-region (point) (progn (forward-line 1) (point))))))
+
+  (add-hook 'before-save-hook #'niva/delete-empty-lines-at-top)
 #+end_src
 
 **** Flymake
@@ -1201,6 +1211,7 @@ Always move cursor to help window.
   (set-face-attribute 'compilation-warning nil :weight 'unspecified)
   (set-face-attribute 'warning nil             :weight 'unspecified)
 #+end_src
+
 ** Tree-sitter
 *** treesit
 #+begin_src emacs-lisp
