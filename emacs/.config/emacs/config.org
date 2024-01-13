@@ -664,11 +664,12 @@ Always move cursor to help window.
 
   (nvmap :keymaps 'override :prefix "SPC"
     "SPC"   '(execute-extended-command       :which-key "M-x")
-    "B"     '(project-switch-to-buffer       :which-key "Switch buffer")
-    "b"     '(ido-switch-buffer              :which-key "Switch buffer")
+    "B"     '(consult-buffer-other-window    :which-key "consult-buffer-other-window")
+    "b"     '(consult-buffer                 :which-key "consult-buffer")
     "c C"   '(recompile                      :which-key "Recompile")
     "c a"   '(eglot-code-actions             :which-key "eglot-code-actions")
     "c c"   '(compile                        :which-key "compile")
+    "c e"   '(consult-compile-error          :which-key "consult-compile-error")
     "c T"   '(niva/run-test-command          :which-key "niva/run-test-command")
     "p d"   '(project-dired                  :which-key "project-dired")
     "d d"   '(dired                          :which-key "dired")
@@ -677,7 +678,10 @@ Always move cursor to help window.
     "e r"   '(eval-region                    :which-key "eval-region")
     "e i"   '(eglot-inlay-hints-mode         :which-key "eglot-inlay-hints-mode")
     "f f"   '(find-file                      :which-key "Find file")
+    "f m"   '(consukt-flymake                :which-key "consult-flymake")
     "h p"   '(ff-get-other-file              :which-key "ff-get-other-file")
+    "h h"   '(consult-history                :which-key "consult-history")
+    "i m"   '(consult-imenu-multi            :which-key "consult-imenu")
     "m *"   '(org-ctrl-c-star                :which-key "Org-ctrl-c-star")
     "m +"   '(org-ctrl-c-minus               :which-key "Org-ctrl-c-minus")
     "m ."   '(counsel-org-goto               :which-key "Counsel org goto")
@@ -710,7 +714,7 @@ Always move cursor to help window.
     "elf"   '(elfeed                         :which-key "elfeed")
     "eww"   '(eww                            :which-key "eww")
     "gpt"   '(gptel                          :which-key "gptel")
-    "rec"   '(recentf-open                   :which-key "devdocs-lookup")
+    "rec"   '(consult-recent-file            :which-key "consult-recent-file")
     "rip"   '(consult-ripgrep                :which-key "consult-ripgrep")
     "cir"   '(circe                          :which-key "circe")
     "ir"    '(niva/switch-irc-buffers        :which-key "niva/switch-irc-buffers")
@@ -789,6 +793,7 @@ Always move cursor to help window.
 #+begin_src emacs-lisp
   (use-package consult
     :straight t
+    ;;:hook (completion-list-mode . consult-preview-at-point-mode)
     :config
     (consult-customize
      consult-theme
