@@ -584,8 +584,6 @@ Always move cursor to help window.
   (global-set-key                   (kbd "<f13>")   'evil-invert-char)
   (define-key evil-insert-state-map (kbd "C-c C-e") 'comment-line)
   (define-key evil-visual-state-map (kbd "C-c C-e") 'comment-line)
-  (define-key evil-normal-state-map (kbd "<return>") "")
-
 
   (define-key evil-normal-state-map (kbd "C-a C-x") 'kill-this-buffer)
   (define-key help-mode-map         (kbd "C-a C-x") 'evil-delete-buffer)
@@ -598,6 +596,8 @@ Always move cursor to help window.
   (define-key evil-normal-state-map (kbd "C-b n")   'evil-next-buffer)
   (define-key evil-normal-state-map (kbd "C-b p")   'evil-previous-buffer)
   (define-key evil-normal-state-map (kbd "C-b C-b") 'evil-switch-to-windows-last-buffer)
+
+  (with-eval-after-load 'evil-maps  (define-key evil-motion-state-map (kbd "RET") nil))
 #+end_src
 
 #+begin_src emacs-lisp
