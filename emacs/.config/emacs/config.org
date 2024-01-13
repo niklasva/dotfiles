@@ -920,38 +920,29 @@ Always move cursor to help window.
 * File management
 ** Dired
 #+begin_src emacs-lisp
-  (use-package dired-x
-    :hook ((dired-mode . dired-omit-mode))
-    :config
-    (setq dired-omit-verbose nil
-          dired-omit-files (concat dired-omit-files
-                                   "\\|^.DS_STORE$"
-                                   "\\|^.Trash"
-                                   "\\|^.cache$"
-                                   "\\|^.git$"
-                                   "\\|^.mypy_cache"
-                                   "\\|^.pytest_cache"
-                                   "\\|^.vscode"
-                                   "\\|^__pycache__")))
-#+end_src
-*** dired-preview
-#+begin_src emacs-lisp
-  (use-package dired-preview
-    :straight (dired-preview
-               :host github
-               :repo "protesilaos/dired-preview")
+  (use-package dired-subtree :straight t
     :after dired
+    :hook ((dired-mode . dired-hide-details-mode))
     :config
-    (setq dired-preview-delay 0.2)
-    (setq dired-preview-max-size (expt 2 20))
-    (setq dired-preview-ignored-extensions-regexp
-          (concat "\\."
-                  "\\(DS_Store\\|epub\\|pdf\\)"))
-    (advice-add 'dired-preview--display-buffer :around
-                (defun my/dired-preview--display-buffer (origfn buffer)
-                  (let ((display-buffer-base-action))
-                    (funcall origfn buffer))))
-    (dired-preview-global-mode 1))
+    (setq dired-subtree-use-backgrounds nil
+          dired-subtree-line-prefix "  │"
+          dired-kill-when-opening-new-dired-buffer t)
+
+    (bind-key "<tab>" #'dired-subtree-toggle dired-mode-map))
+  ;; (bind-key "<backtab>" #'dired-subtree-cycle dired-mode-map))
+
+  (use-package dired-collapse
+    :straight t
+    :after dired
+    :init
+    (evil-define-key 'normal dired-mode-map (kbd "H") 'dired-up-directory)
+    (evil-define-key 'normal dired-mode-map (kbd "L") 'dired-find-file)
+    (add-hook 'dired-mode-hook 'dired-collapse-mode))
+
+  (use-package async :straight t
+    :config
+    (autoload 'dired-async-mode "dired-async.el" nil t)
+    (dired-async-mode 1))
 #+end_src
 
 
