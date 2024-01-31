@@ -46,7 +46,6 @@ alias newsboat="newsboat -q"
 alias rss="newsboat"
 alias ts="ts '[%Y-%m-%d %H:%M:%S]'"
 alias undwm='pkill yabai skhd &'
-alias vim=nvim
 alias renode='mono /Applications/Renode.app/Contents/MacOS/bin/Renode.exe'
 
 # Intel brew for x86 applications
