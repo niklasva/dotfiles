@@ -859,12 +859,13 @@ Always move cursor to help window.
     (corfu-auto-delay 0.2)
     (corfu-auto-prefix 1)
 
-    :hook ((prog-mode . corfu-mode))
-    :init
-    (corfu-popupinfo-mode t)
+    ;;:hook ((prog-mode . corfu-mode) (org-mode . corfu-mode))
+    ;; :init
 
     :config
-    (setq corfu-popupinfo-delay '(0.5 . 0.2)))
+    (corfu-popupinfo-mode t)
+    (global-corfu-mode t)
+    (setq corfu-popupinfo-delay '(0.3 . 0.2)))
 
   (add-hook 'eshell-mode-hook (lambda () (setq-local corfu-auto nil) (corfu-mode)))
   (add-hook 'org-mode-hook (lambda () (corfu-mode)))
@@ -1499,6 +1500,19 @@ Always move cursor to help window.
 
 ** org
 #+begin_src emacs-lisp
+  (require 'org-tempo)
+  (add-to-list 'org-modules 'org-tempo)
+  (dolist (pair '(("sh"   . "src sh")
+                  ("el"   . "src emacs-lisp")
+                  ("sc"   . "src scheme")
+                  ("ts"   . "src typescript")
+                  ("py"   . "src python")
+                  ("go"   . "src go")
+                  ("yaml" . "src yaml")
+                  ("json" . "src json")
+                  ("cpp"  . "src cpp")))
+    (add-to-list 'org-structure-template-alist pair))
+
   (use-package org
     :straight t
     :config
@@ -1607,21 +1621,6 @@ Only use variable-pitch if explicitly called.
     (set-face-attribute 'variable-pitch nil :font "CMU Serif 14" :height 1.4 :inherit 'default))
 #+end_src
 
-** org-tempo
-#+begin_src emacs-lisp
-  (require 'org-tempo)
-  (add-to-list 'org-modules 'org-tempo)
-  (dolist (pair '(("sh"   . "src sh")
-                  ("el"   . "src emacs-lisp")
-                  ("sc"   . "src scheme")
-                  ("ts"   . "src typescript")
-                  ("py"   . "src python")
-                  ("go"   . "src go")
-                  ("yaml" . "src yaml")
-                  ("json" . "src json")
-                  ("cpp"  . "src cpp")))
-    (add-to-list 'org-structure-template-alist pair))
-#+end_src
 
 
 ** org code blocks
