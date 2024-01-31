@@ -796,8 +796,8 @@ Always move cursor to help window.
     :straight nil
     :load-path "straight/repos/vertico/extensions"
     :after vertico
-    :hook
-    (vertico-mode . vertico-mouse-mode))
+    :config
+    (vertico-mouse-mode +1))
 #+end_src
 
 ** Consult
