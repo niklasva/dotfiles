@@ -122,9 +122,9 @@ Show only one active window when opening multiple files at the same time.
 
 ** Hide buffers
 
-Hide buffers by prepending space to buffer name.
 #+begin_src emacs-lisp
   (defun niva/hide-buffer (bufname)
+    "Hide buffers by prepending space to buffer name."
     (if (get-buffer bufname)
         (with-current-buffer bufname
           (rename-buffer (concat " " bufname)))))
@@ -468,6 +468,7 @@ Always move cursor to help window.
 *** Remove font weight
 #+begin_src emacs-lisp
   (defun niva/remove-font-weight ()
+    "Set weights to regular on common faces"
     (interactive)
     (custom-set-faces
      '(default                           ((t (:background unspecified))))
@@ -1004,6 +1005,7 @@ Always move cursor to help window.
 ** Byte-compile config on save
 #+begin_src disabled
   (defun niva/compile-config ()
+    "Byte-compile config on save"
     (interactive)
     (when (and (buffer-file-name)
                (string= (file-name-nondirectory (buffer-file-name)) "config.org"))
@@ -1020,6 +1022,7 @@ Always move cursor to help window.
 
 #+begin_src emacs-lisp
   (defun niva/format-all-elisp-code-blocks ()
+    "Format all elisp blocks in current buffer"
     (interactive)
     (setq-local indent-tabs-mode nil)
     (save-excursion
@@ -1135,6 +1138,7 @@ Always move cursor to help window.
   (add-hook 'c++-ts-mode-hook #'eglot-c-save-hooks)
 
   (defun niva/delete-empty-lines-at-top ()
+    "Delete topmost lines if they contain no characters"
     (interactive)
     (save-excursion
       (goto-char (point-min))
@@ -1371,6 +1375,7 @@ Always move cursor to help window.
 ** Running tests
 #+begin_src emacs-lisp
   (defun niva/run-test-command ()
+    "Run command for testing"
     (interactive)
     (let* ((command-history (symbol-value 'my-run-test-project-command-history))
            (last-command (car command-history))
@@ -1423,6 +1428,7 @@ Always move cursor to help window.
 *** Kill buffer on quit
 #+begin_src emacs-lisp
   (defun niva/term-handle-exit (&optional process-name msg)
+    "Kill buffer on quit"
     (kill-buffer (current-buffer)))
 
   (advice-add 'term-handle-exit :after 'niva/term-handle-exit)
@@ -1431,6 +1437,7 @@ Always move cursor to help window.
 *** Log coloring
 #+begin_src emacs-lisp
   (defun niva/font-lock-comment-annotations ()
+    "Colorize keywords in eshell buffers"
     (interactive)
     (font-lock-add-keywords
      nil
@@ -1606,6 +1613,7 @@ Only use variable-pitch if explicitly called.
 #+begin_src emacs-lisp
   ;; Disable < matching with (
   (defun niva/org-syntax-remove-angle-bracket-match ()
+    "Disable < matching with ("
     (interactive)
     (modify-syntax-entry ?< "." org-mode-syntax-table)
     (modify-syntax-entry ?> "." org-mode-syntax-table))
@@ -1818,6 +1826,7 @@ Only use variable-pitch if explicitly called.
   (setq elfeed-show-entry-switch 'elfeed-olivetti)
 
   (defun niva/clear-elfeed ()
+    "Clear elfeed database"
     (interactive)
     (setq elfeed-db-directory (expand-file-name "~/.elfeed"))
     (delete-directory elfeed-db-directory t)
