@@ -1177,6 +1177,12 @@ Always move cursor to help window.
   (set-face-attribute 'warning nil             :weight 'unspecified)
 #+end_src
 
+** Mode extension
+#+begin_src emacs-lisp
+  (dolist (pair '(("\\.tpp\\'" . c++-mode)))
+    (push pair auto-mode-alist))
+#+end_src
+
 ** Tree-sitter
 *** treesit
 #+begin_src emacs-lisp
