@@ -297,7 +297,7 @@ Always move cursor to help window.
   (use-package plan9-theme              :straight t)
   (use-package professional-theme       :straight t)
   (use-package rebecca-theme            :straight t)
-  (use-package reverse-theme              :straight t)
+  (use-package reverse-theme            :straight t)
   (use-package seti-theme               :straight t)
   (use-package sexy-monochrome-theme    :straight t)
   (use-package silkworm-theme           :straight t)
@@ -392,7 +392,7 @@ Always move cursor to help window.
 
 ** Mode line
 *** Mode line format
-#+begin_src emacs-lisp
+#+begin_src disabled
   (defun is-vc-file ()
     (let ((backend (vc-backend (buffer-file-name))))
       (if backend
@@ -439,25 +439,35 @@ Always move cursor to help window.
              (format-time-string "%R") " ")
      'face 'font-lock-string-face))
 
+  (setq-default mode-line-format
+                `((:eval (if (and buffer-file-name (buffer-modified-p)) "*%b" " %b"))
+                  (:eval (if vc-mode niva--git-mode-line))
+                  " | %l:%c"
+                  (:eval (propertize " " 'display (list 'space :align-to (- (window-total-width) (length (niva/format-right-mode-line))))))
+                  (:eval (if (niva/bottom-right-window-p) (niva/format-right-mode-line)))))
+#+end_src
+
+#+begin_src emacs-lisp
   (setq evil-mode-line-format nil)
-  (set-face-attribute 'mode-line-active nil :height 0.9)
-  (set-face-attribute 'mode-line-inactive nil :height 0.9)
-  (set-face-attribute 'minibuffer-prompt nil :height 0.9 :family (face-attribute 'variable-pitch :family))
+
   (setq minibuffer-prompt-properties '(read-only t intangible t cursor-intangible t face minibuffer-prompt))
 
+  (setq-default niva/custom-mode-line
+                '("%e" mode-line-front-space
+                  (:propertize
+                   ("" mode-line-mule-info mode-line-client mode-line-modified
+                    mode-line-remote mode-line-window-dedicated)
+                   display (min-width (6.0)))
+                  mode-line-frame-identification
+                  "%12b" ;; Remove font weight from buffer name
+                  " "
+                  mode-line-position (project-mode-line project-mode-line-format)
+                  (vc-mode vc-mode) "  " mode-line-modes mode-line-misc-info
+                  mode-line-end-spaces))
 
-  (dolist (buffer (list " *Minibuf-0*" " *Echo Area 0*"
-                        " *Minibuf-1*" " *Echo Area 1*"))
-    (when (get-buffer buffer)
-      (with-current-buffer buffer
-        (setq-local face-remapping-alist '((default (:height 0.9) variable-pitch))))))
-
-  ;;(setq-default mode-line-format
-  ;;              `((:eval (if (and buffer-file-name (buffer-modified-p)) "*%b" " %b"))
-  ;;                (:eval (if vc-mode niva--git-mode-line))
-  ;;                " | %l:%c"
-  ;;                (:eval (propertize " " 'display (list 'space :align-to (- (window-total-width) (length (niva/format-right-mode-line))))))
-  ;;                (:eval (if (niva/bottom-right-window-p) (niva/format-right-mode-line)))))
+  (defun niva/change-mode-line ()
+    (interactive)
+    (setq mode-line-format niva/custom-mode-line))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1575,7 +1585,7 @@ Always move cursor to help window.
 
 Only use variable-pitch if explicitly called.
 
-#+begin_src emacs-lisp
+#+begin_src disabled
   (defun niva/variable-pitch-on ()
     (interactive)
     (set-face-attribute 'variable-pitch nil :font "CMU Serif 14" :height 1.4 :inherit 'default))
@@ -2131,7 +2141,6 @@ Only use variable-pitch if explicitly called.
                   (niva/switch-irc-buffers))
               (message "Circe timed out.")))))))
 #+end_src
-* AI
 ** gptel
 #+begin_src emacs-lisp
   (use-package gptel
