@@ -1226,7 +1226,7 @@ Always move cursor to help window.
     :straight t
     :diminish
     :config
-    (setq git-gutter:update-interval 0.02
+    (setq git-gutter:update-interval 1
           git-gutter:added-sign    "+"
           git-gutter:modified-sign "="
           git-gutter:deleted-sign  "-")
@@ -1630,7 +1630,7 @@ Only use variable-pitch if explicitly called.
     (modify-syntax-entry ?< "." org-mode-syntax-table)
     (modify-syntax-entry ?> "." org-mode-syntax-table))
 
-  (add-hook 'org-mode-hook #'org-syntax-table-modify)
+  (add-hook 'org-mode-hook #'org-syntax-remove-angle-bracket-match)
 #+end_src
 
 ** org-roam
