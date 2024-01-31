@@ -499,13 +499,13 @@ Always move cursor to help window.
 
 *** Enable chinese characters
 
-#+begin_src emacs-lisp
-  ;; (use-package cnfonts
-  ;;   :straight t
-  ;;   :config
-  ;;   (setq cnfonts-use-face-font-rescale t
-  ;;         cnfonts-default-fontsize 16)
-  ;;   (cnfonts-mode 1))
+#+begin_src disabled
+  (use-package cnfonts
+    :straight t
+    :config
+    (setq cnfonts-use-face-font-rescale t
+          cnfonts-default-fontsize 16)
+    (cnfonts-mode 1))
 #+end_src
 
 ** Ligatures
