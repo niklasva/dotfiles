@@ -835,26 +835,16 @@ Always move cursor to help window.
 
 ** Yasnippet
 #+begin_src emacs-lisp
+  (require 'org-tempo)
+  (add-to-list 'org-modules 'org-tempo t)
+  (use-package yasnippet-snippets :straight t)
+
   (use-package yasnippet
     :straight t
-    :delight t
-    :diminish
-    :commands (yas-recompile-all yas-reload-all yas-minor-mode)
-    :hook
-    (c++-ts-mode . yas-minor-mode)
-    (c++-mode . yas-minor-mode)
-    (c-mode . yas-minor-mode)
-    (c-ts-mode . yas-minor-mode)
-    :config
-    (diminish 'yas-minor-mode)
-    (setq yas-snippet-dirs
-          `(,(concat user-emacs-directory (file-name-as-directory "snippets")))))
-
-  (use-package yasnippet-snippets
-    :straight t
-    :diminish
-    :after yasnippet)
+    :diminish yas-minor-mode
+    :config (yas-global-mode 1))
 #+end_src
+
 ** Corfu
 #+begin_src emacs-lisp
   (use-package corfu
