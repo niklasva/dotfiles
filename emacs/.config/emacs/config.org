@@ -1428,6 +1428,24 @@ Always move cursor to help window.
           eshell-kill-processes-on-exit t
           eshell-scroll-to-bottom-on-input 'all
           eshell-scroll-to-bottom-on-output nil))
+
+  (setq system-name (car (split-string system-name "\\.")))
+  (setq eshell-prompt-regexp "^.+@.+:.+> ")
+  (setq eshell-prompt-function
+        (lambda ()
+          (concat
+           (propertize (user-login-name)
+                       'face 'font-lock-keyword-face)
+           (propertize (format "@%s" (system-name))
+                       'face 'default)
+           (propertize ":"
+                       'face 'font-lock-doc-face)
+           (propertize (abbreviate-file-name (eshell/pwd))
+                       'face 'font-lock-type-face)
+           (propertize " $"
+                       'face 'font-lock-doc-face)
+           (propertize " "
+                       'face 'default))))
 #+end_src
 
 *** eshell-syntax-highlighting
