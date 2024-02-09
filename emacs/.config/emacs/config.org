@@ -1166,6 +1166,39 @@ Always move cursor to help window.
   (set-face-attribute 'warning nil             :weight 'unspecified)
 #+end_src
 
+#+begin_src emacs-lisp
+    (with-eval-after-load 'git-gutter-fringe
+  (fringe-helper-define 'exlamation-mark nil
+                        ".XXX.."
+                        ".XXX.."
+                        ".XXX.."
+                        ".XXX.."
+                        ".XXX.."
+                        "..X..."
+                        "......"
+                        ".XXX.."
+                        ".XXX.."
+                        "......")
+
+  (fringe-helper-define 'flymake-double-exclamation-mark nil
+                        "........."
+                        ".XX...XX"
+                        "..XX.XX."
+                        "...XXX.."
+                        "....X..."
+                        "...XXX.."
+                        "..XX.XX."
+                        ".XX...XX"
+                        ".........")
+
+  (add-hook 'flymake-mode-hook
+            (lambda ()
+              (defface niva-flymake-fringe-error '((t :inherit 'magit-diff-removed)) nil :group nil)
+              (defface niva-flymake-fringe-warning '((t :inherit 'magit-diff-removed)) nil :group nil)
+              (setq flymake-error-bitmap '(flymake-double-exclamation-mark niva-flymake-fringe-error))
+              (setq flymake-warning-bitmap '(exclamation-mark niva-flymake-fringe-warning)))))
+#+end_src
+
 ** Mode extension
 #+begin_src emacs-lisp
   (dolist (pair '(("\\.tpp\\'" . c++-mode)))
@@ -1312,30 +1345,6 @@ Always move cursor to help window.
     ".X....")
 #+end_src
 
-#+begin_src emacs-lisp
-  (fringe-helper-define 'exlamation-mark nil
-    ".XXX.."
-    ".XXX.."
-    ".XXX.."
-    ".XXX.."
-    ".XXX.."
-    "..X..."
-    "......"
-    ".XXX.."
-    ".XXX.."
-    "......")
-
-  (fringe-helper-define 'flymake-double-exclamation-mark nil
-    "........."
-    ".XX...XX"
-    "..XX.XX."
-    "...XXX.."
-    "....X..."
-    "...XXX.."
-    "..XX.XX."
-    ".XX...XX"
-    ".........")
-#+end_src
 *** magit
 #+begin_src emacs-lisp
   (use-package magit
