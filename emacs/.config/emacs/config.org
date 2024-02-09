@@ -1066,18 +1066,11 @@ Always move cursor to help window.
 ** C++
 #+begin_src emacs-lisp
   (setq cc-other-file-alist
-        '(("\\.cpp\\'" (".h" ".hpp" ".ipp" ".tpp"))
-          ("\\.h\\'" (".cpp" ".cc" ".c" ".C"))
-          ("\\.hh\\'" (".cpp" ".cc" ".c" ".C"))
+        '(("\\.h\\'" (".cpp" ".c"))
+          ("\\.hpp\\'" (".cpp" ".tpp"))
           ("\\.c\\'" (".h"))
-          ("\\.C\\'" (".h"))
-          ("\\.cc\\'" (".h" ".hh"))
-          ("\\.ipp\\'" (".hpp" ".cpp" ".tpp"))
-          ("\\.hpp\\'" (".ipp" ".cpp" ".tpp"))
-          ("\\.tpp\\'" (".hpp" ".cpp" ".ipp"))
-          ("\\.ixx\\'" (".hxx" ".cxx"))
-          ("\\.hxx\\'" (".ixx" ".cxx"))
-          ("\\.tcc$" (".h"))))
+          ("\\.cpp\\'" (".h" ".hpp" ".tpp"))
+          ("\\.tpp\\'" (".hpp" ".cpp"))))
 #+end_src
 
 ** Language server
