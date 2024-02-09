@@ -1,4 +1,5 @@
 filetype on
+syntax on
 
 hi LineNr ctermbg=none ctermfg=1
 
