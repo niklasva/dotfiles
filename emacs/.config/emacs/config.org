@@ -488,9 +488,14 @@ Always move cursor to help window.
 
     (set-face-attribute 'bold               nil :weight 'unspecified)
     (set-face-attribute 'buffer-menu-buffer nil :weight 'unspecified)
+    (set-face-attribute 'compilation-error  nil :weight 'unspecified)
+    (set-face-attribute 'default            nil :weight 'unspecified)
     (set-face-attribute 'help-key-binding   nil :weight 'unspecified :family 'unspecified :box 'unspecified :inherit 'default)
+    (set-face-attribute 'outline-1          nil :weight 'unspecified)
+    (set-face-attribute 'outline-2          nil :weight 'unspecified)
+    (set-face-attribute 'outline-3          nil :weight 'unspecified)
     (set-face-attribute 'tooltip            nil :inherit 'default))
-  ;; (niva/remove-font-weight)
+  (add-hook 'prog-mode-hook 'niva/remove-font-weight)
 #+end_src
 
 *** Enable chinese characters
