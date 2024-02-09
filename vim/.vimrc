@@ -35,13 +35,15 @@ let &t_Cs = "\e[4:3m"
 let &t_Ce = "\e[4:0m"
 
 let semhighlight=1
- 
+
 let mapleader = " "
 nnoremap <silent> <leader>ws        :call TrimWhitespace()<CR>
 nnoremap <silent> <leader>x         :bd<CR>
 nnoremap <silent> €                 $
 nnoremap Q <Nop>
 nnoremap U <C-r>
+
+au BufNewFile,BufRead,BufReadPost *.org set syntax=lisp
 
 function! TrimWhitespace()
     let l:save = winsaveview()
