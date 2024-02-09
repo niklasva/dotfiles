@@ -694,7 +694,7 @@ Always move cursor to help window.
     "e r"   '(eval-region                    :which-key "eval-region")
     "e i"   '(eglot-inlay-hints-mode         :which-key "eglot-inlay-hints-mode")
     "f f"   '(find-file                      :which-key "Find file")
-    "f m"   '(consukt-flymake                :which-key "consult-flymake")
+    "f m"   '(consult-flymake                :which-key "consult-flymake")
     "h p"   '(ff-get-other-file              :which-key "ff-get-other-file")
     "h h"   '(consult-history                :which-key "consult-history")
     "i m"   '(consult-imenu-multi            :which-key "consult-imenu")
