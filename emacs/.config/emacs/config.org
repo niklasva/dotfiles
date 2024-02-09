@@ -374,7 +374,7 @@ Always move cursor to help window.
 #+end_src
 *** Load theme
 #+begin_src emacs-lisp
-  (load-theme 'ef-day)
+  (load-theme 'standard-dark)
 #+end_src
 *** Faces
 ** Compilaton mode
@@ -927,6 +927,7 @@ Always move cursor to help window.
 * File management
 ** Dired
 #+begin_src emacs-lisp
+  (use-package dirtree :straight t)
   (use-package dired-subtree :straight t
     :after dired
     :hook ((dired-mode . dired-hide-details-mode))
@@ -1238,6 +1239,7 @@ Always move cursor to help window.
                     ("\\.ts\\'"           . typescript-ts-mode)
                     ("\\.tsx\\'"          . tsx-ts-mode)
                     ("\\.css\\'"          . css-ts-mode)
+                    ("\\.cmake\\'"        . cmake-ts-mode)
                     ("\\.py\\'"           . python-ts-mode)
                     ("\\.yaml\\'"         . yaml-ts-mode)
                     ("\\.clangd\\'"       . yaml-ts-mode)
@@ -1257,15 +1259,7 @@ Always move cursor to help window.
     (setq git-gutter:update-interval 1
           git-gutter:added-sign    "+"
           git-gutter:modified-sign "="
-          git-gutter:deleted-sign  "-")
-
-    (defun niva/modus-gutter () (interactive)
-           (set-face-attribute 'git-gutter:added    nil :foreground (face-attribute 'modus-themes-fg-green-intense :foreground) :background 'unspecified)
-           (set-face-attribute 'git-gutter:modified nil :foreground (face-attribute 'modus-themes-fg-blue          :foreground) :background 'unspecified)
-           (set-face-attribute 'git-gutter:deleted  nil :foreground (face-attribute 'modus-themes-fg-red-intense   :foreground) :background 'unspecified))
-
-    (if (string-match-p "modus" (prin1-to-string custom-enabled-themes))
-        (niva/modus-gutter)))
+          git-gutter:deleted-sign  "-"))
 #+end_src
 
 **** git-gutter-fringe
@@ -1278,15 +1272,14 @@ Always move cursor to help window.
     (global-git-gutter-mode +1)
     (setq git-gutter-fr:side 'left-fringe))
 
+  (add-hook 'git-gutter-mode-hook
+            (lambda ()
+              (set-face-attribute 'git-gutter-fr:added    nil :foreground (face-attribute 'magit-diff-added   :foreground) :background (face-attribute 'magit-diff-added   :background))
+              (set-face-attribute 'git-gutter-fr:modified nil :foreground (face-attribute 'magit-diff-base    :foreground) :background (face-attribute 'magit-diff-base    :background))
+              (set-face-attribute 'git-gutter-fr:deleted  nil :foreground (face-attribute 'magit-diff-removed :foreground) :background (face-attribute 'magit-diff-removed :background))))
+
   (add-hook 'prog-mode-hook
             (lambda () (git-gutter-mode +1)))
-
-  (defun niva/modus-gutter () (interactive)
-         (set-face-attribute 'git-gutter-fr:added    nil :foreground (face-attribute 'modus-themes-fg-green-intense :foreground) :background 'unspecified)
-         (set-face-attribute 'git-gutter-fr:modified nil :foreground (face-attribute 'modus-themes-fg-blue          :foreground) :background 'unspecified)
-         (set-face-attribute 'git-gutter-fr:deleted  nil :foreground (face-attribute 'modus-themes-fg-red-intense   :foreground) :background 'unspecified))
-  (if (string-match-p "modus" (prin1-to-string custom-enabled-themes))
-      (niva/modus-gutter))
 
   (defun niva/naysayer-faces () (interactive)
          (set-face-attribute 'highlight              nil :background "#335533")
@@ -1296,53 +1289,34 @@ Always move cursor to help window.
          (set-face-attribute 'git-gutter-fr:modified nil :foreground "#00638a")
          (set-face-attribute 'git-gutter-fr:deleted  nil :foreground "#d0372d"))
 
-  (if (string-match-p "naysayer" (prin1-to-string custom-enabled-themes))
-      (niva/naysayer-faces))
 
   (fringe-helper-define 'git-gutter-fr:added nil
-    ".X...."
-    "..X..."
-    "X....."
-    ".X...."
-    "..X..."
-    "X....."
-    ".X...."
-    "..X..."
-    "X....."
-    ".X...."
-    "..X..."
-    "X....."
-    ".X....")
+                        "......."
+                        "...x..."
+                        "...x..."
+                        "...x..."
+                        "xxxxxxx"
+                        "...x..."
+                        "...x..."
+                        "...x..."
+                        ".......")
 
   (fringe-helper-define 'git-gutter-fr:deleted nil
-    ".X...."
-    "..X..."
-    "X....."
-    ".X...."
-    "..X..."
-    "X....."
-    ".X...."
-    "..X..."
-    "X....."
-    ".X...."
-    "..X..."
-    "X....."
-    ".X....")
+                        "......."
+                        "......."
+                        "......."
+                        ".XXXXX."
+                        "......."
+                        "......."
+                        ".......")
 
+  ;; Lines
   (fringe-helper-define 'git-gutter-fr:modified nil
-    ".X...."
-    "..X..."
-    "X....."
-    ".X...."
-    "..X..."
-    "X....."
-    ".X...."
-    "..X..."
-    "X....."
-    ".X...."
-    "..X..."
-    "X....."
-    ".X....")
+                        "......."
+                        ".xxxxx."
+                        "......."
+                        "......."
+                        ".xxxxx.")
 #+end_src
 
 *** magit
@@ -1497,12 +1471,7 @@ Always move cursor to help window.
 ** olivetti
 #+begin_src emacs-lisp
   (use-package olivetti
-    :straight t
-    :config
-    (add-hook 'olivetti-mode-hook
-              (lambda ()
-                (setq olivetti-body-width 100
-                      olivetti-minimum-body-width 100))))
+    :straight t)
 #+end_src
 
 ** org
