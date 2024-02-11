@@ -5,19 +5,20 @@
                   '(height                  . 45)
                   '(min-width               . 1)
                   '(width                   . 155)
-                  '(internal-border-width   . 24)
+                  '(internal-border-width   . 0)
                   '(vertical-scroll-bars    . nil)
                   '(tool-bar-lines          . 0)
                   '(ns-transparent-titlebar . t)
                   '(ns-appearance           . dark)
-                  '(font                    . "Iosevka Comfy 17"))))
+                  '(font                    . "MxPlus IBM VGA 8x16 16"))))
 
-(set-face-attribute 'default nil :font "Iosevka Comfy 17" :weight 'regular)
+(set-face-attribute 'default nil :font "MxPlus IBM VGA 8x16" :height 160 :weight 'regular)
 
-(setq ns-antialias-text t)
+(setq ns-antialias-text nil)
 (setq ns-use-thin-smoothing nil)
 (setq ns-use-native-fullscreen nil)
 (setq custom-safe-themes t)
+(setq frame-title-format "")
 
 ;;(ignore-errors
 ;;    (load-theme 'wheatgrass))
