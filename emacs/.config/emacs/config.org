@@ -191,7 +191,6 @@ Prevent emacs from contaminating system clipboard.
   (setq ns-use-thin-smoothing t
         ns-use-proxy-icon nil
         ns-use-mwheel-momentum t
-        ns-antialias-text t
         ns-use-mwheel-acceleration t
         frame-resize-pixelwise t)
 #+end_src
