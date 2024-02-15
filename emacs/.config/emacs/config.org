@@ -1325,6 +1325,17 @@ Always move cursor to help window.
     (advice-add 'ediff-quit :around #'disable-y-or-n-p))
 #+end_src
 ** Documentation
+*** helpful
+#+begin_src emacs-lisp
+  (use-package helpful
+    :straight (:host github :repo "wilfred/helpful")
+    :bind (("C-h f" . helpful-callable)
+  		     ("C-h v" . helpful-variable)
+  		     ("C-h k" . helpful-key)
+  		     ("C-h F" . helpful-function)
+  		     ("C-h C" . helpful-command)
+  		     ("C-c C-d" . helpful-at-point)))
+#+end_src
 *** devdocs
 #+begin_src emacs-lisp
   (use-package devdocs
