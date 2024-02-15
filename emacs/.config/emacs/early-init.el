@@ -19,6 +19,11 @@
 (setq ns-use-native-fullscreen nil)
 (setq custom-safe-themes t)
 (setq frame-title-format "")
+(scroll-bar-mode -1)
+(tool-bar-mode -1)
+(tooltip-mode nil)
+(menu-bar-mode 1)
+(set-fringe-mode 1)
 
 ;;(ignore-errors
 ;;    (load-theme 'wheatgrass))
