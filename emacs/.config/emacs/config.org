@@ -1040,7 +1040,7 @@ Always move cursor to help window.
                 (replace-regexp-in-region "\n *#\\+end_src"   "\n#+end_src" begin end)
                 (replace-regexp-in-region "\n *#\\+begin_src" "\n#+begin_src" begin end)))))))
     (font-lock-fontify-block))
-  (add-hook 'before-save-hook 'niva/format-all-elisp-code-blocks)
+  ;; (add-hook 'before-save-hook 'niva/format-all-elisp-code-blocks)
 #+end_src
 ** Python
 
