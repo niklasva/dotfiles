@@ -1611,7 +1611,7 @@ Only use variable-pitch if explicitly called.
     (modify-syntax-entry ?< "." org-mode-syntax-table)
     (modify-syntax-entry ?> "." org-mode-syntax-table))
 
-  (add-hook 'org-mode-hook #'org-syntax-remove-angle-bracket-match)
+  (add-hook 'org-mode-hook #'niva/org-syntax-remove-angle-bracket-match)
 #+end_src
 
 ** org-roam
