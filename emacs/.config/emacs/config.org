@@ -1159,36 +1159,36 @@ Always move cursor to help window.
 #+end_src
 
 #+begin_src emacs-lisp
-    (with-eval-after-load 'git-gutter-fringe
-  (fringe-helper-define 'exlamation-mark nil
-                        ".XXX.."
-                        ".XXX.."
-                        ".XXX.."
-                        ".XXX.."
-                        ".XXX.."
-                        "..X..."
-                        "......"
-                        ".XXX.."
-                        ".XXX.."
-                        "......")
+  (with-eval-after-load 'git-gutter-fringe
+    (fringe-helper-define 'exlamation-mark nil
+      ".XXX.."
+      ".XXX.."
+      ".XXX.."
+      ".XXX.."
+      ".XXX.."
+      "..X..."
+      "......"
+      ".XXX.."
+      ".XXX.."
+      "......")
 
-  (fringe-helper-define 'flymake-double-exclamation-mark nil
-                        "........."
-                        ".XX...XX"
-                        "..XX.XX."
-                        "...XXX.."
-                        "....X..."
-                        "...XXX.."
-                        "..XX.XX."
-                        ".XX...XX"
-                        ".........")
+    (fringe-helper-define 'flymake-double-exclamation-mark nil
+      "........."
+      ".XX...XX"
+      "..XX.XX."
+      "...XXX.."
+      "....X..."
+      "...XXX.."
+      "..XX.XX."
+      ".XX...XX"
+      ".........")
 
-  (add-hook 'flymake-mode-hook
-            (lambda ()
-              (defface niva-flymake-fringe-error '((t :inherit 'magit-diff-removed)) nil :group nil)
-              (defface niva-flymake-fringe-warning '((t :inherit 'magit-diff-removed)) nil :group nil)
-              (setq flymake-error-bitmap '(flymake-double-exclamation-mark niva-flymake-fringe-error))
-              (setq flymake-warning-bitmap '(exclamation-mark niva-flymake-fringe-warning)))))
+    (add-hook 'flymake-mode-hook
+              (lambda ()
+                (defface niva-flymake-fringe-error '((t :inherit 'magit-diff-removed)) nil :group nil)
+                (defface niva-flymake-fringe-warning '((t :inherit 'magit-diff-removed)) nil :group nil)
+                (setq flymake-error-bitmap '(flymake-double-exclamation-mark niva-flymake-fringe-error))
+                (setq flymake-warning-bitmap '(exclamation-mark niva-flymake-fringe-warning)))))
 #+end_src
 
 ** Mode extension
@@ -1282,32 +1282,32 @@ Always move cursor to help window.
 
 
   (fringe-helper-define 'git-gutter-fr:added nil
-                        "......."
-                        "...x..."
-                        "...x..."
-                        "...x..."
-                        "xxxxxxx"
-                        "...x..."
-                        "...x..."
-                        "...x..."
-                        ".......")
+    "......."
+    "...x..."
+    "...x..."
+    "...x..."
+    "xxxxxxx"
+    "...x..."
+    "...x..."
+    "...x..."
+    ".......")
 
   (fringe-helper-define 'git-gutter-fr:deleted nil
-                        "......."
-                        "......."
-                        "......."
-                        ".XXXXX."
-                        "......."
-                        "......."
-                        ".......")
+    "......."
+    "......."
+    "......."
+    ".XXXXX."
+    "......."
+    "......."
+    ".......")
 
   ;; Lines
   (fringe-helper-define 'git-gutter-fr:modified nil
-                        "......."
-                        ".xxxxx."
-                        "......."
-                        "......."
-                        ".xxxxx.")
+    "......."
+    ".xxxxx."
+    "......."
+    "......."
+    ".xxxxx.")
 #+end_src
 
 *** magit
