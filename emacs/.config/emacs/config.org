@@ -362,10 +362,10 @@ Always move cursor to help window.
     (when (eq niva/theme 'sitaramv-solaris)
       (set-face-attribute 'org-block nil :inherit 'default :background "black")
       (set-face-attribute 'org-block-begin-line nil :background "black")
-      (set-face-attribute 'font-lock-comment-face nil :inherit 'font-lock-builtin-face :slant 'unspecified :foreground 'unspecified)))
-      (set-face-attribute 'font-lock-string-face nil :foreground "cyan")
-      (set-face-attribute 'font-lock-function-name-face nil :foreground "yellow")
-      (set-face-attribute 'font-lock-preprocessor-face nil :foreground "green")
+      (set-face-attribute 'font-lock-comment-face nil :inherit 'font-lock-builtin-face :slant 'unspecified :foreground 'unspecified))
+    (set-face-attribute 'font-lock-string-face nil :foreground "cyan")
+    (set-face-attribute 'font-lock-function-name-face nil :foreground "yellow")
+    (set-face-attribute 'font-lock-preprocessor-face nil :foreground "green"))
   (niva/update-theme-faces)
 #+end_src
 ** Compilaton mode
