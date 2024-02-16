@@ -2145,7 +2145,7 @@ Only use variable-pitch if explicitly called.
     (setq-default gptel-default-mode #'org-mode
                   gptel-max-tokens 200
                   gptel-prompt-prefix-alist '((org-mode . "> "))
-                  gptel-stream nil
+                  gptel-stream t
                   gptel-model "deepseek-coder:6.7b-instruct"
                   gptel-default-session "gptel"
                   gptel-backend (gptel-make-ollama "localhost" :host "localhost:11434" :stream t))
