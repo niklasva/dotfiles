@@ -461,6 +461,19 @@ Always move cursor to help window.
   (setq inhibit-compacting-font-caches t)
 #+end_src
 
+*** Display time
+#+begin_src emacs-lisp
+  (setq display-time-format " %H:%M ")
+  (setq display-time-interval 60)
+  (setq display-time-default-load-average nil)
+
+  (setq display-time-string-forms
+        '((propertize
+           (format-time-string display-time-format now)
+           'help-echo (format-time-string "%a %b %e, %Y" now))
+          " "))
+  (display-time-mode 1)
+#+end_src
 ** Font
 *** Remove font weight
 #+begin_src emacs-lisp
