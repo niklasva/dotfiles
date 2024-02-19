@@ -10,13 +10,13 @@
                   '(tool-bar-lines          . 0)
                   '(ns-transparent-titlebar . t)
                   '(ns-appearance           . dark)
-                  '(font                    . "MxPlus IBM VGA 8x16 16"))))
+                  '(font                    . "Iosevka Comfy 15"))))
 
-(set-face-attribute 'default nil :font "MxPlus IBM VGA 8x16" :height 160 :weight 'regular)
+(set-face-attribute 'default nil :font "Iosevka Comfy 15" :height 160 :weight 'regular)
 
-(setq ns-antialias-text nil)
-(setq ns-use-thin-smoothing nil)
-(setq ns-use-native-fullscreen nil)
+(setq ns-antialias-text t)
+(setq ns-use-thin-smoothing t)
+(setq ns-use-native-fullscreen t)
 (setq custom-safe-themes t)
 (setq frame-title-format "")
 (scroll-bar-mode -1)
