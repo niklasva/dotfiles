@@ -352,7 +352,7 @@ Always move cursor to help window.
 #+end_src
 *** Load theme
 #+begin_src emacs-lisp
-  (setq niva/theme 'sitaramv-solaris)
+  (setq niva/theme 'doom-tomorrow-day)
   (load-theme niva/theme)
 #+end_src
 *** Faces
@@ -360,12 +360,19 @@ Always move cursor to help window.
   (defun niva/update-theme-faces ()
     (interactive)
     (when (eq niva/theme 'sitaramv-solaris)
-      (set-face-attribute 'org-block nil :inherit 'default :background "black")
-      (set-face-attribute 'org-block-begin-line nil :background "black")
-      (set-face-attribute 'font-lock-comment-face nil :inherit 'font-lock-builtin-face :slant 'unspecified :foreground 'unspecified)
-      (set-face-attribute 'font-lock-string-face nil :foreground "cyan")
+      (set-face-attribute 'org-block                    nil :inherit 'default :background "black")
+      (set-face-attribute 'org-block-begin-line         nil :background "black")
+      (set-face-attribute 'font-lock-comment-face       nil :inherit 'font-lock-builtin-face :slant 'unspecified :foreground 'unspecified)
+      (set-face-attribute 'font-lock-string-face        nil :foreground "cyan")
       (set-face-attribute 'font-lock-function-name-face nil :foreground "yellow")
-      (set-face-attribute 'font-lock-preprocessor-face nil :foreground "green")))
+      (set-face-attribute 'font-lock-preprocessor-face  nil :foreground "green"))
+    (when (eq niva/theme 'doom-tomorrow-day)
+      (setq treesit-font-lock-level 3)
+      (set-face-attribute 'font-lock-number-face       nil :foreground 'unspecified :inherit 'font-lock-builtin-face)
+      (set-face-attribute 'font-lock-variable-use-face nil :foreground 'unspecified :inherit 'default)
+      (set-face-attribute 'font-lock-constant-face     nil :foreground 'unspecified :inherit 'font-lock-number-face)
+      (set-face-attribute 'warning                     nil :foreground 'unspecified :inherit 'font-lock-builtin-face)
+      (set-face-attribute 'font-lock-type-face         nil :foreground 'unspecified :inherit 'font-lock-builtin-face)))
   (niva/update-theme-faces)
 #+end_src
 ** Compilaton mode
@@ -499,7 +506,7 @@ Always move cursor to help window.
     (set-face-attribute 'outline-2          nil :weight 'unspecified)
     (set-face-attribute 'outline-3          nil :weight 'unspecified)
     (set-face-attribute 'tooltip            nil :inherit 'default))
-  (add-hook 'prog-mode-hook 'niva/remove-font-weight)
+  ;; (add-hook 'prog-mode-hook 'niva/remove-font-weight)
 #+end_src
 
 *** Enable chinese characters
