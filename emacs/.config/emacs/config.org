@@ -1397,13 +1397,13 @@ Always move cursor to help window.
     :straight t
     :init
     (defvar lps/devdocs-alist
-      '((python-mode-hook     . "python~3.11")
-        (c-mode-hook          . "c")
-        (c++-mode-hook        . "cpp")
-        (org-mode-hook        . "elisp")
-        (elisp-mode-hook      . "elisp")
-        (emacs-lisp-mode-hook . "elisp")
-        (sh-mode-hook         . "bash")))
+      '((python-ts-mode-hook     . "python~3.12")
+        (c-ts-mode-hook          . "c")
+        (c++-mode-hook           . "cpp")
+        (c++-ts-mode-hook        . "cpp")
+        (org-mode-hook           . "elisp")
+        (emacs-lisp-mode-hook    . "elisp")
+        (sh-mode-hook            . "bash")))
 
     (setq devdocs-window-select t
           shr-max-image-proportion 0.4)
