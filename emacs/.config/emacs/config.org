@@ -624,6 +624,9 @@ Always move cursor to help window.
   (define-key evil-normal-state-map (kbd "C-b p")   'evil-previous-buffer)
   (define-key evil-normal-state-map (kbd "C-b C-b") 'evil-switch-to-windows-last-buffer)
 
+  (define-key evil-normal-state-map (kbd "C-p") (lambda () (interactive) (evil-backward-paragraph 2) (forward-line 1)))
+  (define-key evil-normal-state-map (kbd "C-n") (lambda () (interactive) (evil-forward-paragraph) (forward-line 1)))
+
   (with-eval-after-load 'evil-maps  (define-key evil-motion-state-map (kbd "RET") nil))
 #+end_src
 
