@@ -1108,9 +1108,10 @@ Always move cursor to help window.
 
 ** Language server
 *** Eglot
+*** Eglot
 #+begin_src emacs-lisp
   (use-package eldoc
-    :straight t
+    :straight (:type built-in)
     :diminish
     :config
     (setq eldoc-idle-delay 0.1)
@@ -1119,7 +1120,7 @@ Always move cursor to help window.
   (diminish 'abbrev-mode)
 
   (use-package eglot
-    :straight t
+    :straight (:type built-in)
     :config
     (add-to-list 'eglot-server-programs '((python-mode python-ts-mode) . ("pyright-langserver" "--stdio")))
     (add-to-list 'eglot-server-programs '((c-mode c++-mode c++-ts-mode) . ("clangd"
@@ -1209,11 +1210,11 @@ Always move cursor to help window.
   (add-hook 'before-save-hook #'niva/delete-empty-lines-at-top)
 #+end_src
 
-**** Flymake
+** Flymake
 
 #+begin_src emacs-lisp
   (use-package flymake
-    :straight t
+    :straight (:type built-in)
     :config
     (setq flymake-start-on-save-buffer t
           flymake-no-changes-timeout 1
@@ -1455,7 +1456,7 @@ Always move cursor to help window.
 ** eshell
 #+begin_src emacs-lisp
   (use-package eshell
-    :straight t
+    :straight (:type built-in)
     :defines eshell-prompt-function
     :config
     (add-hook 'eshell-mode-hook
@@ -1777,7 +1778,7 @@ Only use variable-pitch if explicitly called.
 ** shr
 #+begin_src emacs-lisp
   (use-package shr
-    :straight t
+    :straight (:type built-in)
     :config
     (setq shr-use-fonts nil
           shr-width 75)
