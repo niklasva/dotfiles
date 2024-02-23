@@ -935,6 +935,13 @@ Always move cursor to help window.
       ("N" flymake-goto-prev-error)))
 #+end_src
 
+** imenu
+#+begin_src emacs-lisp
+  (use-package imenu
+    :straight (:type built-in)
+    :config
+    (setq org-imenu-depth 8))
+#+end_src
 * File management
 ** Dired
 #+begin_src emacs-lisp
