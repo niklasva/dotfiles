@@ -2002,19 +2002,8 @@ Only use variable-pitch if explicitly called.
 
 *** Customization
 #+begin_src emacs-lisp
-  (defun elfeed-search-format-date (date)
-    (let* ((current-date (format-time-string "%Y%m%d"))
-           (current-year (format-time-string "%Y"))
-           (yesterday    (format-time-string "%Y%m%d" (time-subtract (current-time) (days-to-time 1))))
-           (date-str     (format-time-string "%Y%m%d" (seconds-to-time date)))
-           (date-year    (format-time-string "%Y" (seconds-to-time date)))
-           (format-string (cond
-                           ((string= current-date date-str) "      Today %H:%M")
-                           ((string= yesterday date-str) "  Yesterday %H:%M")
-                           ((string= current-year date-year) " %a %d %b %H:%M")
-                           (t "  %a %d %b %Y"))))
-
-      (format-time-string format-string (seconds-to-time date))))
+  (use-package relative-date :straight (relative-date :host github :repo "rougier/relative-date"))
+  (defun elfeed-search-format-date (date) (format "%-12s" (relative-date date)))
 #+end_src
 
 #+begin_src emacs-lisp
