@@ -1254,7 +1254,7 @@ Always move cursor to help window.
     (add-hook 'flymake-mode-hook
               (lambda ()
                 (defface niva-flymake-fringe-error '((t :inherit 'magit-diff-removed)) nil :group nil)
-                (defface niva-flymake-fringe-warning '((t :inherit 'magit-diff-removed)) nil :group nil)
+                (defface niva-flymake-fringe-warning '((t :inherit 'magit-diff-base)) nil :group nil)
                 (setq flymake-error-bitmap '(flymake-double-exclamation-mark niva-flymake-fringe-error))
                 (setq flymake-warning-bitmap '(exclamation-mark niva-flymake-fringe-warning)))))
 #+end_src
