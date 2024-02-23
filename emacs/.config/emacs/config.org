@@ -1550,7 +1550,9 @@ Always move cursor to help window.
 ** olivetti
 #+begin_src emacs-lisp
   (use-package olivetti
-    :straight t)
+    :straight t
+    :config
+    (setq olivetti-style 'fancy))
 #+end_src
 
 ** org
@@ -1780,8 +1782,9 @@ Only use variable-pitch if explicitly called.
   (use-package shr
     :straight (:type built-in)
     :config
-    (setq shr-use-fonts nil
-          shr-width 75)
+    (setq shr-use-fonts nil)
+    (setq shr-max-width nil)
+    (setq shr-width nil)
 
     (defun niva/create-image-content (spec size content-type flags)
       (let ((data (if (consp spec)
@@ -1798,11 +1801,12 @@ Only use variable-pitch if explicitly called.
                                (plist-get flags :width)
                                (plist-get flags :height)))))))
 
+    (setq niva--image-slice-divisor 1)
     (defun niva/handle-image-params (image alt start size)
       (let* ((image-pixel-cons (image-size image t))
              (image-pixel-width (car image-pixel-cons))
              (image-pixel-height (cdr image-pixel-cons))
-             (image-scroll-rows (round (/ image-pixel-height (default-font-height)))))
+             (image-scroll-rows (/ (round (/ image-pixel-height (default-font-height))) niva--image-slice-divisor)))
         (when (and (> (current-column) 0) (> image-pixel-width 400))
           (insert "\n"))
         (insert-sliced-image image (or alt "*") nil image-scroll-rows 1)
@@ -1902,7 +1906,12 @@ Only use variable-pitch if explicitly called.
 
   (defun elfeed-olivetti (buff)
     (switch-to-buffer buff)
+    (setq-local olivetti-body-width 80)
+    (setq-local shr-inhibit-images nil)
+    (setq-local shr-max-image-proportion 1)
+    (setq-local scroll-margin 10)
     (olivetti-mode)
+    (hl-text-block-mode)
     (elfeed-show-refresh))
   (setq elfeed-show-entry-switch 'elfeed-olivetti)
 
@@ -1930,7 +1939,7 @@ Only use variable-pitch if explicitly called.
           elfeed-sort-order 'descending
           elfeed-protocol-enabled-protocols '(fever)
           elfeed-protocol-fever-update-unread-only nil
-          elfeed-protocol-fever-maxsize 150
+          elfeed-protocol-fever-maxsize 50
           elfeed-protocol-fever-fetch-category-as-tag t
           elfeed-protocol-feeds (list (list niva/elfeed-fever-url
                                             :api-url niva/elfeed-api-url
@@ -2014,21 +2023,29 @@ Only use variable-pitch if explicitly called.
            (feed-title (when feed (or (elfeed-meta feed :title) (elfeed-feed-title feed))))
            (star (if (member "star" (mapcar #'symbol-name (elfeed-entry-tags entry))) "*" " "))
            (tags (delete "unread" (delete "star" (mapcar #'symbol-name (elfeed-entry-tags entry)))))
-           (tags-str "%s")
+           (tags-str "%-12s")
            (date (elfeed-search-format-date (elfeed-entry-date entry)))
            (title (or (elfeed-meta entry :title) (elfeed-entry-title entry) ""))
            (title-faces (elfeed-search--faces (elfeed-entry-tags entry)))
-           (title-width (- (window-width) 10 elfeed-search-trailing-width))
-           (title-column (elfeed-format-column
-                          title (elfeed-clamp
-                                 (- elfeed-search-title-min-width 20)
-                                 (- title-width 20)
-                                 (- elfeed-search-title-max-width 20))
-                          :left))
            (formatted-date (propertize date 'face 'elfeed-search-title-face))
            (formatted-star (propertize star 'face 'elfeed-search-tag-face))
-           (formatted-tags (and tags (propertize (format tags-str (mapconcat 'identity tags " ")) 'face 'elfeed-search-tag-face)))
+
+           (formatted-tags
+            (if (> (window-width) 120)
+                (and tags (propertize (format tags-str (mapconcat 'identity tags " ")) 'face 'elfeed-search-tag-face)) ""))
+
            (formatted-feed-title (and feed-title (propertize (format "%s" feed-title) 'face 'elfeed-search-feed-face)))
+
+           (title-width (- (window-width)
+                           (string-width formatted-date)
+                           (string-width formatted-star)
+                           (string-width formatted-tags)
+                           widest-feed-title 5))
+
+           (title-column (elfeed-format-column
+                          title title-width
+                          :left))
+
            (formatted-title (propertize (format "%s " title-column) 'face title-faces 'kbd-help title)))
 
       (if (< widest-tag (string-width formatted-tags))
@@ -2040,11 +2057,20 @@ Only use variable-pitch if explicitly called.
       (setq tag-padding (format "%%-%ds" widest-tag))
       (setq feed-padding (format "%%-%ds" widest-feed-title))
 
-      (mapc #'insert (list formatted-date " " formatted-star " " (format tag-padding formatted-tags) " " (format feed-padding formatted-feed-title) " " formatted-title))))
+      (mapc #'insert (list
+                      formatted-date
+                      " " (format feed-padding formatted-feed-title)
+                      " " formatted-title
+                      " " formatted-tags
+                      formatted-star))))
 
-  (setq elfeed-search-title-min-width 30
-        elfeed-search-title-max-width 120
-        elfeed-search-print-entry-function #'niva/elfeed-search-print-entry)
+
+  (setq elfeed-search-print-entry-function #'niva/elfeed-search-print-entry)
+
+  (defun niva/update-elfeed-on-resize (&optional _)
+    (when (eq major-mode 'elfeed-search-mode)
+      (elfeed-update)))
+  (add-hook 'window-size-change-functions #'niva/update-elfeed-on-resize)
 #+end_src
 
 #+begin_src emacs-lisp
@@ -2059,7 +2085,7 @@ Only use variable-pitch if explicitly called.
             (string> a-title b-title)
           (string< a-tags b-tags)))))
 
-  (setf elfeed-search-sort-function #'niva/elfeed-sort-by-tags-and-feed)
+  (setf elfeed-search-sort-function nil)
 #+end_src
 
 *** Graphics handling
@@ -2234,5 +2260,8 @@ Only use variable-pitch if explicitly called.
 ** hl-text-block-mode
 #+begin_src emacs-lisp
   (use-package hl-text-block-mode
-    :straight (:host github :repo "niklasva/hl-text-block-mode"))
+    :straight (:host github :repo "niklasva/hl-text-block-mode")
+    :config
+    (setq hl-text-block-highlight-entire-line t)
+    (set-face-attribute 'hl-text-block-face nil :inherit 'hl-line :weight 'bold :extend t))
 #+end_src
