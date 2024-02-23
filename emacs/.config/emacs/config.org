@@ -2231,3 +2231,12 @@ Only use variable-pitch if explicitly called.
     (add-to-list 'display-buffer-alist '("gptel" display-buffer-same-window)))
   (add-hook 'gptel-mode-hook 'evil-insert-state)
 #+end_src
+
+*** gptel-extensions
+#+begin_src emacs-lisp
+  (use-package gptel-extensions
+    :defer t
+    :after gptel
+    :straight (:host github :repo "kamushadenes/gptel-extensions.el" :files ("gptel-extensions.el")))
+  #+end_src
+
