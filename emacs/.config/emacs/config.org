@@ -2284,13 +2284,21 @@ Only use variable-pitch if explicitly called.
     :after gptel
     :straight (:host github :repo "kamushadenes/gptel-extensions.el" :files ("gptel-extensions.el")))
   #+end_src
-
 * My packages
 ** hl-text-block-mode
 #+begin_src emacs-lisp
-  (use-package hl-text-block-mode
-    :straight (:host github :repo "niklasva/hl-text-block-mode")
+  (use-package hl-paragraph-mode
+    :straight (:host github :repo "niklasva/hl-paragraph-mode")
     :config
-    (setq hl-text-block-highlight-entire-line t)
-    (set-face-attribute 'hl-text-block-face nil :inherit 'hl-line :weight 'bold :extend t))
+    (setq hl-paragraph-highlight-entire-line t)
+    (set-face-attribute 'hl-paragraph-face nil
+                        :inherit    'unspecified
+                        :foreground 'unspecified
+                        :background "firebrick"))
+
+    (set-face-attribute 'hl-paragraph-face nil
+                        :inherit    'unspecified
+                        :foreground 'unspecified
+                        :background (face-attribute 'region :background))
+
 #+end_src
