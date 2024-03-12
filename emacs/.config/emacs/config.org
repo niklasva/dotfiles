@@ -482,6 +482,10 @@ Always move cursor to help window.
   (display-time-mode 1)
 #+end_src
 ** Font
+*** Reset
+#+begin_src emacs-lisp
+(set-face-attribute 'fixed-pitch nil :family 'unspecified)
+#+end_src
 *** Remove font weight
 #+begin_src emacs-lisp
   (defun niva/remove-font-weight ()
