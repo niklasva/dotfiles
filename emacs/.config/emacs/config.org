@@ -1513,6 +1513,7 @@ Always move cursor to help window.
     :straight (:type built-in)
     :defines eshell-prompt-function
     :config
+    (add-hook 'shell-mode-hook 'with-editor-export-editor)
     (add-hook 'eshell-mode-hook
               (lambda ()
                 (define-key eshell-hist-mode-map (kbd "C-c C-l") nil)
@@ -1600,6 +1601,13 @@ Always move cursor to help window.
   (defalias 'ts    "ts '[%Y-%m-%d %H:%M:%S]'")
 #+end_src
 
+** exec-path-from-shell
+#+begin_src emacs-lisp
+  (use-package exec-path-from-shell
+    :straight t
+    :config (exec-path-from-shell-initialize))
+  (when (memq window-system '(mac ns x)) (exec-path-from-shell-initialize))
+#+end_src
 * Org
 ** olivetti
 #+begin_src emacs-lisp
