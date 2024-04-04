@@ -144,6 +144,10 @@ Prevent emacs from contaminating system clipboard.
     (simpleclip-mode 1))
 #+end_src
 
+** save-place
+#+begin_src emacs-lisp
+  (save-place-mode +1)
+#+end_src
 * Customization
 ** GUI settings
 #+begin_src emacs-lisp
