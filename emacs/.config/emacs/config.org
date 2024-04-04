@@ -1283,10 +1283,11 @@ Always move cursor to help window.
 
     (add-hook 'flymake-mode-hook
               (lambda ()
-                (defface niva-flymake-fringe-error '((t :inherit 'magit-diff-removed)) nil :group nil)
-                (defface niva-flymake-fringe-warning '((t :inherit 'magit-diff-base)) nil :group nil)
-                (setq flymake-error-bitmap '(flymake-double-exclamation-mark niva-flymake-fringe-error))
-                (setq flymake-warning-bitmap '(exclamation-mark niva-flymake-fringe-warning)))))
+                (unless (string-match-p "kaolin" (prin1-to-string custom-enabled-themes))
+                  (defface niva-flymake-fringe-error '((t :inherit 'magit-diff-removed)) nil :group nil)
+                  (defface niva-flymake-fringe-warning '((t :inherit 'magit-diff-base)) nil :group nil)
+                  (setq flymake-error-bitmap '(flymake-double-exclamation-mark niva-flymake-fringe-error))
+                  (setq flymake-warning-bitmap '(exclamation-mark niva-flymake-fringe-warning))))))
 #+end_src
 
 ** Mode extension
@@ -1387,9 +1388,10 @@ Always move cursor to help window.
 
   (add-hook 'git-gutter-mode-hook
             (lambda ()
-              (set-face-attribute 'git-gutter-fr:added    nil :foreground (face-attribute 'magit-diff-added   :foreground) :background (face-attribute 'magit-diff-added   :background))
-              (set-face-attribute 'git-gutter-fr:modified nil :foreground (face-attribute 'magit-diff-base    :foreground) :background (face-attribute 'magit-diff-base    :background))
-              (set-face-attribute 'git-gutter-fr:deleted  nil :foreground (face-attribute 'magit-diff-removed :foreground) :background (face-attribute 'magit-diff-removed :background))))
+              (unless (string-match-p "kaolin" (prin1-to-string custom-enabled-themes))
+                (set-face-attribute 'git-gutter-fr:added    nil :foreground (face-attribute 'magit-diff-added   :foreground) :background (face-attribute 'magit-diff-added   :background))
+                (set-face-attribute 'git-gutter-fr:modified nil :foreground (face-attribute 'magit-diff-base    :foreground) :background (face-attribute 'magit-diff-base    :background))
+                (set-face-attribute 'git-gutter-fr:deleted  nil :foreground (face-attribute 'magit-diff-removed :foreground) :background (face-attribute 'magit-diff-removed :background)))))
 
   (add-hook 'prog-mode-hook
             (lambda () (git-gutter-mode +1)))
