@@ -1090,7 +1090,7 @@ Always move cursor to help window.
 #+end_src
 * Development
 ** Elisp
-
+*** Formatter
 #+begin_src emacs-lisp
   (defun niva/format-all-elisp-code-blocks ()
     "Format all elisp blocks in current buffer"
@@ -1115,19 +1115,18 @@ Always move cursor to help window.
     (font-lock-fontify-block))
   ;; (add-hook 'before-save-hook 'niva/format-all-elisp-code-blocks)
 #+end_src
-** Python
 
+*** Polymode
 #+begin_src emacs-lisp
-  (use-package yapfify
-    :straight t
-    :hook ((python-mode python-ts-mode) . yapf-mode)
-    :config
-    (defun python-save-hooks ()
-      (add-hook 'before-save-hook #'yapfify-buffer))
+  (use-package polymode
+    :straight t)
 
-    (add-hook 'python-mode-hook      #'python-save-hooks)
-    (add-hook 'python-ts-mode-hook   #'python-save-hooks))
+  (use-package poly-org
+    :straight t
+    :config
+    (add-to-list 'org-mode-hook #'poly-org-mode))
 #+end_src
+
 ** C++
 #+begin_src emacs-lisp
   (setq cc-other-file-alist
