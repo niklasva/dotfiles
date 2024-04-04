@@ -774,7 +774,7 @@ Always move cursor to help window.
     "ir"    '(niva/switch-irc-buffers        :which-key "niva/switch-irc-buffers")
     "scr"   '(scratch-buffer                 :which-key "scratch-buffer")
 
-    "time"  '((lambda () (interactive) (message (format-time-string "%H:%M | %a %d %b | v%W")))       :which-key "Display current time")
+    "time"  '((lambda () (interactive) (message (format-time-string "%a %d %b %H:%M v%W")))           :which-key "Display current time")
     "conf"  '((lambda () (interactive) (find-file "~/.config/emacs/config.org"))                      :which-key "Open config.org")
     "vconf" '((lambda () (interactive) (split-window-right) (find-file "~/.config/emacs/config.org")) :which-key "Open config.org")
     "sconf" '((lambda () (interactive) (split-window-below) (find-file "~/.config/emacs/config.org")) :which-key "Open config.org"))
@@ -977,12 +977,8 @@ Always move cursor to help window.
       ("C-j" (lambda () (interactive) (evil-window-decrease-height 4)))
       ("C-k" (lambda () (interactive) (evil-window-increase-height 4)))
       ("C-h" (lambda () (interactive) (evil-window-decrease-width 8)))
-      ("C-l" (lambda () (interactive) (evil-window-increase-width 8))))
+      ("C-l" (lambda () (interactive) (evil-window-increase-width 8)))))
 
-    (defhydra hydra-flymake-error (evil-normal-state-map "SPC fm")
-      "Flymake go to error"
-      ("n"   flymake-goto-next-error)
-      ("N" flymake-goto-prev-error)))
 #+end_src
 
 ** imenu
