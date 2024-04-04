@@ -32,10 +32,8 @@ set undodir=~/.vimundo/
 set undofile
 set updatetime=300
 
-let &t_Cs = "\e[4:3m"
-let &t_Ce = "\e[4:0m"
-
-let semhighlight=1
+let base16colorspace=256
+colorscheme base16-3024
 
 let mapleader = " "
 nnoremap <silent> <leader>ws        :call TrimWhitespace()<CR>
@@ -45,6 +43,7 @@ nnoremap Q <Nop>
 nnoremap U <C-r>
 
 au BufNewFile,BufRead,BufReadPost *.org set syntax=lisp
+au BufNewFile,BufRead,BufReadPost *.sh  set syntax=bash
 
 function! TrimWhitespace()
     let l:save = winsaveview()
