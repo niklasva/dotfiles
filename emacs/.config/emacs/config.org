@@ -73,6 +73,17 @@ Show only one active window when opening multiple files at the same time.
     (add-hook hook 'indent-tabs-hook))
 #+end_src
 
+*** Reformatter
+#+begin_src emacs-lisp
+  (use-package reformatter
+    :straight t
+    :config
+    (reformatter-define sh-format
+      :program "shfmt"
+      :group 'sh-mode)
+    (add-to-list 'sh-mode-hook #'sh-format-on-save-mode))
+#+end_src
+
 ** Clean up trailing whitespace
 #+begin_src emacs-lisp
   (setq org-src-strip-leading-and-trailing-blank-lines t)
@@ -1248,14 +1259,14 @@ Always move cursor to help window.
 #+end_src
 
 ** Flymake
-
 #+begin_src emacs-lisp
   (use-package flymake
     :straight (:type built-in)
     :config
     (setq flymake-start-on-save-buffer t
           flymake-no-changes-timeout 1
-          flymake-fringe-indicator-position 'right-fringe))
+          flymake-fringe-indicator-position 'right-fringe)
+    (add-hook 'sh-mode-hook 'flymake-mode))
 
   (set-face-attribute 'error nil               :weight 'unspecified)
   (set-face-attribute 'compilation-error nil   :weight 'unspecified)
