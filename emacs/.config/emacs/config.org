@@ -73,17 +73,6 @@ Show only one active window when opening multiple files at the same time.
     (add-hook hook 'indent-tabs-hook))
 #+end_src
 
-*** Reformatter
-#+begin_src emacs-lisp
-  (use-package reformatter
-    :straight t
-    :config
-    (reformatter-define sh-format
-      :program "shfmt"
-      :group 'sh-mode)
-    (add-to-list 'sh-mode-hook #'sh-format-on-save-mode))
-#+end_src
-
 ** Clean up trailing whitespace
 #+begin_src emacs-lisp
   (setq org-src-strip-leading-and-trailing-blank-lines t)
@@ -1137,33 +1126,42 @@ Always move cursor to help window.
           ("\\.tpp\\'" (".hpp" ".cpp"))))
 #+end_src
 
-** Language server
-*** Eglot
-*** Eglot
+** Eldoc
 #+begin_src emacs-lisp
   (use-package eldoc
     :straight (:type built-in)
     :diminish
     :config
-    (setq eldoc-idle-delay 0.1)
-    (setq eldoc-echo-area-use-multiline-p t)
+    (setq eldoc-idle-delay 0.1
+    eldoc-echo-area-use-multiline-p t
+    eldoc-echo-area-prefer-doc-buffer t)
     (diminish 'eldoc-mode))
   (diminish 'abbrev-mode)
+#+end_src
 
+** Language server
+*** Eglot
+**** -
+#+begin_src emacs-lisp
   (use-package eglot
     :straight (:type built-in)
     :config
-    (add-to-list 'eglot-server-programs '((python-mode python-ts-mode) . ("pyright-langserver" "--stdio")))
-    (add-to-list 'eglot-server-programs '((c-mode c++-mode c++-ts-mode) . ("clangd"
-                                                                           "--query-driver=/Applications/ARM/**/*"
-                                                                           "--clang-tidy"
-                                                                           "--completion-style=detailed"
-                                                                           "--pch-storage=memory"
-                                                                           "--header-insertion=never"
-                                                                           "-background-index-priority=background"
-                                                                           "-j=8"
-                                                                           "--log=error"
-                                                                           "--function-arg-placeholders"))))
+    (setq eglot-autoshutdown t)
+    (add-to-list 'eglot-server-programs '((c-mode c++-mode c++-ts-mode) .
+                                          ("clangd"
+                                           "--query-driver=/Applications/ARM/**/*"
+                                           "--clang-tidy"
+                                           "--completion-style=detailed"
+                                           "--pch-storage=memory"
+                                           "--header-insertion=never"
+                                           "-background-index-priority=background"
+                                           "-j=8"
+                                           "--log=error"
+                                           "--function-arg-placeholders")))
+
+    (add-to-list 'eglot-server-programs '((python-mode python-ts-mode) .
+                                          ("pyright-langserver"
+                                           "--stdio"))))
 
   (dolist (hook '(c-mode-hook c++-mode-hook c-ts-mode-hook c++-ts-mode-hook python-mode-hook python-ts-mode-hook))
     (add-hook hook 'eglot-ensure))
@@ -1190,44 +1188,45 @@ Always move cursor to help window.
                       (cons #'flymake-eldoc-function
                             (remove #'flymake-eldoc-function eldoc-documentation-functions)))
                 (setq eldoc-documentation-strategy #'eldoc-documentation-compose)))
-  (set-face-attribute 'eglot-mode-line nil :inherit 'unspecified)
+    (set-face-attribute 'eglot-mode-line nil :inherit 'unspecified)
 
-  (defun eglot--format-markup (markup)
-    "Format MARKUP according to LSP's spec."
-    (pcase-let ((`(,string ,mode)
-                 (if (stringp markup) (list markup 'gfm-view-mode)
-                   (list (plist-get markup :value)
-                         (pcase (plist-get markup :kind)
-                           ("markdown" 'gfm-view-mode)
-                           ("plaintext" 'text-mode)
-                           (_ major-mode))))))
-      (with-temp-buffer
-        (setq-local markdown-fontify-code-blocks-natively t)
-        (setq string (replace-regexp-in-string "\n---" "  " string))
-        (insert string)
-        (let ((inhibit-message t)
-              (message-log-max nil)
-              match)
-          (ignore-errors (delay-mode-hooks (funcall mode)))
-          (font-lock-ensure)
-          (goto-char (point-min))
-          (let ((inhibit-read-only t))
-            (when (fboundp 'text-property-search-forward)
-              (while (setq match (text-property-search-forward 'invisible))
-                (delete-region (prop-match-beginning match)
-                               (prop-match-end match)))))
-          (string-trim (buffer-string)))))))
+    (defun eglot--format-markup (markup)
+      "Format MARKUP according to LSP's spec."
+      (pcase-let ((`(,string ,mode)
+                   (if (stringp markup) (list markup 'gfm-view-mode)
+                     (list (plist-get markup :value)
+                           (pcase (plist-get markup :kind)
+                             ("markdown" 'gfm-view-mode)
+                             ("plaintext" 'text-mode)
+                             (_ major-mode))))))
+        (with-temp-buffer
+          (setq-local markdown-fontify-code-blocks-natively t)
+          (setq string (replace-regexp-in-string "\n---" "  " string))
+          (insert string)
+          (let ((inhibit-message t)
+                (message-log-max nil)
+                match)
+            (ignore-errors (delay-mode-hooks (funcall mode)))
+            (font-lock-ensure)
+            (goto-char (point-min))
+            (let ((inhibit-read-only t))
+              (when (fboundp 'text-property-search-forward)
+                (while (setq match (text-property-search-forward 'invisible))
+                  (delete-region (prop-match-beginning match)
+                                 (prop-match-end match)))))
+            (string-trim (buffer-string)))))))
 #+end_src
 
 **** Format on save
 #+begin_src emacs-lisp
-  (defun eglot-c-save-hooks ()
+  (defun eglot-save-hooks ()
     (add-hook 'before-save-hook #'eglot-format-buffer))
 
-  (add-hook 'c-mode-hook      #'eglot-c-save-hooks)
-  (add-hook 'c-ts-mode-hook   #'eglot-c-save-hooks)
-  (add-hook 'c++-mode-hook    #'eglot-c-save-hooks)
-  (add-hook 'c++-ts-mode-hook #'eglot-c-save-hooks)
+  (add-hook 'c-mode-hook         #'eglot-save-hooks)
+  (add-hook 'c-ts-mode-hook      #'eglot-save-hooks)
+  (add-hook 'c++-mode-hook       #'eglot-save-hooks)
+  (add-hook 'c++-ts-mode-hook    #'eglot-save-hooks)
+  (add-hook 'python-ts-mode-hook #'eglot-save-hooks)
 
   (defun niva/delete-empty-lines-at-top ()
     "Delete topmost lines if they contain no characters"
@@ -1337,6 +1336,30 @@ Always move cursor to help window.
                     ("\\.clang-format\\'" . yaml-ts-mode)
                     ("\\.clang-tidy\\'"   . yaml-ts-mode)))
       (push pair auto-mode-alist)))
+#+end_src
+
+** Reformatter
+#+begin_src emacs-lisp
+  (use-package reformatter
+    :straight t
+    :config
+    (reformatter-define sh-format
+      :program "shfmt"
+      :group 'sh-mode)
+
+    (reformatter-define black-format
+      :program "black"
+      :args '("-" "--quiet")
+      :group 'python-mode)
+
+    (reformatter-define isort-format
+      :program "isort"
+      :args '("--apply" "-")
+      :group 'python-mode)
+
+    (add-to-list 'sh-mode-hook #'sh-format-on-save-mode)
+    (add-to-list 'python-ts-mode-hook #'black-format-on-save-mode)
+    (add-to-list 'python-ts-mode-hook #'isort-format-on-save-mode))
 #+end_src
 
 ** Version control
