@@ -370,7 +370,16 @@ Always move cursor to help window.
       (set-face-attribute 'font-lock-string-face        nil :foreground "cyan")
       (set-face-attribute 'font-lock-function-name-face nil :foreground "yellow")
       (set-face-attribute 'font-lock-preprocessor-face  nil :foreground "green"))
+
     (when (eq niva/theme 'doom-tomorrow-day)
+      (setq treesit-font-lock-level 3)
+      (set-face-attribute 'font-lock-number-face       nil :foreground 'unspecified :inherit 'font-lock-builtin-face)
+      (set-face-attribute 'font-lock-variable-use-face nil :foreground 'unspecified :inherit 'default)
+      (set-face-attribute 'font-lock-constant-face     nil :foreground 'unspecified :inherit 'font-lock-number-face)
+      (set-face-attribute 'warning                     nil :foreground 'unspecified :inherit 'font-lock-builtin-face)
+      (set-face-attribute 'font-lock-type-face         nil :foreground 'unspecified :inherit 'font-lock-builtin-face))
+
+    (when (eq niva/theme 'doom-tomorrow-night)
       (setq treesit-font-lock-level 3)
       (set-face-attribute 'font-lock-number-face       nil :foreground 'unspecified :inherit 'font-lock-builtin-face)
       (set-face-attribute 'font-lock-variable-use-face nil :foreground 'unspecified :inherit 'default)
