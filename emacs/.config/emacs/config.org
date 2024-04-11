@@ -19,6 +19,7 @@
 #+end_src
 
 * Imports
+** Private config
 #+begin_src emacs-lisp
   (defvar import-file
     (expand-file-name "private/config.el" user-emacs-directory))
