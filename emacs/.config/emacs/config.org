@@ -54,10 +54,8 @@ Show only one active window when opening multiple files at the same time.
 #+begin_src emacs-lisp
   (setq-default evil-auto-indent t
                 indent-line-function 'evil-indent-line
-                evil-indent-convert-tabs nil
                 indent-tabs-mode nil
-                tab-always-indent t
-                tab-width 2
+                tab-width 4
                 org-src-tab-acts-natively t)
 
   (defun indent-tabs-hook ()
