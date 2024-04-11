@@ -1170,10 +1170,10 @@ Always move cursor to help window.
   (advice-add 'eglot--mode-line-format :override (lambda () ""))
 
   (set-face-attribute 'eglot-inlay-hint-face nil
-                      :foreground (face-attribute 'font-lock-regexp-grouping-construct :foreground)
+                      :foreground (face-attribute 'font-lock-keyword-face :foreground)
                       :italic nil
                       :font (face-attribute 'default :font)
-                      :height 0.75
+                      :height 0.70
                       :underline 'unspecified
                       :weight 'unspecified)
 
