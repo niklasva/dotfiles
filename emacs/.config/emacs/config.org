@@ -1579,7 +1579,7 @@ Always move cursor to help window.
 #+end_src
 
 *** Log coloring
-#+begin_src emacs-lisp
+#+begin_src disabled
   (defun niva/font-lock-comment-annotations ()
     "Colorize keywords in eshell buffers"
     (interactive)
@@ -1592,7 +1592,7 @@ Always move cursor to help window.
        ("\\<\\(.*DEBUG: --- CMD: POLL(60) REPLY: ISTATR(49) ---.*\\)" 1 'completions-common-part t)
        ("\\<\\(.*DEBUG: --- CMD: OUT(68) REPLY: ACK(40) ---.*\\)"     1 'completions-common-part t))))
 
-  (add-hook 'eshell-mode-hook 'font-lock-comment-annotations)
+  (add-hook 'eshell-mode-hook 'niva/font-lock-comment-annotations)
 #+end_src
 
 *** Alias
