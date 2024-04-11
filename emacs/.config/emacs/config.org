@@ -1134,6 +1134,14 @@ Always move cursor to help window.
           ("\\.tpp\\'" (".hpp" ".cpp"))))
 #+end_src
 
+** Python
+#+begin_src emacs-lisp
+(setq-default python-indent-block-paren-deeper t)
+(setq-default python-indent-guess-indent-offset nil)
+(setq-default python-indent-guess-indent-offset-verbose nil)
+(setq-default python-indent-offset 4)
+#+end_src
+
 ** Eldoc
 #+begin_src emacs-lisp
   (use-package eldoc
@@ -1141,8 +1149,9 @@ Always move cursor to help window.
     :diminish
     :config
     (setq eldoc-idle-delay 0.1
-    eldoc-echo-area-use-multiline-p t
-    eldoc-echo-area-prefer-doc-buffer t)
+          eldoc-echo-area-use-multiline-p t
+          eldoc-echo-area-prefer-doc-buffer t)
+
     (diminish 'eldoc-mode))
   (diminish 'abbrev-mode)
 #+end_src
