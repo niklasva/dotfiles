@@ -24,8 +24,3 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
-
-emacs/.config/emacs/*
-!*emacs/.config/emacs/init.el
-!*emacs/.config/emacs/early-init.el
-!*emacs/.config/emacs/config.org
