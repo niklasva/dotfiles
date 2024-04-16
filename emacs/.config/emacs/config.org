@@ -2263,7 +2263,7 @@ Only use variable-pitch if explicitly called.
 #+end_src
 
 * My packages
-** hl-text-block-mode
+** hl-paragraph-mode
 #+begin_src emacs-lisp
   (use-package hl-paragraph-mode
     :straight (:host github :repo "niklasva/hl-paragraph-mode")
