@@ -1,4 +1,5 @@
-(setq package-enable-at-startup nil)
+(setq vc-follow-symlinks t)
+
 (setq native-comp-speed -1)
 (setq default-frame-alist
     (append (list '(min-height              . 1)
@@ -25,8 +26,11 @@
 (menu-bar-mode 1)
 (set-fringe-mode 1)
 
-;;(ignore-errors
-;;    (load-theme 'wheatgrass))
-
 (setq lexical-binding t)
 (require 'use-package-core)
+
+(load (expand-file-name "lisp/init-straight.el" user-emacs-directory))
+(load (expand-file-name "lisp/theme-packages.el" user-emacs-directory))
+
+(setq niva/theme 'doom-dark+)
+(load-theme niva/theme)
