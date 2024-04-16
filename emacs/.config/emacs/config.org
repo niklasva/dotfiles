@@ -565,35 +565,11 @@ Always move cursor to help window.
 
   (define-key evil-normal-state-map (kbd "C-b n")   'evil-next-buffer)
   (define-key evil-normal-state-map (kbd "C-b p")   'evil-previous-buffer)
+
+  (define-key evil-normal-state-map (kbd "C-n")   'next-line)
+  (define-key evil-normal-state-map (kbd "C-p")   'previous-line)
+
   (define-key evil-normal-state-map (kbd "C-b C-b") 'evil-switch-to-windows-last-buffer)
-
-
-  (defun niva/elfeed--move-paragraph-up ()
-    (interactive)
-    (if (derived-mode-p 'elfeed-show-mode)
-        (condition-case nil
-            (progn
-              (evil-backward-paragraph 2)
-              (forward-line 1))
-          (beginning-of-buffer
-           (message "Previous item")
-           (elfeed-show-prev)))))
-
-  (defun niva/elfeed--move-paragraph-down ()
-    (interactive)
-    (if (derived-mode-p 'elfeed-show-mode)
-        (condition-case nil
-            (progn
-              (evil-forward-paragraph)
-              (forward-line 1))
-          (end-of-buffer
-           (message "Next item")
-           (elfeed-show-next)))))
-
-  (define-key evil-normal-state-map (kbd "C-p") 'niva/elfeed--move-paragraph-up)
-  (define-key evil-normal-state-map (kbd "C-n") 'niva/elfeed--move-paragraph-down)
-  (define-key evil-normal-state-map (kbd "ä") 'niva/elfeed--move-paragraph-up)
-  (define-key evil-normal-state-map (kbd "ö") 'niva/elfeed--move-paragraph-down)
 
 
   (with-eval-after-load 'evil-maps  (define-key evil-motion-state-map (kbd "RET") nil))
@@ -1909,8 +1885,37 @@ Only use variable-pitch if explicitly called.
     :straight t
     :hook (elfeed-search-mode . elfeed-update)
     :config
-    (setq elfeed-search-filter "+unread"
-          elfeed-show-truncate-long-urls nil))
+    (setq elfeed-search-filter "-star +unread")
+    (setq elfeed-show-truncate-long-urls nil)
+    (set-face-attribute 'elfeed-search-unread-title-face nil :inherit 'default)
+
+
+    (defun niva/elfeed--move-paragraph-up ()
+      (interactive)
+      (if (derived-mode-p 'elfeed-show-mode)
+          (condition-case nil
+              (progn
+                (evil-backward-paragraph 2)
+                (forward-line 1))
+            (beginning-of-buffer
+             (message "Previous item")
+             (elfeed-show-prev)))))
+
+    (defun niva/elfeed--move-paragraph-down ()
+      (interactive)
+      (if (derived-mode-p 'elfeed-show-mode)
+          (condition-case nil
+              (progn
+                (evil-forward-paragraph)
+                (forward-line 1))
+            (end-of-buffer
+             (message "Next item")
+             (elfeed-show-next)))))
+
+    (define-key elfeed-show-mode-map (kbd "C-p") 'niva/elfeed--move-paragraph-up)
+    (define-key elfeed-show-mode-map (kbd "C-n") 'niva/elfeed--move-paragraph-down)
+    (define-key elfeed-show-mode-map (kbd "ä") 'niva/elfeed--move-paragraph-up)
+    (define-key elfeed-show-mode-map (kbd "ö") 'niva/elfeed--move-paragraph-down))
 
   (defun elfeed-olivetti (buff)
     (switch-to-buffer buff)
