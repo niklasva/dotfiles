@@ -1,1 +1,1 @@
-
+stow --no-folding -v -t ~ emacs
