@@ -60,10 +60,10 @@ Show only one active window when opening multiple files at the same time.
                 org-src-tab-acts-natively t)
 
   (defun indent-tabs-hook ()
-    (setq tab-width 2
+    (setq tab-width 4
           indent-tabs-mode t
           evil-auto-indent t
-          c-basic-offset 2))
+          c-basic-offset 4))
 
   (dolist (hook '(c++-mode-hook
                   c-mode-hook
@@ -285,6 +285,7 @@ Always move cursor to help window.
   (add-hook 'gptel-mode-hook (lambda () (solaire-mode t) (solaire-mode-reset)))
   (add-hook 'read-only-mode-hook (lambda () (solaire-mode t) (solaire-mode-reset)))
 #+end_src
+
 *** Faces
 #+begin_src emacs-lisp
   (defun niva/update-theme-faces ()
@@ -1225,7 +1226,7 @@ Always move cursor to help window.
     :straight (:type built-in)
     :config
     (setq treesit-font-lock-level    2
-          c-ts-mode-indent-offset    2
+          c-ts-mode-indent-offset    4
           json-ts-mode-indent-offset 4
           treesit-language-source-alist '((bash         "https://github.com/tree-sitter/tree-sitter-bash")
                                           (c            "https://github.com/tree-sitter/tree-sitter-c")
@@ -1830,7 +1831,6 @@ Only use variable-pitch if explicitly called.
 #+end_src
 
 ** eww
-
 #+begin_src emacs-lisp
   (setq-default browse-url-browser-function 'eww-browse-url
                 shr-use-fonts nil
@@ -1876,7 +1876,6 @@ Only use variable-pitch if explicitly called.
                                       (xwidget-webkit-browse-url url)))
 #+end_src
 ** elfeed
-
 #+begin_src emacs-lisp
   (if niva/elfeed-enabled
       (progn
