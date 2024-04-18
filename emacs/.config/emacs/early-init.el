@@ -32,5 +32,5 @@
 (load (expand-file-name "lisp/init-straight.el" user-emacs-directory))
 (load (expand-file-name "lisp/theme-packages.el" user-emacs-directory))
 
-(setq niva/theme 'doom-dark+)
+(setq niva/theme 'ef-tritanopia-dark)
 (load-theme niva/theme)
