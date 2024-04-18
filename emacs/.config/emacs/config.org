@@ -1019,17 +1019,6 @@ Always move cursor to help window.
   ;; (add-hook 'before-save-hook 'niva/format-all-elisp-code-blocks)
 #+end_src
 
-*** Polymode
-#+begin_src emacs-lisp
-  (use-package polymode
-    :straight t)
-
-  (use-package poly-org
-    :straight t
-    :config
-    (add-to-list 'org-mode-hook #'poly-org-mode))
-#+end_src
-
 ** C++
 #+begin_src emacs-lisp
   (setq cc-other-file-alist
