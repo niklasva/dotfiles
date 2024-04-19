@@ -556,13 +556,21 @@ Always move cursor to help window.
   (define-key evil-insert-state-map (kbd "C-c C-e") 'comment-line)
   (define-key evil-visual-state-map (kbd "C-c C-e") 'comment-line)
 
-  (define-key evil-normal-state-map (kbd "C-a C-x") 'kill-this-buffer)
-  (define-key help-mode-map         (kbd "C-a C-x") 'evil-delete-buffer)
+  (define-key evil-normal-state-map (kbd "C-b C-x") 'kill-this-buffer)
+  (define-key help-mode-map         (kbd "C-b C-x") 'evil-delete-buffer)
   (define-key evil-normal-state-map (kbd "C-w C-x") 'delete-window)
   (define-key evil-normal-state-map (kbd "s-e")     'eshell)
   (define-key evil-normal-state-map (kbd "M-e")     'eshell)
   (define-key evil-normal-state-map (kbd "B V")     'org-babel-mark-block)
   (define-key evil-normal-state-map (kbd "SPC e b") 'org-babel-execute-src-block-maybe)
+
+  (define-key evil-normal-state-map (kbd "C-a") 'beginning-of-visual-line)
+  (define-key evil-insert-state-map (kbd "C-a") 'beginning-of-visual-line)
+  (define-key evil-visual-state-map (kbd "C-a") 'beginning-of-visual-line)
+
+  (define-key evil-normal-state-map (kbd "C-e") 'end-of-visual-line)
+  (define-key evil-insert-state-map (kbd "C-e") 'end-of-visual-line)
+  (define-key evil-visual-state-map (kbd "C-e") 'end-of-visual-line)
 
   (define-key evil-normal-state-map (kbd "C-b n")   'evil-next-buffer)
   (define-key evil-normal-state-map (kbd "C-b p")   'evil-previous-buffer)
@@ -570,7 +578,6 @@ Always move cursor to help window.
   (define-key evil-normal-state-map (kbd "C-n")   'next-line)
   (define-key evil-normal-state-map (kbd "C-p")   'previous-line)
 
-  (define-key evil-normal-state-map (kbd "C-b C-b") 'evil-switch-to-windows-last-buffer)
 
 
   (with-eval-after-load 'evil-maps  (define-key evil-motion-state-map (kbd "RET") nil))
