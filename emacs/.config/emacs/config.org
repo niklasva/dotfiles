@@ -1915,7 +1915,7 @@ Only use variable-pitch if explicitly called.
     (setq-local shr-max-image-proportion 1)
     (setq-local scroll-margin 10)
     (olivetti-mode)
-    (hl-text-block-mode)
+    (hl-paragraph-mode)
     (elfeed-show-refresh))
   (setq elfeed-show-entry-switch 'elfeed-olivetti)
 
