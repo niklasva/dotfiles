@@ -187,40 +187,12 @@ Always move cursor to help window.
   (winner-mode 1)
 #+end_src
 
-*** Tabs
-#+begin_src emacs-lisp
-  (defun niva/tab-bar-config ()
-    (setq tab-bar-show nil
-          tab-bar-auto-width-max '(120 . 20)
-          tab-bar-close-button-show nil
-          tab-bar-close-tab-select 'recent
-          tab-bar-new-button-show nil
-          tab-bar-new-tab-to 'right
-          tab-bar-position nil
-          tab-bar-tab-name-function 'tab-bar-tab-name-current)
-
-    (set-face-attribute 'tab-bar nil
-                        :box nil
-                        :background (face-attribute 'default :background))
-    (set-face-attribute 'tab-bar-tab nil
-                        :box nil
-                        :background (face-attribute 'default :background)
-                        :foreground (face-attribute 'font-lock-keyword-face :foreground))
-    (set-face-attribute 'tab-bar-tab-inactive nil
-                        :box nil
-                        :background (face-attribute 'default :background)
-                        :foreground (face-attribute 'font-lock-comment-face :foreground)))
-  (niva/tab-bar-config)
-
-  (global-hl-line-mode -1)
-  (blink-cursor-mode 1)
-#+end_src
-
 *** tab-bar-echo-area
 #+begin_src emacs-lisp
   (use-package tab-bar-echo-area
     :straight t
     :config
+    (setq-default tab-bar-show nil)
     (tab-bar-echo-area-mode 1))
 #+end_src
 
