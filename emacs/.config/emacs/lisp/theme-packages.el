@@ -1,3 +1,14 @@
+(setq custom-safe-themes t)
+
+ (use-package kaolin-themes
+   :straight t
+   :config
+   (setq kaolin-themes-bold nil
+         kaolin-themes-comments-style 'contrast
+         kaolin-themes-italic t
+         kaolin-themes-underline t
+         kaolin-themes-modeline-border nil))
+
 (use-package doom-themes
   :straight t
   :custom
@@ -11,9 +22,7 @@
         doom-city-lights-brighter-comments     t
         doom-monokai-machine-brighter-comments t))
 
-(use-package ef-themes
-  :straight
-  (:host github :repo "protesilaos/ef-themes"))
+(use-package ef-themes :straight (:host github :repo "protesilaos/ef-themes"))
 
 (use-package almost-mono-themes       :straight t)
 (use-package basic-theme              :straight t)
@@ -41,3 +50,34 @@
 (use-package timu-caribbean-theme     :straight t)
 (use-package timu-rouge-theme         :straight t)
 (use-package timu-spacegrey-theme     :straight t)
+
+(setq modus-themes-bold-constructs nil
+      modus-themes-hl-line (quote (accented))
+      modus-themes-org-blocks nil
+      modus-themes-region '(bg-only)
+      modus-themes-tabs-accented t)
+
+(setq modus-themes-common-palette-overrides
+      '((fringe unspecified)
+        (border-mode-line-active unspecified)
+        (border-mode-line-inactive unspecified)))
+
+(setq modus-themes-completions '((matches . (background minimal))
+                                 (selection . (background minimal))
+                                 (popup . (background minimal))))
+
+
+(add-hook 'modus-themes-after-load-theme-hook
+          (lambda ()
+            (set-face-attribute 'solaire-default-face nil
+                                :inherit 'default
+                                :background (car (cdr (assoc 'bg-dim modus-operandi-palette)))
+                                :foreground (car (cdr (assoc 'fg-dim modus-operandi-palette))))
+            (set-face-attribute 'solaire-line-number-face nil
+                                :inherit 'solaire-default-face
+                                :foreground (car (cdr (assoc 'fg-unfocused modus-operandi-palette))))
+            (set-face-attribute 'solaire-hl-line-face nil
+                                :background (car (cdr (assoc 'bg-active modus-operandi-palette))))
+            (set-face-attribute 'solaire-org-hide-face nil
+                                :background (car (cdr (assoc 'bg-dim modus-operandi-palette)))
+                                :foreground (car (cdr (assoc 'bg-dim modus-operandi-palette))))))

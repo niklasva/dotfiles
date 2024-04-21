@@ -183,52 +183,6 @@ Always move cursor to help window.
 #+end_src
 
 ** Theme
-*** Modus
-#+begin_src emacs-lisp
-  (setq modus-themes-bold-constructs nil
-        modus-themes-hl-line (quote (accented))
-        modus-themes-org-blocks nil
-        modus-themes-region '(bg-only)
-        modus-themes-tabs-accented t)
-
-  (setq modus-themes-common-palette-overrides
-        '((fringe unspecified)
-          (border-mode-line-active unspecified)
-          (border-mode-line-inactive unspecified)))
-
-  (setq modus-themes-completions '((matches . (background minimal))
-                                   (selection . (background minimal))
-                                   (popup . (background minimal))))
-
-
-  (add-hook 'modus-themes-after-load-theme-hook
-            (lambda ()
-              (set-face-attribute 'solaire-default-face nil
-                                  :inherit 'default
-                                  :background (car (cdr (assoc 'bg-dim modus-operandi-palette)))
-                                  :foreground (car (cdr (assoc 'fg-dim modus-operandi-palette))))
-              (set-face-attribute 'solaire-line-number-face nil
-                                  :inherit 'solaire-default-face
-                                  :foreground (car (cdr (assoc 'fg-unfocused modus-operandi-palette))))
-              (set-face-attribute 'solaire-hl-line-face nil
-                                  :background (car (cdr (assoc 'bg-active modus-operandi-palette))))
-              (set-face-attribute 'solaire-org-hide-face nil
-                                  :background (car (cdr (assoc 'bg-dim modus-operandi-palette)))
-                                  :foreground (car (cdr (assoc 'bg-dim modus-operandi-palette))))
-              ))
-#+end_src
-
-*** Kaolin
-#+begin_src emacs-lisp
-  (use-package kaolin-themes
-    :straight t
-    :config
-    (setq kaolin-themes-bold nil
-          kaolin-themes-comments-style 'contrast
-          kaolin-themes-italic t
-          kaolin-themes-underline t
-          kaolin-themes-modeline-border nil))
-#+end_src
 *** Solaire
 #+begin_src emacs-lisp
   (use-package solaire-mode
@@ -273,7 +227,7 @@ Always move cursor to help window.
       (set-face-attribute 'font-lock-type-face         nil :foreground 'unspecified :inherit 'font-lock-builtin-face)))
   (niva/update-theme-faces)
 #+end_src
-** Compilaton mode
+* Compilaton mode
 #+begin_src emacs-lisp
   (use-package xterm-color :straight t)
   (setq compilation-environment '("TERM=xterm-256color"))
@@ -379,6 +333,7 @@ Always move cursor to help window.
           " "))
   (display-time-mode 1)
 #+end_src
+
 ** Font
 *** Reset
 #+begin_src emacs-lisp
