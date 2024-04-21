@@ -163,20 +163,6 @@ Prevent emacs from contaminating system clipboard.
 #+end_src
 
 *** Window management
-#+begin_src emacs-lisp
-  (setq window-divider-default-places t
-        window-divider-default-bottom-width 1
-        window-divider-default-right-width 1)
-
-  (window-divider-mode 1)
-
-  (setq ns-use-thin-smoothing t
-        ns-use-proxy-icon nil
-        ns-use-mwheel-momentum t
-        ns-use-mwheel-acceleration t
-        frame-resize-pixelwise t)
-#+end_src
-
 Always move cursor to help window.
 #+begin_src emacs-lisp
   (setq help-window-select t)
