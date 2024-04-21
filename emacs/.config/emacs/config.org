@@ -1472,10 +1472,9 @@ Always move cursor to help window.
     :config
     (setq org-hide-emphasis-markers t
           org-fontify-quote-and-verse-blocks t
-          ;; org-startup-indented t
           org-return-follows-link t
           org-pretty-entities t
-          org-ellipsis "…"
+          org-ellipsis " ..."
           org-use-sub-superscripts nil))
 #+end_src
 
