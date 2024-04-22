@@ -1,0 +1,30 @@
+name: test-emacs
+
+on: push
+
+jobs:
+  test-emacs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: purcell/setup-emacs@master
+        with:
+          version: 29.1
+
+      - uses: actions/checkout@v4
+
+      - name: move
+        run: |
+          cp -r "$(pwd)/emacs/.config/emacs" /home/runner/.emacs.d
+
+      - name: tangle
+        run: |
+          ls /home/runner/.emacs.d/
+          emacs -Q --batch \
+          --eval "(require 'org)" \
+          --eval '(org-babel-tangle-file (expand-file-name (concat user-emacs-directory "config.org")))'
+
+      - name: check-parens
+        run: |
+          emacs -Q --batch \
+          --eval '(with-current-buffer (find-file-noselect (expand-file-name (concat user-emacs-directory "config.el")))(check-parens))'
