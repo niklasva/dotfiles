@@ -1,4 +1,4 @@
-#+PROPERTY: header-args :tangle yes
+#+PROPERTY: header-args :tangle header-args:emacs-lisp
 #+OPTIONS:  toc:2
 #+STARTUP:  overview
 
