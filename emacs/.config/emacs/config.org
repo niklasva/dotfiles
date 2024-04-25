@@ -997,13 +997,14 @@ Always move cursor to help window.
     (add-hook hook 'eglot-ensure))
   (setq eglot-events-buffer-size 0)
 
+  (add-hook 'eglot-managed-mode-hook #'eglot-inlay-hints-mode)
   (advice-add 'eglot--mode-line-format :override (lambda () ""))
 
   (set-face-attribute 'eglot-inlay-hint-face nil
-                      :foreground (face-attribute 'font-lock-keyword-face :foreground)
-                      :italic nil
+                      :foreground (face-attribute 'default :foreground)
+                      :italic t
                       :font (face-attribute 'default :font)
-                      :height 0.70
+                      :height 0.85
                       :underline 'unspecified
                       :weight 'unspecified)
 
@@ -1013,7 +1014,6 @@ Always move cursor to help window.
   (with-eval-after-load 'eglot
     (add-hook 'eglot-managed-mode-hook
               (lambda ()
-                (eglot-inlay-hints-mode -1)
                 (setq eldoc-documentation-functions
                       (cons #'flymake-eldoc-function
                             (remove #'flymake-eldoc-function eldoc-documentation-functions)))
