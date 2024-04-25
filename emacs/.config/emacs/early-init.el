@@ -29,5 +29,5 @@
 (menu-bar-mode 1)
 (set-fringe-mode 1)
 
-(setq niva/theme 'doom-dark+)
+(setq-default niva/theme 'naysayer)
 (load-theme niva/theme)
