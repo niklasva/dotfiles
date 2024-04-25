@@ -228,16 +228,8 @@ Always move cursor to help window.
       (set-face-attribute 'warning                     nil :foreground 'unspecified :inherit 'font-lock-builtin-face)
       (set-face-attribute 'font-lock-type-face         nil :foreground 'unspecified :inherit 'font-lock-builtin-face)))
   (niva/update-theme-faces)
-#+end_src
-* Compilaton mode
-#+begin_src emacs-lisp
-  (use-package xterm-color :straight t)
-  (setq compilation-environment '("TERM=xterm-256color"))
-  (defun niva/advice-compilation-filter (f proc string)
-    (funcall f proc (xterm-color-filter string)))
-  (advice-add 'compilation-filter :around #'niva/advice-compilation-filter)
-#+end_src
 
+#+end_src
 ** Mode line
 *** Mode line format
 #+begin_src disabled
@@ -1445,6 +1437,15 @@ Always move cursor to help window.
     :config (exec-path-from-shell-initialize))
   (when (memq window-system '(mac ns x)) (exec-path-from-shell-initialize))
 #+end_src
+* Compilation mode
+#+begin_src emacs-lisp
+  (use-package xterm-color :straight t)
+  (setq compilation-environment '("TERM=xterm-256color"))
+  (defun niva/advice-compilation-filter (f proc string)
+    (funcall f proc (xterm-color-filter string)))
+  (advice-add 'compilation-filter :around #'niva/advice-compilation-filter)
+#+end_src
+
 * Org
 ** olivetti
 #+begin_src emacs-lisp
