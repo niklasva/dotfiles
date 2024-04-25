@@ -2060,39 +2060,39 @@ Always move cursor to help window.
     :diminish gptel-mode
     :straight (gptel :host github :repo "karthink/gptel")
     :config
+
+    (setq ollama-backend (gptel-make-ollama "ollama" :host "localhost:11434" :stream t :models '("llama3:latest" "deepseek-coder:6.7b-instruct")))
+    (setq openai-backend (gptel-make-openai "ChatGPT" :key 'gptel-api-key :stream t :models '("gpt-3.5-turbo" "gpt-4-turbo")))
+
     (setq-default gptel-default-mode #'org-mode
                   gptel-max-tokens 4096
                   gptel-prompt-prefix-alist '((org-mode . "> "))
                   gptel-stream t
                   gptel-use-header-line nil
-                  gptel-model "gpt-3.5-turbo"
-                  gptel-default-session "gptel"
-                  gptel-backend (gptel-make-openai "ChatGPT"
-                                  :key 'gptel-api-key
-                                  :stream t
-                                  :models '("gpt-3.5-turbo" "gpt-4-turbo")))
+                  gptel-model "llama3:latest"
+                  gptel-default-session "gptel")
 
-    (gptel-make-ollama "ollama"
-      :host "localhost:11434"
-      :stream t
-      :models '("deepseek-coder:6.7b-instruct"))
+    (setq gptel-backend ollama-backend)
+
 
     (with-eval-after-load 'gptel
       (evil-define-key 'normal gptel-mode-map "q" 'switch-to-prev-buffer)
+      (evil-define-key 'normal gptel-mode-map "C-g" 'delete-window)
       (define-key gptel-mode-map (kbd "C-c m") 'gptel-menu))
-
-    ;; (add-to-list 'display-buffer-alist '("*ask*" display-buffer-same-window))
-
     (defun niva/gptel-mode-line-process (original-func &rest args)
       (when (string-match-p "gpt" gptel-model)
         (setq mode-line-process (concat " " (buttonize (substring gptel-model (1+ (string-match "-" gptel-model)))
-                                                             (lambda (&rest _) (gptel-menu)))))))
+                                                       (lambda (&rest _) (gptel-menu)))))))
 
-      (advice-add 'gptel-mode :after #'niva/gptel-mode-line-process)
-      (advice-add 'gptel--update-status :after #'niva/gptel-mode-line-process)
+    (advice-add 'gptel-mode :after #'niva/gptel-mode-line-process)
+    (advice-add 'gptel--update-status :after #'niva/gptel-mode-line-process)
 
-      (add-hook 'gptel-mode-hook 'evil-insert-state)
-      (add-hook 'gptel-mode-hook (lambda () (rename-buffer "*ask*"))))
+    (add-hook 'gptel-mode-hook 'evil-insert-state)
+    (add-hook 'gptel-mode-hook (lambda () (rename-buffer "*ask*"))))
+
+  (add-to-list 'display-buffer-alist '("*ask*" display-buffer-same-window))
+  (global-set-key (kbd "C-c p") 'gptel)
+
 #+end_src
 
 * My packages
