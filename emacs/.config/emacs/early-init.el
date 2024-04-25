@@ -12,7 +12,7 @@
                     '(tool-bar-lines          . 0)
                     '(ns-transparent-titlebar . t)
                     '(ns-appearance           . dark)
-                    '(font                    . "Iosevka Comfy 15"))))
+                    '(font                    . "Mononoki 14"))))
 
 (load (expand-file-name "lisp/init-straight.el" user-emacs-directory))
 (load (expand-file-name "lisp/theme-packages.el" user-emacs-directory))
