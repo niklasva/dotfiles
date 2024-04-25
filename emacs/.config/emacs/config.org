@@ -463,7 +463,6 @@ Always move cursor to help window.
 #+begin_src emacs-lisp
   (global-set-key                   (kbd "€")       (kbd "$"))
   (global-set-key                   (kbd "<f13>")   'evil-invert-char)
-  (define-key evil-insert-state-map (kbd "C-c C-e") 'comment-line)
   (define-key evil-visual-state-map (kbd "C-c C-e") 'comment-line)
 
   (define-key evil-normal-state-map (kbd "C-b C-x") 'kill-this-buffer)
@@ -471,8 +470,6 @@ Always move cursor to help window.
   (define-key evil-normal-state-map (kbd "C-w C-x") 'delete-window)
   (define-key evil-normal-state-map (kbd "s-e")     'eshell)
   (define-key evil-normal-state-map (kbd "M-e")     'eshell)
-  (define-key evil-normal-state-map (kbd "B V")     'org-babel-mark-block)
-  (define-key evil-normal-state-map (kbd "SPC e b") 'org-babel-execute-src-block-maybe)
 
   (define-key evil-normal-state-map (kbd "C-a") 'beginning-of-visual-line)
   (define-key evil-insert-state-map (kbd "C-a") 'beginning-of-visual-line)
@@ -482,13 +479,8 @@ Always move cursor to help window.
   (define-key evil-insert-state-map (kbd "C-e") 'end-of-visual-line)
   (define-key evil-visual-state-map (kbd "C-e") 'end-of-visual-line)
 
-  (define-key evil-normal-state-map (kbd "C-b n")   'evil-next-buffer)
-  (define-key evil-normal-state-map (kbd "C-b p")   'evil-previous-buffer)
-
   (define-key evil-normal-state-map (kbd "C-n")   'next-line)
   (define-key evil-normal-state-map (kbd "C-p")   'previous-line)
-
-
 
   (with-eval-after-load 'evil-maps  (define-key evil-motion-state-map (kbd "RET") nil))
 #+end_src
