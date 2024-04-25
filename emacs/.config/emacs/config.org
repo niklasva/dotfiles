@@ -327,7 +327,7 @@ Always move cursor to help window.
            (format-time-string display-time-format now)
            'help-echo (format-time-string "%a %b %e, %Y" now))
           " "))
-  (display-time-mode 1)
+  (display-time-mode -1)
 #+end_src
 
 ** Font
