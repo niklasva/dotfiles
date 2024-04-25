@@ -961,7 +961,7 @@ Always move cursor to help window.
     :straight (:type built-in)
     :diminish
     :config
-    (setq eldoc-idle-delay 0.1
+    (setq eldoc-idle-delay 0.33
           eldoc-echo-area-use-multiline-p t
           eldoc-echo-area-prefer-doc-buffer t)
 
