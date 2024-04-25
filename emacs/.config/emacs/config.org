@@ -202,6 +202,7 @@ Always move cursor to help window.
 #+begin_src emacs-lisp
   (defun niva/update-theme-faces ()
     (interactive)
+    (when (string-match-p "kaolin" (prin1-to-string niva/theme)) (load-theme niva/theme))
     (when (eq niva/theme 'naysayer) (set-face-attribute 'mode-line-inactive nil :box t))
     (when (eq niva/theme 'sitaramv-solaris)
       (set-face-attribute 'org-block                    nil :inherit 'default :background "black")
