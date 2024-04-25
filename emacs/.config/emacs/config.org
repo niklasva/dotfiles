@@ -149,6 +149,7 @@ Prevent emacs from contaminating system clipboard.
 #+end_src
 * Customization
 ** GUI settings
+*** -
 #+begin_src emacs-lisp
   (setq inhibit-startup-message t
         inhibit-startup-echo-area-message t)
@@ -163,6 +164,7 @@ Prevent emacs from contaminating system clipboard.
 #+end_src
 
 *** Window management
+**** help-window-select
 Always move cursor to help window.
 #+begin_src emacs-lisp
   (setq help-window-select t)
@@ -435,6 +437,7 @@ Always move cursor to help window.
   (use-package transpose-frame :straight t)
 #+end_src
 ** Keybindings
+*** -
 
 #+begin_src emacs-lisp
   (use-package bind-key
@@ -506,6 +509,7 @@ Always move cursor to help window.
 #+end_src
 
 *** Window management
+**** -
 #+begin_src emacs-lisp
   (define-key evil-normal-state-map (kbd "C-w -")   'evil-window-split)
   (define-key evil-normal-state-map (kbd "C-w |")   'evil-window-vsplit)
