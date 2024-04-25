@@ -1480,6 +1480,10 @@ Always move cursor to help window.
 
 ** org code blocks
 #+begin_src emacs-lisp
+  (set-face-attribute 'org-block nil :foreground (face-attribute 'default :foreground))
+#+end_src
+
+#+begin_src emacs-lisp
   (defun narrow-to-region-indirect (start end)
     "Restrict editing in this buffer to the current region, indirectly."
     (interactive "r")
