@@ -1074,7 +1074,7 @@ Always move cursor to help window.
     :config
     (setq flymake-start-on-save-buffer t
           flymake-no-changes-timeout 1
-          flymake-fringe-indicator-position 'right-fringe)
+          flymake-fringe-indicator-position 'left-fringe)
     (add-hook 'sh-mode-hook 'flymake-mode))
 
   (set-face-attribute 'error nil               :weight 'unspecified)
