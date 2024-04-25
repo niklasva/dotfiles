@@ -586,9 +586,9 @@ Always move cursor to help window.
     "w U"   '(winner-redo                      :which-key "winner-redo")
     "w u"   '(winner-undo                      :which-key "winner-undo")
 
+    "ask"   '(gptel                            :which-key "gptel")
     "elf"   '(elfeed                           :which-key "elfeed")
     "eww"   '(eww                              :which-key "eww")
-    "gpt"   '(gptel                            :which-key "gptel")
     "rec"   '(consult-recent-file              :which-key "consult-recent-file")
     "rip"   '(consult-ripgrep                  :which-key "consult-ripgrep")
     "cir"   '(circe                            :which-key "circe")
