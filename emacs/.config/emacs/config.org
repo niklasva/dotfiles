@@ -1216,10 +1216,10 @@ Always move cursor to help window.
   (add-hook 'git-gutter-mode-hook
             (lambda ()
               (unless (string-match-p "kaolin" (prin1-to-string custom-enabled-themes))
-              (with-eval-after-load 'magit
-                (set-face-attribute 'git-gutter-fr:added    nil :foreground (face-attribute 'magit-diff-added   :foreground) :background (face-attribute 'magit-diff-added   :background))
-                (set-face-attribute 'git-gutter-fr:modified nil :foreground (face-attribute 'magit-diff-base    :foreground) :background (face-attribute 'magit-diff-base    :background))
-                (set-face-attribute 'git-gutter-fr:deleted  nil :foreground (face-attribute 'magit-diff-removed :foreground) :background (face-attribute 'magit-diff-removed :background))))))
+                (with-eval-after-load 'magit
+                  (set-face-attribute 'git-gutter-fr:added    nil :foreground (face-attribute 'magit-diff-added   :foreground) :background (face-attribute 'magit-diff-added   :background))
+                  (set-face-attribute 'git-gutter-fr:modified nil :foreground (face-attribute 'magit-diff-base    :foreground) :background (face-attribute 'magit-diff-base    :background))
+                  (set-face-attribute 'git-gutter-fr:deleted  nil :foreground (face-attribute 'magit-diff-removed :foreground) :background (face-attribute 'magit-diff-removed :background))))))
 
   (add-hook 'prog-mode-hook
             (lambda () (git-gutter-mode +1)))
