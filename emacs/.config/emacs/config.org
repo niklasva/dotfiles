@@ -1933,7 +1933,7 @@ Always move cursor to help window.
 
 ** irc
 *** circe
-#+begin_src emacs-lisp
+#+begin_src disabled
   (use-package circe
     :straight t
     :config
@@ -1978,7 +1978,7 @@ Always move cursor to help window.
 #+end_src
 
 *** IRC notifications
-#+begin_src emacs-lisp
+#+begin_src disabled
   (with-eval-after-load 'circe
     (defvar niva--irc-notification "")
 
@@ -2009,7 +2009,7 @@ Always move cursor to help window.
 #+end_src
 
 *** IRC log window
-#+begin_src emacs-lisp
+#+begin_src disabled
   (defun niva/log-to-buffer (buffer nick target text)
     (setq my-buffer (get-buffer-create buffer))
     (with-current-buffer my-buffer
@@ -2025,7 +2025,7 @@ Always move cursor to help window.
     (setq buffer-read-only t))
 #+end_src
 
-#+begin_src emacs-lisp
+#+begin_src disabled
   (define-derived-mode niva/irc-log-mode prog-mode ()
     (setq window-point-insertion-type t)
     (solaire-mode 1)
@@ -2033,7 +2033,7 @@ Always move cursor to help window.
 #+end_src
 
 *** List IRC buffers
-#+begin_src emacs-lisp
+#+begin_src disabled
   (defvar niva--switch-irc-buffers-times 0)
   (defun niva/switch-irc-buffers ()
     (interactive)
