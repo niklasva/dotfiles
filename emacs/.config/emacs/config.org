@@ -465,8 +465,8 @@ Always move cursor to help window.
   (global-set-key                   (kbd "<f13>")   'evil-invert-char)
   (define-key evil-visual-state-map (kbd "C-c C-e") 'comment-line)
 
-  (define-key evil-normal-state-map (kbd "C-b C-x") 'kill-this-buffer)
-  (define-key help-mode-map         (kbd "C-b C-x") 'evil-delete-buffer)
+  (define-key evil-normal-state-map (kbd "M-b C-x") 'kill-this-buffer)
+  (define-key help-mode-map         (kbd "M-b C-x") 'evil-delete-buffer)
   (define-key evil-normal-state-map (kbd "C-w C-x") 'delete-window)
   (define-key evil-normal-state-map (kbd "s-e")     'eshell)
   (define-key evil-normal-state-map (kbd "M-e")     'eshell)
