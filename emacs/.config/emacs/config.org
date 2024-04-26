@@ -453,7 +453,6 @@ Always move cursor to help window.
 
 #+begin_src emacs-lisp
   (global-set-key (kbd "C-j")  nil)
-  (global-set-key (kbd "C-k")  nil)
   (global-set-key (kbd "<f1>") nil)
   (global-set-key (kbd "<f2>") nil)
   (global-set-key (kbd "<f3>") nil)
