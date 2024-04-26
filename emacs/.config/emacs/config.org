@@ -474,6 +474,14 @@ Always move cursor to help window.
   (define-key evil-insert-state-map (kbd "C-a") 'beginning-of-visual-line)
   (define-key evil-visual-state-map (kbd "C-a") 'beginning-of-visual-line)
 
+  (define-key evil-normal-state-map (kbd "C-f") 'forward-char)
+  (define-key evil-insert-state-map (kbd "C-f") 'forward-char)
+  (define-key evil-visual-state-map (kbd "C-f") 'forward-char)
+
+  (define-key evil-normal-state-map (kbd "C-b") 'backward-char)
+  (define-key evil-insert-state-map (kbd "C-b") 'backward-char)
+  (define-key evil-visual-state-map (kbd "C-b") 'backward-char)
+
   (define-key evil-normal-state-map (kbd "C-e") 'end-of-visual-line)
   (define-key evil-insert-state-map (kbd "C-e") 'end-of-visual-line)
   (define-key evil-visual-state-map (kbd "C-e") 'end-of-visual-line)
