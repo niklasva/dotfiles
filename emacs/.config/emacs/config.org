@@ -394,7 +394,7 @@ Always move cursor to help window.
           evil-vsplit-window-right t
           evil-split-window-below t
           evil-want-C-u-scroll t
-          evil-undo-system 'undo-redo
+          evil-undo-system 'undo-fu
           evil-scroll-count 8)
     (evil-mode))
 
@@ -606,8 +606,8 @@ Always move cursor to help window.
   (use-package undo-fu
     :straight t
     :bind
-    (("s-z" . undo-fu-only-undo)
-     ("s-Z" . undo-fu-only-redo)
+    (("c-z" . undo-fu-only-undo)
+     ("c-Z" . undo-fu-only-redo)
      :map evil-normal-state-map
      ("u"   . undo-fu-only-undo)
      ("U"   . undo-fu-only-redo))
