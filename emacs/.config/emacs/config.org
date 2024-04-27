@@ -633,14 +633,6 @@ Always move cursor to help window.
           vundo-window-max-height 5
           vundo-compact-display t))
 #+end_src
-** m-x
-
-#+begin_src emacs-lisp
-  (use-package smex
-    :straight t)
-  (smex-initialize)
-#+end_src
-
 ** Vertico
 #+begin_src emacs-lisp
   (use-package vertico
