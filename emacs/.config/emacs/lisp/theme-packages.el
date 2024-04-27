@@ -42,6 +42,7 @@
 (use-package parchment-theme          :straight t)
 (use-package plan9-theme              :straight t)
 (use-package professional-theme       :straight t)
+(use-package punpun-themes            :straight t)
 (use-package sexy-monochrome-theme    :straight t)
 (use-package silkworm-theme           :straight t)
 (use-package soft-morning-theme       :straight t)
