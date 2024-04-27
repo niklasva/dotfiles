@@ -606,8 +606,8 @@ Always move cursor to help window.
   (use-package undo-fu
     :straight t
     :bind
-    (("c-z" . undo-fu-only-undo)
-     ("c-Z" . undo-fu-only-redo)
+    (("s-z" . undo-fu-only-undo)
+     ("s-Z" . undo-fu-only-redo)
      :map evil-normal-state-map
      ("u"   . undo-fu-only-undo)
      ("U"   . undo-fu-only-redo))
