@@ -19,6 +19,10 @@
 #+end_src
 
 * Imports
+** Elisp
+#+begin_src emacs-lisp
+  (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
+#+end_src
 ** Private config
 #+begin_src emacs-lisp
   (defvar import-file
@@ -148,6 +152,10 @@ Prevent emacs from contaminating system clipboard.
   (save-place-mode +1)
 #+end_src
 * Customization
+** Colors
+#+begin_src emacs-lisp
+  (require 'color-operations)
+#+end_src
 ** GUI settings
 *** -
 #+begin_src emacs-lisp
