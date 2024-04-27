@@ -1,0 +1,21 @@
+(defun operate-hex-colors (color1 color2 operation bound-op initial)
+  (let ((result "#"))
+    (dotimes (i 3)
+      (let* ((start (+ 1 (* 2 i)))
+             (end (+ 3 (* 2 i)))
+             (part1 (substring color1 start end))
+             (part2 (substring color2 start end))
+             (val1 (string-to-number part1 16))
+             (val2 (string-to-number part2 16))
+             (operation-result (funcall operation val1 val2))
+             (bounded-result (funcall bound-op operation-result)))
+        (setq result (concat result (format "%02X" bounded-result)))))
+    result))
+
+(defun add-hex-colors (color1 color2)
+  (operate-hex-colors color1 color2 '+ 'min 255))
+
+(defun subtract-hex-colors (color1 color2)
+  (operate-hex-colors color1 color2 '- 'min 0))
+
+(provide 'color-operations)
