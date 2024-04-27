@@ -39,6 +39,7 @@
 (use-package naysayer-theme           :straight t)
 (use-package nofrils-acme-theme       :straight t)
 (use-package paper-theme              :straight t)
+(use-package parchment-theme          :straight t)
 (use-package plan9-theme              :straight t)
 (use-package professional-theme       :straight t)
 (use-package sexy-monochrome-theme    :straight t)
