@@ -29,5 +29,5 @@
 (menu-bar-mode 1)
 (set-fringe-mode 1)
 
-(setq-default niva/theme 'naysayer)
+(setq-default niva/theme 'nofrils-acme)
 (load-theme niva/theme)
