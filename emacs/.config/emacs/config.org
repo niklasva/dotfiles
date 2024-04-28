@@ -980,8 +980,8 @@ Always move cursor to help window.
 #+begin_src emacs-lisp
 (use-package jupyter
   :straight t
+  :bind ("C-c j p" . tempo-template-org-src-jupyter-:session-py))
   :config
-
   ;; Copied from nowislewis/nowisemacs
   (defun my/org-babel-execute-src-block (&optional _arg info _params)
     "Load language if needed"
