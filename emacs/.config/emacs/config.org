@@ -1789,31 +1789,31 @@ Use org mode in scratch buffer
   (define-key elfeed-show-mode-map (kbd "C-p") 'niva/elfeed--move-paragraph-up)
   (define-key elfeed-show-mode-map (kbd "C-n") 'niva/elfeed--move-paragraph-down)
   (define-key elfeed-show-mode-map (kbd "ä") 'niva/elfeed--move-paragraph-up)
-  (define-key elfeed-show-mode-map (kbd "ö") 'niva/elfeed--move-paragraph-down))
+  (define-key elfeed-show-mode-map (kbd "ö") 'niva/elfeed--move-paragraph-down)
 
-(defun elfeed-olivetti (buff)
-  (switch-to-buffer buff)
-  (setq-local olivetti-body-width 80)
-  (setq-local shr-inhibit-images nil)
-  (setq-local shr-max-image-proportion 1)
-  (setq-local scroll-margin 10)
-  (olivetti-mode)
-  (hl-paragraph-mode)
-  (elfeed-show-refresh))
-(setq elfeed-show-entry-switch 'elfeed-olivetti)
+  (defun elfeed-olivetti (buff)
+    (switch-to-buffer buff)
+    (setq-local olivetti-body-width 80)
+    (setq-local shr-inhibit-images nil)
+    (setq-local shr-max-image-proportion 1)
+    (setq-local scroll-margin 10)
+    (olivetti-mode)
+    (hl-paragraph-mode)
+    (elfeed-show-refresh))
+  (setq elfeed-show-entry-switch 'elfeed-olivetti)
 
-(defun niva/clear-elfeed ()
-  "Clear elfeed database"
-  (interactive)
-  (setq elfeed-db-directory (expand-file-name "~/.elfeed"))
-  (delete-directory elfeed-db-directory t)
-  (message "Elfeed database cleared. Restart Elfeed to initialize a new database."))
-(niva/clear-elfeed)
+  (defun niva/clear-elfeed ()
+    "Clear elfeed database"
+    (interactive)
+    (setq elfeed-db-directory (expand-file-name "~/.elfeed"))
+    (delete-directory elfeed-db-directory t)
+    (message "Elfeed database cleared. Restart Elfeed to initialize a new database."))
+  (niva/clear-elfeed)
 
-(defun niva/elfeed-update-loop ()
-  (interactive)
-  (message "Updating elfeed")
-  (elfeed-update))
+  (defun niva/elfeed-update-loop ()
+    (interactive)
+    (message "Updating elfeed")
+    (elfeed-update)))
 #+end_src
 
 *** elfeed-protocol
@@ -1830,7 +1830,7 @@ Use org mode in scratch buffer
         elfeed-protocol-fever-fetch-category-as-tag t
         elfeed-protocol-feeds (list (list niva/elfeed-fever-url
                                           :api-url niva/elfeed-api-url
-                                          :password (niva/lookup-password :host "fever")))))
+                                          :password (niva/lookup-password :host "fever"))))
 
 (defun niva/elfeed-refresh ()
   (interactive)
@@ -1848,6 +1848,7 @@ Use org mode in scratch buffer
 (evil-define-key 'normal elfeed-show-mode-map "I" #'niva/elfeed-toggle-images)
 (define-key elfeed-search-mode-map (kbd "I") #'niva/elfeed-toggle-images)
 (evil-define-key 'normal elfeed-search-mode-map "r" 'elfeed-update)
+)
 #+end_src
 
 *** Count unreads
