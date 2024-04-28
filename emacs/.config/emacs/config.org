@@ -1490,6 +1490,7 @@ Always move cursor to help window.
 #+begin_src emacs-lisp
 (use-package exec-path-from-shell
   :straight t
+  :defer t
   :config (exec-path-from-shell-initialize))
 (when (memq window-system '(mac ns x)) (exec-path-from-shell-initialize))
 #+end_src
