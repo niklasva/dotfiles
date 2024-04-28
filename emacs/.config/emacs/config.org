@@ -436,7 +436,7 @@ Always move cursor to help window.
   (evil-set-initial-state 'dired-mode 'normal)
 #+end_src
 
-*** savehist
+* savehist
 #+begin_src emacs-lisp
   (use-package savehist
     :straight t
