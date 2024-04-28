@@ -904,11 +904,6 @@ Always move cursor to help window.
         gcmh-mode +1))
 #+end_src
 
-** Profiling
-#+begin_src emacs-lisp
-(use-package esup
-  :straight t)
-#+end_src
 
 ** Byte-compile config on save
 #+begin_src disabled
