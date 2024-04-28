@@ -7,6 +7,7 @@
 (use-package diminish
   :straight t)
 #+end_src
+
 * Encryption
 ** pinentry
 #+begin_src emacs-lisp
@@ -59,7 +60,6 @@ Show only one active window when opening multiple files at the same time.
 #+end_src
 
 ** Indentation rules
-
 #+begin_src emacs-lisp
 (setq-default evil-auto-indent t
               indent-line-function 'evil-indent-line
@@ -118,7 +118,6 @@ Show only one active window when opening multiple files at the same time.
 #+end_src
 
 ** Hide buffers
-
 #+begin_src emacs-lisp
 (defun niva/hide-buffer (bufname)
   "Hide buffers by prepending space to buffer name."
@@ -161,11 +160,13 @@ Prevent emacs from contaminating system clipboard.
 #+begin_src emacs-lisp
 (save-place-mode +1)
 #+end_src
+
 * Customization
 ** Colors
 #+begin_src emacs-lisp
 (require 'color-operations)
 #+end_src
+
 ** GUI settings
 *** -
 #+begin_src emacs-lisp
@@ -361,6 +362,7 @@ Always move cursor to help window.
 #+begin_src emacs-lisp
 (set-face-attribute 'fixed-pitch nil :family 'unspecified)
 #+end_src
+
 *** Remove font weight
 #+begin_src emacs-lisp
 (defun niva/remove-font-weight ()
@@ -462,6 +464,7 @@ Always move cursor to help window.
 #+begin_src emacs-lisp
 (use-package transpose-frame :straight t)
 #+end_src
+
 ** Keybindings
 *** -
 
@@ -659,6 +662,7 @@ Always move cursor to help window.
         vundo-window-max-height 5
         vundo-compact-display t))
 #+end_src
+
 ** Vertico
 #+begin_src emacs-lisp
 (use-package vertico
@@ -694,7 +698,6 @@ Always move cursor to help window.
 #+begin_src emacs-lisp
 (use-package consult
   :straight t
-  ;;:hook (completion-list-mode . consult-preview-at-point-mode)
   :config
   (consult-customize
    consult-theme
@@ -829,6 +832,7 @@ Always move cursor to help window.
   :config
   (setq org-imenu-depth 8))
 #+end_src
+
 * File management
 ** Dired
 #+begin_src emacs-lisp
@@ -858,7 +862,6 @@ Always move cursor to help window.
   (autoload 'dired-async-mode "dired-async.el" nil t)
   (dired-async-mode 1))
 #+end_src
-
 
 ** Emacs system-files
 *** Backup files
@@ -925,6 +928,7 @@ Always move cursor to help window.
 
   (add-hook 'after-save-hook 'niva/compile-config)
 #+end_src
+
 * Development
 ** Elisp
 *** Formatter
@@ -974,7 +978,8 @@ Always move cursor to help window.
 
 *** jupyter
 #+begin_src emacs-lisp
-(use-package jupyter :straight t
+(use-package jupyter
+  :straight t
   :config
 
   ;; Copied from nowislewis/nowisemacs
@@ -1338,6 +1343,7 @@ Always move cursor to help window.
   (set-face-attribute 'markdown-line-break-face nil :underline 'unspecified)
   (setq markdown-hr-display-char nil))
 #+end_src
+
 *** helpful
 #+begin_src emacs-lisp
 (use-package helpful
@@ -1349,6 +1355,7 @@ Always move cursor to help window.
 		 ("C-h C" . helpful-command)
 		 ("C-c C-d" . helpful-at-point)))
 #+end_src
+
 *** devdocs
 #+begin_src emacs-lisp
 (use-package devdocs
@@ -2116,6 +2123,7 @@ Use org mode in scratch buffer
                   (niva/switch-irc-buffers))
               (message "Circe timed out.")))))))
 #+end_src
+
 ** gptel
 #+begin_src emacs-lisp
 (use-package gptel
