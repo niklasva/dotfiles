@@ -1539,7 +1539,7 @@ Use org mode in scratch buffer
                 ("go"   . "src go")
                 ("yaml" . "src yaml")
                 ("json" . "src json")
-                ("jp"   . "src jupyter-python :session py")
+                ("jp"   . "src jupyter :session py")
                 ("cpp"  . "src cpp")))
   (add-to-list 'org-structure-template-alist pair))
 #+end_src
@@ -1613,20 +1613,6 @@ Use org mode in scratch buffer
         org-roam-ui-follow t
         org-roam-ui-open-on-start nil
         org-roam-ui-update-on-save t))
-#+end_src
-
-** org-babel
-
-#+begin_src emacs-lisp
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((emacs-lisp . t)
-   (python . t)
-   (jupyter . t)))
-
-(setq org-babel-default-header-args:jupyter-python '((:async . "yes")))
-
-(setq-default org-confirm-babel-evaluate nil)
 #+end_src
 
 
