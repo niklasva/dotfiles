@@ -238,6 +238,12 @@ Always move cursor to help window.
       (set-face-attribute 'font-lock-type-face         nil :foreground 'unspecified :inherit 'font-lock-builtin-face)))
   (niva/update-theme-faces)
 
+  (add-hook 'org-mode-hook (lambda ()
+    (when (eq niva/theme 'nofrils-acme)
+      (set-face-attribute 'org-block nil :background (subtract-hex-colors (face-attribute 'default :background) "#000010"))
+      (set-face-attribute 'org-block-begin-line nil :extend t :overline t :underline nil :background (face-attribute 'org-block :background))
+      (set-face-attribute 'org-block-end-line nil :extend t :overline nil :underline t :background (face-attribute 'org-block :background))
+      (set-face-background 'org-default (face-attribute 'mode-line-inactive :background)))))
 #+end_src
 ** Mode line
 *** Mode line format
