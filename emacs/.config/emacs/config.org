@@ -1469,8 +1469,11 @@ Always move cursor to help window.
   (use-package olivetti
     :straight t
     :config
-    (setq olivetti-style 'fancy))
-#+end_src
+** scratch
+Use org mode in scratch buffer
+#+begin_src emacs-lisp
+  (setq-default initial-major-mode 'org-mode)
+  #+end_src
 
 ** org-tempo
 #+begin_src emacs-lisp
