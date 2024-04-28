@@ -22,8 +22,12 @@
         doom-city-lights-brighter-comments     t
         doom-monokai-machine-brighter-comments t))
 
-(use-package ef-themes :straight (:host github :repo "protesilaos/ef-themes"))
+(use-package acme-theme
+  :straight t
+  :config
+  (setq-default acme-theme-black-fg t))
 
+(use-package ef-themes :straight (:host github :repo "protesilaos/ef-themes"))
 (use-package almost-mono-themes       :straight t)
 (use-package basic-theme              :straight t)
 (use-package brutalist-theme          :straight t)
