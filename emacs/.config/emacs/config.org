@@ -2,8 +2,7 @@
 #+OPTIONS:  toc:2
 #+STARTUP:  overview
 
-* Package management
-** diminish
+* Diminish
 #+begin_src emacs-lisp
   (use-package diminish
     :straight t)
