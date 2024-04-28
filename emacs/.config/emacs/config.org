@@ -1046,6 +1046,7 @@ Always move cursor to help window.
 (add-hook 'eglot-managed-mode-hook #'eglot-inlay-hints-mode)
 (advice-add 'eglot--mode-line-format :override (lambda () ""))
 
+(with-eval-after-load 'eglot
 (set-face-attribute 'eglot-inlay-hint-face nil
                     :foreground (face-attribute 'default :foreground)
                     :italic t
@@ -1057,7 +1058,6 @@ Always move cursor to help window.
 
 (set-face-attribute 'eglot-highlight-symbol-face nil :underline t :weight 'regular)
 
-(with-eval-after-load 'eglot
   (add-hook 'eglot-managed-mode-hook
             (lambda ()
               (setq eldoc-documentation-functions
