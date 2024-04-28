@@ -241,15 +241,17 @@ Always move cursor to help window.
     (set-face-attribute 'font-lock-variable-use-face nil :foreground 'unspecified :inherit 'default)
     (set-face-attribute 'font-lock-constant-face     nil :foreground 'unspecified :inherit 'font-lock-number-face)
     (set-face-attribute 'warning                     nil :foreground 'unspecified :inherit 'font-lock-builtin-face)
-    (set-face-attribute 'font-lock-type-face         nil :foreground 'unspecified :inherit 'font-lock-builtin-face)))
-(niva/update-theme-faces)
+    (set-face-attribute 'font-lock-type-face         nil :foreground 'unspecified :inherit 'font-lock-builtin-face))
 
-(add-hook 'org-mode-hook (lambda ()
-                           (when (eq niva/theme 'nofrils-acme)
-                             (set-face-attribute 'org-block nil :background (subtract-hex-colors (face-attribute 'default :background) "#000010"))
-                             (set-face-attribute 'org-block-begin-line nil :extend t :overline t :underline nil :background (face-attribute 'org-block :background))
-                             (set-face-attribute 'org-block-end-line nil :extend t :overline nil :underline t :background (face-attribute 'org-block :background))
-                             (set-face-background 'org-default (face-attribute 'mode-line-inactive :background)))))
+  (when (or (eq niva/theme 'nofrils-acme) (eq niva/theme 'acme))
+    ;; (set-face-background 'org-default (face-attribute 'mode-line-inactive :background))
+    (set-face-attribute  'org-block            nil :background (subtract-hex-colors (face-attribute 'default :background) "#000010"))
+    (set-face-attribute  'org-block-begin-line nil :extend t :overline t :underline nil :background (face-attribute 'org-block :background))
+    (set-face-attribute  'org-block-end-line   nil :extend t :overline nil :underline t :background (face-attribute 'org-block :background))))
+
+(niva/update-theme-faces)
+#+end_src
+
 #+end_src
 ** Mode line
 *** Mode line format
