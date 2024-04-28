@@ -1352,6 +1352,7 @@ Always move cursor to help window.
       (compile command)))
   (defvar niva/run-test-command-history nil)
 #+end_src
+
 * Terminal
 ** eshell
 #+begin_src emacs-lisp
@@ -1463,12 +1464,30 @@ Always move cursor to help window.
   (advice-add 'compilation-filter :around #'niva/advice-compilation-filter)
 #+end_src
 
-* Org
-** olivetti
+* Olivetti
 #+begin_src emacs-lisp
-  (use-package olivetti
+  (use-package olivetti :straight t :config (setq olivetti-style 'fancy))
+#+end_src
+
+* Org
+#+begin_src emacs-lisp
+  (dolist (face '(org-level-1 org-level-2 org-level-3 org-level-4 org-level-5
+                org-level-6 org-level-7 org-level-8 org-ellipsis))
+  (set-face-attribute face nil :foreground (face-attribute 'default :foreground)))
+#+end_src
+
+** org
+#+begin_src emacs-lisp
+  (use-package org
     :straight t
     :config
+    (setq org-hide-emphasis-markers t
+          org-fontify-quote-and-verse-blocks t
+          org-ellipsis " "
+          org-use-sub-superscripts nil)
+    (set-face-attribute 'org-ellipsis nil :foreground 'unspecified :underline 'unspecified))
+#+end_src
+
 ** scratch
 Use org mode in scratch buffer
 #+begin_src emacs-lisp
