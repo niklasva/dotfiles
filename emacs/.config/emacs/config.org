@@ -90,7 +90,10 @@ Show only one active window when opening multiple files at the same time.
 #+begin_src emacs-lisp
   (recentf-mode 1)
   (setq history-length 9999
-        history-delete-duplicates t)
+        history-delete-duplicates t
+        recentf-max-saved-items 1000
+        recentf-auto-cleanup 'never
+        recentf-auto-save-timer (run-with-idle-timer 600 t 'recentf-save-list))
 #+end_src
 
 #+begin_src emacs-lisp
