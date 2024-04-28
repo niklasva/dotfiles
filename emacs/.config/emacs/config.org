@@ -1472,7 +1472,7 @@ Always move cursor to help window.
     (setq olivetti-style 'fancy))
 #+end_src
 
-** org
+** org-tempo
 #+begin_src emacs-lisp
   (require 'org-tempo)
   (add-to-list 'org-modules 'org-tempo)
@@ -1487,19 +1487,14 @@ Always move cursor to help window.
                   ("jp"   . "src jupyter-python :session py")
                   ("cpp"  . "src cpp")))
     (add-to-list 'org-structure-template-alist pair))
-
-  (use-package org
-    :straight t
-    :config
-    (setq org-hide-emphasis-markers t
-          org-fontify-quote-and-verse-blocks t
-          org-return-follows-link t
-          org-pretty-entities t
-          org-ellipsis " ..."
-          org-use-sub-superscripts nil))
 #+end_src
 
 ** org code blocks
+
+#+begin_src emacs-lisp
+(setq org-confirm-babel-evaluate nil)
+#+end_src
+
 #+begin_src emacs-lisp
   (set-face-attribute 'org-block nil :foreground (face-attribute 'default :foreground))
 #+end_src
