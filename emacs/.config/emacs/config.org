@@ -720,10 +720,11 @@ Always move cursor to help window.
 #+begin_src emacs-lisp
 (require 'org-tempo)
 (add-to-list 'org-modules 'org-tempo t)
-(use-package yasnippet-snippets :straight t)
+(use-package yasnippet-snippets :straight t :defer t)
 
 (use-package yasnippet
   :straight t
+  :defer t
   :diminish yas-minor-mode
   :config (yas-global-mode 1))
 #+end_src
@@ -779,6 +780,7 @@ Always move cursor to help window.
 (use-package kind-icon
   :straight t
   :after corfu
+  :defer t
   :custom
   (kind-icon-use-icons t)
   (kind-icon-default-face 'corfu-default) ; to compute blended backgrounds correctly
@@ -816,6 +818,7 @@ Always move cursor to help window.
 #+begin_src emacs-lisp
 (use-package imenu
   :straight (:type built-in)
+  :defer t
   :config
   (setq org-imenu-depth 8))
 #+end_src
@@ -837,6 +840,7 @@ Always move cursor to help window.
 (use-package dired-collapse
   :straight t
   :after dired
+  :defer t
   :init
   (evil-define-key 'normal dired-mode-map (kbd "H") 'dired-up-directory)
   (evil-define-key 'normal dired-mode-map (kbd "L") 'dired-find-file)
@@ -978,6 +982,7 @@ Always move cursor to help window.
 (use-package eldoc
   :straight (:type built-in)
   :diminish
+  :defer t
   :config
   (setq eldoc-idle-delay 0.33
         eldoc-echo-area-use-multiline-p t
@@ -993,6 +998,7 @@ Always move cursor to help window.
 #+begin_src emacs-lisp
 (use-package eglot
   :straight (:type built-in)
+  :defer t
   :config
   (setq eglot-autoshutdown t)
   (add-to-list 'eglot-server-programs '((c-mode c++-mode c++-ts-mode) .
@@ -1150,6 +1156,7 @@ Always move cursor to help window.
 #+begin_src emacs-lisp
 (use-package treesit
   :straight (:type built-in)
+  :defer t
   :config
   (setq treesit-font-lock-level    2
         c-ts-mode-indent-offset    4
@@ -1288,6 +1295,7 @@ Always move cursor to help window.
 #+begin_src emacs-lisp
 (use-package magit
   :straight t
+  :defer t
   :config
   (setq ediff-split-window-function 'split-window-horizontally
         ediff-window-setup-function 'ediff-setup-windows-plain)
@@ -1364,6 +1372,7 @@ Always move cursor to help window.
 #+begin_src emacs-lisp
 (use-package eshell
   :straight (:type built-in)
+  :defer t
   :defines eshell-prompt-function
   :config
   (add-hook 'shell-mode-hook 'with-editor-export-editor)
@@ -1416,6 +1425,7 @@ Always move cursor to help window.
 *** eshell-syntax-highlighting
 #+begin_src emacs-lisp
 (use-package eshell-syntax-highlighting
+:defer t
   :straight t
   :hook (eshell-mode . eshell-syntax-highlighting-mode))
 #+end_src
@@ -1472,7 +1482,7 @@ Always move cursor to help window.
 
 * Olivetti
 #+begin_src emacs-lisp
-(use-package olivetti :straight t :config (setq olivetti-style 'fancy))
+(use-package olivetti :straight t :defer t :config (setq olivetti-style 'fancy))
 #+end_src
 
 * Org
@@ -1737,6 +1747,7 @@ Use org mode in scratch buffer
 #+begin_src emacs-lisp
 (use-package elfeed
   :straight t
+  :defer t
   :hook (elfeed-search-mode . elfeed-update)
   :config
   (setq elfeed-search-filter "-star +unread")
@@ -1976,6 +1987,7 @@ Use org mode in scratch buffer
 #+begin_src disabled
   (use-package circe
     :straight t
+    :defer t
     :config
     (setq lui-fill-column                     80
           lui-time-stamp-position             'right
@@ -2098,6 +2110,7 @@ Use org mode in scratch buffer
 #+begin_src emacs-lisp
 (use-package gptel
   :diminish gptel-mode
+  :defer t
   :straight (gptel :host github :repo "karthink/gptel")
   :config
 
