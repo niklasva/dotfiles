@@ -969,9 +969,29 @@ Always move cursor to help window.
 
 *** jupyter
 #+begin_src emacs-lisp
-(use-package jupyter
-  :straight t
-  :defer t )
+(use-package jupyter :straight t
+  :config
+
+  ;; Copied from nowislewis/nowisemacs
+  (defun my/org-babel-execute-src-block (&optional _arg info _params)
+    "Load language if needed"
+    (let* ((lang (nth 0 info))
+           (sym (cond ((member (downcase lang) '("c" "cpp" "c++")) 'C)
+                      ((member (downcase lang) '("jupyter-python")) 'jupyter)
+                      (t (intern lang))))
+           (backup-languages org-babel-load-languages))
+      (unless (assoc sym backup-languages)
+        (condition-case err
+            (progn
+              (org-babel-do-load-languages 'org-babel-load-languages (list (cons sym t)))
+              (setq-default org-babel-load-languages (append (list (cons sym t)) backup-languages)))
+          (file-missing
+           (setq-default org-babel-load-languages backup-languages)
+           err)))))
+  (advice-add 'org-babel-execute-src-block :before #'my/org-babel-execute-src-block )
+
+  (setq org-babel-default-header-args:jupyter '((:kernel . "python") (:async . "yes")))
+  (setq-default org-confirm-babel-evaluate nil))
 #+end_src
 
 ** Eldoc
