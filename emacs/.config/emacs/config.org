@@ -1346,7 +1346,6 @@ Always move cursor to help window.
 #+begin_src emacs-lisp
 (use-package magit
   :straight t
-  :defer t
   :config
   (setq ediff-split-window-function 'split-window-horizontally
         ediff-window-setup-function 'ediff-setup-windows-plain)
