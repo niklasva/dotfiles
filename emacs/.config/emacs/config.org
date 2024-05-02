@@ -478,9 +478,11 @@ Always move cursor to help window.
 
 #+begin_src emacs-lisp
 (setq mac-escape-modifier nil
-      mac-option-modifier nil
+      mac-option-modifier 'meta
       mac-right-command-modifier 'meta
-      mac-pass-command-to-system t)
+      mac-right-option-modifier nil
+      mac-pass-command-to-system t
+)
 #+end_src
 
 #+begin_src emacs-lisp
