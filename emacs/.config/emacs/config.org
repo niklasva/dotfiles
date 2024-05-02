@@ -1580,6 +1580,13 @@ Use org mode in scratch buffer
   (add-to-list 'org-structure-template-alist pair))
 #+end_src
 
+** ob-async
+#+begin_src emacs-lisp
+(use-package ob-async
+  :straight t
+  :config
+  (setq ob-async-no-async-languages-alist '("jupyter")))
+#+end_src
 ** org code blocks
 
 #+begin_src emacs-lisp
