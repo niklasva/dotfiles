@@ -1014,6 +1014,7 @@ Always move cursor to help window.
 (advice-add 'org-babel-execute-src-block :before #'my/org-babel-execute-src-block )
 
 (setq org-babel-default-header-args:jupyter '((:kernel . "python") (:async . "yes")))
+(add-to-list 'org-src-lang-modes '("jupyter" . python))
 (setq-default org-confirm-babel-evaluate nil)
 #+end_src
 
