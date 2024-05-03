@@ -818,12 +818,14 @@ Always move cursor to help window.
 #+end_src
 
 ** buffer-move
+
 #+begin_src emacs-lisp
 (use-package buffer-move
   :straight t)
 #+end_src
 
 ** Hydra
+
 #+begin_src emacs-lisp
 (use-package hydra
   :straight t
@@ -1532,6 +1534,7 @@ Always move cursor to help window.
   :config (exec-path-from-shell-initialize))
 (when (memq window-system '(mac ns x)) (exec-path-from-shell-initialize))
 #+end_src
+
 * Compilation mode
 #+begin_src emacs-lisp
 (use-package xterm-color :straight t)
@@ -1685,12 +1688,12 @@ Use org mode in scratch buffer
         org-roam-ui-update-on-save t))
 #+end_src
 
-
 ** visual-fill-column
 #+begin_src emacs-lisp
 (use-package visual-fill-column
   :straight t)
 #+end_src
+
 * Tetris
 #+begin_src emacs-lisp
 (setq-default tetris-use-color t
@@ -1699,6 +1702,7 @@ Use org mode in scratch buffer
 (add-hook 'tetris-mode-hook (lambda ()
                               (set-face-attribute 'gamegrid-face-*Tetris* nil :font "Monaco")))
 #+end_src
+
 * Web
 ** shr
 #+begin_src emacs-lisp
@@ -1810,6 +1814,7 @@ Use org mode in scratch buffer
                                     (other-window 1)
                                     (xwidget-webkit-browse-url url)))
 #+end_src
+
 ** elfeed
 #+begin_src emacs-lisp
 (if niva/elfeed-enabled
