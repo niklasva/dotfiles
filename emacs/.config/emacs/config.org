@@ -1,6 +1,6 @@
 #+PROPERTY: header-args
 #+OPTIONS:  toc:2
-#+STARTUP:  overview indent
+#+STARTUP:  overview noindent
 
 * Diminish
 #+begin_src emacs-lisp
