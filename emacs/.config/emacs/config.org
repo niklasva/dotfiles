@@ -67,7 +67,7 @@ Show only one active window when opening multiple files at the same time.
               tab-width 4
               org-src-tab-acts-natively t
               org-edit-src-content-indentation 0
-              org-indent-indentation-per-level 4
+              org-indent-indentation-per-level 2
               org-indent-mode-turns-on-hiding-stars nil)
 
 (defun indent-tabs-hook ()
