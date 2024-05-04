@@ -2242,8 +2242,12 @@ Use org mode in scratch buffer
                       :foreground 'unspecified
                       :background "firebrick")
 
-  (set-face-attribute 'hl-paragraph-face nil
-                      :inherit    'unspecified
-                      :foreground 'unspecified
-                      :background (face-attribute 'region :background)))
-#+end_src
+
+** org-header-line-outline
+#+begin_src emacs-lisp
+(use-package org-header-line-outline
+  :after org
+  :straight (:host github :repo "niklasva/org-header-line-outline")
+  :config
+  (add-hook 'org-mode-hook (lambda() (unless (equal (buffer-name) "*scratch*") (org-header-line-outline-mode)))))
+  #+end_src
