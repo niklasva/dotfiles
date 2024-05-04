@@ -488,8 +488,10 @@ Always move cursor to help window.
       mac-option-modifier 'meta
       mac-right-command-modifier 'meta
       mac-right-option-modifier nil
-      mac-pass-command-to-system t
-)
+      mac-pass-command-to-system t)
+
+(global-set-key (kbd "s-,") 'menu-set-font)
+(global-set-key (kbd "M-,") 'menu-set-font)
 #+end_src
 
 #+begin_src emacs-lisp
