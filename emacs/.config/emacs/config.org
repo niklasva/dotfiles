@@ -1004,6 +1004,7 @@ Always move cursor to help window.
   (let* ((lang (nth 0 info))
          (sym (cond ((member (downcase lang) '("c" "cpp" "c++")) 'C)
                     ((member (downcase lang) '("jupyter-python")) 'jupyter)
+                    ((member (downcase lang) '("sh" "bash" "zsh")) 'shell)
                     (t (intern lang))))
          (backup-languages org-babel-load-languages))
     (unless (assoc sym backup-languages)
