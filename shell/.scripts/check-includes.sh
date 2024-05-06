@@ -15,6 +15,10 @@ INCLUDES=$(ggrep -r "#include.*/.*" .\
                      -e 's/^gmock.*//g' \
                      -e 's/^gtest.*//g' \
                      -e 's/^drivers.*//g' \
+                     -e 's/.*.hpp  *//g' \
+                     -e 's/.*.h$//g' \
+                     -e 's/.*.h  *//g' \
+                     -e 's/^\/.*//g' \
                | sort -u)
 
 FILES=$(find . -type f -name "*" | sort -u | sed 's/^\.\///g')
