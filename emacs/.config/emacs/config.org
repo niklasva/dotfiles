@@ -1696,15 +1696,6 @@ Use org mode in scratch buffer
   :straight t)
 #+end_src
 
-* Tetris
-#+begin_src emacs-lisp
-(setq-default tetris-use-color t
-              tetris-use-glyphs nil
-              tetris-border 4)
-(add-hook 'tetris-mode-hook (lambda ()
-                              (set-face-attribute 'gamegrid-face-*Tetris* nil :font "Monaco")))
-#+end_src
-
 * Web
 ** shr
 #+begin_src emacs-lisp
@@ -2251,3 +2242,14 @@ Use org mode in scratch buffer
   :config
   (add-hook 'org-mode-hook (lambda() (unless (equal (buffer-name) "*scratch*") (org-header-line-outline-mode)))))
   #+end_src
+
+* Misc
+** Tetris
+
+#+begin_src emacs-lisp
+(setq-default tetris-use-color t
+              tetris-use-glyphs nil
+              tetris-border 4)
+(add-hook 'tetris-mode-hook (lambda ()
+                              (set-face-attribute 'gamegrid-face-*Tetris* nil :font "Monaco")))
+#+end_src
