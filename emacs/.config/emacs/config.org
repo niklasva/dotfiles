@@ -268,7 +268,6 @@ Always move cursor to help window.
   (niva/update-theme-faces)
 #+end_src
 
-#+end_src
 ** Mode line
 *** Mode line format (disabled)
 #+begin_src disabled
