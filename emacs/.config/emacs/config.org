@@ -734,8 +734,7 @@ Always move cursor to help window.
   :config
   (consult-customize
    consult-theme
-   :preview-key '("M-." "C-SPC"
-                  :debounce 0.2 any))
+   :preview-key '("M-." "C-SPC" :debounce 0.2 any))
   (setq consult-ripgrep-args "rg \
             --null \
             --line-buffered \
@@ -748,7 +747,7 @@ Always move cursor to help window.
             --line-number \
             --hidden \
             --follow \
-            --glob \"!.git/*\" ."))
+            --glob \"!.git/*\""))
 #+end_src
 
 ** Marginalia
@@ -785,9 +784,6 @@ Always move cursor to help window.
   (corfu-echo-documentation t)
   (corfu-auto-delay 0.2)
   (corfu-auto-prefix 1)
-
-  ;;:hook ((prog-mode . corfu-mode) (org-mode . corfu-mode))
-  ;; :init
 
   :config
   (corfu-popupinfo-mode t)
