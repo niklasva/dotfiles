@@ -1271,75 +1271,20 @@ Always move cursor to help window.
 #+end_src
 
 ** Version control
-*** Git gutter
+*** git-gutter
 #+begin_src emacs-lisp
 (use-package git-gutter
   :straight t
-  :diminish
+  :hook (prog-mode . git-gutter-mode)
   :config
-  (setq git-gutter:update-interval 1
-        git-gutter:added-sign    "+"
-        git-gutter:modified-sign "="
-        git-gutter:deleted-sign  "-"))
-#+end_src
+  (setq git-gutter:update-interval 1))
 
-**** git-gutter-fringe
-#+begin_src emacs-lisp
 (use-package git-gutter-fringe
   :straight t
-  :delight
-  :diminish git-gutter-mode
   :config
-  (global-git-gutter-mode +1)
-  (setq git-gutter-fr:side 'left-fringe))
-
-(add-hook 'git-gutter-mode-hook
-          (lambda ()
-            (unless (string-match-p "kaolin" (prin1-to-string custom-enabled-themes))
-              (with-eval-after-load 'magit
-                (set-face-attribute 'git-gutter-fr:added    nil :foreground (face-attribute 'magit-diff-added   :foreground) :background (face-attribute 'magit-diff-added   :background))
-                (set-face-attribute 'git-gutter-fr:modified nil :foreground (face-attribute 'magit-diff-base    :foreground) :background (face-attribute 'magit-diff-base    :background))
-                (set-face-attribute 'git-gutter-fr:deleted  nil :foreground (face-attribute 'magit-diff-removed :foreground) :background (face-attribute 'magit-diff-removed :background))))))
-
-(add-hook 'prog-mode-hook
-          (lambda () (git-gutter-mode +1)))
-
-(defun niva/naysayer-faces () (interactive)
-       (set-face-attribute 'highlight              nil :background "#335533")
-       (set-face-attribute 'compilation-info       nil :foreground "#2ec09c")
-       (set-face-attribute 'region                 nil :background "#335533")
-       (set-face-attribute 'git-gutter-fr:added    nil :foreground "#5e8203")
-       (set-face-attribute 'git-gutter-fr:modified nil :foreground "#00638a")
-       (set-face-attribute 'git-gutter-fr:deleted  nil :foreground "#d0372d"))
-
-
-(fringe-helper-define 'git-gutter-fr:added nil
-  "......."
-  "...x..."
-  "...x..."
-  "...x..."
-  "xxxxxxx"
-  "...x..."
-  "...x..."
-  "...x..."
-  ".......")
-
-(fringe-helper-define 'git-gutter-fr:deleted nil
-  "......."
-  "......."
-  "......."
-  ".XXXXX."
-  "......."
-  "......."
-  ".......")
-
-;; Lines
-(fringe-helper-define 'git-gutter-fr:modified nil
-  "......."
-  ".xxxxx."
-  "......."
-  "......."
-  ".xxxxx.")
+  (define-fringe-bitmap 'git-gutter-fr:added [192] nil nil '(center repeated))
+  (define-fringe-bitmap 'git-gutter-fr:modified [192] nil nil '(center repeated))
+  (define-fringe-bitmap 'git-gutter-fr:deleted [192] nil nil '(center repeated)))
 #+end_src
 
 *** magit
