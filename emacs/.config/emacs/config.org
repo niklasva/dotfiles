@@ -1992,7 +1992,7 @@ Use org mode in scratch buffer
          (star (if (member "star" (mapcar #'symbol-name (elfeed-entry-tags entry))) "*" " "))
          (tags (delete "unread" (delete "star" (mapcar #'symbol-name (elfeed-entry-tags entry)))))
          (tags-str "%-12s")
-         (date (elfeed-search-format-date (elfeed-entry-date entry)))
+         (date (format "%-12s" (relative-date  (elfeed-entry-date entry))))
          (title (or (elfeed-meta entry :title) (elfeed-entry-title entry) ""))
          (title-faces (elfeed-search--faces (elfeed-entry-tags entry)))
          (formatted-date (propertize date 'face 'elfeed-search-title-face))
