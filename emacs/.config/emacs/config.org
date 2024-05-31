@@ -2238,10 +2238,11 @@ Use org mode in scratch buffer
   :config
   (setq hl-paragraph-highlight-entire-line t)
   (set-face-attribute 'hl-paragraph-face nil
-                      :inherit    'unspecified
+                      ;; :inherit    'org-block
+                      :inverse-video t
                       :foreground 'unspecified
-                      :background "firebrick")
-
+                      ))
+#+end_src
 
 ** org-header-line-outline
 #+begin_src emacs-lisp
@@ -2250,7 +2251,7 @@ Use org mode in scratch buffer
   :straight (:host github :repo "niklasva/org-header-line-outline")
   :config
   (add-hook 'org-mode-hook (lambda() (unless (equal (buffer-name) "*scratch*") (org-header-line-outline-mode)))))
-  #+end_src
+#+end_src
 
 * Misc
 ** Tetris
