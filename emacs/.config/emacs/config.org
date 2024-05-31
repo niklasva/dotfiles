@@ -1974,7 +1974,6 @@ Use org mode in scratch buffer
 ;;   (elfeed-db-save)
 ;;   (elfeed-kill-buffer)
 ;;   (quit-window))
-))
 #+end_src
 
 *** Customization
@@ -2072,6 +2071,10 @@ Use org mode in scratch buffer
   (insert "\n\n"))
 #+end_src
 
+*** end
+#+begin_src emacs-lisp
+))
+#+end_src
 ** irc
 *** circe
 #+begin_src disabled
