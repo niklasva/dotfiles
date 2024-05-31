@@ -1490,19 +1490,13 @@ Always move cursor to help window.
 (setq eshell-prompt-function
       (lambda ()
         (concat
-         (propertize (user-login-name)
-                     'face 'font-lock-keyword-face)
-         (propertize (format "@%s" (system-name))
-                     'face 'default)
-         (propertize ":"
-                     'face 'font-lock-doc-face)
-         (propertize (abbreviate-file-name (eshell/pwd))
-                     'face 'font-lock-type-face)
-         (propertize " $"
-                     'face 'font-lock-doc-face)
-         (propertize " "
-                     'face 'default))))
-#+end_src
+         (propertize (user-login-name) 'face 'font-lock-keyword-face)
+         (propertize (format "@%s" (system-name)) 'face 'default)
+         (propertize ":" 'face 'font-lock-doc-face)
+         (propertize (abbreviate-file-name (eshell/pwd)) 'face 'font-lock-type-face)
+         (propertize " $" 'face 'font-lock-doc-face)
+         (propertize " " 'face 'default))))
+         #+end_src
 
 *** eshell-syntax-highlighting
 #+begin_src emacs-lisp
