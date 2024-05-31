@@ -2211,8 +2211,8 @@ Use org mode in scratch buffer
 
 
   (with-eval-after-load 'gptel
-    (evil-define-key 'normal gptel-mode-map "q" 'switch-to-prev-buffer)
-    (evil-define-key 'normal gptel-mode-map "C-g" 'delete-window)
+    (evil-define-key 'normal gptel-mode-map (kbd "q") 'switch-to-prev-buffer)
+    (evil-define-key 'normal gptel-mode-map (kbd "C-g") 'delete-window)
     (define-key gptel-mode-map (kbd "C-c m") 'gptel-menu))
   (defun niva/gptel-mode-line-process (original-func &rest args)
     (when (string-match-p "gpt" gptel-model)
