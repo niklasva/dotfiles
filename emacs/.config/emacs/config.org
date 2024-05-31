@@ -1521,8 +1521,23 @@ Always move cursor to help window.
 
 * Compilation mode
 #+begin_src emacs-lisp
-(use-package xterm-color :straight t)
-(setq compilation-environment '("TERM=xterm-256color"))
+(use-package xterm-color
+  :straight t
+  :config
+  (defun from-face (face)
+    (face-attribute face :foreground))
+  (setq xterm-color-names
+        `[,(from-face 'default)
+          ,(from-face 'ansi-color-red)
+          ,(from-face 'ansi-color-green)
+          ,(from-face 'ansi-color-yellow)
+          ,(from-face 'ansi-color-blue)
+          ,(from-face 'ansi-color-magenta)
+          ,(from-face 'ansi-color-cyan)
+          ,(from-face 'ansi-color-white)
+          ]))
+
+(setq compilation-environment nil)
 (defun niva/advice-compilation-filter (f proc string)
   (funcall f proc (xterm-color-filter string)))
 
