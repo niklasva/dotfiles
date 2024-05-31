@@ -1827,6 +1827,7 @@ Use org mode in scratch buffer
 #+end_src
 
 ** elfeed
+*** begin
 #+begin_src emacs-lisp
 (if niva/elfeed-enabled
     (progn
