@@ -104,6 +104,7 @@ Show only one active window when opening multiple files at the same time.
       recentf-auto-save-timer (run-with-idle-timer 600 t 'recentf-save-list))
 #+end_src
 
+** yes-or-no-p
 #+begin_src emacs-lisp
 (fset 'yes-or-no-p 'y-or-n-p)
 #+end_src
