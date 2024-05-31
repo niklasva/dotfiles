@@ -417,17 +417,6 @@ Always move cursor to help window.
 ;; (add-hook 'prog-mode-hook 'niva/remove-font-weight)
 #+end_src
 
-*** Enable chinese characters
-
-#+begin_src disabled
-  (use-package cnfonts
-    :straight t
-    :config
-    (setq cnfonts-use-face-font-rescale t
-          cnfonts-default-fontsize 16)
-    (cnfonts-mode 1))
-#+end_src
-
 ** Ligatures
 #+begin_src emacs-lisp
 (use-package ligature
