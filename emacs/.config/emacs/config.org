@@ -1063,7 +1063,14 @@ Always move cursor to help window.
   :straight (:type built-in)
   :defer t
   :config
-  (setq eglot-autoshutdown t)
+  (setq-default eglot-autoshutdown t)
+  (setq-default eglot-sync-connect nil)
+  (fset #'jsonrpc--log-event #'ignore)
+  (setq-default eglot-events-buffer-size 0)
+  (setq-default eglot-events-buffer-config '(:size 0))
+  (setq-default eglot-extend-to-xref t)
+  (setq-default eglot-report-progress 'messages)
+
   (add-to-list 'eglot-server-programs '((c-mode c++-mode c++-ts-mode) .
                                         ("clangd"
                                          "--query-driver=/Applications/ARM/**/*"
