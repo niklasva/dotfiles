@@ -1561,7 +1561,30 @@ Always move cursor to help window.
 (setq compilation-environment '("TERM=xterm-256color"))
 (defun niva/advice-compilation-filter (f proc string)
   (funcall f proc (xterm-color-filter string)))
-(advice-add 'compilation-filter :around #'niva/advice-compilation-filter)
+
+(use-package compile
+  :straight (:type built-in)
+  :config
+
+  (setq compilation-error-regexp-alist (delete 'gnu compilation-error-regexp-alist))
+  (add-to-list 'compilation-error-regexp-alist-alist '(niva--compile-warning "\\[Warning\\] \\(.*?\\):\\([0-9]+\\)" 1 2 3 1 1))
+  (add-to-list 'compilation-error-regexp-alist-alist '(niva--compile-error "\\[Error\\] \\(.*?\\):\\([0-9]+\\):?\\([0-9]+\\)?" 1 2 3 nil 1))
+  (add-to-list 'compilation-error-regexp-alist-alist '(niva--compile-mbed-error "\\[mbed\\] ERROR: \"\\(.*?\\)\"" 1 nil nil nil 1))
+  ;; (add-to-list 'compilation-error-regexp-alist-alist '(niva--compile-include "^\\(?:In file included \\|
+  ;;                  \\|\t\\)from \\([0-9]*[^0-9\n]\\(?:[^\n :]\\| [^-/\n]\\|:[^ \n]\\)*?\\): \\([0-9]+\\)\\(?::\\([0-9]+\\)\\)?\\(?:\\([:,]\\|$\\)\\)?" 1 2 3 (0 . 0) 1))
+  (add-to-list 'compilation-error-regexp-alist-alist '(niva--compile-include2 "\\[ERROR\\] In file included from \\(.*?\\):\\([0-9]+\\)," 1 2 nil (0 . 0) 1))
+  (add-to-list 'compilation-error-regexp-alist-alist '(niva--compile-include3 "^\\(\\.\\/.*?\\|\\/.*?\\):\\([0-9]+\\)?:?\\([0-9]+\\)?" 1 2 3 (0 . 0) 1))
+  (add-to-list 'compilation-error-regexp-alist-alist '(niva--compile-include "^\\(?:In file included \\|                 \\|\t\\)from \ \\([0-9]*[^0-9\n]\\(?:[^\n :]\\| [^-/\n]\\|:[^ \n]\\)*?\\):\ \\([0-9]+\\)\\(?::\\([0-9]+\\)\\)?\\(?:\\([:,]\\|$\\)\\)?" 1 2 3 (0 . 0) 1))
+
+  (setq compilation-error-regexp-alist nil)
+  (add-to-list 'compilation-error-regexp-alist 'niva--compile-warning)
+  (add-to-list 'compilation-error-regexp-alist 'niva--compile-error)
+  (add-to-list 'compilation-error-regexp-alist 'niva--compile-mbed-error)
+  (add-to-list 'compilation-error-regexp-alist 'niva--compile-include)
+  (add-to-list 'compilation-error-regexp-alist 'niva--compile-include2)
+  (add-to-list 'compilation-error-regexp-alist 'niva--compile-include3)
+
+  (advice-add 'compilation-filter :around #'niva/advice-compilation-filter))
 #+end_src
 
 * Olivetti
