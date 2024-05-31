@@ -932,6 +932,7 @@ Always move cursor to help window.
 #+begin_src emacs-lisp
 (setq warning-minimum-level :error)
 #+end_src
+
 ** GCMH
 #+begin_src emacs-lisp
 (use-package gcmh
@@ -946,7 +947,6 @@ Always move cursor to help window.
         gcmh-high-cons-threshold 104857600
         gcmh-mode +1))
 #+end_src
-
 
 ** Byte-compile config on save
 #+begin_src disabled
