@@ -620,6 +620,7 @@ Always move cursor to help window.
   "cir"   '(circe                            :which-key "circe")
   "ir"    '(niva/switch-irc-buffers          :which-key "niva/switch-irc-buffers")
   "scr"   '(scratch-buffer                   :which-key "scratch-buffer")
+  "tsfll" '(niva/prompt-treesit-level        :which-key "niva/prompt-treesit-level")
 
   "time"  '((lambda () (interactive) (message (format-time-string "%a %d %b %H:%M v%W")))           :which-key "Display current time")
   "conf"  '((lambda () (interactive) (find-file "~/.config/emacs/config.org"))                      :which-key "Open config.org")
@@ -1244,6 +1245,10 @@ Always move cursor to help window.
                   ("\\.clang-format\\'" . yaml-ts-mode)
                   ("\\.clang-tidy\\'"   . yaml-ts-mode)))
     (push pair auto-mode-alist)))
+
+(defun niva/prompt-treesit-level () (interactive)
+       (setq treesit-font-lock-level (string-to-number (consult--prompt :prompt "treesit-font-lock-level: ")))
+       (funcall major-mode))
 #+end_src
 
 ** Reformatter
