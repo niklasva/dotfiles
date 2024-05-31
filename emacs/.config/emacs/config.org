@@ -119,34 +119,10 @@ Show only one active window when opening multiple files at the same time.
 
 ** Hide buffers
 #+begin_src emacs-lisp
-(defun niva/hide-buffer (bufname)
-  "Hide buffers by prepending space to buffer name."
-  (if (get-buffer bufname)
-      (with-current-buffer bufname
-        (rename-buffer (concat " " bufname)))))
-#+end_src
-
-#+begin_src emacs-lisp
-(defun remove-messages-buffer ()
-  (niva/hide-buffer "*Messages*"))
-#+end_src
-
-#+begin_src emacs-lisp
-(defun niva/hide-lsp-buffers ()
-  (setq-default message-log-max nil)
-  (niva/hide-buffer "*clangd*")
-  (niva/hide-buffer "*clangd::stderr*")
-  (niva/hide-buffer "*pyright*")
-  (niva/hide-buffer "*pyright::stderr*"))
-#+end_src
-
-Don't show *Buffer list* when opening multiple files at the same time.
-#+begin_src emacs-lisp
 (setq inhibit-startup-buffer-menu t)
 #+end_src
 
 ** Clipboard
-Prevent emacs from contaminating system clipboard.
 #+begin_src emacs-lisp
 (use-package simpleclip
   :straight t
