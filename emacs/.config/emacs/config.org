@@ -1114,28 +1114,12 @@ Always move cursor to help window.
           (string-trim (buffer-string)))))))
 #+end_src
 
-**** Format on save
 #+begin_src emacs-lisp
-(defun eglot-save-hooks ()
-  (add-hook 'before-save-hook #'eglot-format-buffer))
-
-(add-hook 'c-mode-hook         #'eglot-save-hooks)
-(add-hook 'c-ts-mode-hook      #'eglot-save-hooks)
-(add-hook 'c++-mode-hook       #'eglot-save-hooks)
-(add-hook 'c++-ts-mode-hook    #'eglot-save-hooks)
-(add-hook 'python-ts-mode-hook #'eglot-save-hooks)
-
-(defun niva/delete-empty-lines-at-top ()
-  "Delete topmost lines if they contain no characters"
-  (interactive)
-  (save-excursion
-    (when (> (count-lines (point-min) (point-max)) 1)
-      (goto-char (point-min))
-      (while (and (looking-at "^$") (> (count-lines (point-min) (point-max)) 1))
-        (message "Removing empty first line")
-        (delete-region (point) (progn (forward-line 1) (point)))))))
-
-(add-hook 'before-save-hook #'niva/delete-empty-lines-at-top)
+(use-package eglot-booster
+  :straight (eglot-booster :type git :host github :repo "jdtsmith/eglot-booster")
+  :after eglot
+  :config
+  (eglot-booster-mode))
 #+end_src
 
 ** Flymake
