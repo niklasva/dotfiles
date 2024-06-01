@@ -20,6 +20,7 @@
 (setq frame-resize-pixelwise t
       frame-title-format ""
       ns-antialias-text t
+      ns-use-native-fullscreen t
       ns-use-proxy-icon nil
       ns-use-thin-smoothing t)
 
