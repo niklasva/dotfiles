@@ -663,6 +663,39 @@ Always move cursor to help window.
         vundo-compact-display t))
 #+end_src
 
+** buffer-move
+
+#+begin_src emacs-lisp
+(use-package buffer-move
+  :straight t)
+#+end_src
+
+** Hydra
+
+#+begin_src emacs-lisp
+(use-package hydra
+  :straight t
+  :config
+  (setq hydra-is-helpful nil)
+  (defhydra hydra-win-resize (evil-normal-state-map "C-w")
+    "Resize window"
+    ("C-j" (lambda () (interactive) (evil-window-decrease-height 4)))
+    ("C-k" (lambda () (interactive) (evil-window-increase-height 4)))
+    ("C-h" (lambda () (interactive) (evil-window-decrease-width 8)))
+    ("C-l" (lambda () (interactive) (evil-window-increase-width 8)))))
+
+#+end_src
+
+** imenu
+#+begin_src emacs-lisp
+(use-package imenu
+  :straight (:type built-in)
+  :defer t
+  :config
+  (setq org-imenu-depth 8))
+#+end_src
+
+* Completion
 ** Vertico
 #+begin_src emacs-lisp
 (use-package vertico
@@ -797,38 +830,6 @@ Always move cursor to help window.
   (kind-icon-formatted 'variable)
   :config
   (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
-#+end_src
-
-** buffer-move
-
-#+begin_src emacs-lisp
-(use-package buffer-move
-  :straight t)
-#+end_src
-
-** Hydra
-
-#+begin_src emacs-lisp
-(use-package hydra
-  :straight t
-  :config
-  (setq hydra-is-helpful nil)
-  (defhydra hydra-win-resize (evil-normal-state-map "C-w")
-    "Resize window"
-    ("C-j" (lambda () (interactive) (evil-window-decrease-height 4)))
-    ("C-k" (lambda () (interactive) (evil-window-increase-height 4)))
-    ("C-h" (lambda () (interactive) (evil-window-decrease-width 8)))
-    ("C-l" (lambda () (interactive) (evil-window-increase-width 8)))))
-
-#+end_src
-
-** imenu
-#+begin_src emacs-lisp
-(use-package imenu
-  :straight (:type built-in)
-  :defer t
-  :config
-  (setq org-imenu-depth 8))
 #+end_src
 
 * File management
