@@ -181,21 +181,13 @@ Always move cursor to help window.
 #+end_src
 
 ** Theme
-*** Solaire
+*** Load themes
 #+begin_src emacs-lisp
-(use-package solaire-mode
-  :straight t
-  :config
-  (solaire-global-mode t)
-  (solaire-mode-reset))
-(setq solaire-global-mode-hook nil)
-
-(add-hook 'compilation-mode-hook (lambda () (solaire-mode t) (solaire-mode-reset)))
-(add-hook 'eshell-mode-hook (lambda () (solaire-mode t) (solaire-mode-reset)))
-(add-hook 'gptel-mode-hook (lambda () (solaire-mode t) (solaire-mode-reset)))
-(add-hook 'read-only-mode-hook (lambda () (solaire-mode t) (solaire-mode-reset)))
+(load (expand-file-name "lisp/theme-packages.el" user-emacs-directory))
+(setq-default niva/theme 'default)
+(unless (eq niva/theme 'default)
+  (load-theme niva/theme))
 #+end_src
-
 *** Faces
 #+begin_src emacs-lisp
 (defun niva/update-theme-faces ()
@@ -401,6 +393,20 @@ Always move cursor to help window.
   :config
   (global-ligature-mode t)
   (ligature-set-ligatures 'prog-mode '("==" "!=" "<-" "<--" "->" "-->")))
+#+end_src
+** Solaire
+#+begin_src emacs-lisp
+(use-package solaire-mode
+  :straight t
+  :config
+  (solaire-global-mode t)
+  (solaire-mode-reset))
+(setq solaire-global-mode-hook nil)
+
+(add-hook 'compilation-mode-hook (lambda () (solaire-mode t) (solaire-mode-reset)))
+(add-hook 'eshell-mode-hook (lambda () (solaire-mode t) (solaire-mode-reset)))
+(add-hook 'gptel-mode-hook (lambda () (solaire-mode t) (solaire-mode-reset)))
+(add-hook 'read-only-mode-hook (lambda () (solaire-mode t) (solaire-mode-reset)))
 #+end_src
 
 * Controls
