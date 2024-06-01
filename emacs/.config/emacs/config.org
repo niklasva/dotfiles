@@ -30,11 +30,8 @@
 
 ** Private config
 #+begin_src emacs-lisp
-(defvar import-file
-  (expand-file-name "private/config.el" user-emacs-directory))
-
-(when (file-readable-p import-file)
-  (load import-file))
+(defvar import-file (expand-file-name "private/config.el" user-emacs-directory))
+(when (file-readable-p import-file) (load import-file))
 #+end_src
 
 * Text edit settings
@@ -44,18 +41,10 @@
               c-default-style "linux"
               create-lockfiles nil
               completion-cycle-threshold 3)
-#+end_src
 
-#+begin_src emacs-lisp
+(global-display-line-numbers-mode -1)
 (setq confirm-kill-emacs 'y-or-n-p)
-#+end_src
-
-#+begin_src emacs-lisp
 (setq ring-bell-function 'ignore)
-#+end_src
-
-Show only one active window when opening multiple files at the same time.
-#+begin_src emacs-lisp
 (add-hook 'window-setup-hook 'delete-other-windows)
 #+end_src
 
@@ -76,11 +65,7 @@ Show only one active window when opening multiple files at the same time.
         evil-auto-indent t
         c-basic-offset 4))
 
-(dolist (hook '(c++-mode-hook
-                c-mode-hook
-                c++-ts-mode-hook
-                c-ts-mode-hook))
-  (add-hook hook 'indent-tabs-hook))
+(dolist (hook '(c++-mode-hook c-mode-hook c++-ts-mode-hook c-ts-mode-hook)) (add-hook hook 'indent-tabs-hook))
 #+end_src
 
 ** Clean up trailing whitespace
@@ -460,7 +445,7 @@ Always move cursor to help window.
 (evil-set-initial-state 'dired-mode 'normal)
 #+end_src
 
-* savehist
+** savehist
 #+begin_src emacs-lisp
 (use-package savehist
   :straight t
@@ -478,8 +463,7 @@ Always move cursor to help window.
 *** -
 
 #+begin_src emacs-lisp
-(use-package bind-key
-  :straight t)
+(use-package bind-key :straight t)
 #+end_src
 
 #+begin_src emacs-lisp
@@ -972,6 +956,7 @@ Always move cursor to help window.
 #+end_src
 
 ** C++
+*** Other file
 #+begin_src emacs-lisp
 (setq cc-other-file-alist
       '(("\\.h\\'" (".cpp" ".c"))
@@ -1533,20 +1518,16 @@ Always move cursor to help window.
   (advice-add 'compilation-filter :around #'niva/advice-compilation-filter))
 #+end_src
 
-* Olivetti
-#+begin_src emacs-lisp
-(use-package olivetti :straight t :defer t :config (setq olivetti-style 'fancy))
-#+end_src
-
-* Org
+* Org Mode
 #+begin_src emacs-lisp
 (dolist (face '(org-level-1 org-level-2 org-level-3 org-level-4 org-level-5
                             org-level-6 org-level-7 org-level-8 org-ellipsis)))
 
 (add-hook 'org-mode-hook (lambda ()
-                           (setq-local olivetti-style 'fancy)
-                           (setq-local olivetti-body-width 130)
-                           (olivetti-mode +1)))
+                           (unless (equal (buffer-name) "*ask*")
+                             (setq-local olivetti-style 'fancy)
+                             (setq-local olivetti-body-width 130)
+                             (olivetti-mode +1))))
 #+end_src
 
 ** org
