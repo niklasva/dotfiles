@@ -189,25 +189,9 @@ Always move cursor to help window.
       (set-face-attribute 'font-lock-preprocessor-face  nil :foreground "green"))
 
     (when (or (eq niva/theme 'default) (eq niva/theme 'doom-tomorrow-day) (eq niva/theme 'doom-tomorrow-night))
-      (setq treesit-font-lock-level 3)
-      (set-face-attribute  'org-block                  nil :background "#FBFBFB")
-
-      (set-face-attribute 'org-block-begin-line
-                          nil
-                          :extend t
-                          :foreground (face-attribute 'org-meta-line :foreground)
-                          :background (face-attribute 'org-block :background)
-                          :overline t
-                          :underline nil)
-
-      (set-face-attribute 'org-block-end-line
-                          nil
-                          :extend t
-                          :foreground (face-attribute 'org-meta-line :foreground)
-                          :background (face-attribute 'org-block :background)
-                          :overline nil
-                          :underline t)
-
+      (set-face-attribute 'org-block                   nil :background "#FBFBFB")
+      (set-face-attribute 'org-block-begin-line        nil :foreground (face-attribute 'org-meta-line :foreground) :background (face-attribute 'org-block :background) :overline t :underline nil :extend t)
+      (set-face-attribute 'org-block-end-line          nil :foreground (face-attribute 'org-meta-line :foreground) :background (face-attribute 'org-block :background) :overline nil :underline t :extend t)
       (set-face-attribute 'font-lock-number-face       nil :foreground 'unspecified :inherit 'font-lock-builtin-face)
       (set-face-attribute 'font-lock-variable-use-face nil :foreground 'unspecified :inherit 'default)
       (set-face-attribute 'font-lock-constant-face     nil :foreground 'unspecified :inherit 'font-lock-number-face)
@@ -228,15 +212,8 @@ Always move cursor to help window.
       (set-face-attribute  'org-block-end-line   nil :extend t :overline nil :underline t :background (face-attribute 'org-block :background))))
 
   (when (or (eq niva/theme 'wombat) (eq niva/theme 'naysayer))
-    (set-face-attribute  'org-block            nil :background
-                         (add-hex-colors (face-attribute 'default :background) "#0A0A0A"))
-    (set-face-attribute  'org-block-begin-line nil
-                         :extend t
-                         :overline t
-                         :underline nil
-                         :foreground (face-attribute 'default :foreground)
-                         :background (face-attribute 'org-block :background))
-
+    (set-face-attribute  'org-block            nil :background (add-hex-colors (face-attribute 'default :background) "#0A0A0A"))
+    (set-face-attribute  'org-block-begin-line nil :extend t :overline t :underline nil :foreground (face-attribute 'default :foreground) :background (face-attribute 'org-block :background))
     (set-face-attribute  'org-block-end-line   nil :extend t :overline nil :underline t :foreground (face-attribute 'default :foreground) :background (face-attribute 'org-block :background)))
 
   (set-face-attribute 'help-key-binding nil :box nil :background 'unspecified :foreground (face-attribute 'default :foreground)))
@@ -1011,22 +988,21 @@ Always move cursor to help window.
 
 (dolist (hook '(c-mode-hook c++-mode-hook c-ts-mode-hook c++-ts-mode-hook python-mode-hook python-ts-mode-hook))
   (add-hook hook 'eglot-ensure))
-(setq eglot-events-buffer-size 0)
 
 (add-hook 'eglot-managed-mode-hook #'eglot-inlay-hints-mode)
 (advice-add 'eglot--mode-line-format :override (lambda () ""))
 
 (with-eval-after-load 'eglot
-(set-face-attribute 'eglot-inlay-hint-face nil
-                    :foreground (face-attribute 'default :foreground)
-                    :italic t
-                    :font (face-attribute 'default :font)
-                    :height 0.85
-                    :underline 'unspecified
-                    :weight 'unspecified)
+  (set-face-attribute 'eglot-inlay-hint-face nil
+                      :foreground (face-attribute 'shadow :foreground)
+                      :italic t
+                      :font (face-attribute 'default :font)
+                      :height 0.85
+                      :underline 'unspecified
+                      :weight 'unspecified)
 
 
-(set-face-attribute 'eglot-highlight-symbol-face nil :underline t :weight 'regular)
+  (set-face-attribute 'eglot-highlight-symbol-face nil :underline t :weight 'regular)
 
   (add-hook 'eglot-managed-mode-hook
             (lambda ()
@@ -1135,9 +1111,9 @@ Always move cursor to help window.
                 (setq flymake-error-bitmap '(flymake-double-exclamation-mark niva-flymake-fringe-error))
                 (setq flymake-warning-bitmap '(exclamation-mark niva-flymake-fringe-warning))))))
 
-(set-face-attribute 'warning nil :foreground 'unspecified :background 'unspecified :inherit 'niva-flymake-fringe-warning)
-(set-face-attribute 'error nil :foreground 'unspecified :background 'unspecified :inherit 'niva-flymake-fringe-error)
-(set-face-attribute 'compilation-info nil :foreground 'unspecified :background 'unspecified :inherit 'magit-diff-added)
+;; (set-face-attribute 'warning nil :foreground 'unspecified :background 'unspecified :inherit 'niva-flymake-fringe-warning)
+;; (set-face-attribute 'error nil :foreground 'unspecified :background 'unspecified :inherit 'niva-flymake-fringe-error)
+;; (set-face-attribute 'compilation-info nil :foreground 'unspecified :background 'unspecified :inherit 'magit-diff-added)
 (set-face-attribute 'flymake-note 'magit-diff-added)
 #+end_src
 
@@ -1146,9 +1122,9 @@ Always move cursor to help window.
 #+begin_src emacs-lisp
 (use-package treesit
   :straight (:type built-in)
-  :defer t
+  :ensure t
   :config
-  (setq treesit-font-lock-level    2
+  (setq treesit-font-lock-level    3
         c-ts-mode-indent-offset    4
         json-ts-mode-indent-offset 4
         treesit-language-source-alist '((bash         "https://github.com/tree-sitter/tree-sitter-bash")
