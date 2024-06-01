@@ -555,6 +555,7 @@ Always move cursor to help window.
   "w u"   '(winner-undo                      :which-key "winner-undo")
 
   "ask"   '(gptel                            :which-key "gptel")
+  "cmd"   '(project-async-shell-command      :which-key "project-async-shell-command")
   "elf"   '(elfeed                           :which-key "elfeed")
   "eww"   '(eww                              :which-key "eww")
   "rec"   '(consult-recent-file              :which-key "consult-recent-file")
