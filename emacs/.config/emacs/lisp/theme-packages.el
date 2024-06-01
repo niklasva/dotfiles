@@ -1,7 +1,7 @@
 (setq custom-safe-themes t)
 
 (use-package kaolin-themes
-  :straight t
+  :straight (:host github :repo "ogdenwebb/emacs-kaolin-themes")
   :defer t
   :config
   (setq kaolin-themes-bold nil
