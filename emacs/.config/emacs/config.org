@@ -238,21 +238,25 @@ Always move cursor to help window.
       (set-face-attribute 'font-lock-type-face         nil :foreground 'unspecified :inherit 'font-lock-builtin-face))
 
     (when (or (eq niva/theme 'nofrils-acme) (eq niva/theme 'acme))
-      ;; (set-face-background 'org-default (face-attribute 'mode-line-inactive :background))
-      ;; (set-face-attribute  'elfeed-search-feed-face nil :foreground (face-attribute 'default :foreground))
       (set-face-attribute  'org-block            nil :background (subtract-hex-colors (face-attribute 'default :background) "#000010"))
       (set-face-attribute  'org-block-begin-line nil :extend t :overline t :underline nil :background (face-attribute 'org-block :background))
       (set-face-attribute  'org-block-end-line   nil :extend t :overline nil :underline t :background (face-attribute 'org-block :background))))
 
   (when (or (eq niva/theme 'wombat) (eq niva/theme 'naysayer))
-            (set-face-attribute  'org-block            nil :background (add-hex-colors (face-attribute 'default :background) "#0A0A0A"))
-            (set-face-attribute  'org-block-begin-line nil :extend t :overline t :underline nil :foreground (face-attribute 'default :foreground) :background (face-attribute 'org-block :background))
-            (set-face-attribute  'org-block-end-line   nil :extend t :overline nil :underline t :foreground (face-attribute 'default :foreground) :background (face-attribute 'org-block :background)))
+    (set-face-attribute  'org-block            nil :background
+                         (add-hex-colors (face-attribute 'default :background) "#0A0A0A"))
+    (set-face-attribute  'org-block-begin-line nil
+                         :extend t
+                         :overline t
+                         :underline nil
+                         :foreground (face-attribute 'default :foreground)
+                         :background (face-attribute 'org-block :background))
+
+    (set-face-attribute  'org-block-end-line   nil :extend t :overline nil :underline t :foreground (face-attribute 'default :foreground) :background (face-attribute 'org-block :background)))
 
   (set-face-attribute 'help-key-binding nil :box nil :background 'unspecified :foreground (face-attribute 'default :foreground)))
-(add-hook 'buffer-list-update-hook 'niva/update-theme-faces)
-
-  (niva/update-theme-faces)
+;; (add-hook 'buffer-list-update-hook 'niva/update-theme-faces)
+(niva/update-theme-faces)
 #+end_src
 
 ** Mode line
