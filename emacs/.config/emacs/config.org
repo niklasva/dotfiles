@@ -2015,13 +2015,6 @@ Use org mode in scratch buffer
   (elfeed-show-refresh))
 #+end_src
 
-#+begin_src emacs-lisp
-(defun niva/insert-indented-image (spec alt &optional flags)
-  (insert "\n        ")
-  (shr-put-image spec alt flags)
-  (insert "\n\n"))
-#+end_src
-
 *** end
 #+begin_src emacs-lisp
 ))
