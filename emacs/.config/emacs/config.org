@@ -1051,7 +1051,7 @@ Always move cursor to help window.
                                          "--completion-style=detailed"
                                          "--pch-storage=memory"
                                          "--header-insertion=never"
-                                         "-background-index-priority=background"
+                                         "--background-index-priority=background"
                                          "-j=8"
                                          "--log=error"
                                          "--function-arg-placeholders")))
