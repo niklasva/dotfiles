@@ -967,6 +967,12 @@ Always move cursor to help window.
         ("\\.tpp\\'" (".hpp" ".cpp"))))
 #+end_src
 
+*** Mode extension
+#+begin_src emacs-lisp
+(dolist (pair '(("\\.tpp\\'" . c++-mode)))
+  (push pair auto-mode-alist))
+#+end_src
+
 ** Python
 *** Editing
 #+begin_src emacs-lisp
@@ -1200,14 +1206,8 @@ Always move cursor to help window.
 (set-face-attribute 'flymake-note 'magit-diff-added)
 #+end_src
 
-** Mode extension
-#+begin_src emacs-lisp
-(dolist (pair '(("\\.tpp\\'" . c++-mode)))
-  (push pair auto-mode-alist))
-#+end_src
 
 ** Tree-sitter
-*** treesit
 #+begin_src emacs-lisp
 (use-package treesit
   :straight (:type built-in)
