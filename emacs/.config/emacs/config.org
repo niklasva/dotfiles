@@ -1254,15 +1254,31 @@ Always move cursor to help window.
   (apheleia-global-mode +1))
 #+end_src
 
+*** Eglot save hooks
+#+begin_src emacs-lisp
+(with-eval-after-load 'eglot
+  (defun eglot-save-hooks ()
+    (add-hook 'before-save-hook #'eglot-format-buffer))
 
-  (reformatter-define isort-format
-    :program "isort"
-    :args '("--apply" "-")
-    :group 'python-mode)
+  (add-hook 'c-mode-hook         #'eglot-save-hooks)
+  (add-hook 'c-ts-mode-hook      #'eglot-save-hooks)
+  (add-hook 'c++-mode-hook       #'eglot-save-hooks)
+  (add-hook 'c++-ts-mode-hook    #'eglot-save-hooks))
+  #+end_src
 
-  (add-to-list 'sh-mode-hook #'sh-format-on-save-mode)
-  (add-to-list 'python-ts-mode-hook #'black-format-on-save-mode)
-  (add-to-list 'python-ts-mode-hook #'isort-format-on-save-mode))
+*** Delete empty lines
+#+begin_src emacs-lisp
+(defun niva/delete-empty-lines-at-top ()
+  "Delete topmost lines if they contain no characters"
+  (interactive)
+  (save-excursion
+    (when (> (count-lines (point-min) (point-max)) 1)
+      (goto-char (point-min))
+      (while (and (looking-at "^$") (> (count-lines (point-min) (point-max)) 1))
+        (message "Removing empty first line")
+        (delete-region (point) (progn (forward-line 1) (point)))))))
+
+(add-hook 'before-save-hook #'niva/delete-empty-lines-at-top)
 #+end_src
 
 ** Version control
