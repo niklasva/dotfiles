@@ -1240,19 +1240,20 @@ Always move cursor to help window.
        (funcall major-mode))
 #+end_src
 
-** Reformatter
+** Formatting
+*** Apheleia
 #+begin_src emacs-lisp
-(use-package reformatter
+(use-package apheleia
   :straight t
   :config
-  (reformatter-define sh-format
-    :program "shfmt"
-    :group 'sh-mode)
+  (setq-default apheleia-mode-lighter nil)
+  (setf (alist-get 'ruff apheleia-formatters)           '("ruff" "format" "--silent" "-"))
+  (setf (alist-get 'ruff-isort apheleia-formatters)     '("ruff" "check" "--fix" "--select" "I" "-"))
+  (setf (alist-get 'python-mode apheleia-mode-alist)    '(ruff ruff-isort))
+  (setf (alist-get 'python-ts-mode apheleia-mode-alist) '(ruff ruff-isort))
+  (apheleia-global-mode +1))
+#+end_src
 
-  (reformatter-define black-format
-    :program "black"
-    :args '("-" "--quiet")
-    :group 'python-mode)
 
   (reformatter-define isort-format
     :program "isort"
