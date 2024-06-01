@@ -2008,10 +2008,10 @@ Use org mode in scratch buffer
 
 *** Graphics handling
 #+begin_src emacs-lisp
-(setq shr-inhibit-images t)
+(setq shr-inhibit-images nil)
 (defun niva/elfeed-toggle-images ()
   (interactive)
-  (setq-local shr-inhibit-images (not shr-inhibit-images))
+  (setq shr-inhibit-images (not shr-inhibit-images))
   (elfeed-show-refresh))
 #+end_src
 
