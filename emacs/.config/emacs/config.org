@@ -946,7 +946,7 @@ Always move cursor to help window.
   :diminish
   :defer t
   :config
-  (setq eldoc-idle-delay 0.33
+  (setq eldoc-idle-delay 0.2
         eldoc-echo-area-use-multiline-p t
         eldoc-echo-area-prefer-doc-buffer t)
 
@@ -956,7 +956,6 @@ Always move cursor to help window.
 
 ** Language server
 *** Eglot
-**** -
 #+begin_src emacs-lisp
 (use-package eglot
   :straight (:type built-in)
@@ -1053,7 +1052,9 @@ Always move cursor to help window.
   :config
   (setq flymake-start-on-save-buffer t
         flymake-no-changes-timeout 1
-        flymake-fringe-indicator-position 'left-fringe)
+        flymake-fringe-indicator-position 'left-fringe
+        flymake-mode-line-lighter nil)
+
   (add-hook 'sh-mode-hook 'flymake-mode)
   (add-hook 'prog-mode-hook 'flymake-mode)
   (add-hook 'text-mode-hook 'flymake-mode))
