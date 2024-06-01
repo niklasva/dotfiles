@@ -339,9 +339,9 @@ Always move cursor to help window.
 (setq solaire-global-mode-hook nil)
 
 (add-hook 'compilation-mode-hook (lambda () (solaire-mode t) (solaire-mode-reset)))
-(add-hook 'eshell-mode-hook (lambda () (solaire-mode t) (solaire-mode-reset)))
-(add-hook 'gptel-mode-hook (lambda () (solaire-mode t) (solaire-mode-reset)))
-(add-hook 'read-only-mode-hook (lambda () (solaire-mode t) (solaire-mode-reset)))
+(add-hook 'eshell-mode-hook      (lambda () (solaire-mode t) (solaire-mode-reset)))
+(add-hook 'gptel-mode-hook       (lambda () (solaire-mode t) (solaire-mode-reset)))
+(add-hook 'read-only-mode-hook   (lambda () (solaire-mode t) (solaire-mode-reset)))
 #+end_src
 
 * Controls
@@ -360,8 +360,7 @@ Always move cursor to help window.
         evil-scroll-count 8)
   (evil-mode))
 
-(with-eval-after-load 'evil-maps
-  (define-key evil-motion-state-map (kbd "RET") nil))
+(with-eval-after-load 'evil-maps (define-key evil-motion-state-map (kbd "RET") nil))
 #+end_src
 
 *** general
@@ -454,6 +453,8 @@ Always move cursor to help window.
 
 (define-key evil-normal-state-map (kbd "C-n")   'next-line)
 (define-key evil-normal-state-map (kbd "C-p")   'previous-line)
+(define-key evil-insert-state-map (kbd "C-n") 'nil)
+(define-key evil-insert-state-map (kbd "C-p") 'nil)
 
 (with-eval-after-load 'evil-maps  (define-key evil-motion-state-map (kbd "RET") nil))
 #+end_src
