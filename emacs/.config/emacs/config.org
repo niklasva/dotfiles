@@ -203,7 +203,7 @@ Always move cursor to help window.
       (set-face-attribute 'font-lock-function-name-face nil :foreground "yellow")
       (set-face-attribute 'font-lock-preprocessor-face  nil :foreground "green"))
 
-    (when (eq niva/theme 'doom-tomorrow-day)
+    (when (or (eq niva/theme 'default) (eq niva/theme 'doom-tomorrow-day) (eq niva/theme 'doom-tomorrow-night))
       (setq treesit-font-lock-level 3)
       (set-face-attribute  'org-block                  nil :background "#FBFBFB")
 
