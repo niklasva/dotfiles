@@ -1213,7 +1213,8 @@ Always move cursor to help window.
   :straight t
   :hook (prog-mode . git-gutter-mode)
   :config
-  (setq git-gutter:update-interval 1))
+  (setq-default git-gutter:lighter nil)
+  (setq-default git-gutter:update-interval 1))
 
 (use-package git-gutter-fringe
   :straight t
