@@ -15,7 +15,6 @@
                     '(font                    . "Mononoki 14"))))
 
 (load (expand-file-name "lisp/init-straight.el" user-emacs-directory))
-(load (expand-file-name "lisp/theme-packages.el" user-emacs-directory))
 
 (setq frame-resize-pixelwise t
       frame-title-format ""
@@ -29,6 +28,3 @@
 (tooltip-mode nil)
 (menu-bar-mode 1)
 (set-fringe-mode 1)
-
-(setq-default niva/theme 'nofrils-acme)
-(load-theme niva/theme)
