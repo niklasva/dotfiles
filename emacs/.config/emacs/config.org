@@ -932,6 +932,7 @@ Always move cursor to help window.
 #+begin_src emacs-lisp
 (use-package jupyter
   :straight t
+  :defer t
   :bind ("C-c j p" . tempo-template-org-src-jupyter-:session-py))
 ;; Copied from nowislewis/nowisemacs
 (defun my/org-babel-execute-src-block (&optional _arg info _params)
@@ -955,6 +956,10 @@ Always move cursor to help window.
 (setq org-babel-default-header-args:jupyter '((:kernel . "python") (:async . "yes")))
 (add-to-list 'org-src-lang-modes '("jupyter" . python))
 (setq-default org-confirm-babel-evaluate nil)
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package pyenv :straight t)
 #+end_src
 
 ** Eldoc
