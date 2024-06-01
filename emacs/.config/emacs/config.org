@@ -623,6 +623,8 @@ Always move cursor to help window.
   "scr"   '(scratch-buffer                   :which-key "scratch-buffer")
   "tsfll" '(niva/prompt-treesit-level        :which-key "niva/prompt-treesit-level")
 
+
+  "frip"   '((lambda () (interactive) (consult-ripgrep (concat (consult--project-root) (consult--prompt :prompt "Search path: ")))) :which-key "consult-ripgrep")
   "time"  '((lambda () (interactive) (message (format-time-string "%a %d %b %H:%M v%W")))           :which-key "Display current time")
   "conf"  '((lambda () (interactive) (find-file "~/.config/emacs/config.org"))                      :which-key "Open config.org")
   "vconf" '((lambda () (interactive) (split-window-right) (find-file "~/.config/emacs/config.org")) :which-key "Open config.org")
