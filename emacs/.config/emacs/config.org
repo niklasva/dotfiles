@@ -398,6 +398,12 @@ Always move cursor to help window.
   (global-ligature-mode t)
   (ligature-set-ligatures 'prog-mode '("==" "!=" "<-" "<--" "->" "-->")))
 #+end_src
+
+** Olivetti
+#+begin_src emacs-lisp
+(use-package olivetti :straight t :defer t :config (setq olivetti-style 'fancy))
+#+end_src
+
 ** Solaire
 #+begin_src emacs-lisp
 (use-package solaire-mode
@@ -1837,7 +1843,7 @@ Use org mode in scratch buffer
 
   (defun elfeed-olivetti (buff)
     (switch-to-buffer buff)
-    (setq-local olivetti-body-width 80)
+    (setq-local olivetti-body-width 90)
     (setq-local shr-inhibit-images nil)
     (setq-local shr-max-image-proportion 1)
     (setq-local scroll-margin 10)
