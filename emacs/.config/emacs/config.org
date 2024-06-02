@@ -1593,6 +1593,11 @@ Use org mode in scratch buffer
   :straight t)
 #+end_src
 
+** adaptive-wrap
+#+begin_src emacs-lisp
+(use-package adaptive-wrap :straight t)
+#+end_src
+
 * Web
 ** shr
 #+begin_src emacs-lisp
