@@ -1275,8 +1275,7 @@ Always move cursor to help window.
       (emacs-lisp-mode-hook    . "elisp")
       (sh-mode-hook            . "bash")))
 
-  (setq devdocs-window-select t
-        shr-max-image-proportion 0.4)
+  (setq devdocs-window-select t)
 
   (dolist (pair lps/devdocs-alist)
     (let ((hook (car pair))
@@ -1602,7 +1601,7 @@ Use org mode in scratch buffer
   :config
   (setq shr-use-fonts nil)
   (setq shr-max-width nil)
-  (setq shr-width nil)
+  (setq shr-fill-text nil)
 
   (defun niva/create-image-content (spec size content-type flags)
     (let ((data (if (consp spec)
@@ -1625,8 +1624,8 @@ Use org mode in scratch buffer
            (image-pixel-width (car image-pixel-cons))
            (image-pixel-height (cdr image-pixel-cons))
            (image-scroll-rows (/ (round (/ image-pixel-height (default-font-height))) niva--image-slice-divisor)))
-      (when (and (> (current-column) 0) (> image-pixel-width 400))
-        (insert "\n"))
+      ;; (when (and (> (current-column) 0) (> image-pixel-width 400))
+      ;;   (insert "\n"))
       (insert-sliced-image image (or alt "*") nil image-scroll-rows 1)
       (put-text-property start (point) 'image-size size)
       (when (and shr-image-animate
@@ -1637,27 +1636,28 @@ Use org mode in scratch buffer
         (image-animate image nil 60))
       image))
 
-  (defun niva/shr-put-image (spec alt &optional flags)
-    (if (display-graphic-p)
-        (let* ((size (cdr (assq 'size flags)))
-               (content-type (and (consp spec)
-                                  (cadr spec)))
-               (start (point))
-               (image (niva/create-image-content spec size content-type flags)))
-          (if image
-              (niva/handle-image-params image alt start size)))
-      (insert (or alt ""))))
+  (advice-add 'shr-put-image :override
+              (defun niva/shr-put-image (spec alt &optional flags)
+                (if (display-graphic-p)
+                    (let* ((size (cdr (assq 'size flags)))
+                           (content-type (and (consp spec)
+                                              (cadr spec)))
+                           (start (point))
+                           (image (niva/create-image-content spec size content-type flags)))
+                      (if image
+                          (niva/handle-image-params image alt start size)))
+                  (insert (or alt "")))))
 
 
   (defun niva/shr-remove-underline-from-images (dom &optional url)
     (let ((start (point)))
       (shr-tag-img dom url)
       (put-text-property start (point) 'face '(:underline nil))))
+  (setq shr-external-rendering-functions '((img . niva/shr-remove-underline-from-images)))
 
-  (setq shr-external-rendering-functions '((img . niva/shr-remove-underline-from-images))
-        shr-put-image-function #'niva/shr-put-image))
+  ;; (setq image-transform-fit-width 500)
 
-(setq image-transform-fit-width 500)
+  )
 #+end_src
 
 ** eww
@@ -1747,21 +1747,8 @@ Use org mode in scratch buffer
            (message "Next item")
            (elfeed-show-next)))))
 
-  (define-key elfeed-show-mode-map (kbd "C-p") 'niva/elfeed--move-paragraph-up)
-  (define-key elfeed-show-mode-map (kbd "C-n") 'niva/elfeed--move-paragraph-down)
   (define-key elfeed-show-mode-map (kbd "ä") 'niva/elfeed--move-paragraph-up)
   (define-key elfeed-show-mode-map (kbd "ö") 'niva/elfeed--move-paragraph-down)
-
-  (defun elfeed-olivetti (buff)
-    (switch-to-buffer buff)
-    (setq-local olivetti-body-width 90)
-    (setq-local shr-inhibit-images nil)
-    (setq-local shr-max-image-proportion 1)
-    (setq-local scroll-margin 10)
-    (olivetti-mode)
-    (hl-paragraph-mode)
-    (elfeed-show-refresh))
-  (setq elfeed-show-entry-switch 'elfeed-olivetti)
 
   (defun niva/clear-elfeed ()
     "Clear elfeed database"
@@ -1769,12 +1756,7 @@ Use org mode in scratch buffer
     (setq elfeed-db-directory (expand-file-name "~/.elfeed"))
     (delete-directory elfeed-db-directory t)
     (message "Elfeed database cleared. Restart Elfeed to initialize a new database."))
-  (niva/clear-elfeed)
-
-  (defun niva/elfeed-update-loop ()
-    (interactive)
-    (message "Updating elfeed")
-    (elfeed-update)))
+  (niva/clear-elfeed))
 #+end_src
 
 *** elfeed-protocol
@@ -1827,34 +1809,34 @@ Use org mode in scratch buffer
 
 *** Window handling
 #+begin_src emacs-lisp
-;; (defun elfeed-entry-buffer ()
-;;   (get-buffer-create "*elfeed-entry*"))
-#+end_src
+(defun niva/elfeed-switch (buff)
+  (pop-to-buffer buff)
+  (with-current-buffer buff
+    (setq-local visual-fill-column-center-text nil
+                visual-fill-column-fringes-outside-margins t
+                visual-fill-column-extra-text-width '(-4 . 0)
+                visual-fill-column-width 80)
+    (adaptive-wrap-prefix-mode 1)
+    (visual-fill-column-mode)))
+(setq elfeed-show-entry-switch 'niva/elfeed-switch)
+(setq elfeed-search-remain-on-entry t)
 
-#+begin_src emacs-lisp
-;; (defun niva/elfeed-split (buff)
-;;   (interactive)
-;;   (let ((w (split-window-below)))
-;;     (select-window w))
-;;   (switch-to-buffer buff)
-;;   (olivetti-mode))
-#+end_src
+(advice-add 'elfeed-show-next :override
+            (defun niva/elfeed-show-next ()
+              (interactive)
+              (pop-to-buffer (elfeed-search-buffer))
+              (with-current-buffer (elfeed-search-buffer)
+                (when elfeed-search-remain-on-entry (forward-line 1))
+                (call-interactively #'elfeed-search-show-entry))))
 
-#+begin_src emacs-lisp
-;; (defun elfeed-kill-buffer ()
-;;   (interactive)
-;;   (let* ((buff (get-buffer "*elfeed-entry*"))
-;;          (window (get-buffer-window buff)))
-;;     (kill-buffer buff)
-;;     (delete-window window)))
-#+end_src
-
-#+begin_src emacs-lisp
-;; (defun elfeed-search-quit-window ()
-;;   (interactive)
-;;   (elfeed-db-save)
-;;   (elfeed-kill-buffer)
-;;   (quit-window))
+(advice-add 'elfeed-show-prev :override
+            (defun niva/elfeed-show-prev ()
+              (interactive)
+              (pop-to-buffer (elfeed-search-buffer))
+              (with-current-buffer (elfeed-search-buffer)
+                (when elfeed-search-remain-on-entry (forward-line 1))
+                (forward-line -2)
+                (call-interactively #'elfeed-search-show-entry))))
 #+end_src
 
 *** Customization
