@@ -1673,9 +1673,9 @@ Use org mode in scratch buffer
               shr-use-colors t
               eww-search-prefix "https://frogfind.com/?q=")
 
-(dolist (face '(shr-h1
-                shr-text
-                shr-code
+(dolist (face '(;; shr-h1
+                ;; shr-text
+                ;; shr-code
                 variable-pitch-text
                 gnus-header
                 info-title-1
@@ -1694,7 +1694,7 @@ Use org mode in scratch buffer
     (set-face-attribute face nil
                         :height 'unspecified
                         :inherit 'default
-                        :family 'unspecified
+                        ;; :family 'unspecified
                         :weight 'unspecified)))
 #+end_src
 
@@ -1809,8 +1809,8 @@ Use org mode in scratch buffer
         (cl-loop for entry in elfeed-search-entries
                  count (memq 'unread (elfeed-entry-tags entry)))))
 
-(add-hook 'elfeed-db-update-hook 'niva/elfeed-update-unread-count)
-(add-hook 'elfeed-search-update-hook 'niva/elfeed-update-unread-count)
+;; (add-hook 'elfeed-db-update-hook 'niva/elfeed-update-unread-count)
+;; (add-hook 'elfeed-search-update-hook 'niva/elfeed-update-unread-count)
 #+end_src
 
 *** Window handling
@@ -1843,6 +1843,8 @@ Use org mode in scratch buffer
                 (when elfeed-search-remain-on-entry (forward-line 1))
                 (forward-line -2)
                 (call-interactively #'elfeed-search-show-entry))))
+
+(add-hook 'elfeed-search-update-hook (lambda () (setq word-wrap nil)))
 #+end_src
 
 *** Customization
@@ -2136,4 +2138,66 @@ Use org mode in scratch buffer
               tetris-border 4)
 (add-hook 'tetris-mode-hook (lambda ()
                               (set-face-attribute 'gamegrid-face-*Tetris* nil :font "Monaco")))
+#+end_src
+
+* Experiment
+#+begin_src emacs-lisp
+(defun niva/elfeed-search-print-entry (entry)
+  (let* ((feed (elfeed-entry-feed entry))
+         (feed-title (when feed (or (elfeed-meta feed :title) (elfeed-feed-title feed))))
+         (star (if (member "star" (mapcar #'symbol-name (elfeed-entry-tags entry))) "s" " "))
+         (unread (if (member "unread" (mapcar #'symbol-name (elfeed-entry-tags entry))) "*" " "))
+         (tags (delete "unread" (delete "star" (mapcar #'symbol-name (elfeed-entry-tags entry)))))
+         (tags-str "%-12s")
+         (date (format "%-12s" (relative-date  (elfeed-entry-date entry))))
+         (title (or (elfeed-meta entry :title) (elfeed-entry-title entry) ""))
+         (title-faces (elfeed-search--faces (elfeed-entry-tags entry)))
+         (formatted-date (propertize (format "%s " date) 'face 'elfeed-search-title-face))
+         (formatted-star (propertize star 'face 'elfeed-search-tag-face))
+         (formatted-tags (propertize (format tags-str (mapconcat 'identity tags " ")) 'face 'elfeed-search-tag-face))
+
+
+         (title-width (- (window-width)
+                         (string-width feed-title)
+                         (string-width formatted-date)
+                         -5
+                         ))
+
+         (title-column (elfeed-format-column
+                        title title-width
+                        :left))
+
+         (formatted-feed-title (propertize feed-title                  'face title-faces))
+         (formatted-title      (propertize (format "%s " title-column) 'face title-faces 'kbd-help title)))
+
+    (if (< widest-tag (string-width formatted-tags))
+        (setq widest-tag (string-width formatted-tags)))
+
+    (if (< widest-feed-title (string-width formatted-feed-title))
+        (setq widest-feed-title (string-width formatted-feed-title)))
+
+    (setq tag-padding (format "%%-%ds" widest-tag))
+    (setq feed-padding (format "%%-%ds" widest-feed-title))
+
+    (setq end-of-window (format (format "%%%ds"
+                                        (- (window-width)
+                                           (string-width formatted-date)
+                                           (string-width formatted-feed-title)
+                                           (string-width formatted-tags)))
+                                ""))
+
+    (setq oop (format (format "%%%ds" (string-width formatted-date)) "" ))
+
+    (mapc #'insert (list
+                    formatted-date
+                    formatted-feed-title
+                    end-of-window
+                    formatted-tags
+                    oop
+                    formatted-title
+                    formatted-star
+                    ))))
+
+
+(setq elfeed-search-print-entry-function #'niva/elfeed-search-print-entry)
 #+end_src
