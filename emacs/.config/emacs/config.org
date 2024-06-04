@@ -2146,61 +2146,121 @@ Use org mode in scratch buffer
 
 * Experiment
 #+begin_src emacs-lisp
+(setq widest-feed-title 0)
+(defun elfeed-search--faces-1 (tags)
+  "Return all the faces that apply to an entry with TAGS."
+  (nconc (cl-loop for (tag . faces) in elfeed-search-face-alist-1
+                  when (memq tag tags)
+                  append faces)
+         (list 'elfeed-search-title-face)))
+
+(setq elfeed-search-face-alist-1
+      '((unread default)))
+
+(defun elfeed-search--faces-2 (tags)
+  "Return all the faces that apply to an entry with TAGS."
+  (nconc (cl-loop for (tag . faces) in elfeed-search-face-alist-2
+                  when (memq tag tags)
+                  append faces)
+         (list 'elfeed-search-title-face)))
+
+(setq elfeed-search-face-alist-2
+      '((unread elfeed-search-feed-face)))
+
+(defun elfeed-search--faces-3 (tags)
+  "Return all the faces that apply to an entry with TAGS."
+  (nconc (cl-loop for (tag . faces) in elfeed-search-face-alist-3
+                  when (memq tag tags)
+                  append faces)
+         (list 'elfeed-search-title-face)))
+
+(setq elfeed-search-face-alist-3
+      '((unread elfeed-search-tag-face)))
+
+(defun elfeed-search--faces-4 (tags)
+  "Return all the faces that apply to an entry with TAGS."
+  (nconc (cl-loop for (tag . faces) in elfeed-search-face-alist-4
+                  when (memq tag tags)
+                  append faces)
+         (list 'elfeed-search-title-face)))
+
+(setq elfeed-search-face-alist-4
+      '((unread elfeed-search-date-face)))
+
 (defun niva/elfeed-search-print-entry (entry)
   (let* ((feed (elfeed-entry-feed entry))
          (feed-title (when feed (or (elfeed-meta feed :title) (elfeed-feed-title feed))))
          (star (if (member "star" (mapcar #'symbol-name (elfeed-entry-tags entry))) "s" " "))
-         (unread (if (member "unread" (mapcar #'symbol-name (elfeed-entry-tags entry))) "*" " "))
+         ;; (unread (if (member "unread" (mapcar #'symbol-name (elfeed-entry-tags entry))) "* " ""))
          (tags (delete "unread" (delete "star" (mapcar #'symbol-name (elfeed-entry-tags entry)))))
-         (tags-str "%-12s")
-         (date (format "%-12s" (relative-date  (elfeed-entry-date entry))))
+         (tags-str "%-12s ")
+         (date (format "%-12s " (relative-date  (elfeed-entry-date entry))))
          (title (or (elfeed-meta entry :title) (elfeed-entry-title entry) ""))
-         (title-faces (elfeed-search--faces (elfeed-entry-tags entry)))
-         (formatted-date (propertize (format "%s " date) 'face 'elfeed-search-title-face))
-         (formatted-star (propertize star 'face 'elfeed-search-tag-face))
-         (formatted-tags (propertize (format tags-str (mapconcat 'identity tags " ")) 'face 'elfeed-search-tag-face))
+
+         (title-faces      (elfeed-search--faces-2 (elfeed-entry-tags entry)))
+         (feed-title-faces (elfeed-search--faces-2 (elfeed-entry-tags entry)))
+         (feed-tag-faces   (elfeed-search--faces-3 (elfeed-entry-tags entry)))
+         (feed-date-faces  (elfeed-search--faces-4 (elfeed-entry-tags entry)))
+
+         (formatted-date (propertize (format "%s" date) 'face 'elfeed-search-title-face))
+         (formatted-tags (propertize (format tags-str (mapconcat 'identity tags " ")) 'face 'elfeed-search-title-face))
 
 
-         (title-width (- (window-width)
-                         (string-width feed-title)
-                         (string-width formatted-date)
-                         -5
-                         ))
 
-         (title-column (elfeed-format-column
-                        title title-width
-                        :left))
+         (formatted-feed-title (propertize feed-title                  'face feed-title-faces))
 
-         (formatted-feed-title (propertize feed-title                  'face title-faces))
-         (formatted-title      (propertize (format "%s " title-column) 'face title-faces 'kbd-help title)))
+         (title-width-wide (- (window-width) (string-width formatted-date) (string-width formatted-tags) widest-feed-title 5))
+         (title-width (- (window-width) (string-width formatted-date)))
+         ;;(formatted-title      (propertize (format (format "%%%ds" title-width-lg) title) 'face title-faces 'kbd-help title)))
+         (formatted-title-wide (propertize (elfeed-format-column title title-width-wide :left) 'face title-faces))
+         (formatted-title (propertize (elfeed-format-column title title-width :left) 'face title-faces))
+         ;; (title-column-lg (elfeed-format-column title title-width-lg :left))
+         ;;(formatted-title      (propertize (format "%s" title-column-lg) 'face title-faces 'kbd-help title)))
+)
 
-    (if (< widest-tag (string-width formatted-tags))
-        (setq widest-tag (string-width formatted-tags)))
+    (setq pre-tag-padding (format (format "%%%ds" (- widest-feed-title (string-width formatted-feed-title))) "" ))
+    (setq end-of-window (format (format "%%%ds"
+                                        (- (window-width)
+                                           ;;(string-width formatted-date)
+                                           (string-width formatted-feed-title)
+                                           (string-width formatted-tags)
+                                           ))
+                                ""))
 
     (if (< widest-feed-title (string-width formatted-feed-title))
         (setq widest-feed-title (string-width formatted-feed-title)))
 
-    (setq tag-padding (format "%%-%ds" widest-tag))
-    (setq feed-padding (format "%%-%ds" widest-feed-title))
+    (setq feed-padding (format "%%-%ds " widest-feed-title))
 
-    (setq end-of-window (format (format "%%%ds"
-                                        (- (window-width)
-                                           (string-width formatted-date)
-                                           (string-width formatted-feed-title)
-                                           (string-width formatted-tags)))
-                                ""))
+    (setq pre-title-padding (format (format "%%%ds" (string-width formatted-date)) "" ))
 
-    (setq oop (format (format "%%%ds" (string-width formatted-date)) "" ))
 
-    (mapc #'insert (list
-                    formatted-date
-                    formatted-feed-title
-                    end-of-window
-                    formatted-tags
-                    oop
-                    formatted-title
-                    formatted-star
-                    ))))
+    (if (> (window-width) 90)
+        (mapc #'insert (list
+                        formatted-date
+                        ;;formatted-feed-title
+                        (format feed-padding formatted-feed-title)
+                        formatted-tags
+                        formatted-title-wide
+                        ;; end-of-window
+                        ;; tag-column
+                        ;;pre-title-padding
+                        ;; unread
+                        ;; formatted-date
+                        ;; formatted-star
+                        ))
+      (mapc #'insert (list
+                      formatted-date
+                      formatted-feed-title
+                      end-of-window
+                      formatted-tags
+                      ;; tag-column
+                      ;;pre-title-padding
+                      ;; unread
+                      formatted-title
+                      ;; formatted-date
+                      ;; formatted-star
+                      )))))
 
 
 (setq elfeed-search-print-entry-function #'niva/elfeed-search-print-entry)
