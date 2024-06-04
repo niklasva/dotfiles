@@ -1796,6 +1796,10 @@ Use org mode in scratch buffer
 
 (evil-define-key 'normal elfeed-show-mode-map "I" #'niva/elfeed-toggle-images)
 (define-key elfeed-search-mode-map (kbd "I") #'niva/elfeed-toggle-images)
+(evil-define-key 'normal elfeed-search-mode-map (kbd "C-p") #'evil-previous-line)
+(evil-define-key 'normal elfeed-search-mode-map (kbd "C-n") #'evil-next-line)
+(evil-define-key 'normal elfeed-search-mode-map (kbd "k") #'evil-previous-line)
+(evil-define-key 'normal elfeed-search-mode-map (kbd "j") #'evil-next-line)
 (evil-define-key 'normal elfeed-search-mode-map "r" 'elfeed-update)
 )
 #+end_src
