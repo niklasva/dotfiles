@@ -1776,7 +1776,7 @@ Use org mode in scratch buffer
         elfeed-sort-order 'descending
         elfeed-protocol-enabled-protocols '(fever)
         elfeed-protocol-fever-update-unread-only nil
-        elfeed-protocol-fever-maxsize 50
+        elfeed-protocol-fever-maxsize 120
         elfeed-protocol-fever-fetch-category-as-tag t
         elfeed-protocol-feeds (list (list niva/elfeed-fever-url
                                           :api-url niva/elfeed-api-url
