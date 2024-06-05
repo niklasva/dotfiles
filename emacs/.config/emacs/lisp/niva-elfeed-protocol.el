@@ -29,10 +29,11 @@ argument.  Return parsed entries."
                                                       ('feed_id feed-id))
                                                  item)
 
+                                                ;;; Custom code
                                                 (pub-date (if (string-equal author "Richard Stallman")
                                                               (- pub-date 21600)
                                                             pub-date))
-
+                                                ;;;
 
                                                 (id (if (stringp id) (string-to-number id) id))
                                                 (feed-id (if (stringp feed-id) (string-to-number feed-id) feed-id))
