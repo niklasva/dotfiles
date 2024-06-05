@@ -2093,7 +2093,3 @@ Use org mode in scratch buffer
 (add-hook 'tetris-mode-hook (lambda ()
                               (set-face-attribute 'gamegrid-face-*Tetris* nil :font "Monaco")))
 #+end_src
-
-* Experiment
-#+begin_src emacs-lisp
-#+end_src
