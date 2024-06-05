@@ -1781,15 +1781,6 @@ Use org mode in scratch buffer
         elfeed-protocol-feeds (list (list niva/elfeed-fever-url
                                           :api-url niva/elfeed-api-url
                                           :password (niva/lookup-password :host "fever"))))
-
-(defun niva/elfeed-refresh ()
-  (interactive)
-  (mark-whole-buffer)
-  (cl-loop for entry in (elfeed-search-selected)
-           do (elfeed-untag-1 entry 'unread))
-  (elfeed-search-update--force)
-  (message niva/elfeed-fever-url)
-  (elfeed-protocol-fever-reinit niva/elfeed-api-url))
 #+end_src
 
 #+begin_src emacs-lisp
