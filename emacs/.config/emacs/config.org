@@ -1728,9 +1728,8 @@ Use org mode in scratch buffer
   :defer t
   :hook (elfeed-search-mode . elfeed-update)
   :config
-  (setq elfeed-search-filter "-star +unread")
+  (setq elfeed-search-filter "+unread")
   (setq elfeed-show-truncate-long-urls nil)
-  (set-face-attribute 'elfeed-search-unread-title-face nil :inherit 'default)
 
 
   (defun niva/elfeed--move-paragraph-up ()
