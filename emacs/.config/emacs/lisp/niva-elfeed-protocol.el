@@ -21,7 +21,6 @@ argument.  Return parsed entries."
                          (begin-time (time-to-seconds))
                          entries)
                     (elfeed-log 'debug "elfeed-protocol-fever: %s, parsing entries, entry-mark: %d" update-action entry-mark)
-                    (elfeed-log 'info "BANANA BOAT")
                     (setq entries
                           (cl-loop for item across items collect
                                    (pcase-let* (((map id ('url entry-url) title
