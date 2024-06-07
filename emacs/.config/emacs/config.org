@@ -1676,7 +1676,7 @@ Use org mode in scratch buffer
 (dolist (face '(;; shr-h1
                 ;; shr-text
                 ;; shr-code
-                variable-pitch-text
+                ;; variable-pitch-text
                 gnus-header
                 info-title-1
                 info-title-2
