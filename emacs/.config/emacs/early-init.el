@@ -11,7 +11,7 @@
                     '(vertical-scroll-bars    . nil)
                     '(tool-bar-lines          . 0)
                     '(ns-transparent-titlebar . t)
-                    '(ns-appearance           . dark)
+                    '(ns-appearance           . light)
                     '(font                    . "Mononoki 14"))))
 
 (load (expand-file-name "lisp/init-straight.el" user-emacs-directory))
