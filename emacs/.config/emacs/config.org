@@ -1817,7 +1817,7 @@ Use org mode in scratch buffer
     (setq-local visual-fill-column-center-text nil
                 visual-fill-column-fringes-outside-margins t
                 visual-fill-column-extra-text-width '(-4 . 0)
-                visual-fill-column-width 80)
+                visual-fill-column-width 100)
     (adaptive-wrap-prefix-mode 1)
     (visual-fill-column-mode)))
 (setq elfeed-show-entry-switch 'niva/elfeed-switch)
