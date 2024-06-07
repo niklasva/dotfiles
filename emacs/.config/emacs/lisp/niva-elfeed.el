@@ -65,7 +65,7 @@
          (formatted-date (propertize (format "%s" date) 'face feed-date-faces))
          (formatted-tags (propertize (format tags-str (mapconcat 'identity tags " ")) 'face feed-tag-faces))
          (formatted-feed-title (propertize feed-title 'face feed-title-faces))
-         (title-width-wide (- (window-width) (string-width formatted-date) (string-width formatted-tags) 25 5))
+         (title-width-wide (- (window-width) (string-width formatted-date) (string-width formatted-tags) 25))
          (title-width (- (window-width) (string-width formatted-date)))
          (formatted-title-wide (propertize (elfeed-format-column title title-width-wide :left) 'face title-faces))
          (formatted-title (propertize (elfeed-format-column title title-width :left) 'face title-faces))
