@@ -81,6 +81,7 @@
                         (niva/fixed-length formatted-feed-title 25)
                         formatted-tags
                         formatted-title-wide
+                        " "
                         ))
       (mapc #'insert (list
                       formatted-date
@@ -88,6 +89,7 @@
                       end-of-window
                       formatted-tags
                       formatted-title
+                      " "
                       )))))
 
 
