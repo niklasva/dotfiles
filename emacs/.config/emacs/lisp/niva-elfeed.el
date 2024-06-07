@@ -96,12 +96,12 @@
 (setq elfeed-search-print-entry-function #'niva/elfeed-search-print-entry)
 
 (with-eval-after-load 'elfeed
-  (when (eq niva/theme 'default)
-    (set-face-attribute 'elfeed-search-date-face         nil :foreground nil :bold nil :inherit 'org-agenda-date)
-    (set-face-attribute 'elfeed-search-feed-face         nil :foreground nil :bold nil :inherit 'gnus-header-from)
-    (set-face-attribute 'elfeed-search-tag-face          nil :foreground nil :bold nil :inherit 'gnus-header-newsgroups)
+  (when (or (eq niva/theme 'default) (eq niva/theme 'naysayer))
+    (set-face-attribute 'elfeed-search-date-face         nil :foreground nil :bold nil :foreground (face-attribute 'org-agenda-date :foreground))
+    (set-face-attribute 'elfeed-search-feed-face         nil :foreground nil :bold nil :foreground (face-attribute 'gnus-header-from :foreground))
+    (set-face-attribute 'elfeed-search-tag-face          nil :foreground nil :bold nil :foreground (face-attribute 'gnus-header-newsgroups :foreground))
     (set-face-attribute 'elfeed-search-title-face        nil :foreground nil :bold nil :inherit 'shadow)
-    (set-face-attribute 'elfeed-search-unread-title-face nil :foreground nil :bold nil :inherit 'gnus-header-subject)))
+    (set-face-attribute 'elfeed-search-unread-title-face nil :foreground nil :bold nil :foreground (face-attribute 'gnus-header-subject :foreground))))
 
 (provide 'niva-elfeed)
 ;;; niva-elfeed.el ends here
