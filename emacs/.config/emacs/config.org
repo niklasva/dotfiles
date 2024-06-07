@@ -1826,7 +1826,8 @@ Use org mode in scratch buffer
 (advice-add 'elfeed-show-next :override
             (defun niva/elfeed-show-next ()
               (interactive)
-              (pop-to-buffer (elfeed-search-buffer))
+              (if (get-buffer-window "*elfeed-search*")
+                  (pop-to-buffer (elfeed-search-buffer)))
               (with-current-buffer (elfeed-search-buffer)
                 (when elfeed-search-remain-on-entry (forward-line 1))
                 (call-interactively #'elfeed-search-show-entry))))
@@ -1834,7 +1835,8 @@ Use org mode in scratch buffer
 (advice-add 'elfeed-show-prev :override
             (defun niva/elfeed-show-prev ()
               (interactive)
-              (pop-to-buffer (elfeed-search-buffer))
+              (if (get-buffer-window "*elfeed-search*")
+                  (pop-to-buffer (elfeed-search-buffer)))
               (with-current-buffer (elfeed-search-buffer)
                 (when elfeed-search-remain-on-entry (forward-line 1))
                 (forward-line -2)
