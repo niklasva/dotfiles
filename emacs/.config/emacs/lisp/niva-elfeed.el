@@ -75,7 +75,7 @@
         (setq widest-feed-title (string-width formatted-feed-title)))
     (setq feed-padding (format "%%-%ds " widest-feed-title))
 
-    (if (> (window-width) 100)
+    (if (> (window-width) 110)
         (mapc #'insert (list
                         formatted-date
                         (niva/fixed-length formatted-feed-title 25)
