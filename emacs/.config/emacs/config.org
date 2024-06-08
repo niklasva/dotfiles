@@ -1831,6 +1831,7 @@ Use org mode in scratch buffer
 (defun niva/elfeed-switch (buff)
   (pop-to-buffer buff)
   (with-current-buffer buff
+    (setq-local evil-respect-visual-line-mode nil)
     (setq-local visual-fill-column-center-text nil
                 visual-fill-column-fringes-outside-margins t
                 visual-fill-column-extra-text-width '(-4 . 0)
