@@ -967,6 +967,8 @@ focus, and only once."
   (setq eldoc-idle-delay 0.2
         eldoc-echo-area-use-multiline-p t
         eldoc-echo-area-prefer-doc-buffer t)
+  (setq eldoc-documentation-strategy #'eldoc-documentation-compose-eagerly)
+
 
   (diminish 'eldoc-mode))
 (diminish 'abbrev-mode)
