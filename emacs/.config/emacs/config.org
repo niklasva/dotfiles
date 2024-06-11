@@ -1227,21 +1227,12 @@ focus, and only once."
 #+end_src
 
 ** Version control
-*** git-gutter
+*** diff-hl
 #+begin_src emacs-lisp
-(use-package git-gutter
-  :straight t
-  :hook (prog-mode . git-gutter-mode)
-  :config
-  (setq-default git-gutter:lighter nil)
-  (setq-default git-gutter:update-interval 1))
-
-(use-package git-gutter-fringe
+(use-package diff-hl
   :straight t
   :config
-  (define-fringe-bitmap 'git-gutter-fr:added [192] nil nil '(center repeated))
-  (define-fringe-bitmap 'git-gutter-fr:modified [192] nil nil '(center repeated))
-  (define-fringe-bitmap 'git-gutter-fr:deleted [192] nil nil '(center repeated)))
+  (global-diff-hl-mode))
 #+end_src
 
 *** magit
