@@ -12,7 +12,12 @@
                     '(tool-bar-lines          . 0)
                     '(ns-transparent-titlebar . t)
                     '(ns-appearance           . light)
-                    '(font                    . "Mononoki 14"))))
+                    '(font                    . "Anonymous Pro 15"))))
+
+(custom-theme-set-faces
+ 'user
+ '(default ((t (:font "Anonymous Pro 15"))))
+ '(variable-pitch ((t (:family "CMU Serif" :height 1.2 :weight normal)))))
 
 (load (expand-file-name "lisp/init-straight.el" user-emacs-directory))
 
