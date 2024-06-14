@@ -189,7 +189,8 @@ Always move cursor to help window.
       (set-face-attribute 'font-lock-preprocessor-face  nil :foreground "green"))
 
     (when (or (eq niva/theme 'default) (eq niva/theme 'doom-tomorrow-day) (eq niva/theme 'doom-tomorrow-night))
-      (set-face-attribute 'org-block                   nil :background "#FBFBFB")
+      (unless (eq niva/theme 'doom-tomorrow-night)
+        (set-face-attribute 'org-block                   nil :background "#FBFBFB"))
       (set-face-attribute 'org-block-begin-line        nil :foreground (face-attribute 'org-meta-line :foreground) :background (face-attribute 'org-block :background) :overline t :underline nil :extend t)
       (set-face-attribute 'org-block-end-line          nil :foreground (face-attribute 'org-meta-line :foreground) :background (face-attribute 'org-block :background) :overline nil :underline t :extend t)
       (set-face-attribute 'font-lock-number-face       nil :foreground 'unspecified :inherit 'font-lock-builtin-face)
