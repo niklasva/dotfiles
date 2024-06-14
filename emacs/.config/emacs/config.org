@@ -544,7 +544,8 @@ Always move cursor to help window.
   "tsfll" '(niva/prompt-treesit-level        :which-key "niva/prompt-treesit-level")
 
 
-  "frip"   '((lambda () (interactive) (consult-ripgrep (concat (consult--project-root) (consult--prompt :prompt "Search path: ")))) :which-key "consult-ripgrep")
+  "early" '((lambda () (interactive) (find-file "~/.config/emacs/early-init.el"))                   :which-key "Open early init")
+  "frip"  '((lambda () (interactive) (consult-ripgrep (concat (consult--project-root) (consult--prompt :prompt "Search path: ")))) :which-key "consult-ripgrep")
   "time"  '((lambda () (interactive) (message (format-time-string "%a %d %b %H:%M v%W")))           :which-key "Display current time")
   "conf"  '((lambda () (interactive) (find-file "~/.config/emacs/config.org"))                      :which-key "Open config.org")
   "vconf" '((lambda () (interactive) (split-window-right) (find-file "~/.config/emacs/config.org")) :which-key "Open config.org")
