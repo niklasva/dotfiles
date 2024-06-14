@@ -292,15 +292,6 @@ Always move cursor to help window.
 ;; (add-hook 'prog-mode-hook 'niva/remove-font-weight)
 #+end_src
 
-** Ligatures
-#+begin_src emacs-lisp
-(use-package ligature
-  :straight t
-  :config
-  (global-ligature-mode t)
-  (ligature-set-ligatures 'prog-mode '("==" "!=" "<-" "<--" "->" "-->")))
-#+end_src
-
 ** Olivetti
 #+begin_src emacs-lisp
 (use-package olivetti :straight t :defer t :config (setq olivetti-style 'fancy))
