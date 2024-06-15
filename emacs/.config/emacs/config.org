@@ -222,31 +222,7 @@ Always move cursor to help window.
 (niva/update-theme-faces)
 #+end_src
 
-** Mode line
-*** Mode line format
-#+begin_src emacs-lisp
-(setq evil-mode-line-format nil)
-(setq minibuffer-prompt-properties '(read-only t intangible t cursor-intangible t face minibuffer-prompt))
-(setq-default niva/custom-mode-line
-              '("%e" mode-line-front-space
-                (:propertize
-                 ("" mode-line-mule-info mode-line-client mode-line-modified
-                  mode-line-remote mode-line-window-dedicated)
-                 display (min-width (6.0)))
-                mode-line-frame-identification
-                "%12b" ;; Remove font weight from buffer name
-                " "
-                mode-line-position (project-mode-line project-mode-line-format)
-                (vc-mode vc-mode) "  " mode-line-modes mode-line-misc-info
-                mode-line-end-spaces))
-
-(defun niva/change-mode-line ()
-  (interactive)
-  (setq mode-line-format niva/custom-mode-line))
-(setq inhibit-compacting-font-caches t)
-#+end_src
-
-*** Display time
+** Display time
 #+begin_src emacs-lisp
 (setq display-time-format " %H:%M ")
 (setq display-time-interval 60)
