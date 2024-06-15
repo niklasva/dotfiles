@@ -303,7 +303,8 @@ Always move cursor to help window.
         evil-want-C-u-scroll t
         evil-undo-system 'undo-fu
         evil-scroll-count 8
-        evil-respect-visual-line-mode t)
+        evil-respect-visual-line-mode t
+        evil-mode-line-format nil)
   (evil-mode))
 
 (with-eval-after-load 'evil-maps (define-key evil-motion-state-map (kbd "RET") nil))
