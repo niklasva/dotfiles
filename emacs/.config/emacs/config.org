@@ -442,7 +442,6 @@ Always move cursor to help window.
 #+end_src
 
 ** which-key
-
 #+begin_src emacs-lisp
 (use-package which-key
   :straight t
