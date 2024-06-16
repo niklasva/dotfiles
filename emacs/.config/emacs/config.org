@@ -373,8 +373,6 @@ Always move cursor to help window.
 
 #+begin_src emacs-lisp
 (global-set-key                   (kbd "€")       (kbd "$"))
-(global-set-key                   (kbd "<f13>")   'evil-invert-char)
-(define-key evil-visual-state-map (kbd "C-c C-e") 'comment-line)
 
 (define-key evil-normal-state-map (kbd "C-x k")   'kill-this-buffer)
 (define-key evil-normal-state-map (kbd "C-x K")   'kill-buffer)
