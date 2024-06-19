@@ -374,7 +374,7 @@ Always move cursor to help window.
 #+begin_src emacs-lisp
 (global-set-key                   (kbd "€")       (kbd "$"))
 
-(define-key evil-normal-state-map (kbd "C-x k")   'kill-this-buffer)
+(define-key evil-normal-state-map (kbd "C-x k")   'kill-current-buffer)
 (define-key evil-normal-state-map (kbd "C-x K")   'kill-buffer)
 (define-key evil-normal-state-map (kbd "C-w C-x") 'delete-window)
 (define-key evil-normal-state-map (kbd "s-e")     'eshell)
