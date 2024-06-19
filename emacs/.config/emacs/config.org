@@ -1030,6 +1030,11 @@ focus, and only once."
   (add-hook 'prog-mode-hook 'flymake-mode)
   (add-hook 'text-mode-hook 'flymake-mode))
 
+(use-package flymake-cursor
+  :straight t
+  :config
+  (setq-default flymake-cursor-number-of-errors-to-display 3))
+
 (set-face-attribute 'error nil               :weight 'unspecified)
 (set-face-attribute 'compilation-error nil   :weight 'unspecified :background nil)
 (set-face-attribute 'compilation-warning nil :weight 'unspecified :background nil)
