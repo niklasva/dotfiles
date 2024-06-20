@@ -24,10 +24,6 @@
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 #+end_src
 
-#+begin_src emacs-lisp
-(require 'time-since)
-#+end_src
-
 ** Private config
 #+begin_src emacs-lisp
 (defvar import-file (expand-file-name "private/config.el" user-emacs-directory))
