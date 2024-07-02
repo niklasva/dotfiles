@@ -2046,8 +2046,8 @@ Use org mode in scratch buffer
   :config
   (setq hl-paragraph-highlight-entire-line t)
   (set-face-attribute 'hl-paragraph-face nil
-                      ;; :inherit    'org-block
-                      :inverse-video t
+                      :inherit    'region
+                      :inverse-video nil
                       :foreground 'unspecified
                       ))
 #+end_src
