@@ -1655,7 +1655,7 @@ Use org mode in scratch buffer
 (setq-default browse-url-browser-function 'eww-browse-url
               shr-use-fonts nil
               shr-use-colors t
-              eww-search-prefix "https://frogfind.com/?q=")
+              eww-search-prefix "https://duckduckgo.com/?q=")
 
 (dolist (face '(;; shr-h1
                 ;; shr-text
