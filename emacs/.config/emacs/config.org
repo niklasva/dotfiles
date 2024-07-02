@@ -875,7 +875,8 @@ focus, and only once."
 
 *** Mode extension
 #+begin_src emacs-lisp
-(dolist (pair '(("\\.tpp\\'" . c++-mode)))
+(dolist (pair '(("\\.tpp\\'" . c++-mode)
+                ("\\.kts\\'" . java-mode)))
   (push pair auto-mode-alist))
 #+end_src
 
