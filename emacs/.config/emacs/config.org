@@ -461,7 +461,7 @@ Always move cursor to help window.
   :straight t
   :diminish
   :config
-  (setq which-key-popup-type 'minibuffer)
+  (setq-default which-key-popup-type 'side-window)
   (which-key-mode))
 
 (nvmap :keymaps 'override :prefix "SPC"
