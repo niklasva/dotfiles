@@ -40,47 +40,34 @@
       elfeed-search-face-alist-4 '((unread elfeed-search-date-face)))
 
 (defun niva/elfeed-search-print-entry (entry)
-  (let* ((feed (elfeed-entry-feed entry))
-         (feed-title (when feed (or (elfeed-meta feed :title) (elfeed-feed-title feed))))
-         (star (if (member "star" (mapcar #'symbol-name (elfeed-entry-tags entry))) "s" " "))
-         (tags (delete "unread" (delete "star" (mapcar #'symbol-name (elfeed-entry-tags entry)))))
-         (tags-str "%-12s ")
-         (date (format "%-12s " (relative-date  (elfeed-entry-date entry))))
-         (title (or (elfeed-meta entry :title) (elfeed-entry-title entry) ""))
-         (title-faces      (elfeed-search--faces-1 (elfeed-entry-tags entry)))
-         (feed-title-faces (elfeed-search--faces-2 (elfeed-entry-tags entry)))
-         (feed-tag-faces   (elfeed-search--faces-3 (elfeed-entry-tags entry)))
-         (feed-date-faces  (elfeed-search--faces-4 (elfeed-entry-tags entry)))
-         (formatted-date (propertize (format "%s" date) 'face feed-date-faces))
-         (formatted-tags (propertize (format tags-str (mapconcat 'identity tags " ")) 'face feed-tag-faces))
+  (let* ((feed                 (elfeed-entry-feed entry))
+         (feed-title           (when feed (or (elfeed-meta feed :title) (elfeed-feed-title feed))))
+         (star                 (if (member "star" (mapcar #'symbol-name (elfeed-entry-tags entry))) "s" " "))
+         (tags                 (delete "unread" (delete "star" (mapcar #'symbol-name (elfeed-entry-tags entry)))))
+         (date                 (format "%-12s " (relative-date  (elfeed-entry-date entry))))
+         (title                (or (elfeed-meta entry :title) (elfeed-entry-title entry) ""))
+         (title-faces          (elfeed-search--faces-1 (elfeed-entry-tags entry)))
+         (feed-title-faces     (elfeed-search--faces-2 (elfeed-entry-tags entry)))
+         (feed-tag-faces       (elfeed-search--faces-3 (elfeed-entry-tags entry)))
+         (feed-date-faces      (elfeed-search--faces-4 (elfeed-entry-tags entry)))
+         (formatted-date       (propertize (format "%s" date) 'face feed-date-faces))
+         (formatted-tags       (propertize (mapconcat 'identity tags " ") 'face feed-tag-faces))
          (formatted-feed-title (propertize feed-title 'face feed-title-faces))
-         (title-width-wide (- (window-width) (string-width formatted-date) (string-width formatted-tags) 25))
-         (title-width (- (window-width) (string-width formatted-date)))
+         (title-width-wide     (- (window-width) (string-width formatted-date) (string-width formatted-tags) 25))
+         (title-width          (- (window-width) (string-width formatted-date)))
          (formatted-title-wide (propertize (elfeed-format-column title title-width-wide :left) 'face title-faces))
-         (formatted-title (propertize (elfeed-format-column title title-width :left) 'face title-faces))
-         (end-of-window (format (format "%%%ds" (- (window-width) (string-width formatted-feed-title) (string-width formatted-tags))) "")))
+         (formatted-title      (propertize (elfeed-format-column title (- (window-width) 20) :left) 'face title-faces))
+         (end-of-window        (format (format "%%%ds" (- (window-width) (string-width formatted-feed-title) (string-width formatted-tags) (string-width formatted-date))) "")))
 
-    (if (< widest-feed-title (string-width formatted-feed-title))
-        (setq widest-feed-title (string-width formatted-feed-title)))
-    (setq feed-padding (format "%%-%ds " widest-feed-title))
-
-    (if (> (window-width) 110)
-        (mapc #'insert (list
-                        formatted-date
-                        (niva/fixed-length formatted-feed-title 25)
-                        formatted-tags
-                        formatted-title-wide
-                        " "
-                        ))
       (mapc #'insert (list
                       formatted-date
                       formatted-feed-title
                       end-of-window
                       formatted-tags
+                    "             "
                       formatted-title
-                      " "
-                      )))))
-
+                    "    "
+                    ))))
 
 (setq elfeed-search-print-entry-function #'niva/elfeed-search-print-entry)
 
