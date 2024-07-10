@@ -34,10 +34,11 @@
                   append faces)
          (list 'elfeed-search-title-face)))
 
-(setq elfeed-search-face-alist-4
-      '((unread elfeed-search-date-face)))
+(setq elfeed-search-face-alist-1 '((unread elfeed-search-unread-title-face))
+      elfeed-search-face-alist-2 '((unread elfeed-search-feed-face))
+      elfeed-search-face-alist-3 '((unread elfeed-search-tag-face))
+      elfeed-search-face-alist-4 '((unread elfeed-search-date-face)))
 
-(setq widest-feed-title 0)
 (defun niva/elfeed-search-print-entry (entry)
   (let* ((feed (elfeed-entry-feed entry))
          (feed-title (when feed (or (elfeed-meta feed :title) (elfeed-feed-title feed))))
