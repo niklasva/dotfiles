@@ -3,44 +3,32 @@
 ;;; Code:
 
 (defun niva/fixed-length (input-string length)
-  "Ensure that INPUT-STRING is exactly LENGTH characters long, padding with spaces if necessary."
   (let ((len (length input-string)))
     (if (>= len length)
         (substring input-string 0 length)
       (concat input-string (make-string (- length len) ? )))))
 
 (defun elfeed-search--faces-1 (tags)
-  "Return all the faces that apply to an entry with TAGS."
   (nconc (cl-loop for (tag . faces) in elfeed-search-face-alist-1
                   when (memq tag tags)
                   append faces)
          (list 'elfeed-search-title-face)))
 
-(setq elfeed-search-face-alist-1
-      '((unread elfeed-search-unread-title-face)))
 
 (defun elfeed-search--faces-2 (tags)
-  "Return all the faces that apply to an entry with TAGS."
   (nconc (cl-loop for (tag . faces) in elfeed-search-face-alist-2
                   when (memq tag tags)
                   append faces)
          (list 'elfeed-search-title-face)))
 
-(setq elfeed-search-face-alist-2
-      '((unread elfeed-search-feed-face)))
 
 (defun elfeed-search--faces-3 (tags)
-  "Return all the faces that apply to an entry with TAGS."
   (nconc (cl-loop for (tag . faces) in elfeed-search-face-alist-3
                   when (memq tag tags)
                   append faces)
          (list 'elfeed-search-title-face)))
 
-(setq elfeed-search-face-alist-3
-      '((unread elfeed-search-tag-face)))
-
 (defun elfeed-search--faces-4 (tags)
-  "Return all the faces that apply to an entry with TAGS."
   (nconc (cl-loop for (tag . faces) in elfeed-search-face-alist-4
                   when (memq tag tags)
                   append faces)
