@@ -483,6 +483,7 @@ Always move cursor to help window.
   "f f"   '(find-file                        :which-key "find-file")
   "f m"   '(consult-flymake                  :which-key "consult-flymake")
   "h p"   '(ff-get-other-file                :which-key "ff-get-other-file")
+  "h g"   '(niva/insert-guards               :which-key "niva/insert-guards")
   "h h"   '(consult-history                  :which-key "consult-history")
   "i m"   '(consult-imenu-multi              :which-key "consult-imenu")
   "L n"   '(global-display-line-numbers-mode :which-key "global-display-line-numbers-mode")
