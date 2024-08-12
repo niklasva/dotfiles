@@ -230,16 +230,18 @@ Always move cursor to help window.
   :init
   (setq treesit-font-lock-level 4)
   :custom-face
-  (font-lock-keyword-face ((t (:foreground unspecified))))
-  (font-lock-operator-face ((t (:foreground unspecified))))
-  (font-lock-type-face ((t (:foreground unspecified))))
+  (font-lock-keyword-face       ((t (:foreground unspecified))))
+  (font-lock-operator-face      ((t (:foreground unspecified))))
+  (font-lock-type-face          ((t (:inherit 'font-lock-preprocessor-face))))
   (font-lock-variable-name-face ((t (:foreground unspecified))))
-  (font-lock-constant-face ((t (:foreground unspecified))))
-  (font-lock-number-face ((t (:foreground unspecified))))
-  (font-lock-doc-face ((t (:foreground unspecified :inherit 'font-lock-comment-face))))
-  (font-lock-preprocessor-face ((t (:foreground unspecified))))
-  (font-lock-bracket-face ((t (:foreground unspecified))))
-  (font-lock-builtin-face ((t (:foreground unspecified)))))
+  (font-lock-constant-face      ((t (:foreground unspecified))))
+  (highlight                    ((t (:foreground "blue"))))
+  (vertico-mouse                ((t (:inherit 'highlight))))
+  (font-lock-bracket-face       ((t (:foreground unspecified))))
+  (font-lock-comment-face       ((t (:family unspecified))))
+  ;; (font-lock-function-name-face ((t (:foreground unspecified))))
+  (eglot-inlay-hint-face        ((t (:inherit 'font-lock-comment-face :family unspecified :height 0.8))))
+  (eglot-highlight-symbol-face  ((t (:inherit unspecified :underline '(:style wave))))))
 #+end_src
 
 ** Display time
