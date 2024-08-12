@@ -1757,7 +1757,7 @@ Use org mode in scratch buffer
   :after elfeed
   :config
   (setq elfeed-use-curl t
-        elfeed-sort-order 'ascending
+        elfeed-sort-order 'descending
         elfeed-protocol-enabled-protocols '(fever)
         elfeed-protocol-fever-update-unread-only nil
         elfeed-protocol-fever-maxsize 120
