@@ -967,7 +967,15 @@ focus, and only once."
                                          "--log=error"
                                          "--function-arg-placeholders")))
 
-  (add-to-list 'eglot-server-programs '((python-mode python-ts-mode) "basedpyright-langserver" "--stdio")))
+  (add-to-list 'eglot-server-programs '((python-mode python-ts-mode)
+                                        "basedpyright-langserver"
+                                        "--stdio"))
+
+  (add-to-list 'eglot-ignored-server-capabilities
+               :documentHighlightProvider)
+  (add-to-list 'eglot-ignored-server-capabilities
+               :textDocument/hover))
+
 (setq-default eglot-workspace-configuration `((:basedpyright . (:typeCheckingMode "basic"))))
 
 (dolist (hook '(c-mode-hook c++-mode-hook c-ts-mode-hook c++-ts-mode-hook python-mode-hook python-ts-mode-hook))
