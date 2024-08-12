@@ -451,6 +451,7 @@ Always move cursor to help window.
 #+end_src
 
 **** Project
+Don't prompt project switch action
 #+begin_src emacs-lisp
 (setq project-switch-commands 'project-find-file)
 #+end_src
