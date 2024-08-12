@@ -1507,7 +1507,7 @@ focus, and only once."
   :config
   (setq org-hide-emphasis-markers t
         org-fontify-quote-and-verse-blocks t
-        org-ellipsis " "
+        org-ellipsis " .."
         org-use-sub-superscripts nil)
   (set-face-attribute 'org-ellipsis nil :foreground 'unspecified :underline 'unspecified))
 #+end_src
