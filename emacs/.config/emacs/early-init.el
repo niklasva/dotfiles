@@ -21,8 +21,9 @@
 
 (load (expand-file-name "lisp/init-straight.el" user-emacs-directory))
 
-(setq frame-resize-pixelwise t
+(setq-default frame-resize-pixelwise t
       frame-title-format ""
+              window-resize-pixelwise t
       ns-antialias-text t
       ns-use-native-fullscreen t
       ns-use-proxy-icon nil
