@@ -977,17 +977,6 @@ focus, and only once."
 (advice-add 'eglot--mode-line-format :override (lambda () ""))
 
 (with-eval-after-load 'eglot
-  (set-face-attribute 'eglot-inlay-hint-face nil
-                      :foreground (face-attribute 'shadow :foreground)
-                      :italic t
-                      :font (face-attribute 'default :font)
-                      :height 0.85
-                      :underline 'unspecified
-                      :weight 'unspecified)
-
-
-  (set-face-attribute 'eglot-highlight-symbol-face nil :underline t :weight 'regular)
-
   (add-hook 'eglot-managed-mode-hook
             (lambda ()
               (setq eldoc-documentation-functions
