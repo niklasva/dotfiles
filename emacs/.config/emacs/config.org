@@ -1032,10 +1032,9 @@ focus, and only once."
 
 #+begin_src emacs-lisp
 (use-package eglot-booster
-  :straight (eglot-booster :type git :host github :repo "jdtsmith/eglot-booster")
   :after eglot
-  :config
-  (eglot-booster-mode))
+  :straight (eglot-booster :type git :host github :repo "jdtsmith/eglot-booster")
+  :config (eglot-booster-mode))
 #+end_src
 
 ** Flymake
