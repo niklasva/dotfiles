@@ -940,10 +940,10 @@ focus, and only once."
   :diminish
   :defer t
   :config
-  (setq eldoc-idle-delay 0.2
+  (setq-default eldoc-idle-delay 0.05
         eldoc-echo-area-use-multiline-p t
-        eldoc-echo-area-prefer-doc-buffer t)
-  (setq eldoc-documentation-strategy #'eldoc-documentation-compose-eagerly)
+                eldoc-echo-area-prefer-doc-buffer t
+                eldoc-documentation-strategy #'eldoc-documentation-compose-eagerly)
 
 
   (diminish 'eldoc-mode))
