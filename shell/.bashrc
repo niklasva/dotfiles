@@ -73,33 +73,5 @@ N_JOBS='`[ \j -gt 0 ] && echo " (\j)"`'
 export PROMPT_DIRTRIM=2
 export PS1="$C_BLUE\u$C_DEF@\h$C_RED:$C_GREEN\w $C_RED\$$C_DEF$C_PURPLE$N_JOBS$C_DEF "
 
-nas()
-{
-	NAS_MAC="c8:60:00:02:30:26"
-	if [ "$1" == "off" ]; then
-		ssh -t nas sudo shutdown -p now
-		waituntil off nas && echo "System is down."
-	elif [ "$1" == "on" ]; then
-		wakeonlan $NAS_MAC
-		waituntil on nas && echo "System is on."
-	else
-		ssh -o ConnectTimeout=180 nas
-	fi
-}
+[ "$TERM" == "xterm-256color" ] && [ -z "$TMUX" ] && { tmux attach || exec tmux new-session && exit; }
 
-waituntil()
-{
-	STATUS=-255
-	REQUESTED_STATUS=-1
-	if [ "$1" == "off" ]; then
-		REQUESTED_STATUS=2
-	else
-		REQUESTED_STATUS=0
-	fi
-
-	while [ $STATUS -ne $REQUESTED_STATUS ]; do
-		sleep 5 && ping -c 1 -t 1 $2 > /dev/null
-		STATUS=$?
-	done
-	return 0
-}
