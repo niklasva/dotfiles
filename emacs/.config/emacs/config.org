@@ -996,7 +996,6 @@ focus, and only once."
 (dolist (hook '(c-mode-hook c++-mode-hook c-ts-mode-hook c++-ts-mode-hook python-mode-hook python-ts-mode-hook))
   (add-hook hook 'eglot-ensure))
 
-(add-hook 'eglot-managed-mode-hook #'eglot-inlay-hints-mode)
 (advice-add 'eglot--mode-line-format :override (lambda () ""))
 
 (with-eval-after-load 'eglot
