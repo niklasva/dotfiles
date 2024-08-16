@@ -2066,7 +2066,6 @@ Use org mode in scratch buffer
   :config
 
   (setq ollama-backend (gptel-make-ollama "ollama" :host "localhost:11434" :stream t :models '("llama3:latest" "deepseek-coder:6.7b-instruct")))
-  ;; (setq openai-backend (gptel-make-openai "ChatGPT" :key 'gptel-api-key :stream t :models '("gpt-4o-mini" "gpt-4o" "gpt-3.5-turbo")))
 
   (setq-default gptel-default-mode #'org-mode
                 gptel-max-tokens 4096
@@ -2074,8 +2073,6 @@ Use org mode in scratch buffer
                 gptel-stream t
                 gptel-use-header-line nil
                 gptel-model "gpt-4o-mini"))
-
-
 
   (with-eval-after-load 'gptel
     (evil-define-key 'normal gptel-mode-map (kbd "q") 'switch-to-prev-buffer)
