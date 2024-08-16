@@ -39,6 +39,7 @@
               completion-cycle-threshold 3)
 
 (global-display-line-numbers-mode -1)
+(setq-default display-line-numbers-width 4)
 (setq confirm-kill-emacs 'y-or-n-p)
 (setq ring-bell-function 'ignore)
 (add-hook 'window-setup-hook 'delete-other-windows)
