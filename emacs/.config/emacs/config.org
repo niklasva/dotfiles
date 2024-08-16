@@ -123,6 +123,16 @@
 (save-place-mode +1)
 #+end_src
 
+** Indent guide
+#+begin_src emacs-lisp
+(use-package indent-guide
+  :straight t
+  :config
+  (set-face-attribute 'indent-guide-face nil :foreground 'unspecified :inherit 'font-lock-comment-face)
+  (setq indent-guide-char ">")
+  (indent-guide-global-mode 1))
+#+end_src
+
 * Customization
 ** Colors
 #+begin_src emacs-lisp
@@ -2135,13 +2145,6 @@ Use org mode in scratch buffer
 #+end_src
 
 #+begin_src emacs-lisp
-#+begin_src emacs-lisp
-(use-package indent-guide
-  :straight t
-  :config
-  (set-face-attribute 'indent-guide-face nil :inherit 'font-lock-comment-face)
-  (setq indent-guide-char ">")
-  (indent-guide-global-mode 0))
 #+end_src
 
 #+begin_src emacs-lisp
