@@ -1495,12 +1495,6 @@ focus, and only once."
 #+begin_src emacs-lisp
 (dolist (face '(org-level-1 org-level-2 org-level-3 org-level-4 org-level-5
                             org-level-6 org-level-7 org-level-8 org-ellipsis)))
-
-(add-hook 'org-mode-hook (lambda ()
-                           (unless (equal (buffer-name) "*ask*")
-                             (setq-local olivetti-style 'fancy)
-                             (setq-local olivetti-body-width 130)
-                             (olivetti-mode +1))))
 #+end_src
 
 ** org
