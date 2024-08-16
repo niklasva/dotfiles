@@ -41,7 +41,6 @@
 (use-package cloud-theme           :straight t :defer t)
 (use-package color-theme-modern    :straight t :defer t)
 (use-package colorless-themes      :straight t :defer t)
-(use-package github-theme          :straight t :defer t)
 (use-package goose-theme           :straight t :defer t)
 (use-package grandshell-theme      :straight t :defer t)
 (use-package hemisu-theme          :straight t :defer t)
