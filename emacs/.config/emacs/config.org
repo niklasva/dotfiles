@@ -1058,13 +1058,12 @@ focus, and only once."
   :config
   (setq-default flymake-cursor-number-of-errors-to-display 3))
 
-(set-face-attribute 'error nil               :weight 'unspecified)
 (set-face-attribute 'compilation-error nil   :weight 'unspecified :background nil)
 (set-face-attribute 'compilation-warning nil :weight 'unspecified :background nil)
-(set-face-attribute 'warning nil             :weight 'unspecified :foreground 'unspecified :underline '(:color "orange" :style wave))
-(set-face-attribute 'error nil               :weight 'unspecified :foreground 'unspecified :underline '(:color "red" :style wave))
-(set-face-attribute 'flymake-warning nil     :weight 'unspecified :underline '(:color "orange" :style wave))
-(set-face-attribute 'flymake-error nil       :weight 'unspecified :underline '(:color "red" :style wave))
+;; (set-face-attribute 'warning nil             :weight 'unspecified :foreground 'unspecified :underline '(:color "orange" :style wave))
+;; (set-face-attribute 'error nil               :weight 'unspecified :foreground 'unspecified :underline '(:color "red" :style wave))
+(set-face-attribute 'flymake-warning nil     :weight 'unspecified :underline  '(:color "orange" :style wave))
+(set-face-attribute 'flymake-error nil       :weight 'unspecified :underline  '(:color "red" :style wave))
 (set-face-attribute 'compilation-info nil    :inherit nil :foreground "green" :weight 'unspecified)
 
 (set-face-attribute 'warning nil             :weight 'unspecified :foreground "orange")
@@ -1074,7 +1073,7 @@ focus, and only once."
 (set-face-attribute 'error nil               :weight 'normal :background 'unspecified :foreground (face-attribute 'ansi-color-red :foreground))
 (set-face-attribute 'compilation-error nil   :weight 'unspecified)
 (set-face-attribute 'compilation-warning nil :weight 'unspecified)
-(set-face-attribute 'warning nil             :weight 'normal :background 'unspecified :foreground (face-attribute 'ansi-color-yellow :foreground))
+;; (set-face-attribute 'warning nil             :weight 'normal :background 'unspecified :foreground (face-attribute 'ansi-color-yellow :foreground))
 #+end_src
 
 #+begin_src emacs-lisp
