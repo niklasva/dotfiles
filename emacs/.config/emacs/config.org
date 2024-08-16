@@ -1326,6 +1326,7 @@ focus, and only once."
         eshell-error-if-no-glob t
         eshell-glob-case-insensitive t
         eshell-hist-ignoredups t
+        eshell-history-size 65535
         eshell-input-filter (lambda (input) (not (string-match-p "\\`\\s-+" input)))
         eshell-kill-processes-on-exit t
         eshell-scroll-to-bottom-on-input 'all
