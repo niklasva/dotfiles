@@ -66,9 +66,9 @@
                                 "")))
 
     (dolist (elem (list formatted-date
-                      formatted-feed-title
-                      end-of-window
-                      formatted-tags
+                        formatted-feed-title
+                        end-of-window
+                        formatted-tags
                         (propertize "             " 'face '(:underline (:color "#4c4e4e")))
                         (propertize formatted-title 'face (list :inherit (elfeed-search--faces-1 (elfeed-entry-tags entry)) :underline '(:color "#4c4e4e")))
                         (propertize "       " 'face '(:underline (:color "#4c4e4e")))))
