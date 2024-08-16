@@ -1339,7 +1339,7 @@ focus, and only once."
         eshell-history-size 65535
         eshell-input-filter (lambda (input) (not (string-match-p "\\`\\s-+" input)))
         eshell-kill-processes-on-exit t
-        eshell-scroll-to-bottom-on-input 'all
+        eshell-scroll-to-bottom-on-input 'this
         eshell-scroll-to-bottom-on-output nil))
 
 (setq system-name (car (split-string system-name "\\.")))
