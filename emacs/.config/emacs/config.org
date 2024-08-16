@@ -709,6 +709,8 @@ Don't prompt project switch action
 
 (use-package cape
   :straight t
+  :custom
+  (cape-elisp-symbol-wrapper nil)
   :config
   (add-to-list 'completion-at-point-functions #'cape-dabbrev)
   (add-to-list 'completion-at-point-functions #'cape-file)
