@@ -972,6 +972,7 @@ focus, and only once."
   (setq-default eglot-events-buffer-config '(:size 0))
   (setq-default eglot-extend-to-xref t)
   (setq-default eglot-report-progress 'messages)
+  (setq-default eglot-send-changes-idle-time 5.0)
 
   (add-to-list 'eglot-server-programs '((c-mode c++-mode c++-ts-mode) .
                                         ("clangd"
