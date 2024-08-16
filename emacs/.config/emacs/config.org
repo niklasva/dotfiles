@@ -1883,6 +1883,7 @@ Use org mode in scratch buffer
                 (call-interactively #'elfeed-search-show-entry))))
 
 (add-hook 'elfeed-search-update-hook (lambda () (setq word-wrap nil)))
+;; (add-hook 'elfeed-show-mode-hook (lambda () (hl-paragraph-mode +1)))
 #+end_src
 
 *** Customization
