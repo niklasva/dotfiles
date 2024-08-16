@@ -1300,6 +1300,7 @@ focus, and only once."
 
 * Terminal
 ** eshell
+*** -
 #+begin_src emacs-lisp
 (use-package eshell
   :straight (:type built-in)
@@ -1317,12 +1318,7 @@ focus, and only once."
               (define-key eshell-mode-map      (kbd "C-u")     'eshell-kill-input)))
 
   (setq eshell-ask-to-save-history 'always
-        eshell-banner-message
-        '(format "%s %s\n"
-                 (propertize (format " %s " (string-trim (buffer-name)))
-                             'face 'mode-line-highlight)
-                 (propertize (current-time-string)
-                             'face 'font-lock-keyword-face))
+        eshell-banner-message ""
         eshell-cmpl-cycle-completions t
         eshell-cmpl-ignore-case t
         eshell-destroy-buffer-when-process-dies nil
