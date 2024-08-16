@@ -1345,7 +1345,14 @@ focus, and only once."
          (propertize (abbreviate-file-name (eshell/pwd)) 'face 'font-lock-type-face)
          (propertize " $" 'face 'font-lock-doc-face)
          (propertize " " 'face 'default))))
-         #+end_src
+
+(advice-add 'eshell/clear :override
+            (defun niva--eshell/clear (&optional scrollback)
+              (interactive)
+              (let ((inhibit-read-only t))
+                (erase-buffer)
+                (eshell-send-input))))
+#+end_src
 
 *** eshell-syntax-highlighting
 #+begin_src emacs-lisp
