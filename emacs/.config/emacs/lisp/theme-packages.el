@@ -16,7 +16,7 @@
   :custom
   (doom-themes-org-config)
   :config
-  (setq doom-themes-enable-bold                t
+  (setq doom-themes-enable-bold                nil
         doom-themes-enable-italic              t
         doom-miramare-brighter-comments        t
         doom-tomorrow-night-brighter-comments  t
