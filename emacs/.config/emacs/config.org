@@ -2056,21 +2056,19 @@ Use org mode in scratch buffer
 (use-package gptel
   :diminish gptel-mode
   :defer t
-  :straight (gptel :host github :repo "karthink/gptel")
+  :straight (gptel :host github :repo "karthink/gptel" branch "master")
   :config
 
   (setq ollama-backend (gptel-make-ollama "ollama" :host "localhost:11434" :stream t :models '("llama3:latest" "deepseek-coder:6.7b-instruct")))
-  (setq openai-backend (gptel-make-openai "ChatGPT" :key 'gptel-api-key :stream t :models '("gpt-3.5-turbo" "gpt-4-turbo")))
+  ;; (setq openai-backend (gptel-make-openai "ChatGPT" :key 'gptel-api-key :stream t :models '("gpt-4o-mini" "gpt-4o" "gpt-3.5-turbo")))
 
   (setq-default gptel-default-mode #'org-mode
                 gptel-max-tokens 4096
                 gptel-prompt-prefix-alist '((org-mode . "> "))
                 gptel-stream t
                 gptel-use-header-line nil
-                gptel-model "llama3:latest"
-                gptel-default-session "gptel")
+                gptel-model "gpt-4o-mini"))
 
-  (setq gptel-backend ollama-backend)
 
 
   (with-eval-after-load 'gptel
