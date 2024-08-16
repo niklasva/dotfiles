@@ -96,6 +96,7 @@
 ** Scrolling behavior
 #+begin_src emacs-lisp
 (setq-default maximum-scroll-margin 1
+              scroll-margin 1
               scroll-conservatively 5
               compilation-scroll-output t
               scroll-preserve-screen-position t)
