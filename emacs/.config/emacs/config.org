@@ -983,10 +983,9 @@ focus, and only once."
                                         "basedpyright-langserver"
                                         "--stdio"))
 
-  (add-to-list 'eglot-ignored-server-capabilities
-               :documentHighlightProvider)
-  (add-to-list 'eglot-ignored-server-capabilities
-               :textDocument/hover))
+  (add-to-list 'eglot-ignored-server-capabilities :inlayHintProvider)
+  (add-to-list 'eglot-ignored-server-capabilities :documentHighlightProvider)
+  (add-to-list 'eglot-ignored-server-capabilities :textDocument/hover))
 
 (setq-default eglot-workspace-configuration `((:basedpyright . (:typeCheckingMode "basic"))))
 
