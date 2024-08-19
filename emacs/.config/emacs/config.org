@@ -508,7 +508,7 @@ Don't prompt project switch action
   "f f"   '(find-file                        :which-key "find-file")
   "f m"   '(consult-flymake                  :which-key "consult-flymake")
   "h p"   '(ff-get-other-file                :which-key "ff-get-other-file")
-  "h g"   '(niva/insert-guards               :which-key "niva/insert-guards")
+  "h g"   '(niva-guards                      :which-key "niva-guards")
   "h h"   '(consult-history                  :which-key "consult-history")
   "i m"   '(consult-imenu-multi              :which-key "consult-imenu")
   "L n"   '(global-display-line-numbers-mode :which-key "global-display-line-numbers-mode")
@@ -908,6 +908,10 @@ focus, and only once."
   (push pair auto-mode-alist))
 #+end_src
 
+*** Header guards
+#+begin_src emacs-lisp
+(require 'niva-guards)
+#+end_src
 ** Python
 *** Editing
 #+begin_src emacs-lisp
