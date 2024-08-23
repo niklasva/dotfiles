@@ -2104,6 +2104,7 @@ Use org mode in scratch buffer
   :straight (:host github :repo "niklasva/hl-paragraph-mode")
   :config
   (setq hl-paragraph-highlight-entire-line t)
+  (set-face-attribute 'shr-link nil :inherit 'unspecified :foreground 'unspecified)
   (set-face-attribute 'hl-paragraph-face nil
                       :inherit    'region
                       :inverse-video nil
