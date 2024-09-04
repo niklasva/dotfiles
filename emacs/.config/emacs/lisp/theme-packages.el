@@ -4,10 +4,12 @@
   :straight (:host github :repo "ogdenwebb/emacs-kaolin-themes")
   :defer t
   :config
-  (setq kaolin-themes-bold nil
+  (setq kaolin-themes-bold t
         kaolin-themes-comments-style 'contrast
         kaolin-themes-italic t
+        kaolin-themes-italic-comments t
         kaolin-themes-underline t
+        kaolin-themes-org-scale-headings nil
         kaolin-themes-modeline-border nil))
 
 (use-package doom-themes
