@@ -124,13 +124,14 @@
 #+end_src
 
 ** Indent guide
-#+begin_src emacs-lisp
+#+begin_src disabled
 (use-package indent-guide
   :straight t
+  :defer t
   :config
   (set-face-attribute 'indent-guide-face nil :foreground 'unspecified :inherit 'font-lock-comment-face)
   (setq indent-guide-char ">")
-  (indent-guide-global-mode 1))
+  (add-hook 'prog-mode-hook 'indent-guide-mode))
 #+end_src
 
 * Customization
