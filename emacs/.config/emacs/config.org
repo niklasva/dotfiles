@@ -1226,9 +1226,10 @@ focus, and only once."
 (use-package diff-hl
   :straight t
   :config
-  (set-face-attribute 'diff-hl-change nil :background 'unspecified :foreground "blue3")
-  (set-face-attribute 'diff-hl-insert nil :background 'unspecified :foreground "green3")
-  (set-face-attribute 'diff-hl-delete nil :background 'unspecified :foreground "red3")
+  (add-hook 'prog-mode-hook (lambda ()
+                              (set-face-attribute 'diff-hl-change nil :background 'unspecified :foreground "blue3")
+                              (set-face-attribute 'diff-hl-insert nil :background 'unspecified :foreground "green3")
+                              (set-face-attribute 'diff-hl-delete nil :background 'unspecified :foreground "red3")))
   (global-diff-hl-mode))
 #+end_src
 
