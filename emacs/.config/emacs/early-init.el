@@ -12,22 +12,21 @@
                     '(tool-bar-lines          . 0)
                     '(ns-transparent-titlebar . t)
                     '(ns-appearance           . light)
-                    '(font                    . "Anonymous Pro 15"))))
+                    '(font                    . "Anonymous Pro 16"))))
 
-(custom-theme-set-faces
- 'user
- '(default ((t (:font "Anonymous Pro 15"))))
- '(variable-pitch ((t (:family "CMU Serif" :height 1.2 :weight normal)))))
+(custom-theme-set-faces 'user '(default ((t (:font "Inconsolata 14" :height unspecified :weight regular)))))
+(custom-theme-set-faces 'user '(shr-text ((t (:inherit default)))))
+(custom-theme-set-faces 'user '(variable-pitch ((t (:font unspecified)))))
 
 (load (expand-file-name "lisp/init-straight.el" user-emacs-directory))
 
 (setq-default frame-resize-pixelwise t
-      frame-title-format ""
+              frame-title-format ""
               window-resize-pixelwise t
-      ns-antialias-text t
-      ns-use-native-fullscreen t
-      ns-use-proxy-icon nil
-      ns-use-thin-smoothing t)
+              ns-antialias-text t
+              ns-use-native-fullscreen t
+              ns-use-proxy-icon nil
+              ns-use-thin-smoothing t)
 
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
