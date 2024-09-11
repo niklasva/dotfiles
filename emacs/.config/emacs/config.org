@@ -1664,6 +1664,7 @@ Use org mode in scratch buffer
   (setq shr-use-fonts nil)
   (setq shr-max-width nil)
   (setq shr-fill-text nil)
+  (setq shr-use-colors nil)
 
   (defun niva/create-image-content (spec size content-type flags)
     (let ((data (if (consp spec)
