@@ -1253,6 +1253,7 @@ focus, and only once."
 (use-package markdown-mode
   :straight t
   :config
+  (setq markdown-list-item-bullets '(""))
   (set-face-attribute 'markdown-code-face nil :background 'unspecified)
   (set-face-attribute 'markdown-line-break-face nil :underline 'unspecified)
   (setq markdown-hr-display-char nil))
