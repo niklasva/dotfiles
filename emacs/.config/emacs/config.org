@@ -1611,7 +1611,8 @@ Use org mode in scratch buffer
   :config
   (when (fboundp 'niva/setup-org-roam)
     (niva/setup-org-roam))
-  (org-roam-db-autosync-enable))
+  (org-roam-db-autosync-enable)
+  (global-set-key (kbd "C-c z z") 'org-roam-capture))
 
 (defun my/org-roam-open-link ()
   (interactive)
