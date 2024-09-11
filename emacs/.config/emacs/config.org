@@ -1730,6 +1730,11 @@ Use org mode in scratch buffer
               shr-use-colors t
               eww-search-prefix "https://duckduckgo.com/?q=")
 
+
+(with-eval-after-load 'eww
+  (define-key eww-mode-map (kbd "ö")     (lambda () (interactive) (evil-forward-paragraph) (forward-line 1) (evil-scroll-line-to-center nil)))
+  (define-key eww-mode-map (kbd "ä")     (lambda () (interactive) (evil-backward-paragraph 2) (forward-line 1) (evil-scroll-line-to-center nil))))
+
 (dolist (face '(;; shr-h1
                 ;; shr-text
                 ;; shr-code
