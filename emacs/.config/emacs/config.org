@@ -1836,10 +1836,11 @@ Use org mode in scratch buffer
         (condition-case nil
             (progn
               (evil-backward-paragraph 2)
-              (forward-line 1))
+              (evil-scroll-line-to-center nil))
           (beginning-of-buffer
            (message "Previous item")
-           (elfeed-show-prev)))))
+           (elfeed-show-prev)
+           (end-of-buffer)))))
 
   (defun niva/elfeed--move-paragraph-down ()
     (interactive)
@@ -1847,6 +1848,7 @@ Use org mode in scratch buffer
         (condition-case nil
             (progn
               (evil-forward-paragraph)
+              (evil-scroll-line-to-center nil)
               (forward-line 1))
           (end-of-buffer
            (message "Next item")
