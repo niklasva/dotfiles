@@ -1219,13 +1219,16 @@ focus, and only once."
 ** Version control
 *** diff-hl
 #+begin_src emacs-lisp
+(defun niva/diff-hl-fix ()
+  (interactive)
+  (set-face-attribute 'diff-hl-change nil :background 'unspecified :foreground "blue3")
+  (set-face-attribute 'diff-hl-insert nil :background 'unspecified :foreground "green3")
+  (set-face-attribute 'diff-hl-delete nil :background 'unspecified :foreground "red3"))
+
 (use-package diff-hl
   :straight t
   :config
-  (add-hook 'prog-mode-hook (lambda ()
-                              (set-face-attribute 'diff-hl-change nil :background 'unspecified :foreground "blue3")
-                              (set-face-attribute 'diff-hl-insert nil :background 'unspecified :foreground "green3")
-                              (set-face-attribute 'diff-hl-delete nil :background 'unspecified :foreground "red3")))
+  (add-hook 'prog-mode-hook 'niva/diff-hl-fix)
   (global-diff-hl-mode))
 #+end_src
 
