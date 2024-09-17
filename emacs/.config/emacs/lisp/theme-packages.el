@@ -32,8 +32,19 @@
   :config
   (setq-default acme-theme-black-fg t))
 
+(use-package catppuccin-theme
+  :straight t
+  :defer t
+  :config
+  (setq-default catppuccin-flavor 'mocha)
+  )
+
 (use-package ef-themes
   :straight (:host github :repo "protesilaos/ef-themes")
+  :defer t)
+
+(use-package os1-theme
+  :straight (:type git :host github :repo "sashimacs/os1-theme")
   :defer t)
 
 (use-package almost-mono-themes    :straight t :defer t)
