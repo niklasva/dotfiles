@@ -845,22 +845,6 @@ focus, and only once."
 (add-function :after after-focus-change-function #'my/garbage-collect-on-focus-lost)
 #+end_src
 
-** Byte-compile config on save
-#+begin_src disabled
-  (defun niva/compile-config ()
-    "Byte-compile config on save"
-    (interactive)
-    (when (and (buffer-file-name)
-               (string= (file-name-nondirectory (buffer-file-name)) "config.org"))
-      (org-babel-tangle-file
-       (expand-file-name "config.org" user-emacs-directory)
-       (expand-file-name "config.el" user-emacs-directory) "emacs-lisp")
-
-      (byte-compile-file (expand-file-name "config.el" user-emacs-directory))))
-
-  (add-hook 'after-save-hook 'niva/compile-config)
-#+end_src
-
 * Development
 ** Elisp
 *** Formatter
