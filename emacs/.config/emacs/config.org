@@ -1089,27 +1089,27 @@ focus, and only once."
 #+begin_src emacs-lisp
 (with-eval-after-load 'git-gutter-fringe
   (fringe-helper-define 'exlamation-mark nil
-    ".XXX.."
-    ".XXX.."
-    ".XXX.."
-    ".XXX.."
-    ".XXX.."
-    "..X..."
-    "......"
-    ".XXX.."
-    ".XXX.."
-    "......")
+                        ".XXX.."
+                        ".XXX.."
+                        ".XXX.."
+                        ".XXX.."
+                        ".XXX.."
+                        "..X..."
+                        "......"
+                        ".XXX.."
+                        ".XXX.."
+                        "......")
 
   (fringe-helper-define 'flymake-double-exclamation-mark nil
-    "........."
-    ".XX...XX"
-    "..XX.XX."
-    "...XXX.."
-    "....X..."
-    "...XXX.."
-    "..XX.XX."
-    ".XX...XX"
-    ".........")
+                        "........."
+                        ".XX...XX"
+                        "..XX.XX."
+                        "...XXX.."
+                        "....X..."
+                        "...XXX.."
+                        "..XX.XX."
+                        ".XX...XX"
+                        ".........")
 
   (add-hook 'flymake-mode-hook
             (lambda ()
