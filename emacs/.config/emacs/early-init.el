@@ -14,7 +14,7 @@
                     '(ns-appearance           . light)
                     '(font                    . "Anonymous Pro 16"))))
 
-(custom-theme-set-faces 'user '(default ((t (:font "Inconsolata 14" :height unspecified :weight regular)))))
+(custom-theme-set-faces 'user '(default ((t (:font "Agave Nerd Font Mono 14" :height unspecified)))))
 (custom-theme-set-faces 'user '(shr-text ((t (:inherit default)))))
 (custom-theme-set-faces 'user '(variable-pitch ((t (:font unspecified)))))
 
