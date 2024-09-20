@@ -199,7 +199,7 @@ Always move cursor to help window.
     (when (eq niva/theme 'naysayer)
       (set-face-attribute 'mode-line-inactive nil :box t)
       (set-face-attribute 'mode-line nil :box )
-      (set-face-attribute 'header-line nil :foreground 'unspecified :background 'unspecified :inherit 'mode-line-inactive)
+      (set-face-attribute 'header-line nil :foreground 'unspecified :background 'unspecified :inherit 'mode-line-inactive :box t)
       (set-face-attribute 'flymake-error-echo nil :background "black" :box t :inverse-video nil :bold t)
       (set-face-attribute 'flymake-warning-echo nil :background "black" :box t :inverse-video nil :bold t)
       (set-face-attribute 'flymake-note-echo nil :background "black" :box t :inverse-video nil :bold t)
