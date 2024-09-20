@@ -186,7 +186,7 @@ Always move cursor to help window.
 *** Load themes
 #+begin_src emacs-lisp
 (load (expand-file-name "lisp/theme-packages.el" user-emacs-directory))
-(setq-default niva/theme 'default)
+(setq-default niva/theme 'naysayer)
 (unless (eq niva/theme 'default)
   (load-theme niva/theme))
 #+end_src
@@ -196,7 +196,15 @@ Always move cursor to help window.
   (interactive)
   (ignore-errors
     (when (string-match-p "kaolin" (prin1-to-string niva/theme)) (load-theme niva/theme))
-    (when (eq niva/theme 'naysayer) (set-face-attribute 'mode-line-inactive nil :box t))
+    (when (eq niva/theme 'naysayer)
+      (set-face-attribute 'mode-line-inactive nil :box t)
+      (set-face-attribute 'mode-line nil :box )
+      (set-face-attribute 'header-line nil :foreground 'unspecified :background 'unspecified :inherit 'mode-line-inactive)
+      (set-face-attribute 'flymake-error-echo nil :background "black" :box t :inverse-video nil :bold t)
+      (set-face-attribute 'flymake-warning-echo nil :background "black" :box t :inverse-video nil :bold t)
+      (set-face-attribute 'flymake-note-echo nil :background "black" :box t :inverse-video nil :bold t)
+      (set-face-attribute 'link nil :inherit 'font-lock-comment-face)
+      (set-face-attribute 'default nil :background "#072626"))
     (when (eq niva/theme 'sitaramv-solaris)
       (set-face-attribute 'org-block                    nil :inherit 'default :background "black")
       (set-face-attribute 'org-block-begin-line         nil :background "black")
