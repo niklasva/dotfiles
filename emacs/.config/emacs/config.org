@@ -817,36 +817,20 @@ Don't prompt project switch action
 (setq warning-minimum-level :error)
 #+end_src
 
-** GCMH
+** Garbage collection
 #+begin_src emacs-lisp
-(setq garbage-collection-messages t
-      gc-cons-threshold (* 16 1024 1024 1024))
+(setq-default garbage-collection-messages t
+              gc-cons-threshold (* 16 1024 1024 1024))
 
-(defmacro my/time (&rest body)
-  `(let ((time (current-time)))
-     ,@body
-     (float-time (time-since time))))
+(defvar niva/gc-timer nil)
 
-(defun my/garbage-collect ()
-  "Garbage collect and tell the user how much time it took."
-  (message "Garbage collector ran for %.06fs"
-           (my/time (garbage-collect))))
-
-(defvar my/gc-timer nil
-  "Timer for garbage collection. See
-`my/garbage-collect-on-focus-lost'.")
-
-(defun my/garbage-collect-on-focus-lost ()
-  "Garbage collect when Emacs loses focus.
-
-Garbage collection is only triggered thirty seconds after losing
-focus, and only once."
+(defun niva/garbage-collect-on-focus-lost ()
   (if (frame-focus-state)
-      (when (timerp my/gc-timer)
-       (cancel-timer my/gc-timer))
-    (setq my/gc-timer (run-with-idle-timer 30 nil #'my/garbage-collect))))
+      (when (timerp niva/gc-timer)
+        (cancel-timer niva/gc-timer))
+    (setq my/gc-timer (run-with-idle-timer 180 nil #'garbage-collect))))
 
-(add-function :after after-focus-change-function #'my/garbage-collect-on-focus-lost)
+(add-function :after after-focus-change-function #'niva/garbage-collect-on-focus-lost)
 #+end_src
 
 * Development
