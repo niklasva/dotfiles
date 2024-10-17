@@ -658,7 +658,7 @@ Don't prompt project switch action
   :config
   (consult-customize
    consult-theme
-   :preview-key '("M-." "C-SPC" :debounce 0.2 any))
+   :preview-key '("M-." "C-SPC" :debounce 0.6 any))
   (setq consult-ripgrep-args "rg \
             --null \
             --line-buffered \
@@ -671,7 +671,12 @@ Don't prompt project switch action
             --line-number \
             --hidden \
             --follow \
-            --glob \"!.git/*\""))
+            --glob \"!.git/*\"")
+
+  (defun niva/consult-ripgrep-in-directory ()
+    (interactive)
+    (let ((directory-to-search (read-directory-name "Search in directory: " nil nil t)))
+      (consult-ripgrep (expand-file-name "." directory-to-search)))))
 #+end_src
 
 ** Marginalia
