@@ -628,10 +628,21 @@ Don't prompt project switch action
 (use-package vertico
   :straight t
   :config
-  (setq vertico-count 10
-        vertico-resize t
-        vertico-cycle t)
-  (vertico-mode))
+  (setq-default vertico-count 10
+                vertico-resize t
+                vertico-cycle t))
+
+(use-package vertico-multiform
+  :straight nil
+  :load-path "straight/repos/vertico/extensions"
+  :after vertico
+  :config
+  (setq-default vertico-sort-function #'vertico-sort-history-alpha
+                vertico-multiform-commands
+                '((consult-theme (vertico-sort-function . vertico-sort-alpha))))
+
+  (vertico-mode)
+  (vertico-multiform-mode))
 
 (use-package vertico-mouse
   :straight nil
