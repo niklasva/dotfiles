@@ -882,10 +882,15 @@ focus, and only once."
 (setq-default python-indent-offset 4)
 #+end_src
 
+*** zmq
+#+begin_src emacs-lisp
+(use-package zmq
+  :straight (zmq :host github :repo "nnicandro/emacs-zmq"))
+#+end_src
 *** jupyter
 #+begin_src emacs-lisp
 (use-package jupyter
-  :straight t
+  :straight (jupyter :type git :host github :repo "emacs-jupyter/jupyter")
   :defer t
   :bind ("C-c j p" . tempo-template-org-src-jupyter-:session-py))
 ;; Copied from nowislewis/nowisemacs
