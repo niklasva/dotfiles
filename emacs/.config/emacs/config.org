@@ -2092,12 +2092,70 @@ Use org mode in scratch buffer
 
 * Experiment
 
+**** shr-face
 #+begin_src emacs-lisp
-(setq-default tetris-use-color t
-              tetris-use-glyphs nil
-              tetris-border 4)
-(add-hook 'tetris-mode-hook (lambda ()
-                              (set-face-attribute 'gamegrid-face-*Tetris* nil :font "Monaco")))
+(use-package shr-tag-pre-highlight
+  :straight t
+  :init
+  (defun shrface-shr-tag-pre-highlight (pre)
+    "Highlighting code in PRE."
+    (let* ((shr-folding-mode 'none)
+           (shr-current-font 'default)
+           (code (with-temp-buffer
+                   (shr-generic pre)
+                   (buffer-string)))
+           (lang (or (shr-tag-pre-highlight-guess-language-attr pre)
+                     (let ((sym (language-detection-string code)))
+                       (and sym (symbol-name sym)))))
+           (mode (and lang
+                      (shr-tag-pre-highlight--get-lang-mode lang))))
+      (shr-ensure-newline)
+      (shr-ensure-newline)
+      (setq start (point))
+      (insert
+       (propertize (concat "#+begin_src " lang "\n") 'face 'org-block-begin-line)
+       (or (and (fboundp mode)
+                (with-demoted-errors "Error while fontifying: %S"
+                  (shr-tag-pre-highlight-fontify code mode)))
+           code)
+       (propertize "\n#+end_src" 'face 'org-block-end-line ))
+      (shr-ensure-newline)
+      (setq end (point))
+      (add-face-text-property start end '(:background "#1f2329" :extend t))
+      (shr-ensure-newline)
+      (insert "\n")))
+  :config
+  (add-to-list 'shr-external-rendering-functions
+               '(pre . shrface-shr-tag-pre-highlight)))
+
+(add-to-list 'shr-tag-pre-highlight-lang-modes '("console" . sh))
+(add-to-list 'shr-tag-pre-highlight-lang-modes '("groovy" . java))
+(add-to-list 'shr-tag-pre-highlight-lang-modes '("json" . js-json))
+(add-to-list 'shr-tag-pre-highlight-lang-modes '("systemd" . conf))
+
+(use-package shrface
+  :straight t
+  ;; :hook (eww-after-render . shrface-mode)
+  :config
+  (shrface-basic)
+  (shrface-trial)
+  (shrface-default-keybindings)
+  (setq shrface-href-versatile t))
+
+(add-hook 'eww-mode-hook
+          (lambda ()
+            (setq visual-fill-column-center-text nil
+                  visual-fill-column-fringes-outside-margins t
+                  visual-fill-column-extra-text-width '(-4 . 0)
+                  visual-fill-column-width 100)
+            (adaptive-wrap-prefix-mode 1)
+            (visual-fill-column-mode)))
+
+(add-hook 'eww-mode-hook
+          (lambda ()
+            (hl-line-mode +1)
+            (setq-local evil-normal-state-cursor '(hollow))
+            ))
 #+end_src
 
 * Experiment
