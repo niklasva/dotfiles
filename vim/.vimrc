@@ -33,7 +33,7 @@ set undofile
 set updatetime=300
 
 let base16colorspace=256
-colorscheme base16-3024
+" colorscheme base16-3024
 
 let mapleader = " "
 nnoremap <silent> <leader>ws        :call TrimWhitespace()<CR>
