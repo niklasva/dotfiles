@@ -955,8 +955,8 @@ focus, and only once."
   (setq-default eglot-send-changes-idle-time 5.0)
 
   (add-to-list 'eglot-server-programs '((c-mode c++-mode c++-ts-mode) .
-                                        ("clangd"
-                                         "--query-driver=/Applications/ARM/**/*"
+                                        ("/opt/homebrew/bin/clangd"
+                                         "--query-driver=/Applications/ARM/bin/arm-none-eabi-*"
                                          "--clang-tidy"
                                          "--completion-style=detailed"
                                          "--pch-storage=memory"
@@ -964,15 +964,14 @@ focus, and only once."
                                          "--background-index-priority=background"
                                          "-j=8"
                                          "--log=error"
-                                         "--function-arg-placeholders")))
+                                         "--function-arg-placeholders"
+                                         )))
 
   (add-to-list 'eglot-server-programs '((python-mode python-ts-mode)
                                         "basedpyright-langserver"
                                         "--stdio"))
 
-  (add-to-list 'eglot-ignored-server-capabilities :inlayHintProvider)
-  (add-to-list 'eglot-ignored-server-capabilities :documentHighlightProvider)
-  (add-to-list 'eglot-ignored-server-capabilities :textDocument/hover))
+  (add-to-list 'eglot-ignored-server-capabilities :inlayHintProvider))
 
 (setq-default eglot-workspace-configuration `((:basedpyright . (:typeCheckingMode "basic"))))
 
