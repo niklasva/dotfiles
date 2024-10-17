@@ -1378,46 +1378,6 @@ focus, and only once."
   :init (exec-path-from-shell-initialize))
 #+end_src
 
-** eshell-completions
-#+begin_src emacs-lisp
-(use-package fish-completion
-  :straight (fish-completion
-             :host github
-             :repo "LemonBreezes/emacs-fish-completion")
-  :config
-  (global-fish-completion-mode))
-
-(defun +eshell-fish-completion-list (raw-prompt)
-  "Return list of completion candidates for RAW-PROMPT."
-  (mapcar (lambda (e) (let ((res (split-string e "\t")))
-                        (propertize (car res) 'fish-annotation (cadr res))))
-          (split-string
-           (fish-completion--list-completions-with-desc raw-prompt)
-           "\n" t)))
-
-(defun +eshell-fish-capf ()
-  "A a capf for fish-completion."
-  (when-let ((args (ignore-errors (eshell-complete-parse-arguments)))
-             (table (+eshell-fish-completion-list (buffer-substring (cadr args) (point))))
-             ((not (file-exists-p (car table)))))
-    (list (car (last args)) (point) table
-          :exclusive 'no
-          :annotation-function #'+eshell-fish-completion-annotate)))
-
-(defun +eshell-fish-completion-annotate (cand)
-  (when-let* ((pos (or (next-single-property-change 0 'fish-annotation cand)
-                       0))
-              (ann (get-text-property pos 'fish-annotation cand)))
-    (concat (propertize " " 'display '(space :align-to center)) ann)))
-
-(defun +eshell-use-annotated-completions-h ()
-  "Use annotaed fish completions."
-  (if fish-completion-mode
-      (add-hook 'completion-at-point-functions #'+eshell-fish-capf nil t)
-    (remove-hook 'completion-at-point-functions #'+eshell-fish-capf t)))
-
-(add-hook 'fish-completion-mode-hook #'+eshell-use-annotated-completions-h)
-#+end_src
 * Compilation mode
 #+begin_src emacs-lisp
 (use-package xterm-color
