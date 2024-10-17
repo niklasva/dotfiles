@@ -2156,19 +2156,3 @@ Use org mode in scratch buffer
             (setq-local evil-normal-state-cursor '(hollow))
             ))
 #+end_src
-
-* Experiment
-#+begin_src emacs-lisp
-(defconst niva--insert-guards-base-path "/Users/niklas/dev/git/nrf52-application/src")
-
-(defun niva/insert-guards ()
-  (interactive)
-  (let* ((file-path (buffer-file-name))
-         (relative-path (file-relative-name file-path niva--insert-guards-base-path))
-         (upcased-path (upcase relative-path))
-         (guard (concat (replace-regexp-in-string "[/|.]" "_" upcased-path) "__"))
-         (guard-string (format "#ifndef %s\n#define %s" guard guard)))
-    (save-excursion
-      (goto-char (point-min))
-      (insert guard-string "\n"))))
-#+end_src
