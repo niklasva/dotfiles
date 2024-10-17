@@ -797,6 +797,19 @@ Don't prompt project switch action
 (setq create-lockfiles nil)
 #+end_src
 
+** treemacs
+#+begin_src emacs-lisp
+(use-package treemacs
+  :straight t
+  :config
+  (setq treemacs-no-png-images t
+        treemacs-file-follow-delay 0.03)
+  (set-face-attribute 'treemacs-root-face nil :height 'unspecified :weight 'unspecified)
+  (treemacs-hide-gitignored-files-mode t)
+  (global-set-key (kbd "C-c t") 'treemacs))
+(setq ns-option-modifier 'none)
+#+end_src
+
 ** Other
 #+begin_src emacs-lisp
 (global-auto-revert-mode t)
@@ -2116,8 +2129,7 @@ Use org mode in scratch buffer
   (add-hook 'org-mode-hook (lambda() (unless (equal (buffer-name) "*scratch*") (org-header-line-outline-mode)))))
 #+end_src
 
-* Misc
-** Tetris
+* Experiment
 
 #+begin_src emacs-lisp
 (setq-default tetris-use-color t
