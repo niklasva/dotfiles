@@ -698,28 +698,16 @@ Don't prompt project switch action
 ** Corfu
 #+begin_src emacs-lisp
 (use-package corfu
-  :straight (corfu :repo "minad/corfu" :branch "main" :files (:defaults "extensions/*.el"))
-  :custom
-  (corfu-cycle t)
-  (corfu-auto t)
-  (corfu-quit-no-match 'separator)
-  (corfu-preselect 'valid)
-
-  (corfu-echo-documentation t)
-  (corfu-auto-delay 0.2)
-  (corfu-auto-prefix 1)
-
+  :straight t
   :config
-  (corfu-popupinfo-mode t)
-  (global-corfu-mode t)
-  (setq corfu-popupinfo-delay '(0.3 . 0.2)))
+  (setq corfu-auto t
+        corfu-echo-documentation t
+        corfu-preselect 'prompt
+        corfu-auto-prefix 1
+        corfu-auto-delay 0.1)
+  (global-corfu-mode t))
 
-(add-hook 'eshell-mode-hook (lambda ()
-                              (setq-local corfu-auto t)
-                              (setq-local corfu-preselect 'prompt)
-                              (corfu-mode)
-                              ))
-(add-hook 'org-mode-hook (lambda () (corfu-mode)))
+(add-hook 'eshell-mode-hook (lambda () (setq-local corfu-auto t) (setq-local corfu-preselect 'prompt)))
 
 (use-package orderless
   :straight t
@@ -730,14 +718,14 @@ Don't prompt project switch action
 
 (use-package cape
   :straight t
-  :custom
-  (cape-elisp-symbol-wrapper nil)
   :config
+  (setq cape-elisp-symbol-wrapper nil
+        cape-dabbrev-min-length 4)
   (add-to-list 'completion-at-point-functions #'cape-dabbrev)
   (add-to-list 'completion-at-point-functions #'cape-file)
   (add-to-list 'completion-at-point-functions #'cape-elisp-block)
   (add-to-list 'completion-at-point-functions #'cape-elisp-symbol)
-  (add-to-list 'completion-at-point-functions #'cape-history)
+  ;; (add-to-list 'completion-at-point-functions #'cape-history)
   (add-to-list 'completion-at-point-functions #'cape-keyword))
 
 (use-package kind-icon
