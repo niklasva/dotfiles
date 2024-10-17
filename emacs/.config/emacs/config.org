@@ -871,6 +871,7 @@ focus, and only once."
 *** Header guards
 #+begin_src emacs-lisp
 (require 'niva-guards)
+(global-set-key (kbd "C-c h g") 'niva-guards)
 #+end_src
 ** Python
 *** Editing
