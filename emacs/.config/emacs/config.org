@@ -226,7 +226,22 @@ Always move cursor to help window.
 (niva/update-theme-faces)
 #+end_src
 
-** Font lock
+** Display time
+#+begin_src emacs-lisp
+(setq display-time-format " %H:%M ")
+(setq display-time-interval 60)
+(setq display-time-default-load-average nil)
+
+(setq display-time-string-forms
+      '((propertize
+         (format-time-string display-time-format now)
+         'help-echo (format-time-string "%a %b %e, %Y" now))
+        " "))
+(display-time-mode -1)
+#+end_src
+
+** Font
+*** Font lock
 #+begin_src emacs-lisp
 (use-package font-lock
   :init
@@ -250,21 +265,6 @@ Always move cursor to help window.
   (eglot-highlight-symbol-face         ((t (:inherit unspecified :underline '(:style wave))))))
 #+end_src
 
-** Display time
-#+begin_src emacs-lisp
-(setq display-time-format " %H:%M ")
-(setq display-time-interval 60)
-(setq display-time-default-load-average nil)
-
-(setq display-time-string-forms
-      '((propertize
-         (format-time-string display-time-format now)
-         'help-echo (format-time-string "%a %b %e, %Y" now))
-        " "))
-(display-time-mode -1)
-#+end_src
-
-** Font
 *** Reset
 #+begin_src emacs-lisp
 (set-face-attribute 'fixed-pitch nil :family 'unspecified)
@@ -297,13 +297,8 @@ Always move cursor to help window.
 ;; (add-hook 'prog-mode-hook 'niva/remove-font-weight)
 #+end_src
 
-** Olivetti
-#+begin_src emacs-lisp
-(use-package olivetti :straight t :defer t :config (setq olivetti-style 'fancy))
-#+end_src
-
 ** Solaire
-#+begin_src emacs-lisp
+#+begin_src disabled
 (use-package solaire-mode
   :straight t
   :config
@@ -1695,9 +1690,7 @@ Use org mode in scratch buffer
 
 ** webkit
 #+begin_src emacs-lisp
-(setq browse-url-browser-function (lambda (url session)
-                                    (other-window 1)
-                                    (xwidget-webkit-browse-url url)))
+(setq browse-url-browser-function (lambda (url session) (other-window 1) (xwidget-webkit-browse-url url)))
 #+end_src
 
 ** elfeed
