@@ -18,7 +18,9 @@
 (straight-use-package 'use-package)
 
 (use-package no-littering
- :straight t
- :init
+  :straight t
+  :init
   (setq no-littering-etc-directory "~/.cache/emacs/etc")
   (setq no-littering-var-directory "~/.cache/emacs/var"))
+
+(use-package diminish :straight t)

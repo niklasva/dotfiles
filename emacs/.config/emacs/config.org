@@ -2,12 +2,6 @@
 #+OPTIONS:  toc:2
 #+STARTUP:  overview noindent
 
-* Diminish
-#+begin_src emacs-lisp
-(use-package diminish
-  :straight t)
-#+end_src
-
 * Encryption
 ** pinentry
 #+begin_src emacs-lisp
