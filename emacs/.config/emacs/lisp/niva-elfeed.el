@@ -57,7 +57,7 @@
          (title-width-wide (- (window-width) (string-width formatted-date) (string-width formatted-tags) 25))
          (title-width (- (window-width) (string-width formatted-date)))
          (formatted-title-wide (propertize (elfeed-format-column title title-width-wide :left) 'face (elfeed-search--faces-1 (elfeed-entry-tags entry))))
-         (formatted-title (propertize (elfeed-format-column title (- (window-width) 20) :left) 'face (elfeed-search--faces-1 (elfeed-entry-tags entry))))
+         (formatted-title (propertize (elfeed-format-column title (- (window-width) 24) :left) 'face (elfeed-search--faces-1 (elfeed-entry-tags entry))))
          (end-of-window (format (format "%%%ds"
                                         (- (window-width)
                                            (string-width formatted-feed-title)
@@ -69,9 +69,9 @@
                         formatted-feed-title
                         end-of-window
                         formatted-tags
-                        (propertize "             " 'face '(:underline (:color "#4c4e4e")))
-                        (propertize formatted-title 'face (list :inherit (elfeed-search--faces-1 (elfeed-entry-tags entry)) :underline '(:color "#4c4e4e")))
-                        (propertize "       " 'face '(:underline (:color "#4c4e4e")))))
+                        (propertize "             " 'face '(:underline nil))
+                        (propertize formatted-title 'face (list :inherit (elfeed-search--faces-1 (elfeed-entry-tags entry)) :underline '(:color "red")))
+                        (propertize "       " 'face '(:underline nil))))
       (insert elem)
       )))
 
@@ -79,12 +79,13 @@
 (setq elfeed-search-print-entry-function #'niva/elfeed-search-print-entry)
 
 (with-eval-after-load 'elfeed
+  (set-face-attribute 'elfeed-search-unread-title-face nil :bold nil)
   (when (or (eq niva/theme 'default) (eq niva/theme 'naysayer))
     (set-face-attribute 'elfeed-search-date-face         nil :foreground nil :bold nil :foreground (face-attribute 'org-agenda-date :foreground))
     (set-face-attribute 'elfeed-search-feed-face         nil :foreground nil :bold nil :foreground (face-attribute 'gnus-header-from :foreground))
-    (set-face-attribute 'elfeed-search-tag-face          nil :foreground nil :bold nil :foreground (face-attribute 'gnus-header-newsgroups :foreground))
+    (set-face-attribute 'elfeed-search-tag-face          nil :foreground nil :bold nil :foreground (face-attribute 'shadow :foreground))
     (set-face-attribute 'elfeed-search-title-face        nil :foreground nil :bold nil :inherit 'shadow)
-    (set-face-attribute 'elfeed-search-unread-title-face nil :foreground nil :bold nil :foreground (face-attribute 'gnus-header-subject :foreground))))
+    (set-face-attribute 'elfeed-search-unread-title-face nil :foreground nil :bold nil :foreground (face-attribute 'default :foreground))))
 
 (provide 'niva-elfeed)
 ;;; niva-elfeed.el ends here
