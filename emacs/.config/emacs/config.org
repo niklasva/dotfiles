@@ -1446,14 +1446,11 @@ Don't prompt project switch action
 
 ** org
 #+begin_src emacs-lisp
-(use-package org
-  :straight t
-  :config
-  (setq org-hide-emphasis-markers t
-        org-fontify-quote-and-verse-blocks t
-        org-ellipsis " .."
-        org-use-sub-superscripts nil)
-  (set-face-attribute 'org-ellipsis nil :foreground 'unspecified :underline 'unspecified))
+(setq org-hide-emphasis-markers t
+      org-fontify-quote-and-verse-blocks t
+      org-ellipsis " .."
+      org-use-sub-superscripts nil)
+(set-face-attribute 'org-ellipsis nil :foreground 'unspecified :underline 'unspecified)
 #+end_src
 
 ** scratch
@@ -1486,8 +1483,8 @@ Use org mode in scratch buffer
   :config
   (setq ob-async-no-async-languages-alist '("jupyter")))
 #+end_src
-** org code blocks
 
+** org code blocks
 #+begin_src emacs-lisp
 (defun ek/babel-ansi ()
   (when-let ((beg (org-babel-where-is-src-block-result nil nil)))
@@ -1770,11 +1767,12 @@ Use org mode in scratch buffer
                 gptel-use-header-line nil
                 gptel-model "gpt-4o-mini"))
 
-  (with-eval-after-load 'gptel
-    (evil-define-key 'normal gptel-mode-map (kbd "q") 'switch-to-prev-buffer)
-    (evil-define-key 'normal gptel-mode-map (kbd "C-g") 'delete-window)
-    (define-key gptel-mode-map (kbd "C-c m") 'gptel-menu))
-  (add-hook 'gptel-mode-hook 'evil-insert-state)
+(with-eval-after-load 'gptel
+  (evil-define-key 'normal gptel-mode-map (kbd "q") 'switch-to-prev-buffer)
+  (evil-define-key 'normal gptel-mode-map (kbd "C-g") 'delete-window)
+  (define-key gptel-mode-map (kbd "C-c m") 'gptel-menu))
+
+(add-hook 'gptel-mode-hook 'evil-insert-state)
 (global-set-key (kbd "C-c p") 'gptel)
 
 #+end_src
