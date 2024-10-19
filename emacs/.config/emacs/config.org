@@ -1102,7 +1102,8 @@ Don't prompt project switch action
   :straight (:type built-in)
   :ensure t
   :config
-    (setq treesit-font-lock-level  4
+  (add-to-list 'treesit-extra-load-path "~/.cache/emacs/tree-sitter")
+  (setq treesit-font-lock-level  4
         c-ts-mode-indent-offset    4
         json-ts-mode-indent-offset 4
         treesit-language-source-alist '((bash         "https://github.com/tree-sitter/tree-sitter-bash")
