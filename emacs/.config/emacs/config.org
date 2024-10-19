@@ -242,6 +242,7 @@ Always move cursor to help window.
   :init
   (setq treesit-font-lock-level 4)
   :custom-face
+  (fringe                              ((t (:background unspecified))))
   (font-lock-escape-face               ((t (:inherit 'font-lock-builtin-face))))
   (font-lock-regexp-grouping-backslash ((t (:inherit unspecified))))
   (font-lock-operator-face             ((t (:foreground unspecified))))
