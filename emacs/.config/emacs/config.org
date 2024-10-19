@@ -650,7 +650,7 @@ Don't prompt project switch action
   :config
   (consult-customize
    consult-theme
-   :preview-key '("M-." "C-SPC" :debounce 0.6 any))
+   :preview-key '("M-." "C-SPC" :debounce 0.5 any))
   (setq consult-ripgrep-args "rg \
             --null \
             --line-buffered \
@@ -697,12 +697,16 @@ Don't prompt project switch action
 (use-package corfu
   :straight t
   :config
-  (setq corfu-auto t
+  (setq corfu-cycle t
+        corfu-auto t
         corfu-echo-documentation t
         corfu-preselect 'prompt
-        corfu-auto-prefix 1
-        corfu-auto-delay 0.1)
-  (global-corfu-mode t))
+        corfu-auto-prefix 2
+        corfu-count 5
+        corfu-bar-width 0.0)
+
+  (global-corfu-mode t)
+  (corfu-popupinfo-mode))
 
 (add-hook 'eshell-mode-hook (lambda () (setq-local corfu-auto t) (setq-local corfu-preselect 'prompt)))
 
@@ -722,22 +726,19 @@ Don't prompt project switch action
   (add-to-list 'completion-at-point-functions #'cape-file)
   (add-to-list 'completion-at-point-functions #'cape-elisp-block)
   (add-to-list 'completion-at-point-functions #'cape-elisp-symbol)
-  ;; (add-to-list 'completion-at-point-functions #'cape-history)
   (add-to-list 'completion-at-point-functions #'cape-keyword))
 
 (use-package kind-icon
   :straight t
   :after corfu
   :defer t
-  :custom
-  (kind-icon-use-icons t)
-  (kind-icon-default-face 'corfu-default) ; to compute blended backgrounds correctly
-  (kind-icon-blend-background nil)  ; Use midpoint color between foreground and background colors ("blended")?
-  (kind-icon-blend-frac 0.08)
-  (kind-icon-default-style
-   '(:padding -1 :stroke 0 :margin 0 :radius 0 :height 1.0 :scale 1.0))
-  (kind-icon-formatted 'variable)
   :config
+  (setq kind-icon-use-icons t
+        kind-icon-default-face 'corfu-default
+        kind-icon-blend-background nil
+        kind-icon-blend-frac 0.08
+        kind-icon-default-style '(:padding -1 :stroke 0 :margin 0 :radius 0 :height 1.0 :scale 1.0)
+        kind-icon-formatted 'variable)
   (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
 #+end_src
 
@@ -754,7 +755,6 @@ Don't prompt project switch action
         dired-kill-when-opening-new-dired-buffer t)
 
   (bind-key "<tab>" #'dired-subtree-toggle dired-mode-map))
-;; (bind-key "<backtab>" #'dired-subtree-cycle dired-mode-map))
 
 (use-package dired-collapse
   :straight t
@@ -837,6 +837,7 @@ Don't prompt project switch action
 (require 'niva-guards)
 (global-set-key (kbd "C-c h g") 'niva-guards)
 #+end_src
+
 ** Python
 *** Editing
 #+begin_src emacs-lisp
