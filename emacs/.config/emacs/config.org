@@ -43,6 +43,7 @@
 (setq confirm-kill-emacs 'y-or-n-p)
 (setq ring-bell-function 'ignore)
 (add-hook 'window-setup-hook 'delete-other-windows)
+(setq create-lockfiles nil)
 #+end_src
 
 ** Indentation rules
@@ -781,28 +782,6 @@ Don't prompt project switch action
   (dired-async-mode 1))
 #+end_src
 
-** Emacs system-files
-*** Backup files
-#+begin_src emacs-lisp
-(setq backup-directory-alist `(("." . "/tmp/backups/")))
-(make-directory "/tmp/auto-saves/" t)
-#+end_src
-
-*** Auto-save files
-#+begin_src emacs-lisp
-(setq auto-save-list-file-prefix "/tmp/auto-saves/sessions/"
-      auto-save-file-name-transforms `((".*" ,"/tmp/auto-saves/" t)))
-
-(add-hook 'kill-emacs-hook
-          (lambda ()
-            (dolist (file (directory-files temporary-file-directory t "\\`auto-save-file-name-p\\'"))
-              (delete-file file))))
-#+end_src
-
-*** Lock files
-#+begin_src emacs-lisp
-(setq create-lockfiles nil)
-#+end_src
 
 ** treemacs
 #+begin_src emacs-lisp
