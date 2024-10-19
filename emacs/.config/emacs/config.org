@@ -2152,3 +2152,7 @@ Use org mode in scratch buffer
             (setq-local evil-normal-state-cursor '(hollow))
             ))
 #+end_src
+
+#+begin_src emacs-lisp
+(make-frame-visible)
+#+end_src
