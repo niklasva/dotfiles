@@ -39,7 +39,7 @@
       elfeed-search-face-alist-3 '((unread elfeed-search-tag-face))
       elfeed-search-face-alist-4 '((unread elfeed-search-date-face)))
 
-(defun niva/elfeed-search-print-entry (entry)
+(defun niva/elfeed-search-print-entry--multi-line (entry)
   (let* ((feed (elfeed-entry-feed entry))
          (feed-title (or (elfeed-meta feed :title)
                          (elfeed-feed-title feed)
@@ -72,11 +72,34 @@
                         (propertize "             " 'face '(:underline nil))
                         (propertize formatted-title 'face (list :inherit (elfeed-search--faces-1 (elfeed-entry-tags entry)) :underline '(:color "red")))
                         (propertize "       " 'face '(:underline nil))))
-      (insert elem)
-      )))
+      (insert elem))))
 
 
-(setq elfeed-search-print-entry-function #'niva/elfeed-search-print-entry)
+(defun niva/elfeed-search-print-entry--single-line (entry)
+  (let* ((date (format "%-12s " (relative-date (elfeed-entry-date entry))))
+         (title (or (elfeed-meta entry :title) (elfeed-entry-title entry) ""))
+         (title-faces (elfeed-search--faces (elfeed-entry-tags entry)))
+         (feed (elfeed-entry-feed entry))
+         (feed-title
+          (when feed
+            (or (elfeed-meta feed :title) (elfeed-feed-title feed))))
+         (tags (mapcar #'symbol-name (elfeed-entry-tags entry)))
+         (tags (delete "star" (delete "unread" tags)))
+         (tags-str (mapconcat
+                    (lambda (s) (propertize s 'face 'elfeed-search-tag-face))
+                    tags ","))
+         (title-width (- (window-width) 20 elfeed-search-trailing-width))
+         (title-column (elfeed-format-column
+                        title (elfeed-clamp
+                               elfeed-search-title-min-width
+                               title-width
+                               elfeed-search-title-max-width)
+                        :left)))
+    (insert (propertize date 'face 'elfeed-search-date-face) " "
+            (propertize title-column 'face title-faces 'kbd-help title) " "
+            (format "%-30s" (format "%s (%s)" (propertize feed-title 'face 'elfeed-search-feed-face) tags-str)))))
+
+(setq elfeed-search-print-entry-function #'niva/elfeed-search-print-entry--single-line)
 
 (with-eval-after-load 'elfeed
   (set-face-attribute 'elfeed-search-unread-title-face nil :bold nil)
