@@ -200,4 +200,14 @@
   (delete-directory elfeed-db-directory t)
   (message "Elfeed database cleared. Restart Elfeed to initialize a new database."))
 (niva/clear-elfeed)
+
+(with-eval-after-load 'elfeed
+  (setq-default niva-elfeed-unread-count 0)
+  (defun niva/elfeed-update-unread-count ()
+    (interactive)
+    (setq niva-elfeed-unread-count
+          (cl-loop for entry in elfeed-search-entries
+                   count (memq 'unread (elfeed-entry-tags entry))))))
+;; (add-hook 'elfeed-db-update-hook 'niva/elfeed-update-unread-count)
+;; (add-hook 'elfeed-search-update-hook 'niva/elfeed-update-unread-count)
 ;;; niva-elfeed.el ends here

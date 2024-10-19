@@ -1734,7 +1734,6 @@ Use org mode in scratch buffer
 #+end_src
 
 ** elfeed
-*** elfeed
 #+begin_src emacs-lisp
 (use-package elfeed
   :straight t
@@ -1751,20 +1750,7 @@ Use org mode in scratch buffer
   (define-key elfeed-show-mode-map (kbd "ö") 'niva/elfeed--move-paragraph-down))
 #+end_src
 
-*** Count unreads
-#+begin_src emacs-lisp
-(with-eval-after-load 'elfeed
-  (setq-default niva-elfeed-unread-count 0)
-  (defun niva/elfeed-update-unread-count ()
-    (interactive)
-    (setq niva-elfeed-unread-count
-          (cl-loop for entry in elfeed-search-entries
-                   count (memq 'unread (elfeed-entry-tags entry))))))
-;; (add-hook 'elfeed-db-update-hook 'niva/elfeed-update-unread-count)
-;; (add-hook 'elfeed-search-update-hook 'niva/elfeed-update-unread-count)
-#+end_src
-
-*** elfeed-protocol
+** elfeed-protocol
 #+begin_src emacs-lisp
 (use-package elfeed-protocol
   :straight t
