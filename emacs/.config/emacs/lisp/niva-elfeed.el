@@ -2,6 +2,20 @@
 ;;; Commentary:
 ;;; Code:
 
+
+(defun niva/elfeed-sort-by-tags-and-feed (a b)
+  (let* ((a-title (format "%s" (elfeed-entry-feed a)))
+         (b-title (format "%s" (elfeed-entry-feed b)))
+         (a-tags (format "%s" (elfeed-entry-tags a)))
+         (b-tags (format "%s" (elfeed-entry-tags b))))
+    (if (and (string= a-tags b-tags) (string= a-title b-title))
+        (< (elfeed-entry-date b) (elfeed-entry-date a))
+      (if (string= a-tags b-tags)
+          (string> a-title b-title)
+        (string< a-tags b-tags)))))
+
+(setf elfeed-search-sort-function nil)
+
 (defun niva/fixed-length (input-string length)
   (let ((len (length input-string)))
     (if (>= len length)
@@ -110,5 +124,80 @@
     (set-face-attribute 'elfeed-search-title-face        nil :foreground nil :bold nil :inherit 'shadow)
     (set-face-attribute 'elfeed-search-unread-title-face nil :foreground nil :bold nil :foreground (face-attribute 'default :foreground))))
 
+
+(with-eval-after-load 'elfeed
+  (defun niva/elfeed-switch (buff)
+    (pop-to-buffer buff)
+    (with-current-buffer buff
+      (setq-local evil-respect-visual-line-mode nil)
+      (setq-local visual-fill-column-center-text nil
+                  visual-fill-column-fringes-outside-margins t
+                  visual-fill-column-extra-text-width '(-4 . 0)
+                  visual-fill-column-width 100)
+      (adaptive-wrap-prefix-mode 1)
+      (visual-fill-column-mode)))
+
+  (setq elfeed-show-entry-switch 'niva/elfeed-switch)
+  (setq elfeed-search-remain-on-entry t)
+
+  (advice-add 'elfeed-show-next :override
+              (defun niva/elfeed-show-next ()
+                (interactive)
+                (if (get-buffer-window "*elfeed-search*")
+                    (pop-to-buffer (elfeed-search-buffer)))
+                (with-current-buffer (elfeed-search-buffer)
+                  (when elfeed-search-remain-on-entry (forward-line 1))
+                  (call-interactively #'elfeed-search-show-entry))))
+
+  (advice-add 'elfeed-show-prev :override
+              (defun niva/elfeed-show-prev ()
+                (interactive)
+                (if (get-buffer-window "*elfeed-search*")
+                    (pop-to-buffer (elfeed-search-buffer)))
+                (with-current-buffer (elfeed-search-buffer)
+                  (when elfeed-search-remain-on-entry (forward-line 1))
+                  (forward-line -2)
+                  (call-interactively #'elfeed-search-show-entry))))
+
+  (add-hook 'elfeed-search-update-hook (lambda () (setq word-wrap nil))))
+
+(defun niva/elfeed-toggle-images ()
+  (interactive)
+  (setq shr-inhibit-images (not shr-inhibit-images))
+  (elfeed-show-refresh))
+
+(defun niva/elfeed--move-paragraph-up ()
+  (interactive)
+  (if (derived-mode-p 'elfeed-show-mode)
+      (condition-case nil
+          (progn
+            (evil-backward-paragraph 2)
+            (evil-scroll-line-to-center nil))
+        (beginning-of-buffer
+         (message "Previous item")
+         (elfeed-show-prev)
+         (end-of-buffer)))))
+
+(defun niva/elfeed--move-paragraph-down ()
+  (interactive)
+  (if (derived-mode-p 'elfeed-show-mode)
+      (condition-case nil
+          (progn
+            (evil-forward-paragraph)
+            (evil-scroll-line-to-center nil)
+            (forward-line 1))
+        (end-of-buffer
+         (message "Next item")
+         (elfeed-show-next)))))
+
+
 (provide 'niva-elfeed)
+
+(defun niva/clear-elfeed ()
+  "Clear elfeed database"
+  (interactive)
+  (setq elfeed-db-directory (expand-file-name "~/.elfeed"))
+  (delete-directory elfeed-db-directory t)
+  (message "Elfeed database cleared. Restart Elfeed to initialize a new database."))
+(niva/clear-elfeed)
 ;;; niva-elfeed.el ends here
