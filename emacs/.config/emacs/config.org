@@ -13,13 +13,8 @@
 #+end_src
 
 * Imports
-** Elisp
 #+begin_src emacs-lisp
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
-#+end_src
-
-** Private config
-#+begin_src emacs-lisp
 (defvar import-file (expand-file-name "private/config.el" user-emacs-directory))
 (when (file-readable-p import-file) (load import-file))
 #+end_src
