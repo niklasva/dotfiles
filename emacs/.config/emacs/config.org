@@ -1034,20 +1034,20 @@ Don't prompt project switch action
   :ensure t
   :config
   (add-to-list 'treesit-extra-load-path "~/.cache/emacs/tree-sitter")
-  (setq treesit-font-lock-level  4
-        c-ts-mode-indent-offset    4
-        json-ts-mode-indent-offset 4
-        treesit-language-source-alist '((bash         "https://github.com/tree-sitter/tree-sitter-bash")
-                                        (c            "https://github.com/tree-sitter/tree-sitter-c")
-                                        (cpp          "https://github.com/tree-sitter/tree-sitter-cpp")
-                                        (cmake        "https://github.com/uyha/tree-sitter-cmake")
-                                        (js           "https://github.com/tree-sitter/tree-sitter-javascript")
-                                        (json         "https://github.com/tree-sitter/tree-sitter-json")
-                                        (python       "https://github.com/tree-sitter/tree-sitter-python")
-                                        (tsx          "https://github.com/tree-sitter/tree-sitter-typescript")
-                                        (typescript   "https://github.com/tree-sitter/tree-sitter-typescript")
-                                        (rust         "https://github.com/tree-sitter/tree-sitter-rust")
-                                        (yaml         "https://github.com/ikatyang/tree-sitter-yaml")))
+  (setq-default treesit-font-lock-level 4
+                c-ts-mode-indent-offset    4
+                json-ts-mode-indent-offset 4
+                treesit-language-source-alist '((bash         "https://github.com/tree-sitter/tree-sitter-bash")
+                                                (c            "https://github.com/tree-sitter/tree-sitter-c")
+                                                (cpp          "https://github.com/tree-sitter/tree-sitter-cpp")
+                                                (cmake        "https://github.com/uyha/tree-sitter-cmake")
+                                                (js           "https://github.com/tree-sitter/tree-sitter-javascript")
+                                                (json         "https://github.com/tree-sitter/tree-sitter-json")
+                                                (python       "https://github.com/tree-sitter/tree-sitter-python")
+                                                (tsx          "https://github.com/tree-sitter/tree-sitter-typescript")
+                                                (typescript   "https://github.com/tree-sitter/tree-sitter-typescript")
+                                                (rust         "https://github.com/tree-sitter/tree-sitter-rust")
+                                                (yaml         "https://github.com/ikatyang/tree-sitter-yaml")))
 
   (dolist (pair '(("\\.sh\\'"           . bash-ts-mode)
                   ("\\.c\\'"            . c-ts-mode)
