@@ -745,9 +745,10 @@ Don't prompt project switch action
 * File management
 ** Dired
 #+begin_src emacs-lisp
-(use-package dirtree :straight t)
+(use-package dirtree :straight t :defer t)
 (use-package dired-subtree :straight t
   :after dired
+  :defer t
   :hook ((dired-mode . dired-hide-details-mode))
   :config
   (setq dired-subtree-use-backgrounds nil
@@ -776,6 +777,7 @@ Don't prompt project switch action
 #+begin_src emacs-lisp
 (use-package treemacs
   :straight t
+  :defer t
   :config
   (setq treemacs-no-png-images t
         treemacs-file-follow-delay 0.03)
@@ -883,7 +885,7 @@ Don't prompt project switch action
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package pyenv :straight t)
+(use-package pyenv :straight t :defer t)
 #+end_src
 
 ** Eldoc
@@ -1128,6 +1130,7 @@ Don't prompt project switch action
 #+begin_src emacs-lisp
 (use-package magit
   :straight t
+  :defer t
   :config
   (setq ediff-split-window-function 'split-window-horizontally
         ediff-window-setup-function 'ediff-setup-windows-plain)
@@ -1210,6 +1213,7 @@ Don't prompt project switch action
   :defer t
   :defines eshell-prompt-function
   :config
+  (defalias 'ff 'find-file)
   (add-hook 'shell-mode-hook 'with-editor-export-editor)
   (add-hook 'eshell-mode-hook
             (lambda ()
@@ -1257,7 +1261,7 @@ Don't prompt project switch action
 *** eshell-syntax-highlighting
 #+begin_src emacs-lisp
 (use-package eshell-syntax-highlighting
-:defer t
+  :defer t
   :straight t
   :hook (eshell-mode . eshell-syntax-highlighting-mode))
 #+end_src
@@ -1493,6 +1497,7 @@ Use org mode in scratch buffer
 ** org-roam
 #+begin_src emacs-lisp
 (use-package org-roam
+  :defer t
   :straight t
   :config
   (when (fboundp 'niva/setup-org-roam)
@@ -1804,6 +1809,7 @@ Use org mode in scratch buffer
 
 (use-package shrface
   :straight t
+  :defer t
   ;; :hook (eww-after-render . shrface-mode)
   :config
   (shrface-basic)
