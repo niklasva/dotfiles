@@ -1001,7 +1001,7 @@ Don't prompt project switch action
   :config
   (setq flymake-start-on-save-buffer t
         flymake-no-changes-timeout 1
-        flymake-fringe-indicator-position 'left-fringe
+        flymake-fringe-indicator-position nil
         flymake-mode-line-lighter nil)
 
   (add-hook 'sh-mode-hook 'flymake-mode)
