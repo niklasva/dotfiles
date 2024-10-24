@@ -895,7 +895,7 @@ Don't prompt project switch action
   :diminish
   :defer t
   :config
-  (setq-default eldoc-idle-delay 0.9
+  (setq-default eldoc-idle-delay 0.4
                 eldoc-echo-area-use-multiline-p t
                 eldoc-echo-area-prefer-doc-buffer t
                 eldoc-documentation-strategy #'eldoc-documentation-compose-eagerly)
@@ -937,8 +937,9 @@ Don't prompt project switch action
   (add-to-list 'eglot-server-programs '((python-mode python-ts-mode)
                                         "basedpyright-langserver"
                                         "--stdio"))
-
-  (add-to-list 'eglot-ignored-server-capabilities :inlayHintProvider))
+  ;; (add-to-list 'eglot-ignored-server-capabilities :inlayHintProvider)
+  ;;(add-to-list 'eglot-ignored-server-capabilities :documentHighlightProvider)
+  )
 
 (setq-default eglot-workspace-configuration `((:basedpyright . (:typeCheckingMode "basic"))))
 
@@ -950,10 +951,13 @@ Don't prompt project switch action
 (with-eval-after-load 'eglot
   (add-hook 'eglot-managed-mode-hook
             (lambda ()
-              (setq eldoc-documentation-functions
-                    (cons #'flymake-eldoc-function
-                          (remove #'flymake-eldoc-function eldoc-documentation-functions)))
-              (setq eldoc-documentation-strategy #'eldoc-documentation-compose)))
+              (eglot-inlay-hints-mode -1)
+
+              ;; (setq eldoc-documentation-functions
+              ;;       (cons #'flymake-eldoc-function
+              ;;             (remove #'flymake-eldoc-function eldoc-documentation-functions)))
+              ;; (setq eldoc-documentation-strategy #'eldoc-documentation-compose)
+              ))
   (set-face-attribute 'eglot-mode-line nil :inherit 'unspecified)
 
   (defun eglot--format-markup (markup)
