@@ -29,6 +29,14 @@
 (setq ring-bell-function 'ignore)
 (add-hook 'window-setup-hook 'delete-other-windows)
 (setq create-lockfiles nil)
+
+(setq backup-directory-alist '(("." . "~/.cache/emacs/backup"))
+      backup-by-copying t
+      version-control t
+      delete-old-versions t
+      kept-new-versions 20
+      kept-old-versions 5
+      create-lockfiles nil)
 #+end_src
 
 ** Indentation rules
