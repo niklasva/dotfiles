@@ -5,11 +5,7 @@
 * Encryption
 ** pinentry
 #+begin_src emacs-lisp
-(use-package pinentry
-  :straight t
-  :config
-  (fset 'epg-wait-for-status 'ignore)
-  (pinentry-start))
+(setq epa-pinentry-mode 'loopback)
 #+end_src
 
 * Imports
