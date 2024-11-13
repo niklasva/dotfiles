@@ -14,8 +14,7 @@
       (goto-char (point-max))
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
-(straight-use-package 'org)
-(straight-use-package 'use-package)
+(use-package org :straight t)
 
 (use-package no-littering
   :straight t
