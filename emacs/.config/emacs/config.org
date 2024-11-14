@@ -1490,12 +1490,6 @@ Use org mode in scratch buffer
 #+end_src
 
 #+begin_src emacs-lisp
-;; (set-face-attribute 'org-block nil :foreground (face-attribute 'default :foreground))
-;; (set-face-attribute 'org-code nil :inherit 'org-block)
-;; (set-face-attribute 'org-drawer nil :inherit 'org-block-end-line)
-#+end_src
-
-#+begin_src emacs-lisp
 (defun narrow-to-region-indirect (start end)
   "Restrict editing in this buffer to the current region, indirectly."
   (interactive "r")
