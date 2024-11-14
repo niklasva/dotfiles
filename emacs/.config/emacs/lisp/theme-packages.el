@@ -36,8 +36,7 @@
   :straight t
   :defer t
   :config
-  (setq-default catppuccin-flavor 'mocha)
-  )
+  (setq-default catppuccin-flavor 'mocha))
 
 (use-package ef-themes
   :straight (:host github :repo "protesilaos/ef-themes")
@@ -60,6 +59,7 @@
 (use-package paper-theme           :straight t :defer t)
 (use-package parchment-theme       :straight t :defer t)
 (use-package plan9-theme           :straight t :defer t)
+(use-package minimal-theme         :straight t :defer t)
 (use-package professional-theme    :straight t :defer t)
 (use-package punpun-themes         :straight t :defer t)
 (use-package sexy-monochrome-theme :straight t :defer t)
