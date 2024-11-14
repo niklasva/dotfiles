@@ -83,9 +83,7 @@
         modus-themes-tabs-accented t)
 
   (setq modus-themes-common-palette-overrides
-        '((fringe unspecified)
-          (border-mode-line-active unspecified)
-          (border-mode-line-inactive unspecified)))
+        '((fringe unspecified)))
 
   (setq modus-themes-completions '((matches . (background minimal))
                                    (selection . (background minimal))
