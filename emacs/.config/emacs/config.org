@@ -1438,6 +1438,14 @@ Don't prompt project switch action
       org-ellipsis " .."
       org-use-sub-superscripts nil)
 (set-face-attribute 'org-ellipsis nil :foreground 'unspecified :underline 'unspecified)
+
+(setq org-todo-keywords
+      '((sequence "TODO" "STARTED" "REVIEW" "|" "DONE" "CANCELED")))
+
+(setq org-todo-keyword-faces
+      '(("TODO" . org-todo)
+        ("STARTED" . (:foreground "darkorange3" :weight bold))
+        ("REVIEW" . (:foreground "darkblue" :weight bold))))
 #+end_src
 
 ** scratch
