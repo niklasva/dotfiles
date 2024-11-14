@@ -182,6 +182,7 @@ Always move cursor to help window.
 (setq-default niva/theme 'modus-operandi)
 (unless (eq niva/theme 'default)
   (load-theme niva/theme))
+(make-frame-visible)
 #+end_src
 *** Faces
 #+begin_src emacs-lisp
