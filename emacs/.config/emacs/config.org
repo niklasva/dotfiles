@@ -179,7 +179,7 @@ Always move cursor to help window.
 *** Load themes
 #+begin_src emacs-lisp
 (load (expand-file-name "lisp/theme-packages.el" user-emacs-directory))
-(setq-default niva/theme 'naysayer)
+(setq-default niva/theme 'modus-operandi)
 (unless (eq niva/theme 'default)
   (load-theme niva/theme))
 #+end_src
