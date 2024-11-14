@@ -413,6 +413,8 @@ Always move cursor to help window.
 (global-set-key                   (kbd "€")       (kbd "$"))
 (global-set-key                   (kbd "s-n")     (kbd "M-n"))
 (global-set-key                   (kbd "s-p")     (kbd "M-p"))
+(global-set-key                   (kbd "s-f")     (kbd "M-f"))
+(global-set-key                   (kbd "s-b")     (kbd "M-b"))
 (global-set-key                   (kbd "s-m")     nil)
 
 (define-key evil-normal-state-map (kbd "C-<return>")   'eldoc-doc-buffer)
