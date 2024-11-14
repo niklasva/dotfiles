@@ -1,6 +1,10 @@
+(setq package-enable-at-startup nil)
+(setq gc-cons-threshold most-positive-fixnum)
 (setq vc-follow-symlinks t)
 (setq native-comp-speed -1)
 (setq lexical-binding t)
+
+(load (expand-file-name "lisp/init-straight.el" user-emacs-directory))
 
 (setq default-frame-alist
       (append (list '(min-height              . 1)
@@ -12,13 +16,17 @@
                     '(tool-bar-lines          . 0)
                     '(ns-transparent-titlebar . t)
                     '(ns-appearance           . light)
-                    '(font                    . "Anonymous Pro 16"))))
+                    '(visibility              . nil)
+                    '(font                    . "Inconsolata 14"))))
 
-(custom-theme-set-faces 'user '(default ((t (:font "Agave Nerd Font Mono 14" :height unspecified)))))
-(custom-theme-set-faces 'user '(shr-text ((t (:inherit default)))))
-(custom-theme-set-faces 'user '(variable-pitch ((t (:font unspecified)))))
+(custom-theme-set-faces 'user '(default ((t (:font "Inconsolata 15" :width regular :height unspecified)))))
+;; (custom-theme-set-faces 'user '(shr-text ((t (:inherit default)))))
+;; (custom-theme-set-faces 'user '(variable-pitch ((t (:font unspecified)))))
 
-(load (expand-file-name "lisp/init-straight.el" user-emacs-directory))
+(use-package benchmark-init
+  :straight t
+  :config
+  (add-hook 'after-init-hook 'benchmark-init/deactivate))
 
 (setq-default frame-resize-pixelwise t
               frame-title-format ""
