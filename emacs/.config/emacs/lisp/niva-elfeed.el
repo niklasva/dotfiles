@@ -126,8 +126,14 @@
 
 
 (with-eval-after-load 'elfeed
+  (defun elfeed ()
+    (interactive)
+    (switch-to-buffer (elfeed-search-buffer))
+    (unless (eq major-mode 'elfeed-search-mode)
+      (elfeed-search-mode)))
+
   (defun niva/elfeed-switch (buff)
-    (pop-to-buffer buff)
+    ;; (popper--bury-all)
     (with-current-buffer buff
       (setq-local evil-respect-visual-line-mode nil)
       (setq-local visual-fill-column-center-text nil
@@ -135,7 +141,8 @@
                   visual-fill-column-extra-text-width '(-4 . 0)
                   visual-fill-column-width 100)
       (adaptive-wrap-prefix-mode 1)
-      (visual-fill-column-mode)))
+      (visual-fill-column-mode))
+    (switch-to-buffer buff))
 
   (setq elfeed-show-entry-switch 'niva/elfeed-switch)
   (setq elfeed-search-remain-on-entry t)

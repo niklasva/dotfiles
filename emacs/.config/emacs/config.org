@@ -1700,6 +1700,11 @@ Use org mode in scratch buffer
   (setq shr-inhibit-images t)
 
   (require 'niva-elfeed)
+
+  (add-to-list 'display-buffer-alist
+               '(("\\*elfeed-show\\*"
+                  (display-buffer-same-window))))
+
   (define-key elfeed-show-mode-map (kbd "ä") 'niva/elfeed--move-paragraph-up)
   (define-key elfeed-show-mode-map (kbd "ö") 'niva/elfeed--move-paragraph-down))
 #+end_src
