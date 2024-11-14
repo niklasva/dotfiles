@@ -431,6 +431,10 @@ Always move cursor to help window.
 (define-key evil-insert-state-map (kbd "C-p") 'nil)
 
 (with-eval-after-load 'evil-maps  (define-key evil-motion-state-map (kbd "RET") nil))
+
+(define-key evil-normal-state-map (kbd "C-p") 'previous-line)
+(define-key evil-insert-state-map (kbd "C-n") 'nil)
+
 #+end_src
 
 #+begin_src emacs-lisp
