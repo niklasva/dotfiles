@@ -1864,3 +1864,38 @@ Use org mode in scratch buffer
 #+begin_src emacs-lisp
 (make-frame-visible)
 #+end_src
+
+#+begin_src emacs-lisp
+(use-package popper
+  :straight t
+  :bind (:map popper-mode-map
+              ("C-<TAB>"   . popper-cycle)
+              ("C-c <TAB>"   . popper-toggle))
+  :hook (emacs-startup . popper-mode)
+
+  :init
+  (setq popper-reference-buffers
+        '("Output\\*$" "\\*Pp Eval Output\\*$"
+          "\\*Compile-Log\\*"
+          ;; compilation-mode
+          "^\\*eldoc.*\\*.*$" eldoc-mode
+          elfeed-search-mode
+          "\\*Flycheck errors\\*$" " \\*Flycheck checker\\*$"
+          "\\*ChatGPT\\*$" gptel-mode
+          "\\*gptel\\*$" gptel-mode
+          ))
+
+  :config
+  (popper-echo-mode 1)
+
+  ;; HACK: close popper window with `C-g'
+  (defun +popper-close-window-hack (&rest _)
+    "Close popper window via `C-g'."
+    (when (and (called-interactively-p 'interactive)
+               (not (region-active-p))
+               popper-open-popup-alist)
+      (let ((window (caar popper-open-popup-alist)))
+	    (when (window-live-p window)
+          (delete-window window)))))
+  (advice-add #'keyboard-quit :before #'+popper-close-window-hack))
+  #+end_src
