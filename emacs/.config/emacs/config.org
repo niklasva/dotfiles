@@ -1751,7 +1751,7 @@ Use org mode in scratch buffer
                 gptel-prompt-prefix-alist '((org-mode . "> "))
                 gptel-stream t
                 gptel-use-header-line nil
-                gptel-model "gpt-4o-mini"))
+                gptel-model 'gpt-4o-mini))
 
 (with-eval-after-load 'gptel
   (evil-define-key 'normal gptel-mode-map (kbd "q") 'switch-to-prev-buffer)
