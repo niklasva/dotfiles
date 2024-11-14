@@ -538,7 +538,7 @@ Don't prompt project switch action
   "w U"   '(winner-redo                       :which-key "winner-redo")
   "w u"   '(winner-undo                       :which-key "winner-undo")
 
-  "gpt"   '(gptel                             :which-key "gptel")
+  "gpt"   '(niva/gptel-common-buffer          :which-key "niva/gptel-common-buffer")
   "cmd"   '(project-async-shell-command       :which-key "project-async-shell-command")
   "elf"   '(elfeed                            :which-key "elfeed")
   "eww"   '(eww                               :which-key "eww")
@@ -1759,7 +1759,12 @@ Use org mode in scratch buffer
   (define-key gptel-mode-map (kbd "C-c m") 'gptel-menu))
 
 (add-hook 'gptel-mode-hook 'evil-insert-state)
-(global-set-key (kbd "C-c p") 'gptel)
+
+(defun niva/gptel-common-buffer () (interactive) (gptel "*gptel*" nil nil t))
+(global-set-key (kbd "C-c p") 'niva/gptel-common-buffer)
+(add-to-list 'display-buffer-alist
+             '(("\\*gptel\\*" gptel-mode
+                (display-buffer-same-window))))
 
 #+end_src
 
