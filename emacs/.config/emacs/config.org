@@ -1707,7 +1707,9 @@ Use org mode in scratch buffer
                   (display-buffer-same-window))))
 
   (define-key elfeed-show-mode-map (kbd "ä") 'niva/elfeed--move-paragraph-up)
-  (define-key elfeed-show-mode-map (kbd "ö") 'niva/elfeed--move-paragraph-down))
+  (define-key elfeed-show-mode-map (kbd "ö") 'niva/elfeed--move-paragraph-down)
+  (define-key elfeed-show-mode-map (kbd "å") 'elfeed-show-next)
+  (define-key elfeed-show-mode-map (kbd "¨") 'elfeed-show-prev))
 #+end_src
 
 ** elfeed-protocol
