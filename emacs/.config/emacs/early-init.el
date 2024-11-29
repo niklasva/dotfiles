@@ -17,9 +17,9 @@
                     '(ns-transparent-titlebar . t)
                     '(ns-appearance           . light)
                     '(visibility              . nil)
-                    '(font                    . "Inconsolata 14"))))
+                    '(font                    . "Inconsolata 13"))))
 
-(custom-theme-set-faces 'user '(default ((t (:font "Inconsolata 15" :width regular :height unspecified)))))
+(custom-theme-set-faces 'user '(default ((t (:font "Inconsolata 13" :width regular :height unspecified)))))
 ;; (custom-theme-set-faces 'user '(shr-text ((t (:inherit default)))))
 ;; (custom-theme-set-faces 'user '(variable-pitch ((t (:font unspecified)))))
 
