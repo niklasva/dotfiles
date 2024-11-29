@@ -247,7 +247,7 @@ Always move cursor to help window.
 
 ** Font
 *** Font lock
-#+begin_src emacs-lisp
+#+begin_src disabled
 (use-package font-lock
   :init
   (when (or
