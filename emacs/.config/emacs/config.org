@@ -1158,7 +1158,11 @@ Don't prompt project switch action
   :defer t
   :config
   (setq ediff-split-window-function 'split-window-horizontally
-        ediff-window-setup-function 'ediff-setup-windows-plain)
+        ediff-window-setup-function 'ediff-setup-windows-plain
+        magit-no-confirm nil)
+
+  (setq magit-section-initial-visibility-alist
+        '((stashes . hide) (untracked . hide) (unpushed . hide) ([unpulled status] . show)))
 
   (defun disable-y-or-n-p (orig-fun &rest args)
     (cl-letf (((symbol-function 'y-or-n-p) (lambda (prompt) t)))
