@@ -1013,7 +1013,9 @@ Don't prompt project switch action
 (use-package eglot-booster
   :after eglot
   :straight (eglot-booster :type git :host github :repo "jdtsmith/eglot-booster")
-  :config (eglot-booster-mode))
+  :config
+  (setq-default eglot-booster-io-only t)
+  (eglot-booster-mode))
 #+end_src
 
 ** Flymake
