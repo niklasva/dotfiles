@@ -31,6 +31,7 @@
 (setq create-lockfiles nil)
 
 (setq backup-directory-alist '(("." . "~/.cache/emacs/backup"))
+      auto-save-file-name-transforms '((".*" "~/.cache/emacs/auto-save/" t))
       backup-by-copying t
       version-control t
       delete-old-versions t
