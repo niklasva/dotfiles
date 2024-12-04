@@ -549,11 +549,12 @@ Don't prompt project switch action
   "rip"   '(niva/consult-ripgrep-in-directory :which-key "niva/consult-ripgrep-in-directory")
   "cir"   '(circe                             :which-key "circe")
   "ir"    '(niva/switch-irc-buffers           :which-key "niva/switch-irc-buffers")
-  "scr"   '(scratch-buffer                    :which-key "scratch-buffer")
+  "SCR"   '(scratch-buffer                    :which-key "scratch-buffer")
   "tsfll" '(niva/prompt-treesit-level         :which-key "niva/prompt-treesit-level")
 
 
   "early" '((lambda () (interactive) (find-file "~/.config/emacs/early-init.el"))                   :which-key "Open early init")
+  "scr"   '((lambda () (interactive) (find-file "~/dev/stuff/persist-scratch.org"))                 :which-key "Open persistent scratch file")
   "time"  '((lambda () (interactive) (message (format-time-string "%a %d %b %H:%M v%W")))           :which-key "Display current time")
   "conf"  '((lambda () (interactive) (find-file "~/.config/emacs/config.org"))                      :which-key "Open config.org")
   "vconf" '((lambda () (interactive) (split-window-right) (find-file "~/.config/emacs/config.org")) :which-key "Open config.org")
