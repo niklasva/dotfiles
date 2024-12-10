@@ -68,7 +68,7 @@
           (lambda ()
             (if (version< emacs-version "24.4")
                 (visual-wrap-prefix-mode))
-            (display-line-numbers-mode t)
+            (display-line-numbers-mode -1)
             (setq show-trailing-whitespace t)
             (diminish 'eldoc-mode)
             (add-hook 'before-save-hook 'delete-trailing-whitespace)))
