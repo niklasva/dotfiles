@@ -19,7 +19,8 @@
                     '(visibility              . nil)
                     '(font                    . "Inconsolata 13"))))
 
-(custom-theme-set-faces 'user '(default ((t (:font "Inconsolata 13" :width regular :height unspecified)))))
+(custom-theme-set-faces 'user '(default ((t (:font "Fixedsys Excelsior 16" :width regular :height unspecified)))))
+
 ;; (custom-theme-set-faces 'user '(shr-text ((t (:inherit default)))))
 ;; (custom-theme-set-faces 'user '(variable-pitch ((t (:font unspecified)))))
 
@@ -31,7 +32,7 @@
 (setq-default frame-resize-pixelwise t
               frame-title-format ""
               window-resize-pixelwise t
-              ns-antialias-text t
+              ns-antialias-text nil
               ns-use-native-fullscreen t
               ns-use-proxy-icon nil
               ns-use-thin-smoothing t)
