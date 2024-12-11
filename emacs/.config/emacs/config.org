@@ -182,7 +182,7 @@ Always move cursor to help window.
 *** Load themes
 #+begin_src emacs-lisp
 (load (expand-file-name "lisp/theme-packages.el" user-emacs-directory))
-(setq-default niva/theme 'bharadwaj)
+(setq-default niva/theme 'nordless)
 (unless (eq niva/theme 'default)
   (load-theme niva/theme))
 (make-frame-visible)
