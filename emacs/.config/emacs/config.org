@@ -231,8 +231,6 @@ Always move cursor to help window.
     (set-face-attribute  'org-block-end-line   nil :extend t :overline nil :underline t :foreground (face-attribute 'default :foreground) :background (face-attribute 'org-block :background)))
 
   (set-face-attribute 'help-key-binding nil :box nil :background 'unspecified :foreground (face-attribute 'default :foreground)))
-;; (add-hook 'buffer-list-update-hook 'niva/update-theme-faces)
-;; (niva/update-theme-faces)
 #+end_src
 
 ** Display time
