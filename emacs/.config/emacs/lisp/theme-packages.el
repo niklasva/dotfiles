@@ -46,12 +46,15 @@
   :straight (:type git :host github :repo "sashimacs/os1-theme")
   :defer t)
 
+(use-package colorless-themes
+  :straight (:host github :repo "lthms/colorless-themes.el"
+                   :files ("colorless-themes.el" "*.el")))
+
 (use-package almost-mono-themes    :straight t :defer t)
 (use-package basic-theme           :straight t :defer t)
 (use-package chyla-theme           :straight t :defer t)
 (use-package cloud-theme           :straight t :defer t)
 (use-package color-theme-modern    :straight t :defer t)
-(use-package colorless-themes      :straight t :defer t)
 (use-package goose-theme           :straight t :defer t)
 (use-package grandshell-theme      :straight t :defer t)
 (use-package naysayer-theme        :straight t :defer t)
