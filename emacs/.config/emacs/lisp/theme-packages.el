@@ -74,6 +74,10 @@
 (use-package timu-caribbean-theme  :straight t :defer t)
 (use-package timu-rouge-theme      :straight t :defer t)
 (use-package timu-spacegrey-theme  :straight t :defer t)
+(use-package avk-emacs-themes      :straight t :defer t)
+(use-package base16                :straight t :defer t)
+(use-package lab-themes            :straight t :defer t)
+(use-package ubuntu-theme          :straight t :defer t)
 
 (use-package modus-themes
   :straight t
