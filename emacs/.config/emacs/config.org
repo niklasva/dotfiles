@@ -280,6 +280,7 @@ Always move cursor to help window.
   (font-lock-type-face                   ((t (:inherit unspecified :foreground "gray75"))))
   (font-lock-variable-name-face          ((t (:foreground unspecified))))
   (font-lock-variable-use-face           ((t (:foreground unspecified))))
+  (org-block                             ((t (:inherit default))))
   (vertico-mouse                         ((t (:inherit 'highlight))))
   (eglot-inlay-hint-face                 ((t (:inherit 'font-lock-comment-face :height 1.0 :italic t))))
   (eglot-highlight-symbol-face           ((t (:inherit unspecified :underline '(:style wave)))))
