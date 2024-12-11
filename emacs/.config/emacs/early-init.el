@@ -17,9 +17,10 @@
                     '(ns-transparent-titlebar . t)
                     '(ns-appearance           . light)
                     '(visibility              . nil)
-                    '(font                    . "Inconsolata 13"))))
+                    '(font                    . "Mx437 IGS VGA 9x16 16"))))
 
-(custom-theme-set-faces 'user '(default ((t (:font "Fixedsys Excelsior 16" :width regular :height unspecified)))))
+(custom-theme-set-faces 'user '(default ((t (:font "Mx437 IGS VGA 9x16 16" :weight unspecified :height unspecified)))))
+(setq ns-antialias-text nil)
 
 ;; (custom-theme-set-faces 'user '(shr-text ((t (:inherit default)))))
 ;; (custom-theme-set-faces 'user '(variable-pitch ((t (:font unspecified)))))
