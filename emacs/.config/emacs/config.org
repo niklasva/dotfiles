@@ -192,6 +192,10 @@ Always move cursor to help window.
 (defun niva/update-theme-faces ()
   (interactive)
   (ignore-errors
+    (when (eq niva/theme 'ryerson)
+      (set-face-attribute 'font-lock-comment-face  nil :inherit 'unspecified :foreground "lightblue")
+      (set-face-attribute 'org-block nil :inherit 'default :foreground 'unspecified))
+
     (when (string-match-p "kaolin" (prin1-to-string niva/theme)) (load-theme niva/theme))
     (when (eq niva/theme 'naysayer)
       (set-face-attribute 'mode-line-inactive nil :box t)
