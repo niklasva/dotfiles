@@ -94,20 +94,4 @@
 
   (setq modus-themes-completions '((matches . (background minimal))
                                    (selection . (background minimal))
-                                   (popup . (background minimal))))
-
-
-  (add-hook 'modus-themes-after-load-theme-hook
-            (lambda ()
-              (set-face-attribute 'solaire-default-face nil
-                                  :inherit 'default
-                                  :background (car (cdr (assoc 'bg-dim modus-operandi-palette)))
-                                  :foreground (car (cdr (assoc 'fg-dim modus-operandi-palette))))
-              (set-face-attribute 'solaire-line-number-face nil
-                                  :inherit 'solaire-default-face
-                                  :foreground (car (cdr (assoc 'fg-unfocused modus-operandi-palette))))
-              (set-face-attribute 'solaire-hl-line-face nil
-                                  :background (car (cdr (assoc 'bg-active modus-operandi-palette))))
-              (set-face-attribute 'solaire-org-hide-face nil
-                                  :background (car (cdr (assoc 'bg-dim modus-operandi-palette)))
-                                  :foreground (car (cdr (assoc 'bg-dim modus-operandi-palette)))))))
+                                   (popup . (background minimal)))))
