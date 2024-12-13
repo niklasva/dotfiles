@@ -38,6 +38,8 @@
       kept-new-versions 20
       kept-old-versions 5
       create-lockfiles nil)
+
+(setq-default column-number-mode t)
 #+end_src
 
 ** Indentation rules
