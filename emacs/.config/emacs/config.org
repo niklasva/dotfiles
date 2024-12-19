@@ -323,7 +323,7 @@ Always move cursor to help window.
 #+end_src
 
 ** Solaire
-#+begin_src disabled
+#+begin_src emacs-lisp
 (use-package solaire-mode
   :straight t
   :config
