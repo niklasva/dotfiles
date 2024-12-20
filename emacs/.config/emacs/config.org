@@ -547,6 +547,7 @@ Don't prompt project switch action
   "t t"   '(toggle-truncate-lines             :which-key "Toggle truncate lines")
   "w U"   '(winner-redo                       :which-key "winner-redo")
   "w u"   '(winner-undo                       :which-key "winner-undo")
+  "p b"   '(consult-project-buffer            :which-key "project-list-buffers")
 
   "gpt"   '(niva/gptel-common-buffer          :which-key "niva/gptel-common-buffer")
   "cmd"   '(project-async-shell-command       :which-key "project-async-shell-command")
