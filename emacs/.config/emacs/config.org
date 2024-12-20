@@ -1151,15 +1151,40 @@ Don't prompt project switch action
 #+begin_src emacs-lisp
 (defun niva/diff-hl-fix ()
   (interactive)
-  (set-face-attribute 'diff-hl-change nil :inherit 'unspecified :background 'unspecified :foreground "blue3")
-  (set-face-attribute 'diff-hl-insert nil :inherit 'unspecified :background 'unspecified :foreground "green3")
-  (set-face-attribute 'diff-hl-delete nil :inherit 'unspecified :background 'unspecified :foreground "red3"))
+  ;; (set-face-attribute 'diff-hl-change nil :inherit 'unspecified :background 'unspecified :foreground "blue3")
+  ;; (set-face-attribute 'diff-hl-insert nil :inherit 'unspecified :background 'unspecified :foreground "green3")
+  ;; (set-face-attribute 'diff-hl-delete nil :inherit 'unspecified :background 'unspecified :foreground "red3")
+  (set-face-attribute 'diff-hl-change nil :inherit 'unspecified :background 'unspecified)
+  (set-face-attribute 'diff-hl-insert nil :inherit 'unspecified :background 'unspecified)
+  (set-face-attribute 'diff-hl-delete nil :inherit 'unspecified :background 'unspecified))
 
 (use-package diff-hl
   :straight t
   :config
-  (add-hook 'prog-mode-hook 'niva/diff-hl-fix)
-  (global-diff-hl-mode))
+
+    (defun my-diff-hl-fringe-bmp-function (_type _pos)
+      "Fringe bitmap function for use as `diff-hl-fringe-bmp-function'."
+      (define-fringe-bitmap 'my-diff-hl-bmp
+        (vector
+         #b10000000
+         #b00000000
+         )
+        2 8
+        '(center t)))
+
+    (setq diff-hl-fringe-bmp-function #'my-diff-hl-fringe-bmp-function)
+
+  (setq diff-hl-draw-borders t
+        diff-hl-side 'left
+        diff-hl-margin-symbols-alist '((change . "[") ;"="
+                                       (delete . "[") ;"-"
+                                       (ignored . " ") ;"!"
+                                       (insert . "[") ;"+"
+                                       (unknown . " ") ;"?"
+                                       ))
+(add-hook 'prog-mode-hook 'niva/diff-hl-fix)
+;; (diff-hl-margin-mode)
+(global-diff-hl-mode))
 #+end_src
 
 *** magit
