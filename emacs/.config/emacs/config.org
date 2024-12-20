@@ -269,10 +269,12 @@ Always move cursor to help window.
          (eq niva/theme 'ef-day)
          (eq niva/theme 'modus-operandi)
          (eq niva/theme 'bharadwaj)
+         (eq niva/theme 'xemacs)
          (eq niva/theme 'modus-operandi-tinted))
     ;; (set-face-foreground 'font-lock-comment-face "darkred")
-    (set-face-foreground 'font-lock-type-face "gray25")
-    (set-face-foreground 'font-lock-constant-face "gray40"))
+    ;;(set-face-foreground 'font-lock-type-face "gray25")
+    ;;(set-face-foreground 'font-lock-constant-face "gray40")
+)
 
   (setq-default treesit-font-lock-level 3)
   :custom-face
