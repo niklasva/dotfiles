@@ -6,24 +6,29 @@
 
 (load (expand-file-name "lisp/init-straight.el" user-emacs-directory))
 
+(setq-default header-line-format (buffer-file-name))
+
 (setq default-frame-alist
       (append (list '(min-height              . 1)
                     '(height                  . 45)
                     '(min-width               . 1)
                     '(width                   . 155)
-                    '(internal-border-width   . 0)
+                    '(internal-border-width   . 30)
                     '(vertical-scroll-bars    . nil)
                     '(tool-bar-lines          . 0)
                     '(ns-transparent-titlebar . t)
                     '(ns-appearance           . light)
                     '(visibility              . nil)
-                    '(font                    . "Mx437 IGS VGA 9x16 16"))))
+                    '(undecorated-round       . t)
+                    '(font                    . "MxPlus IBM VGA 8x16 16"))))
 
-(custom-theme-set-faces 'user '(default ((t (:font "Mx437 IGS VGA 9x16 16" :weight unspecified :height unspecified)))))
+                                        ; (custom-theme-set-faces 'user '(default ((t (:font "MxPlus ToshibaSat 8x16 16" :weight unspecified :height unspecified)))))
+
+(custom-theme-set-faces 'user '(default ((t (:font "MxPlus IBM VGA 8x16 16" :weight unspecified :height unspecified)))))
+
+;; (custom-theme-set-faces 'user '(default ((t (:font "MxPlus AST PremiumExec 20" :weight unspecified :height unspecified)))))
+
 (setq ns-antialias-text nil)
-
-;; (custom-theme-set-faces 'user '(shr-text ((t (:inherit default)))))
-;; (custom-theme-set-faces 'user '(variable-pitch ((t (:font unspecified)))))
 
 (use-package benchmark-init
   :straight t
