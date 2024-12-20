@@ -199,6 +199,13 @@ Always move cursor to help window.
       (set-face-attribute 'font-lock-comment-face  nil :inherit 'unspecified :foreground "lightblue")
       (set-face-attribute 'org-block nil :inherit 'default :foreground 'unspecified))
 
+    (when (string-match-p "less" (prin1-to-string niva/theme))
+      (set-face-attribute 'elfeed-search-unread-title-face nil :inherit 'default :foreground 'unspecified)
+      (set-face-attribute 'elfeed-search-title-face nil :inherit 'shadow :foreground "darkgray")
+      (set-face-attribute 'elfeed-search-feed-face nil :inherit 'shadow :foreground "darkgray")
+      (set-face-attribute 'elfeed-search-tag-face nil :inherit 'shadow :foreground "darkgray")
+      )
+
     (when (string-match-p "kaolin" (prin1-to-string niva/theme)) (load-theme niva/theme))
     (when (eq niva/theme 'naysayer)
       (set-face-attribute 'mode-line-inactive nil :box t)
