@@ -185,29 +185,38 @@ Always move cursor to help window.
 *** Load themes
 #+begin_src emacs-lisp
 (load (expand-file-name "lisp/theme-packages.el" user-emacs-directory))
-(setq-default niva/theme 'ramangalahy)
+(setq-default niva/theme 'doom-tomorrow-night)
 (unless (eq niva/theme 'default)
   (load-theme niva/theme))
 (make-frame-visible)
 #+end_src
 *** Faces
 #+begin_src emacs-lisp
+(defun niva/theme-is-active (theme-name)
+  (cl-some (lambda (theme) (string-match-p theme-name (symbol-name theme)))
+           custom-enabled-themes))
+
 (defun niva/update-theme-faces ()
   (interactive)
   (ignore-errors
-    (when (eq niva/theme 'ryerson)
+    (when (null custom-enabled-themes)
+      (set-face-attribute 'org-block            nil :inherit 'default)
+      (set-face-attribute 'org-block-begin-line nil :extend t :overline t   :underline nil :background (face-attribute 'org-block :background))
+      (set-face-attribute 'org-block-end-line   nil :extend t :overline nil :underline t   :background (face-attribute 'org-block :background)))
+
+    (when (niva/theme-is-active "ryerson")
       (set-face-attribute 'font-lock-comment-face  nil :inherit 'unspecified :foreground "lightblue")
       (set-face-attribute 'org-block nil :inherit 'default :foreground 'unspecified))
 
-    (when (string-match-p "less" (prin1-to-string niva/theme))
+    (when (niva/theme-is-active "less")
       (set-face-attribute 'elfeed-search-unread-title-face nil :inherit 'default :foreground 'unspecified)
       (set-face-attribute 'elfeed-search-title-face nil :inherit 'shadow :foreground "darkgray")
       (set-face-attribute 'elfeed-search-feed-face nil :inherit 'shadow :foreground "darkgray")
-      (set-face-attribute 'elfeed-search-tag-face nil :inherit 'shadow :foreground "darkgray")
-      )
+      (set-face-attribute 'elfeed-search-tag-face nil :inherit 'shadow :foreground "darkgray"))
 
     (when (string-match-p "kaolin" (prin1-to-string niva/theme)) (load-theme niva/theme))
-    (when (eq niva/theme 'naysayer)
+
+    (when (niva/theme-is-active "naysayer")
       (set-face-attribute 'mode-line-inactive nil :box t)
       (set-face-attribute 'mode-line nil :box )
       (set-face-attribute 'header-line nil :foreground 'unspecified :background 'unspecified :inherit 'mode-line-inactive :box t)
@@ -215,7 +224,8 @@ Always move cursor to help window.
       (set-face-attribute 'flymake-warning-echo nil :background "black" :box t :inverse-video nil :bold t)
       (set-face-attribute 'flymake-note-echo nil :background "black" :box t :inverse-video nil :bold t)
       (set-face-attribute 'link nil :inherit 'font-lock-comment-face))
-    (when (eq niva/theme 'sitaramv-solaris)
+
+    (when (niva/theme-is-active "sitaramv-solaris")
       (set-face-attribute 'org-block                    nil :inherit 'default :background "black")
       (set-face-attribute 'org-block-begin-line         nil :background "black")
       (set-face-attribute 'font-lock-comment-face       nil :inherit 'font-lock-builtin-face :slant 'unspecified :foreground 'unspecified)
@@ -223,25 +233,26 @@ Always move cursor to help window.
       (set-face-attribute 'font-lock-function-name-face nil :foreground "yellow")
       (set-face-attribute 'font-lock-preprocessor-face  nil :foreground "green"))
 
-    (when (eq niva/theme 'doom-tomorrow-night)
+    (when (niva/theme-is-active "doom-tomorrow-night")
       (set-face-attribute 'font-lock-number-face       nil :foreground 'unspecified :inherit 'font-lock-builtin-face)
       (set-face-attribute 'font-lock-variable-use-face nil :foreground 'unspecified :inherit 'default)
       (set-face-attribute 'font-lock-constant-face     nil :foreground 'unspecified :inherit 'font-lock-number-face)
       (set-face-attribute 'warning                     nil :foreground 'unspecified :inherit 'font-lock-builtin-face)
       (set-face-attribute 'font-lock-type-face         nil :foreground 'unspecified :inherit 'font-lock-builtin-face))
 
-    (when (or (eq niva/theme 'nofrils-acme) (eq niva/theme 'acme))
+    (when (or (niva/theme-is-active "nofrils-acme") (niva/theme-is-active "acme"))
       (set-face-attribute  'org-block            nil :background (subtract-hex-colors (face-attribute 'default :background) "#000010"))
       (set-face-attribute  'org-block-begin-line nil :extend t :overline t :underline nil :background (face-attribute 'org-block :background))
-      (set-face-attribute  'org-block-end-line   nil :extend t :overline nil :underline t :background (face-attribute 'org-block :background))))
+      (set-face-attribute  'org-block-end-line   nil :extend t :overline nil :underline t :background (face-attribute 'org-block :background)))
 
-  (when (or (eq niva/theme 'wombat) (eq niva/theme 'naysayer))
-    (set-face-attribute  'org-block            nil :background (add-hex-colors (face-attribute 'default :background) "#0A0A0A"))
-    (set-face-attribute  'org-block-begin-line nil :extend t :overline t :underline nil :foreground (face-attribute 'default :foreground) :background (face-attribute 'org-block :background))
-    (set-face-attribute  'org-block-end-line   nil :extend t :overline nil :underline t :foreground (face-attribute 'default :foreground) :background (face-attribute 'org-block :background)))
-
-  (set-face-attribute 'help-key-binding nil :box nil :background 'unspecified :foreground (face-attribute 'default :foreground)))
+    (when (or (niva/theme-is-active "wombat") (niva/theme-is-active "naysayer"))
+      (set-face-attribute 'org-block            nil :background (add-hex-colors (face-attribute 'default :background) "#0A0A0A"))
+      (set-face-attribute 'org-block-begin-line nil :extend t :overline t :underline nil :foreground (face-attribute 'default :foreground) :background (face-attribute 'org-block :background))
+      (set-face-attribute 'org-block-end-line   nil :extend t :overline nil :underline t :foreground (face-attribute 'default :foreground) :background (face-attribute 'org-block :background))))
+(set-face-attribute 'help-key-binding nil :box nil :background 'unspecified :foreground (face-attribute 'default :foreground)))
 #+end_src
+
+
 
 ** Display time
 #+begin_src emacs-lisp
@@ -271,15 +282,14 @@ Always move cursor to help window.
          (eq niva/theme 'bharadwaj)
          (eq niva/theme 'xemacs)
          (eq niva/theme 'modus-operandi-tinted))
-    ;; (set-face-foreground 'font-lock-comment-face "darkred")
-    ;;(set-face-foreground 'font-lock-type-face "gray25")
-    ;;(set-face-foreground 'font-lock-constant-face "gray40")
-)
+    (set-face-foreground 'font-lock-comment-face "darkred")
+    (set-face-foreground 'font-lock-type-face "gray25")
+    (set-face-foreground 'font-lock-constant-face "gray40"))
 
   (setq-default treesit-font-lock-level 3)
   :custom-face
   (fringe                                ((t (:background unspecified))))
-  (shr-link ((t (:inherit unspecified :foreground "red"))))
+  (shr-link                              ((t (:inherit unspecified :foreground "red"))))
   (font-lock-bracket-face                ((t (:foreground unspecified))))
   (font-lock-builtin-face                ((t (:inherit 'font-lock-function-call-face))))
   (font-lock-comment-delimiter face      ((t (:inherit font-lock-comment-face))))
