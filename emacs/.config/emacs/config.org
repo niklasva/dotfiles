@@ -1521,6 +1521,7 @@ Use org mode in scratch buffer
 (add-to-list 'org-modules 'org-tempo)
 (dolist (pair '(("sh"   . "src sh")
                 ("el"   . "src emacs-lisp")
+                ("els"  . "src emacs-lisp :results silent")
                 ("sc"   . "src scheme")
                 ("ts"   . "src typescript")
                 ("py"   . "src python")
