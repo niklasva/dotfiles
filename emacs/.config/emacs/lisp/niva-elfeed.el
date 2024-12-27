@@ -179,11 +179,8 @@
       (condition-case nil
           (progn
             (evil-backward-paragraph 2)
-            (evil-scroll-line-to-center nil))
-        (beginning-of-buffer
-         (message "Previous item")
-         (elfeed-show-prev)
-         (end-of-buffer)))))
+            (forward-line 1)
+            (evil-scroll-line-to-center nil)))))
 
 (defun niva/elfeed--move-paragraph-down ()
   (interactive)
@@ -192,10 +189,7 @@
           (progn
             (evil-forward-paragraph)
             (evil-scroll-line-to-center nil)
-            (forward-line 1))
-        (end-of-buffer
-         (message "Next item")
-         (elfeed-show-next)))))
+            (forward-line 1)))))
 
 
 (provide 'niva-elfeed)
