@@ -201,13 +201,13 @@ Always move cursor to help window.
   (ignore-errors
     (when (string-match-p "kaolin" (prin1-to-string niva/theme)) (load-theme niva/theme))
     (when (null custom-enabled-themes)
-      (custom-set-faces '(org-block ((t (:inherit 'default))))
+      (custom-set-faces '(org-block            ((t (:inherit 'default))))
                         '(org-block-begin-line ((t (:inherit 'org-block :extend t :overline t   :underline nil))))
                         '(org-block-end-line   ((t (:inherit 'org-block :extend t :overline nil :underline t))))))
 
     (when (niva/theme-is-active "ryerson")
-      (custom-set-faces '(font-lock-comment-face  ((t (:inherit 'unspecified :foreground "lightblue"))))
-                        '(org-block               ((t (:inherit 'default :foreground 'unspecified))))))
+      (custom-set-faces '(font-lock-comment-face ((t (:inherit 'unspecified :foreground "lightblue"))))
+                        '(org-block              ((t (:inherit 'default :foreground 'unspecified))))))
 
     (when (niva/theme-is-active "less")
       (custom-set-faces '(elfeed-search-unread-title-face ((t :inherit 'default :foreground 'unspecified)))
@@ -217,7 +217,8 @@ Always move cursor to help window.
 
     (when (niva/theme-is-active "naysayer")
       (custom-set-faces '(mode-line-inactive   ((t (:box t))))
-                        '(mode-line            ((t (:box ))))
+                        '(mode-line            ((t (:box t))))
+                        '(default              ((t (:foreground "#DACAAE"))))
                         '(header-line          ((t (:foreground unspecified :background unspecified :inherit 'mode-line-inactive :box t))))
                         '(flymake-error-echo   ((t (:background "black" :box t :inverse-video nil :bold t))))
                         '(flymake-warning-echo ((t (:background "black" :box t :inverse-video nil :bold t))))
@@ -225,13 +226,14 @@ Always move cursor to help window.
                         '(link                 ((t (:inherit 'font-lock-comment-face))))))
 
     (when (niva/theme-is-active "sitaramv-solaris")
-      (custom-set-faces '(org-block  ((t (:inherit 'default :background "black"))))
-                        '(org-block-begin-line         ((t (:background "black"))))
-                        '(font-lock-comment-face       ((t (:inherit 'font-lock-builtin-face :slant unspecified :foreground unspecified))))
-                        '(font-lock-string-face        ((t (:foreground "cyan"))))
-                        '(font-lock-function-name-face ((t (:foreground "yellow"))))
-                        '(elfeed-search-title-face ((t (:foreground "darkgray"))))
-                        '(font-lock-preprocessor-face  ((t (:foreground "green"))))))
+      (custom-set-faces '(org-block                       ((t (:inherit 'default :background "black"))))
+                        '(org-block-begin-line            ((t (:background "black"))))
+                        '(font-lock-comment-face          ((t (:inherit 'font-lock-builtin-face :slant unspecified :foreground unspecified))))
+                        '(font-lock-string-face           ((t (:foreground "cyan"))))
+                        '(font-lock-function-name-face    ((t (:foreground "yellow"))))
+                        '(elfeed-search-title-face        ((t (:foreground "darkgray"))))
+                        '(elfeed-search-unread-title-face ((t (:foreground "white"))))
+                        '(font-lock-preprocessor-face     ((t (:foreground "green"))))))
 
     (when (niva/theme-is-active "doom-tomorrow-night")
       (custom-set-faces '(font-lock-number-face       ((t (:foreground unspecified :inherit 'font-lock-builtin-face))))
@@ -241,15 +243,18 @@ Always move cursor to help window.
                         '(font-lock-type-face         ((t (:foreground unspecified :inherit 'font-lock-builtin-face))))))
 
     (when (or (niva/theme-is-active "nofrils-acme") (niva/theme-is-active "acme"))
-      (set-face-attribute  'org-block            nil :background (subtract-hex-colors (face-attribute 'default :background) "#000010"))
-      (set-face-attribute  'org-block-begin-line nil :extend t :overline t :underline nil :background (face-attribute 'org-block :background))
-      (set-face-attribute  'org-block-end-line   nil :extend t :overline nil :underline t :background (face-attribute 'org-block :background)))
+      (custom-set-faces '(org-block            ((t (:background "#FFFFDC")))))
+                        '(org-block-begin-line ((t (:extend t :overline t :underline nil :background "#FFFFDC"))))
+                        '(org-block-end-line   ((t (:extend t :overline nil :underline t :background "#FFFFDC")))))
 
     (when (or (niva/theme-is-active "wombat") (niva/theme-is-active "naysayer"))
-      (set-face-attribute 'org-block            nil :background (add-hex-colors (face-attribute 'default :background) "#0A0A0A"))
-      (set-face-attribute 'org-block-begin-line nil :extend t :overline t :underline nil :foreground (face-attribute 'default :foreground) :background (face-attribute 'org-block :background))
-      (set-face-attribute 'org-block-end-line   nil :extend t :overline nil :underline t :foreground (face-attribute 'default :foreground) :background (face-attribute 'org-block :background))))
-  (set-face-attribute 'help-key-binding nil :box nil :background 'unspecified :foreground (face-attribute 'default :foreground)))
+      (custom-set-faces '(org-block            ((t (:background "#182C32"))))
+                        '(org-block-begin-line ((t (:inherit 'default :extend t :overline t :underline nil :background "#182C32"))))
+                        '(org-block-end-line   ((t (:inherit 'default :extend t :overline nil :underline t :background "#182C32"))))))
+
+    (niva/diff-hl-fix))
+  (custom-set-faces '(help-key-binding nil :box nil :background 'unspecified :foreground (face-attribute 'default :foreground))))
+(niva/update-theme-faces)
 #+end_src
 
 
