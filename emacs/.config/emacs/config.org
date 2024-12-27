@@ -230,6 +230,7 @@ Always move cursor to help window.
                         '(font-lock-comment-face       ((t (:inherit 'font-lock-builtin-face :slant unspecified :foreground unspecified))))
                         '(font-lock-string-face        ((t (:foreground "cyan"))))
                         '(font-lock-function-name-face ((t (:foreground "yellow"))))
+                        '(elfeed-search-title-face ((t (:foreground "darkgray"))))
                         '(font-lock-preprocessor-face  ((t (:foreground "green"))))))
 
     (when (niva/theme-is-active "doom-tomorrow-night")
