@@ -47,14 +47,14 @@
 (setq-default evil-auto-indent t
               indent-line-function 'evil-indent-line
               indent-tabs-mode nil
-              tab-width 8
+              tab-width 4
               org-src-tab-acts-natively t
               org-edit-src-content-indentation 0
               org-indent-indentation-per-level 2
               org-indent-mode-turns-on-hiding-stars nil)
 
 (defun indent-tabs-hook ()
-  (setq tab-width 8
+  (setq tab-width 4
         indent-tabs-mode t
         evil-auto-indent t
         c-basic-offset tab-width))
