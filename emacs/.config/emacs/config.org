@@ -1752,7 +1752,7 @@ Use org mode in scratch buffer
 
 ** webkit
 #+begin_src emacs-lisp
-(setq browse-url-browser-function (lambda (url session) (other-window 1) (xwidget-webkit-browse-url url)))
+;; (setq browse-url-browser-function (lambda (url session) (other-window 1) (xwidget-webkit-browse-url url)))
 #+end_src
 
 ** elfeed
