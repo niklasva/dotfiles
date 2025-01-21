@@ -991,10 +991,7 @@ Don't prompt project switch action
 
   (add-to-list 'eglot-server-programs '((python-mode python-ts-mode)
                                         "basedpyright-langserver"
-                                        "--stdio"))
-  ;; (add-to-list 'eglot-ignored-server-capabilities :inlayHintProvider)
-  ;;(add-to-list 'eglot-ignored-server-capabilities :documentHighlightProvider)
-  )
+                                        "--stdio")))
 
 (setq-default eglot-workspace-configuration `((:basedpyright . (:typeCheckingMode "basic"))))
 
@@ -1004,15 +1001,7 @@ Don't prompt project switch action
 (advice-add 'eglot--mode-line-format :override (lambda () ""))
 
 (with-eval-after-load 'eglot
-  (add-hook 'eglot-managed-mode-hook
-            (lambda ()
-              (eglot-inlay-hints-mode -1)
-
-              ;; (setq eldoc-documentation-functions
-              ;;       (cons #'flymake-eldoc-function
-              ;;             (remove #'flymake-eldoc-function eldoc-documentation-functions)))
-              ;; (setq eldoc-documentation-strategy #'eldoc-documentation-compose)
-              ))
+  (add-hook 'eglot-managed-mode-hook (lambda () (eglot-inlay-hints-mode -1)))
   (set-face-attribute 'eglot-mode-line nil :inherit 'unspecified)
 
   (defun eglot--format-markup (markup)
