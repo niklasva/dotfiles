@@ -275,18 +275,17 @@ Always move cursor to help window.
 
 ** Font
 *** Font lock
-#+begin_src disabled
+#+begin_src emacs-lisp
 (use-package font-lock
   :init
-  (when (or
-         (eq niva/theme 'default)
-         (eq niva/theme 'doom-tomorrow-day)
-         (eq niva/theme 'ef-arbutus)
-         (eq niva/theme 'ef-day)
-         (eq niva/theme 'modus-operandi)
-         (eq niva/theme 'bharadwaj)
-         (eq niva/theme 'xemacs)
-         (eq niva/theme 'modus-operandi-tinted))
+  (when (or (eq custom-enabled-themes nil)
+            (niva/theme-is-active "doom-tomorrow-day")
+            (niva/theme-is-active "ef-arbutus")
+            (niva/theme-is-active "ef-day")
+            (niva/theme-is-active "modus-operandi")
+            (niva/theme-is-active "bharadwaj")
+            (niva/theme-is-active "xemacs")
+            (niva/theme-is-active "modus-operandi-tinted"))
     (set-face-foreground 'font-lock-comment-face "darkred")
     (set-face-foreground 'font-lock-type-face "gray25")
     (set-face-foreground 'font-lock-constant-face "gray40"))
@@ -312,7 +311,7 @@ Always move cursor to help window.
   (eglot-inlay-hint-face                 ((t (:inherit 'font-lock-comment-face :height 1.0 :italic t))))
   (eglot-highlight-symbol-face           ((t (:inherit unspecified :underline '(:style wave)))))
   (eglot-diagnostic-tag-unnecessary-face ((t (:strike-through t)))))
-  #+end_src
+#+end_src
 
 *** Reset
 #+begin_src emacs-lisp
