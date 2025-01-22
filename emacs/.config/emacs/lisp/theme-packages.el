@@ -1,4 +1,5 @@
 (setq custom-safe-themes t)
+(add-to-list 'custom-theme-load-path (concat user-emacs-directory "themes"))
 
 (use-package kaolin-themes
   :straight (:host github :repo "ogdenwebb/emacs-kaolin-themes")
