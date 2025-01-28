@@ -1845,7 +1845,7 @@ Use org mode in scratch buffer
        (propertize "\n#+end_src" 'face 'org-block-end-line ))
       (shr-ensure-newline)
       (setq end (point))
-      (add-face-text-property start end '(:background "#1f2329" :extend t))
+      (add-face-text-property start end 'org-block)
       (shr-ensure-newline)
       (insert "\n")))
   :config
