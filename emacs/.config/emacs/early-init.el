@@ -38,7 +38,7 @@
 (setq-default frame-resize-pixelwise t
               frame-title-format ""
               window-resize-pixelwise t
-              ns-antialias-text nil
+              ns-antialias-text t
               ns-use-native-fullscreen t
               ns-use-proxy-icon nil
               ns-use-thin-smoothing t)
