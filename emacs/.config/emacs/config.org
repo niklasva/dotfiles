@@ -1838,15 +1838,36 @@ Use org mode in scratch buffer
   (elfeed-protocol-enable)
 
   (evil-define-key 'normal elfeed-show-mode-map "I" #'niva/elfeed-toggle-images)
-  (define-key elfeed-search-mode-map (kbd "I") #'niva/elfeed-toggle-images)
+  (define-key elfeed-search-mode-map              (kbd "I") #'niva/elfeed-toggle-images)
   (evil-define-key 'normal elfeed-search-mode-map (kbd "C-p") #'evil-previous-line)
   (evil-define-key 'normal elfeed-search-mode-map (kbd "C-n") #'evil-next-line)
   (evil-define-key 'normal elfeed-search-mode-map (kbd "k") #'evil-previous-line)
   (evil-define-key 'normal elfeed-search-mode-map (kbd "j") #'evil-next-line)
   (evil-define-key 'normal elfeed-search-mode-map (kbd "x") #'elfeed-search-untag-all-unread)
-  (evil-define-key 'normal elfeed-show-mode-map (kbd "'") #'niva/elfeed--move-paragraph-up)
-  (evil-define-key 'normal elfeed-show-mode-map (kbd ";") #'niva/elfeed--move-paragraph-down)
+  (evil-define-key 'normal elfeed-show-mode-map   (kbd "'") #'niva/elfeed--move-paragraph-up)
+  (evil-define-key 'normal elfeed-show-mode-map   (kbd ";") #'niva/elfeed--move-paragraph-down)
   (evil-define-key 'normal elfeed-search-mode-map "r" 'elfeed-update))
+
+(defun niva/eww--move-paragraph-up ()
+  (interactive)
+  (if (derived-mode-p 'eww-mode)
+      (condition-case nil
+          (progn
+            (evil-backward-paragraph 2)
+            (forward-line 1)
+            (evil-scroll-line-to-center nil)))))
+
+(defun niva/eww--move-paragraph-down ()
+  (interactive)
+  (if (derived-mode-p 'eww-mode)
+      (condition-case nil
+          (progn
+            (evil-forward-paragraph)
+            (evil-scroll-line-to-center nil)
+            (forward-line 1)))))
+
+  (evil-define-key 'normal eww-mode-map   (kbd "'") #'niva/eww--move-paragraph-up)
+  (evil-define-key 'normal eww-mode-map   (kbd ";") #'niva/eww--move-paragraph-down)
 #+end_src
 
 
