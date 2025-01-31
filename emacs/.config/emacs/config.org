@@ -993,7 +993,9 @@ Don't prompt project switch action
                            (_ major-mode))))))
       (with-temp-buffer
         (setq-local markdown-fontify-code-blocks-natively t)
+        ;; >>> start of change >>>
         (setq string (replace-regexp-in-string "\n---" "  " string))
+        ;; <<< end of change <<<
         (insert string)
         (let ((inhibit-message t)
               (message-log-max nil)
