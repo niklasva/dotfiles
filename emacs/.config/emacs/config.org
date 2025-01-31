@@ -94,11 +94,20 @@
 ** Scrolling behavior
 #+begin_src emacs-lisp
 (setq-default maximum-scroll-margin 1
-              scroll-margin 1
+              scroll-margin 0
               scroll-conservatively 5
               compilation-scroll-output t
               scroll-preserve-screen-position t)
-(pixel-scroll-precision-mode t)
+#+end_src
+
+*** ultra-scroll
+#+begin_src emacs-lisp
+(use-package elfeed-summary :straight t)
+(use-package ultra-scroll
+  :straight (ultra-scroll :type git :host github :repo "jdtsmith/ultra-scroll")
+  :config
+  (ultra-scroll-mode))
+
 #+end_src
 
 ** Hide buffers
