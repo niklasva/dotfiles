@@ -429,6 +429,7 @@ Always move cursor to help window.
 
 (define-key evil-normal-state-map (kbd "C-p") 'previous-line)
 (define-key evil-insert-state-map (kbd "C-n") 'nil)
+(define-key evil-normal-state-map (kbd "C-.") 'nil)
 
 #+end_src
 
@@ -629,6 +630,22 @@ Don't prompt project switch action
 (global-set-key (kbd "s-O") 'global-text-scale-adjust)
 #+end_src
 
+** embark
+#+begin_src emacs-lisp
+(use-package embark
+  :straight t
+  :bind (("C-." . embark-act)
+         ("M-." . embark-dwim)
+         :map minibuffer-local-map
+         ("C-d" . embark-act)
+         :map embark-region-map
+         ("D" . denote-region)))
+
+(use-package embark-consult
+  :straight t
+  :hook
+  (embark-collect-mode . consult-preview-at-point-mode))
+#+end_src
 * Completion
 ** Vertico
 #+begin_src emacs-lisp
