@@ -386,17 +386,6 @@ Always move cursor to help window.
 #+end_src
 
 #+begin_src emacs-lisp
-(setq mac-escape-modifier nil
-      mac-option-modifier 'meta
-      mac-right-command-modifier 'meta
-      mac-right-option-modifier nil
-      mac-pass-command-to-system t)
-
-(global-set-key (kbd "s-,") 'menu-set-font)
-(global-set-key (kbd "M-,") 'menu-set-font)
-#+end_src
-
-#+begin_src emacs-lisp
 (global-set-key (kbd "C-j")  nil)
 (global-set-key (kbd "<f1>") nil)
 (global-set-key (kbd "<f2>") nil)
@@ -819,6 +808,17 @@ Don't prompt project switch action
   (global-set-key (kbd "C-c t") 'treemacs))
 (setq ns-option-modifier 'none)
 #+end_src
+
+#+begin_src emacs-lisp
+(setq-default mac-escape-modifier nil
+              mac-option-modifier 'meta
+              mac-right-command-modifier 'meta
+              mac-right-option-modifier nil)
+
+(global-set-key (kbd "s-,") 'menu-set-font)
+(global-set-key (kbd "M-,") 'menu-set-font)
+#+end_src
+
 
 ** Other
 #+begin_src emacs-lisp
