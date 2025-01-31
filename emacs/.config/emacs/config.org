@@ -5,7 +5,7 @@
 * Encryption
 ** pinentry
 #+begin_src emacs-lisp
-(setq epa-pinentry-mode 'loopback)
+(use-package pinentry :straight t :config (pinentry-start))
 #+end_src
 
 * Imports
