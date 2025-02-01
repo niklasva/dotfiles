@@ -116,16 +116,6 @@
 (setq elfeed-search-print-entry-function #'niva/elfeed-search-print-entry--single-line)
 
 (with-eval-after-load 'elfeed
-  (set-face-attribute 'elfeed-search-unread-title-face nil :bold nil)
-  (when (or (eq niva/theme 'default) (eq niva/theme 'naysayer))
-    (set-face-attribute 'elfeed-search-date-face         nil :foreground nil :bold nil :foreground (face-attribute 'org-agenda-date :foreground))
-    (set-face-attribute 'elfeed-search-feed-face         nil :foreground nil :bold nil :foreground (face-attribute 'gnus-header-from :foreground))
-    (set-face-attribute 'elfeed-search-tag-face          nil :foreground nil :bold nil :foreground (face-attribute 'shadow :foreground))
-    (set-face-attribute 'elfeed-search-title-face        nil :foreground nil :bold nil :inherit 'shadow)
-    (set-face-attribute 'elfeed-search-unread-title-face nil :foreground nil :bold nil :foreground (face-attribute 'default :foreground))))
-
-
-(with-eval-after-load 'elfeed
   (defun elfeed ()
     (interactive)
     (switch-to-buffer (elfeed-search-buffer))
