@@ -431,6 +431,10 @@ Always move cursor to help window.
 (global-set-key (kbd "s-t")        'tab-new)
 (global-set-key (kbd "s-w")        'tab-close)
 (global-set-key (kbd "s-z")        nil)
+
+(global-set-key (kbd "C-c bbl") 'niva/toggle-bing-bong-light)
+(global-set-key (kbd "C-c bbd") 'niva/toggle-bing-bong-dark)
+(global-set-key (kbd "C-c ct") 'consult-theme)
 #+end_src
 
 *** Window management
