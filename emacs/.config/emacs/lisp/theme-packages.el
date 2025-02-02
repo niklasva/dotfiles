@@ -97,3 +97,20 @@
   (setq modus-themes-completions '((matches . (background minimal))
                                    (selection . (background minimal))
                                    (popup . (background minimal)))))
+
+
+(defun niva/toggle-bing-bong-dark ()
+  (interactive)
+  (if (member 'bing-bong-dark custom-enabled-themes)
+      (progn
+        (disable-theme 'bing-bong-dark))
+    (progn
+      (load-theme 'bing-bong-dark t))))
+
+(defun niva/toggle-bing-bong-light ()
+  (interactive)
+  (if (member 'bing-bong-light custom-enabled-themes)
+      (progn
+        (disable-theme 'bing-bong-light))
+    (progn
+      (load-theme 'bing-bong-light t))))
