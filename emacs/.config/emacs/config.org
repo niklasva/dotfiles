@@ -3,78 +3,12 @@
 #+STARTUP:  overview noindent
 
 * Theme
-** Load themes
 #+begin_src emacs-lisp
 (load (expand-file-name "lisp/theme-packages.el" user-emacs-directory))
 (load-theme 'ef-eagle)
+(niva/update-theme-faces)
 (make-frame-visible)
 #+end_src
-** Faces
-#+begin_src emacs-lisp
-(defun niva/theme-is-active (theme-name)
-  (cl-some (lambda (theme) (string-match-p theme-name (symbol-name theme)))
-           custom-enabled-themes))
-
-(defun niva/update-theme-faces ()
-  (interactive)
-  (ignore-errors
-    (when (null custom-enabled-themes)
-      (custom-set-faces '(org-block            ((t (:inherit 'default))))
-                        '(org-block-begin-line ((t (:inherit 'org-block :extend t :overline t   :underline nil))))
-                        '(org-block-end-line   ((t (:inherit 'org-block :extend t :overline nil :underline t))))))
-
-    (when (niva/theme-is-active "ryerson")
-      (custom-set-faces '(font-lock-comment-face ((t (:inherit 'unspecified :foreground "lightblue"))))
-                        '(org-block              ((t (:inherit 'default :foreground 'unspecified))))))
-
-    (when (niva/theme-is-active "less")
-      (custom-set-faces '(elfeed-search-unread-title-face ((t :inherit 'default :foreground 'unspecified)))
-                        '(elfeed-search-title-face        ((t (:inherit 'shadow :foreground "darkgray"))))
-                        '(elfeed-search-feed-face         ((t (:inherit 'shadow :foreground "darkgray"))))
-                        '(elfeed-search-tag-face          ((t (:inherit 'shadow :foreground "darkgray"))))))
-
-    (when (niva/theme-is-active "naysayer")
-      (custom-set-faces '(mode-line-inactive   ((t (:box t))))
-                        '(mode-line            ((t (:box t))))
-                        '(default              ((t (:foreground "#DACAAE"))))
-                        '(header-line          ((t (:foreground unspecified :background unspecified :inherit 'mode-line-inactive :box t))))
-                        '(flymake-error-echo   ((t (:background "black" :box t :inverse-video nil :bold t))))
-                        '(flymake-warning-echo ((t (:background "black" :box t :inverse-video nil :bold t))))
-                        '(flymake-note-echo    ((t (:background "black" :box t :inverse-video nil :bold t))))
-                        '(link                 ((t (:inherit 'font-lock-comment-face))))))
-
-    (when (niva/theme-is-active "sitaramv-solaris")
-      (custom-set-faces '(org-block                       ((t (:inherit 'default :background "black"))))
-                        '(org-block-begin-line            ((t (:background "black"))))
-                        '(font-lock-comment-face          ((t (:inherit 'font-lock-builtin-face :slant unspecified :foreground unspecified))))
-                        '(font-lock-string-face           ((t (:foreground "cyan"))))
-                        '(font-lock-function-name-face    ((t (:foreground "yellow"))))
-                        '(elfeed-search-title-face        ((t (:foreground "darkgray"))))
-                        '(elfeed-search-unread-title-face ((t (:foreground "white"))))
-                        '(font-lock-preprocessor-face     ((t (:foreground "green"))))))
-
-    (when (niva/theme-is-active "doom-tomorrow-night")
-      (custom-set-faces '(font-lock-number-face       ((t (:foreground unspecified :inherit 'font-lock-builtin-face))))
-                        '(font-lock-variable-use-face ((t (:foreground unspecified :inherit 'default))))
-                        '(font-lock-constant-face     ((t (:foreground unspecified :inherit 'font-lock-number-face))))
-                        '(warning                     ((t (:foreground unspecified :inherit 'font-lock-builtin-face))))
-                        '(font-lock-type-face         ((t (:foreground unspecified :inherit 'font-lock-builtin-face))))))
-
-    (when (or (niva/theme-is-active "nofrils-acme") (niva/theme-is-active "acme"))
-      (custom-set-faces '(org-block            ((t (:background "#FFFFDC")))))
-                        '(org-block-begin-line ((t (:extend t :overline t :underline nil :background "#FFFFDC"))))
-                        '(org-block-end-line   ((t (:extend t :overline nil :underline t :background "#FFFFDC")))))
-
-    (when (or (niva/theme-is-active "wombat") (niva/theme-is-active "naysayer"))
-      (custom-set-faces '(org-block            ((t (:background "#182C32"))))
-                        '(org-block-begin-line ((t (:inherit 'default :extend t :overline t :underline nil :background "#182C32"))))
-                        '(org-block-end-line   ((t (:inherit 'default :extend t :overline nil :underline t :background "#182C32"))))))
-
-    (niva/diff-hl-fix))
-  (custom-set-faces '(help-key-binding nil :box nil :background 'unspecified :foreground (face-attribute 'default :foreground))))
-(niva/update-theme-faces)
-#+end_src
-
 
 * Encryption
 ** pinentry
