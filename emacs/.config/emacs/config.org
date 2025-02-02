@@ -321,7 +321,7 @@ Always move cursor to help window.
 * Controls
 ** Evil mode
 *** evil-mode
-#+begin_src emacs-lisp
+#+begin_src disabled emacs-lisp
 (use-package evil
   :straight t
   :init
@@ -336,7 +336,8 @@ Always move cursor to help window.
         evil-mode-line-format nil)
   (evil-mode))
 
-(with-eval-after-load 'evil-maps (define-key evil-motion-state-map (kbd "RET") nil))
+(with-eval-after-load 'evil-maps
+  (define-key evil-motion-state-map (kbd "RET") nil))
 #+end_src
 
 *** general
@@ -355,9 +356,9 @@ Always move cursor to help window.
   :delight
   :config
   (setq evil-collection-setup-minibuffer t)
-  (evil-collection-init))
+  (evil-collection-init)
+  (evil-set-initial-state 'dired-mode 'normal))
 
-(evil-set-initial-state 'dired-mode 'normal)
 #+end_src
 
 ** savehist
@@ -397,32 +398,26 @@ Always move cursor to help window.
 (global-set-key                   (kbd "s-b")     (kbd "M-b"))
 (global-set-key                   (kbd "s-m")     nil)
 
-(define-key evil-normal-state-map (kbd "C-<return>")   'eldoc-doc-buffer)
 
-(define-key evil-normal-state-map (kbd "C-x k")   'kill-current-buffer)
-(define-key evil-normal-state-map (kbd "C-x K")   'kill-buffer)
-(define-key evil-normal-state-map (kbd "C-w C-x") 'delete-window)
-(define-key evil-normal-state-map (kbd "s-e")     'eshell)
-(define-key evil-normal-state-map (kbd "M-e")     'eshell)
-
-(define-key evil-normal-state-map (kbd "C-n") 'next-line)
-(define-key evil-normal-state-map (kbd "C-p") 'previous-line)
-(define-key evil-insert-state-map (kbd "C-n") 'nil)
-(define-key evil-insert-state-map (kbd "C-p") 'nil)
-
-(with-eval-after-load 'evil-maps  (define-key evil-motion-state-map (kbd "RET") nil))
-
-(define-key evil-normal-state-map (kbd "C-p") 'previous-line)
-(define-key evil-insert-state-map (kbd "C-n") 'nil)
-(define-key evil-normal-state-map (kbd "C-.") 'nil)
-
-#+end_src
-
-#+begin_src emacs-lisp
-(define-key evil-normal-state-map (kbd "C-w n")     'tab-next)
-(define-key evil-normal-state-map (kbd "C-w c")     'tab-new)
-(define-key evil-normal-state-map (kbd "C-<tab>")   'tab-next)
-(define-key evil-normal-state-map (kbd "C-S-<tab>") 'tab-previous)
+(with-eval-after-load 'evil-maps  
+  (define-key evil-normal-state-map (kbd "C-<return>")   'eldoc-doc-buffer)
+  (define-key evil-normal-state-map (kbd "C-x k")   'kill-current-buffer)
+  (define-key evil-normal-state-map (kbd "C-x K")   'kill-buffer)
+  (define-key evil-normal-state-map (kbd "C-w C-x") 'delete-window)
+  (define-key evil-normal-state-map (kbd "s-e")     'eshell)
+  (define-key evil-normal-state-map (kbd "M-e")     'eshell)
+  (define-key evil-normal-state-map (kbd "C-n") 'next-line)
+  (define-key evil-normal-state-map (kbd "C-p") 'previous-line)
+  (define-key evil-insert-state-map (kbd "C-n") 'nil)
+  (define-key evil-insert-state-map (kbd "C-p") 'nil)
+  (define-key evil-motion-state-map (kbd "RET") nil)
+  (define-key evil-normal-state-map (kbd "C-p") 'previous-line)
+  (define-key evil-insert-state-map (kbd "C-n") 'nil)
+  (define-key evil-normal-state-map (kbd "C-.") 'nil)
+  (define-key evil-normal-state-map (kbd "C-w n")     'tab-next)
+  (define-key evil-normal-state-map (kbd "C-w c")     'tab-new)
+  (define-key evil-normal-state-map (kbd "C-<tab>")   'tab-next)
+  (define-key evil-normal-state-map (kbd "C-S-<tab>") 'tab-previous))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -440,36 +435,36 @@ Always move cursor to help window.
 *** Window management
 **** -
 #+begin_src emacs-lisp
-;; -- use c-x instead --
-;; (define-key evil-normal-state-map (kbd "C-w -")   'evil-window-split)
-;; (define-key evil-normal-state-map (kbd "C-w |")   'evil-window-vsplit)
-;; (define-key evil-normal-state-map (kbd "C-w _")   'evil-window-vsplit)
-;; (define-key evil-normal-state-map (kbd "C-w S--") 'evil-window-vsplit)
-;; (define-key evil-normal-state-map (kbd "C-w C--") 'evil-window-vsplit)
-(define-key evil-normal-state-map (kbd "C-w SPC") 'transpose-frame)
-
-(define-key evil-normal-state-map (kbd "C-w H") 'buf-move-left)
-(define-key evil-normal-state-map (kbd "C-w J") 'buf-move-down)
-(define-key evil-normal-state-map (kbd "C-w K") 'buf-move-up)
-(define-key evil-normal-state-map (kbd "C-w L") 'buf-move-right)
-
-(define-key evil-normal-state-map (kbd "M-<") 'ns-next-frame)
-(define-key evil-normal-state-map (kbd "M->") 'ns-prev-frame)
-(define-key evil-normal-state-map (kbd "s-<") 'ns-next-frame)
-(define-key evil-normal-state-map (kbd "s->") 'ns-prev-frame)
+(with-eval-after-load 'evil-maps  
+  ;; -- use c-x instead --
+  ;; (define-key evil-normal-state-map (kbd "C-w -")   'evil-window-split)
+  ;; (define-key evil-normal-state-map (kbd "C-w |")   'evil-window-vsplit)
+  ;; (define-key evil-normal-state-map (kbd "C-w _")   'evil-window-vsplit)
+  ;; (define-key evil-normal-state-map (kbd "C-w S--") 'evil-window-vsplit)
+  ;; (define-key evil-normal-state-map (kbd "C-w C--") 'evil-window-vsplit)
+  (define-key evil-normal-state-map (kbd "C-w SPC") 'transpose-frame)
+  (define-key evil-normal-state-map (kbd "C-w H") 'buf-move-left)
+  (define-key evil-normal-state-map (kbd "C-w J") 'buf-move-down)
+  (define-key evil-normal-state-map (kbd "C-w K") 'buf-move-up)
+  (define-key evil-normal-state-map (kbd "C-w L") 'buf-move-right)
+  (define-key evil-normal-state-map (kbd "M-<") 'ns-next-frame)
+  (define-key evil-normal-state-map (kbd "M->") 'ns-prev-frame)
+  (define-key evil-normal-state-map (kbd "s-<") 'ns-next-frame)
+  (define-key evil-normal-state-map (kbd "s->") 'ns-prev-frame))
 #+end_src
 
 **** Move to next frame if windmove fails
 #+begin_src emacs-lisp
-(define-key evil-normal-state-map (kbd "C-w h") (lambda() (interactive)
-                                                  (condition-case nil
-                                                      (windmove-left)
-                                                    (error (ns-next-frame)))))
+(with-eval-after-load 'evil-maps  
+  (define-key evil-normal-state-map (kbd "C-w h") (lambda() (interactive)
+                                                    (condition-case nil
+                                                        (windmove-left)
+                                                      (error (ns-next-frame)))))
 
-(define-key evil-normal-state-map (kbd "C-w l") (lambda() (interactive)
-                                                  (condition-case nil
-                                                      (windmove-right)
-                                                    (error (ns-prev-frame)))))
+  (define-key evil-normal-state-map (kbd "C-w l") (lambda() (interactive)
+                                                    (condition-case nil
+                                                        (windmove-right)
+                                                      (error (ns-prev-frame))))))
 #+end_src
 
 **** Project
@@ -482,6 +477,7 @@ Don't prompt project switch action
 #+begin_src emacs-lisp
 (use-package which-key
   :straight t
+  :after evil
   :diminish
   :config
   (setq-default which-key-popup-type 'side-window)
@@ -535,6 +531,7 @@ Don't prompt project switch action
   "ir"    '(niva/switch-irc-buffers           :which-key "niva/switch-irc-buffers")
   "SCR"   '(scratch-buffer                    :which-key "scratch-buffer")
   "tsfll" '(niva/prompt-treesit-level         :which-key "niva/prompt-treesit-level"))
+
 (global-set-key (kbd "C-c early") (lambda () (interactive) (find-file "~/.config/emacs/early-init.el")))
 (global-set-key (kbd "C-c scr")  (lambda () (interactive) (find-file "~/dev/stuff/persist-scratch.org")))
 (global-set-key (kbd "C-c conf") (lambda () (interactive) (find-file "~/.config/emacs/config.org")))
@@ -546,14 +543,13 @@ Don't prompt project switch action
 #+begin_src emacs-lisp
 (use-package undo-fu
   :straight t
-  :bind
-  (("s-z" . undo-fu-only-undo)
-   ("s-Z" . undo-fu-only-redo)
-   :map evil-normal-state-map
-   ("u"   . undo-fu-only-undo)
-   ("U"   . undo-fu-only-redo))
-  :custom
-  (undo-fu-allow-undo-in-region t))
+  :config
+  (setq undo-fu-allow-undo-in-region t)
+  (global-set-key (kbd "s-z")  'undo-fu-only-undo)
+  (global-set-key (kbd "s-Z")  'undo-fu-only-redo)
+  (with-eval-after-load 'evil-maps  
+    (define-key evil-normal-state-map (kbd "u") 'undo-fu-only-undo)
+    (define-key evil-normal-state-map (kbd "U") 'undo-fu-only-redo)))
 #+end_src
 
 *** undo-fu-session
@@ -589,12 +585,13 @@ Don't prompt project switch action
   :straight t
   :config
   (setq hydra-is-helpful nil)
-  (defhydra hydra-win-resize (evil-normal-state-map "C-w")
-    "Resize window"
-    ("C-j" (lambda () (interactive) (evil-window-decrease-height 4)))
-    ("C-k" (lambda () (interactive) (evil-window-increase-height 4)))
-    ("C-h" (lambda () (interactive) (evil-window-decrease-width 8)))
-    ("C-l" (lambda () (interactive) (evil-window-increase-width 8)))))
+  (with-eval-after-load 'evil-maps
+    (defhydra hydra-win-resize (evil-normal-state-map "C-w")
+      "Resize window"
+      ("C-j" (lambda () (interactive) (evil-window-decrease-height 4)))
+      ("C-k" (lambda () (interactive) (evil-window-increase-height 4)))
+      ("C-h" (lambda () (interactive) (evil-window-decrease-width 8)))
+      ("C-l" (lambda () (interactive) (evil-window-increase-width 8))))))
 
 #+end_src
 
@@ -781,8 +778,9 @@ Don't prompt project switch action
   :after dired
   :defer t
   :init
-  (evil-define-key 'normal dired-mode-map (kbd "H") 'dired-up-directory)
-  (evil-define-key 'normal dired-mode-map (kbd "L") 'dired-find-file)
+  (with-eval-after-load 'evil-maps  
+    (evil-define-key 'normal dired-mode-map (kbd "H") 'dired-up-directory)
+    (evil-define-key 'normal dired-mode-map (kbd "L") 'dired-find-file))
   (add-hook 'dired-mode-hook 'dired-collapse-mode))
 
 (use-package async :straight t
@@ -1245,10 +1243,11 @@ Don't prompt project switch action
           (doc (cdr pair)))
       (add-hook hook `(lambda () (setq-local devdocs-current-docs (list ,doc))))))
 
+(with-eval-after-load 'evil-maps  
   (define-key evil-normal-state-map (kbd "SPC g d")
               (lambda ()
                 (interactive)
-                (devdocs-lookup nil (thing-at-point 'symbol t)))))
+                (devdocs-lookup nil (thing-at-point 'symbol t))))))
 #+end_src
 
 ** Running tests
@@ -1567,13 +1566,13 @@ Use org mode in scratch buffer
   (org-roam-db-autosync-enable)
   (global-set-key (kbd "C-c z z") 'org-roam-capture))
 
-(defun my/org-roam-open-link ()
-  (interactive)
-  (if (and (eq major-mode 'org-mode) (string-match-p org-link-any-re (thing-at-point 'line)))
-      (call-interactively #'org-roam-node-find)
-    (evil-ret)))
-
-(evil-define-key 'normal org-mode-map (kbd "RET") #'my/org-roam-open-link)
+(with-eval-after-load 'evil-maps  
+  (defun my/org-roam-open-link ()
+    (interactive)
+    (if (and (eq major-mode 'org-mode) (string-match-p org-link-any-re (thing-at-point 'line)))
+        (call-interactively #'org-roam-node-find)
+      (evil-ret)))
+  (evil-define-key 'normal org-mode-map (kbd "RET") #'my/org-roam-open-link))
 #+end_src
 
 *** websocket
@@ -1752,8 +1751,9 @@ Use org mode in scratch buffer
 
 
 (with-eval-after-load 'eww
-  (define-key eww-mode-map (kbd "ö")     (lambda () (interactive) (evil-forward-paragraph) (forward-line 1) (evil-scroll-line-to-center nil)))
-  (define-key eww-mode-map (kbd "ä")     (lambda () (interactive) (evil-backward-paragraph 2) (forward-line 1) (evil-scroll-line-to-center nil))))
+  (with-eval-after-load 'evil-maps  
+    (define-key eww-mode-map (kbd "ö")     (lambda () (interactive) (evil-forward-paragraph) (forward-line 1) (evil-scroll-line-to-center nil)))
+    (define-key eww-mode-map (kbd "ä")     (lambda () (interactive) (evil-backward-paragraph 2) (forward-line 1) (evil-scroll-line-to-center nil)))))
 
 (dolist (face '(;; shr-h1
                 ;; shr-text
@@ -1832,37 +1832,38 @@ Use org mode in scratch buffer
                                           :password (niva/lookup-password :host "fever"))))
   (elfeed-protocol-enable)
 
-  (evil-define-key 'normal elfeed-show-mode-map "I" #'niva/elfeed-toggle-images)
   (define-key elfeed-search-mode-map              (kbd "I") #'niva/elfeed-toggle-images)
-  (evil-define-key 'normal elfeed-search-mode-map (kbd "C-p") #'evil-previous-line)
-  (evil-define-key 'normal elfeed-search-mode-map (kbd "C-n") #'evil-next-line)
-  (evil-define-key 'normal elfeed-search-mode-map (kbd "k") #'evil-previous-line)
-  (evil-define-key 'normal elfeed-search-mode-map (kbd "j") #'evil-next-line)
-  (evil-define-key 'normal elfeed-search-mode-map (kbd "x") #'elfeed-search-untag-all-unread)
-  (evil-define-key 'normal elfeed-show-mode-map   (kbd "'") #'niva/elfeed--move-paragraph-up)
-  (evil-define-key 'normal elfeed-show-mode-map   (kbd ";") #'niva/elfeed--move-paragraph-down)
-  (evil-define-key 'normal elfeed-search-mode-map "r" 'elfeed-update))
+  (with-eval-after-load 'evil-maps  
+    (evil-define-key 'normal elfeed-show-mode-map "I" #'niva/elfeed-toggle-images)
+    (evil-define-key 'normal elfeed-search-mode-map (kbd "C-p") #'evil-previous-line)
+    (evil-define-key 'normal elfeed-search-mode-map (kbd "C-n") #'evil-next-line)
+    (evil-define-key 'normal elfeed-search-mode-map (kbd "k") #'evil-previous-line)
+    (evil-define-key 'normal elfeed-search-mode-map (kbd "j") #'evil-next-line)
+    (evil-define-key 'normal elfeed-search-mode-map (kbd "x") #'elfeed-search-untag-all-unread)
+    (evil-define-key 'normal elfeed-show-mode-map   (kbd "'") #'niva/elfeed--move-paragraph-up)
+    (evil-define-key 'normal elfeed-show-mode-map   (kbd ";") #'niva/elfeed--move-paragraph-down)
+    (evil-define-key 'normal elfeed-search-mode-map "r" 'elfeed-update)
 
-(defun niva/eww--move-paragraph-up ()
-  (interactive)
-  (if (derived-mode-p 'eww-mode)
-      (condition-case nil
-          (progn
-            (evil-backward-paragraph 2)
-            (forward-line 1)
-            (evil-scroll-line-to-center nil)))))
+  (defun niva/eww--move-paragraph-up ()
+    (interactive)
+    (if (derived-mode-p 'eww-mode)
+        (condition-case nil
+            (progn
+              (evil-backward-paragraph 2)
+              (forward-line 1)
+              (evil-scroll-line-to-center nil)))))
 
-(defun niva/eww--move-paragraph-down ()
-  (interactive)
-  (if (derived-mode-p 'eww-mode)
-      (condition-case nil
-          (progn
-            (evil-forward-paragraph)
-            (evil-scroll-line-to-center nil)
-            (forward-line 1)))))
+  (defun niva/eww--move-paragraph-down ()
+    (interactive)
+    (if (derived-mode-p 'eww-mode)
+        (condition-case nil
+            (progn
+              (evil-forward-paragraph)
+              (evil-scroll-line-to-center nil)
+              (forward-line 1)))))
 
-  (evil-define-key 'normal eww-mode-map   (kbd "'") #'niva/eww--move-paragraph-up)
-  (evil-define-key 'normal eww-mode-map   (kbd ";") #'niva/eww--move-paragraph-down)
+    (evil-define-key 'normal eww-mode-map   (kbd "'") #'niva/eww--move-paragraph-up)
+    (evil-define-key 'normal eww-mode-map   (kbd ";") #'niva/eww--move-paragraph-down)))
 #+end_src
 
 
@@ -1889,11 +1890,11 @@ Use org mode in scratch buffer
                 gptel-model 'gpt-4o-mini))
 
 (with-eval-after-load 'gptel
-  (evil-define-key 'normal gptel-mode-map (kbd "q") 'switch-to-prev-buffer)
-  (evil-define-key 'normal gptel-mode-map (kbd "C-g") 'delete-window)
-  (define-key gptel-mode-map (kbd "C-c m") 'gptel-menu))
-
-(add-hook 'gptel-mode-hook 'evil-insert-state)
+  (define-key gptel-mode-map (kbd "C-c m") 'gptel-menu)
+  (with-eval-after-load 'evil-maps  
+    (evil-define-key 'normal gptel-mode-map (kbd "q") 'switch-to-prev-buffer)
+    (evil-define-key 'normal gptel-mode-map (kbd "C-g") 'delete-window)
+    (add-hook 'gptel-mode-hook 'evil-insert-state)))
 
 (defun niva/gptel-common-buffer () (interactive) (gptel "*gptel*" nil nil t))
 (global-set-key (kbd "C-c p") 'niva/gptel-common-buffer)
