@@ -27,35 +27,37 @@
       (concat input-string (make-string (- length len) ? )))))
 
 (defun elfeed-search--faces-1 (tags)
-  (nconc (cl-loop for (tag . faces) in elfeed-search-face-alist-1
-                  when (memq tag tags)
-                  append faces)
-         (list 'elfeed-search-title-face)))
+  (append
+   (mapcan (lambda (entry)
+             (when (memq (car entry) tags)
+               (cdr entry)))
+           elfeed-search-face-alist-1)
+   (list 'elfeed-search-title-face)))
 
 
 (defun elfeed-search--faces-2 (tags)
-  (nconc (cl-loop for (tag . faces) in elfeed-search-face-alist-2
-                  when (memq tag tags)
-                  append faces)
-         (list 'elfeed-search-title-face)))
-
+  (append
+   (mapcan (lambda (entry)
+             (when (memq (car entry) tags)
+               (cdr entry)))
+           elfeed-search-face-alist-2)
+   (list 'elfeed-search-title-face)))
 
 (defun elfeed-search--faces-3 (tags)
-  (nconc (cl-loop for (tag . faces) in elfeed-search-face-alist-3
-                  when (memq tag tags)
-                  append faces)
-         (list 'elfeed-search-title-face)))
+  (append
+   (mapcan (lambda (entry)
+             (when (memq (car entry) tags)
+               (cdr entry)))
+           elfeed-search-face-alist-3)
+   (list 'elfeed-search-title-face)))
 
 (defun elfeed-search--faces-4 (tags)
-  (nconc (cl-loop for (tag . faces) in elfeed-search-face-alist-4
-                  when (memq tag tags)
-                  append faces)
-         (list 'elfeed-search-title-face)))
-
-(setq elfeed-search-face-alist-1 '((unread elfeed-search-unread-title-face))
-      elfeed-search-face-alist-2 '((unread elfeed-search-feed-face))
-      elfeed-search-face-alist-3 '((unread elfeed-search-tag-face))
-      elfeed-search-face-alist-4 '((unread elfeed-search-date-face)))
+  (append
+   (mapcan (lambda (entry)
+             (when (memq (car entry) tags)
+               (cdr entry)))
+           elfeed-search-face-alist-4)
+   (list 'elfeed-search-title-face)))
 
 (defun niva/elfeed-search-print-entry--multi-line (entry)
   (let* ((feed (elfeed-entry-feed entry))
