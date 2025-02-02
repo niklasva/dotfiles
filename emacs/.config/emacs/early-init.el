@@ -1,12 +1,6 @@
-(setq package-enable-at-startup nil)
-(setq gc-cons-threshold most-positive-fixnum)
-(setq vc-follow-symlinks t)
-(setq native-comp-speed -1)
-(setq lexical-binding t)
-
-(load (expand-file-name "lisp/init-straight.el" user-emacs-directory))
-
-(setq-default header-line-format (buffer-file-name))
+;;; early-init.el --- -*- lexical-binding: t; -*-
+;;; Commentary:
+;;; Code:
 
 (setq default-frame-alist
       (append (list '(min-height              . 1)
@@ -20,10 +14,21 @@
                     '(ns-appearance           . light)
                     '(visibility              . t))))
 
-(use-package benchmark-init
-  :straight t
-  :config
-  (add-hook 'after-init-hook 'benchmark-init/deactivate))
+(setq-default package-enable-at-startup nil)
+(setq-default gc-cons-threshold most-positive-fixnum)
+(setq-default vc-follow-symlinks t)
+(setq-default native-comp-speed -1)
+(setq-default lexical-binding t)
+(setq-default gnus-init-inhibit t)
+
+(custom-set-variables
+ '(org-modules nil))
+
+(load (expand-file-name "lisp/init-straight.el" user-emacs-directory))
+
+(setq-default header-line-format (buffer-file-name))
+
+(use-package benchmark-init :straight t :config (add-hook 'after-init-hook 'benchmark-init/deactivate))
 
 (setq-default frame-resize-pixelwise t
               frame-title-format ""

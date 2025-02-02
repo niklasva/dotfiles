@@ -2,7 +2,6 @@
 ;;; Commentary:
 ;;; Code:
 
-
 (defun niva/elfeed-sort-by-tags-and-feed (a b)
   (let* ((a-title (format "%s" (elfeed-entry-feed a)))
          (b-title (format "%s" (elfeed-entry-feed b)))
@@ -14,7 +13,12 @@
           (string> a-title b-title)
         (string< a-tags b-tags)))))
 
-(setf elfeed-search-sort-function nil)
+(defvar elfeed-search-sort-function nil)
+
+(defvar elfeed-search-face-alist-1 '((unread elfeed-search-unread-title-face)))
+(defvar elfeed-search-face-alist-2 '((unread elfeed-search-feed-face)))
+(defvar elfeed-search-face-alist-3 '((unread elfeed-search-tag-face)))
+(defvar elfeed-search-face-alist-4 '((unread elfeed-search-date-face)))
 
 (defun niva/fixed-length (input-string length)
   (let ((len (length input-string)))

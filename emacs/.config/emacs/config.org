@@ -249,8 +249,8 @@ Always move cursor to help window.
 
     (when (or (niva/theme-is-active "nofrils-acme") (niva/theme-is-active "acme"))
       (custom-set-faces '(org-block            ((t (:background "#FFFFDC")))))
-      '(org-block-begin-line ((t (:extend t :overline t :underline nil :background "#FFFFDC"))))
-      '(org-block-end-line   ((t (:extend t :overline nil :underline t :background "#FFFFDC")))))
+                        '(org-block-begin-line ((t (:extend t :overline t :underline nil :background "#FFFFDC"))))
+                        '(org-block-end-line   ((t (:extend t :overline nil :underline t :background "#FFFFDC")))))
 
     (when (or (niva/theme-is-active "wombat") (niva/theme-is-active "naysayer"))
       (custom-set-faces '(org-block            ((t (:background "#182C32"))))
@@ -388,18 +388,24 @@ Always move cursor to help window.
 (global-set-key (kbd "<f2>") nil)
 (global-set-key (kbd "<f3>") nil)
 (global-set-key (kbd "<f4>") nil)
-#+end_src
+(global-set-key (kbd "€")          (kbd "$"))
+(global-set-key (kbd "s-n")        (kbd "M-n"))
+(global-set-key (kbd "s-p")        (kbd "M-p"))
+(global-set-key (kbd "s-f")        (kbd "M-f"))
+(global-set-key (kbd "s-b")        (kbd "M-b"))
+(global-set-key (kbd "s-m")        nil)
+(global-set-key (kbd "C-x b")      'consult-buffer)
+(global-set-key (kbd "C-x C-b")      'consult-buffer)
+(global-set-key (kbd "s-q")        'save-buffers-kill-terminal)
+(global-set-key (kbd "s-<return>") 'toggle-frame-fullscreen)
+(global-set-key (kbd "s-t")        'tab-new)
+(global-set-key (kbd "s-w")        'tab-close)
+(global-set-key (kbd "s-z")        nil)
+(global-set-key (kbd "C-c bbl")    'niva/toggle-bing-bong-light)
+(global-set-key (kbd "C-c bbd")    'niva/toggle-bing-bong-dark)
+(global-set-key (kbd "C-c ct")     'consult-theme)
 
-#+begin_src emacs-lisp
-(global-set-key                   (kbd "€")       (kbd "$"))
-(global-set-key                   (kbd "s-n")     (kbd "M-n"))
-(global-set-key                   (kbd "s-p")     (kbd "M-p"))
-(global-set-key                   (kbd "s-f")     (kbd "M-f"))
-(global-set-key                   (kbd "s-b")     (kbd "M-b"))
-(global-set-key                   (kbd "s-m")     nil)
-
-
-(with-eval-after-load 'evil-maps  
+(with-eval-after-load 'evil-maps
   (define-key evil-normal-state-map (kbd "C-<return>")   'eldoc-doc-buffer)
   (define-key evil-normal-state-map (kbd "C-x k")   'kill-current-buffer)
   (define-key evil-normal-state-map (kbd "C-x K")   'kill-buffer)
@@ -417,31 +423,7 @@ Always move cursor to help window.
   (define-key evil-normal-state-map (kbd "C-w n")     'tab-next)
   (define-key evil-normal-state-map (kbd "C-w c")     'tab-new)
   (define-key evil-normal-state-map (kbd "C-<tab>")   'tab-next)
-  (define-key evil-normal-state-map (kbd "C-S-<tab>") 'tab-previous))
-#+end_src
-
-#+begin_src emacs-lisp
-(global-set-key (kbd "s-q")        'save-buffers-kill-terminal)
-(global-set-key (kbd "s-<return>") 'toggle-frame-fullscreen)
-(global-set-key (kbd "s-t")        'tab-new)
-(global-set-key (kbd "s-w")        'tab-close)
-(global-set-key (kbd "s-z")        nil)
-
-(global-set-key (kbd "C-c bbl") 'niva/toggle-bing-bong-light)
-(global-set-key (kbd "C-c bbd") 'niva/toggle-bing-bong-dark)
-(global-set-key (kbd "C-c ct")  'consult-theme)
-#+end_src
-
-*** Window management
-**** -
-#+begin_src emacs-lisp
-(with-eval-after-load 'evil-maps
-  ;; -- use c-x instead --
-  ;; (define-key evil-normal-state-map (kbd "C-w -")   'evil-window-split)
-  ;; (define-key evil-normal-state-map (kbd "C-w |")   'evil-window-vsplit)
-  ;; (define-key evil-normal-state-map (kbd "C-w _")   'evil-window-vsplit)
-  ;; (define-key evil-normal-state-map (kbd "C-w S--") 'evil-window-vsplit)
-  ;; (define-key evil-normal-state-map (kbd "C-w C--") 'evil-window-vsplit)
+  (define-key evil-normal-state-map (kbd "C-S-<tab>") 'tab-previous)
   (define-key evil-normal-state-map (kbd "C-w SPC") 'transpose-frame)
   (define-key evil-normal-state-map (kbd "C-w H") 'buf-move-left)
   (define-key evil-normal-state-map (kbd "C-w J") 'buf-move-down)
@@ -450,24 +432,12 @@ Always move cursor to help window.
   (define-key evil-normal-state-map (kbd "M-<") 'ns-next-frame)
   (define-key evil-normal-state-map (kbd "M->") 'ns-prev-frame)
   (define-key evil-normal-state-map (kbd "s-<") 'ns-next-frame)
-  (define-key evil-normal-state-map (kbd "s->") 'ns-prev-frame))
+  (define-key evil-normal-state-map (kbd "s->") 'ns-prev-frame)
+  (define-key evil-normal-state-map (kbd "C-w h") (lambda() (interactive) (condition-case nil (windmove-left) (error (ns-next-frame)))))
+  (define-key evil-normal-state-map (kbd "C-w l") (lambda() (interactive) (condition-case nil (windmove-right) (error (ns-prev-frame))))))
 #+end_src
 
-**** Move to next frame if windmove fails
-#+begin_src emacs-lisp
-(with-eval-after-load 'evil-maps
-  (define-key evil-normal-state-map (kbd "C-w h") (lambda() (interactive)
-                                                    (condition-case nil
-                                                        (windmove-left)
-                                                      (error (ns-next-frame)))))
-
-  (define-key evil-normal-state-map (kbd "C-w l") (lambda() (interactive)
-                                                    (condition-case nil
-                                                        (windmove-right)
-                                                      (error (ns-prev-frame))))))
-#+end_src
-
-**** Project
+*** Project
 Don't prompt project switch action
 #+begin_src emacs-lisp
 (setq project-switch-commands 'project-find-file)
@@ -1154,17 +1124,17 @@ Don't prompt project switch action
   :straight t
   :config
 
-  (defun my-diff-hl-fringe-bmp-function (_type _pos)
-    "Fringe bitmap function for use as `diff-hl-fringe-bmp-function'."
-    (define-fringe-bitmap 'my-diff-hl-bmp
-      (vector
-       #b10000000
-       #b00000000
-       )
-      2 8
-      '(center t)))
+    (defun my-diff-hl-fringe-bmp-function (_type _pos)
+      "Fringe bitmap function for use as `diff-hl-fringe-bmp-function'."
+      (define-fringe-bitmap 'my-diff-hl-bmp
+        (vector
+         #b10000000
+         #b00000000
+         )
+        2 8
+        '(center t)))
 
-  (setq diff-hl-fringe-bmp-function #'my-diff-hl-fringe-bmp-function)
+    (setq diff-hl-fringe-bmp-function #'my-diff-hl-fringe-bmp-function)
 
   (setq diff-hl-draw-borders t
         diff-hl-side 'left
@@ -1174,9 +1144,9 @@ Don't prompt project switch action
                                        (insert . "[") ;"+"
                                        (unknown . " ") ;"?"
                                        ))
-  (add-hook 'prog-mode-hook 'niva/diff-hl-fix)
-  ;; (diff-hl-margin-mode)
-  (global-diff-hl-mode))
+(add-hook 'prog-mode-hook 'niva/diff-hl-fix)
+;; (diff-hl-margin-mode)
+(global-diff-hl-mode))
 #+end_src
 
 *** magit
@@ -1243,11 +1213,11 @@ Don't prompt project switch action
           (doc (cdr pair)))
       (add-hook hook `(lambda () (setq-local devdocs-current-docs (list ,doc))))))
 
-  (with-eval-after-load 'evil-maps
-    (define-key evil-normal-state-map (kbd "SPC g d")
-                (lambda ()
-                  (interactive)
-                  (devdocs-lookup nil (thing-at-point 'symbol t))))))
+(with-eval-after-load 'evil-maps
+  (define-key evil-normal-state-map (kbd "SPC g d")
+              (lambda ()
+                (interactive)
+                (devdocs-lookup nil (thing-at-point 'symbol t))))))
 #+end_src
 
 ** Running tests
@@ -1844,23 +1814,23 @@ Use org mode in scratch buffer
     (evil-define-key 'normal elfeed-show-mode-map   (kbd ";") #'niva/elfeed--move-paragraph-down)
     (evil-define-key 'normal elfeed-search-mode-map "r" 'elfeed-update)
 
-    (defun niva/eww--move-paragraph-up ()
-      (interactive)
-      (if (derived-mode-p 'eww-mode)
-          (condition-case nil
-              (progn
-                (evil-backward-paragraph 2)
-                (forward-line 1)
-                (evil-scroll-line-to-center nil)))))
+  (defun niva/eww--move-paragraph-up ()
+    (interactive)
+    (if (derived-mode-p 'eww-mode)
+        (condition-case nil
+            (progn
+              (evil-backward-paragraph 2)
+              (forward-line 1)
+              (evil-scroll-line-to-center nil)))))
 
-    (defun niva/eww--move-paragraph-down ()
-      (interactive)
-      (if (derived-mode-p 'eww-mode)
-          (condition-case nil
-              (progn
-                (evil-forward-paragraph)
-                (evil-scroll-line-to-center nil)
-                (forward-line 1)))))
+  (defun niva/eww--move-paragraph-down ()
+    (interactive)
+    (if (derived-mode-p 'eww-mode)
+        (condition-case nil
+            (progn
+              (evil-forward-paragraph)
+              (evil-scroll-line-to-center nil)
+              (forward-line 1)))))
 
     (evil-define-key 'normal eww-mode-map   (kbd "'") #'niva/eww--move-paragraph-up)
     (evil-define-key 'normal eww-mode-map   (kbd ";") #'niva/eww--move-paragraph-down)))
