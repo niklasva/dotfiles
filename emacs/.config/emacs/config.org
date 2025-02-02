@@ -1713,7 +1713,6 @@ Use org mode in scratch buffer
               shr-use-colors t
               eww-search-prefix "https://duckduckgo.com/?q=")
 
-
 (with-eval-after-load 'eww
   (with-eval-after-load 'evil-maps
     (define-key eww-mode-map (kbd "ö")     (lambda () (interactive) (evil-forward-paragraph) (forward-line 1) (evil-scroll-line-to-center nil)))
@@ -1901,9 +1900,8 @@ Use org mode in scratch buffer
 	               "tell application \"Emacs\" to activate")))
 (add-hook 'server-after-make-frame-hook #'niva/foreground-emacsclient)
 #+end_src
-* Popper
-#+end_src
 
+* Popper
 #+begin_src emacs-lisp
 (use-package popper
   :straight t
