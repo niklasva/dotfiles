@@ -7,12 +7,11 @@
                     '(height                  . 45)
                     '(min-width               . 1)
                     '(width                   . 155)
-                    '(internal-border-width   . 10)
+                    '(internal-border-width   . 20)
                     '(vertical-scroll-bars    . nil)
                     '(tool-bar-lines          . 0)
                     '(ns-transparent-titlebar . t)
-                    '(ns-appearance           . light)
-                    '(visibility              . t))))
+                    '(ns-appearance           . light))))
 
 (setq-default package-enable-at-startup nil)
 (setq-default gc-cons-threshold most-positive-fixnum)
@@ -30,10 +29,12 @@
 
 (use-package benchmark-init :straight t :config (add-hook 'after-init-hook 'benchmark-init/deactivate))
 
+(custom-set-faces '(default ((t (:font "Iosevka Curly 14" :weight unspecified :width unspecified)))))
+
 (setq-default frame-resize-pixelwise t
               frame-title-format ""
               window-resize-pixelwise t
-              ns-antialias-text nil
+              ns-antialias-text t
               ns-use-native-fullscreen t
               ns-use-proxy-icon nil
               ns-use-thin-smoothing t)

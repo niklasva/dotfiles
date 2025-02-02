@@ -94,26 +94,27 @@
 #+begin_src emacs-lisp
 (setq-default c-basic-offset 4
               c-default-style "linux"
-              create-lockfiles nil
-              completion-cycle-threshold 3)
+              completion-cycle-threshold t
+              display-line-numbers-width 4
+              confirm-kill-emacs 'y-or-n-p
+              ring-bell-function 'ignore
+              column-number-mode t)
+
+(setq-default backup-directory-alist '(("." . "~/.cache/emacs/backup"))
+              auto-save-file-name-transforms '((".*" "~/.cache/emacs/auto-save/" t))
+              backup-by-copying t
+              version-control t
+              delete-old-versions t
+              kept-new-versions 20
+              kept-old-versions 5
+              create-lockfiles nil)
+
+(add-hook 'window-setup-hook 'delete-other-windows)
+(fset 'yes-or-no-p 'y-or-n-p)
 
 (global-display-line-numbers-mode -1)
-(setq-default display-line-numbers-width 4)
-(setq confirm-kill-emacs 'y-or-n-p)
-(setq ring-bell-function 'ignore)
-(add-hook 'window-setup-hook 'delete-other-windows)
-(setq create-lockfiles nil)
-
-(setq backup-directory-alist '(("." . "~/.cache/emacs/backup"))
-      auto-save-file-name-transforms '((".*" "~/.cache/emacs/auto-save/" t))
-      backup-by-copying t
-      version-control t
-      delete-old-versions t
-      kept-new-versions 20
-      kept-old-versions 5
-      create-lockfiles nil)
-
-(setq-default column-number-mode t)
+(electric-indent-mode)
+(electric-pair-mode)
 #+end_src
 
 ** Indentation rules
@@ -139,15 +140,7 @@
 ** Clean up trailing whitespace
 #+begin_src emacs-lisp
 (setq org-src-strip-leading-and-trailing-blank-lines t)
-
-(add-hook 'prog-mode-hook
-          (lambda ()
-            (if (version< emacs-version "24.4")
-                (visual-wrap-prefix-mode))
-            (display-line-numbers-mode -1)
-            (setq show-trailing-whitespace t)
-            (diminish 'eldoc-mode)
-            (add-hook 'before-save-hook 'delete-trailing-whitespace)))
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
 #+end_src
 
 ** recentf
@@ -162,7 +155,6 @@
 
 ** yes-or-no-p
 #+begin_src emacs-lisp
-(fset 'yes-or-no-p 'y-or-n-p)
 #+end_src
 
 ** Scrolling behavior
@@ -394,6 +386,8 @@ Always move cursor to help window.
 (global-set-key (kbd "s-f")        (kbd "M-f"))
 (global-set-key (kbd "s-b")        (kbd "M-b"))
 (global-set-key (kbd "s-m")        nil)
+(global-set-key (kbd "s-s")        nil)
+(global-set-key (kbd "s-q")        nil)
 (global-set-key (kbd "C-x b")      'consult-buffer)
 (global-set-key (kbd "C-x C-b")      'consult-buffer)
 (global-set-key (kbd "s-q")        'save-buffers-kill-terminal)
@@ -1907,9 +1901,7 @@ Use org mode in scratch buffer
 	               "tell application \"Emacs\" to activate")))
 (add-hook 'server-after-make-frame-hook #'niva/foreground-emacsclient)
 #+end_src
-* Experiment
-
-**** shr-face
+* Popper
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1946,3 +1938,5 @@ Use org mode in scratch buffer
           (delete-window window)))))
   (advice-add #'keyboard-quit :before #'+popper-close-window-hack))
   #+end_src
+
+* Experiment
