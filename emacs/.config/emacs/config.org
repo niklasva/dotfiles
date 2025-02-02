@@ -10,14 +10,9 @@
 (make-frame-visible)
 #+end_src
 
-* Encryption
-** pinentry
-#+begin_src emacs-lisp
-(use-package pinentry :straight t :config (pinentry-start))
-#+end_src
-
 * Imports
 #+begin_src emacs-lisp
+(use-package pinentry :straight t :config (pinentry-start))
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 (defvar import-file (expand-file-name "private/config.el" user-emacs-directory))
 (when (file-readable-p import-file) (load import-file))
