@@ -488,7 +488,7 @@ Don't prompt project switch action
   (which-key-mode))
 
 (nvmap :keymaps 'override :prefix "SPC"
-  "SPC"   '(execute-extended-command          :which-key "M-x")
+  ;; "SPC"   '(execute-extended-command          :which-key "M-x")
   "B"     '(consult-buffer-other-window       :which-key "consult-buffer-other-window")
   "b"     '(consult-buffer                    :which-key "consult-buffer")
   "c C"   '(recompile                         :which-key "recompile")
@@ -534,15 +534,11 @@ Don't prompt project switch action
   "cir"   '(circe                             :which-key "circe")
   "ir"    '(niva/switch-irc-buffers           :which-key "niva/switch-irc-buffers")
   "SCR"   '(scratch-buffer                    :which-key "scratch-buffer")
-  "tsfll" '(niva/prompt-treesit-level         :which-key "niva/prompt-treesit-level")
-
-
-  "early" '((lambda () (interactive) (find-file "~/.config/emacs/early-init.el"))                   :which-key "Open early init")
-  "scr"   '((lambda () (interactive) (find-file "~/dev/stuff/persist-scratch.org"))                 :which-key "Open persistent scratch file")
-  "time"  '((lambda () (interactive) (message (format-time-string "%a %d %b %H:%M v%W")))           :which-key "Display current time")
-  "conf"  '((lambda () (interactive) (find-file "~/.config/emacs/config.org"))                      :which-key "Open config.org")
-  "vconf" '((lambda () (interactive) (split-window-right) (find-file "~/.config/emacs/config.org")) :which-key "Open config.org")
-  "sconf" '((lambda () (interactive) (split-window-below) (find-file "~/.config/emacs/config.org")) :which-key "Open config.org"))
+  "tsfll" '(niva/prompt-treesit-level         :which-key "niva/prompt-treesit-level"))
+(global-set-key (kbd "C-c early") (lambda () (interactive) (find-file "~/.config/emacs/early-init.el")))
+(global-set-key (kbd "C-c scr")  (lambda () (interactive) (find-file "~/dev/stuff/persist-scratch.org")))
+(global-set-key (kbd "C-c conf") (lambda () (interactive) (find-file "~/.config/emacs/config.org")))
+(global-set-key (kbd "C-c ff")  'find-file)
 #+end_src
 
 ** Undo
