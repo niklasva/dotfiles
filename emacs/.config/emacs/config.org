@@ -1897,6 +1897,16 @@ Use org mode in scratch buffer
   (add-hook 'org-mode-hook (lambda() (unless (equal (buffer-name) "*scratch*") (org-header-line-outline-mode)))))
 #+end_src
 
+* Emacsclient
+#+begin_src emacs-lisp
+(defun niva/foreground-emacsclient ()
+  (when (eq system-type 'darwin)
+    (start-process "bring-emacs-to-front" nil
+    	           "osascript"
+	               "-e"
+	               "tell application \"Emacs\" to activate")))
+(add-hook 'server-after-make-frame-hook #'niva/foreground-emacsclient)
+#+end_src
 * Experiment
 
 **** shr-face
