@@ -803,14 +803,13 @@ Don't prompt project switch action
   (set-face-attribute 'treemacs-root-face nil :height 'unspecified :weight 'unspecified)
   (treemacs-hide-gitignored-files-mode t)
   (global-set-key (kbd "C-c t") 'treemacs))
-(setq ns-option-modifier 'none)
 #+end_src
 
 #+begin_src emacs-lisp
 (setq-default mac-escape-modifier nil
               mac-option-modifier 'meta
               mac-right-command-modifier 'meta
-              mac-right-option-modifier nil)
+              mac-right-option-modifier 'nil)
 
 (global-set-key (kbd "s-,") 'menu-set-font)
 (global-set-key (kbd "M-,") 'menu-set-font)
