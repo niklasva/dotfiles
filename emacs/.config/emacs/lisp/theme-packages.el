@@ -1,6 +1,16 @@
+;;; theme-packages.el --- Theme-related configuration
+;;; Commentary:
+;;; Code:
+
+;;; General settings
 (setq custom-safe-themes t)
 (add-to-list 'custom-theme-load-path (concat user-emacs-directory "themes"))
 
+;; Bing Bong
+(use-package bing-bong-dark-theme  :commands (niva/toggle-bing-bong-dark)  :load-path "themes")
+(use-package bing-bong-light-theme :commands (niva/toggle-bing-bong-light) :load-path "themes")
+
+;;; Kaolin Themes
 (use-package kaolin-themes
   :straight (:host github :repo "ogdenwebb/emacs-kaolin-themes")
   :defer t
@@ -13,6 +23,7 @@
         kaolin-themes-org-scale-headings nil
         kaolin-themes-modeline-border nil))
 
+;;; Doom Themes
 (use-package doom-themes
   :straight t
   :defer t
@@ -27,10 +38,23 @@
         doom-city-lights-brighter-comments     t
         doom-monokai-machine-brighter-comments t))
 
-(use-package acme-theme       :straight t :defer t :config (setq-default acme-theme-black-fg t))
-(use-package ef-themes        :straight (:host github :repo "protesilaos/ef-themes") :defer t)
-(use-package os1-theme        :straight (:type git :host github :repo "sashimacs/os1-theme") :defer t)
-(use-package colorless-themes :straight (:host github :repo "lthms/colorless-themes.el" :files ("colorless-themes.el" "*.el")))
+;;; Other theme packages
+(use-package acme-theme
+  :straight t
+  :defer t
+  :config
+  (setq-default acme-theme-black-fg t))
+
+(use-package ef-themes
+  :straight (:host github :repo "protesilaos/ef-themes")
+  :defer t)
+
+(use-package os1-theme
+  :straight (:type git :host github :repo "sashimacs/os1-theme")
+  :defer t)
+
+(use-package colorless-themes
+  :straight (:host github :repo "lthms/colorless-themes.el" :files ("colorless-themes.el" "*.el")))
 
 (use-package almost-mono-themes    :straight t :defer t)
 (use-package basic-theme           :straight t :defer t)
@@ -43,12 +67,13 @@
 (use-package professional-theme    :straight t :defer t)
 (use-package standard-themes       :straight t :defer t)
 
+;;; Modus Themes
 (use-package modus-themes
   :straight t
   :defer t
   :config
   (setq modus-themes-bold-constructs nil
-        modus-themes-hl-line (quote (accented))
+        modus-themes-hl-line '(accented)
         modus-themes-org-blocks nil
         modus-themes-region '(bg-only)
         modus-themes-tabs-accented t)
@@ -60,28 +85,16 @@
                                    (selection . (background minimal))
                                    (popup . (background minimal)))))
 
-
-(defun niva/toggle-bing-bong-dark ()
-  (interactive)
-  (if (member 'bing-bong-dark custom-enabled-themes)
-      (progn
-        (disable-theme 'bing-bong-dark))
-    (progn
-      (load-theme 'bing-bong-dark t))))
-
-(defun niva/toggle-bing-bong-light ()
-  (interactive)
-  (if (member 'bing-bong-light custom-enabled-themes)
-      (progn
-        (disable-theme 'bing-bong-light))
-    (progn
-      (load-theme 'bing-bong-light t))))
-
+;;; Helpers
 (defun niva/theme-is-active (theme-name)
-  (cl-some (lambda (theme) (string-match-p theme-name (symbol-name theme)))
+  "Return non-nil if THEME-NAME is currently enabled."
+  (cl-some (lambda (theme)
+             (string-match-p theme-name (symbol-name theme)))
            custom-enabled-themes))
 
+;;; Custom face updates per theme
 (defun niva/update-theme-faces ()
+  "Adjust certain face settings depending on the active theme."
   (interactive)
   (ignore-errors
     (when (null custom-enabled-themes)
@@ -138,3 +151,4 @@
 
     (niva/diff-hl-fix))
   (custom-set-faces '(help-key-binding nil :box nil :background 'unspecified :foreground (face-attribute 'default :foreground))))
+;;; theme-packages.el ends here

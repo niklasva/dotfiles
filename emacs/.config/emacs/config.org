@@ -2,14 +2,6 @@
 #+OPTIONS:  toc:2
 #+STARTUP:  overview noindent
 
-* Theme
-#+begin_src emacs-lisp
-(load (expand-file-name "lisp/theme-packages.el" user-emacs-directory))
-(load-theme 'ef-eagle)
-(niva/update-theme-faces)
-(make-frame-visible)
-#+end_src
-
 * Imports
 #+begin_src emacs-lisp
 (use-package pinentry :straight t :config (pinentry-start))
@@ -18,9 +10,10 @@
 (when (file-readable-p import-file) (load import-file))
 #+end_src
 
-* Text edit settings
+* Defaults
 ** Defaults
 #+begin_src emacs-lisp
+(setq-default warning-minimum-level :error)
 (setq-default c-basic-offset 4
               c-default-style "linux"
               completion-cycle-threshold t
@@ -38,16 +31,16 @@
               kept-old-versions 5
               create-lockfiles nil)
 
+(setq-default case-fold-search t)
+
 (add-hook 'window-setup-hook 'delete-other-windows)
 (fset 'yes-or-no-p 'y-or-n-p)
 
 (global-display-line-numbers-mode -1)
 (electric-indent-mode)
 (electric-pair-mode)
-#+end_src
+(delete-selection-mode)
 
-** Indentation rules
-#+begin_src emacs-lisp
 (setq-default evil-auto-indent t
               indent-line-function 'evil-indent-line
               indent-tabs-mode nil
@@ -64,30 +57,17 @@
         c-basic-offset tab-width))
 
 (dolist (hook '(c++-mode-hook c-mode-hook c++-ts-mode-hook c-ts-mode-hook)) (add-hook hook 'indent-tabs-hook))
-#+end_src
 
-** Clean up trailing whitespace
-#+begin_src emacs-lisp
 (setq org-src-strip-leading-and-trailing-blank-lines t)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
-#+end_src
 
-** recentf
-#+begin_src emacs-lisp
 (recentf-mode 1)
 (setq history-length 9999
       history-delete-duplicates t
       recentf-max-saved-items 1000
       recentf-auto-cleanup 'never
       recentf-auto-save-timer (run-with-idle-timer 600 t 'recentf-save-list))
-#+end_src
 
-** yes-or-no-p
-#+begin_src emacs-lisp
-#+end_src
-
-** Scrolling behavior
-#+begin_src emacs-lisp
 (setq-default maximum-scroll-margin 1
               scroll-margin 0
               scroll-conservatively 5
@@ -95,29 +75,9 @@
               scroll-preserve-screen-position t)
 #+end_src
 
-*** ultra-scroll
-#+begin_src emacs-lisp
-(use-package elfeed-summary :straight t)
-(use-package ultra-scroll
-  :straight (ultra-scroll :type git :host github :repo "jdtsmith/ultra-scroll")
-  :config
-  (ultra-scroll-mode))
-
-#+end_src
-
 ** Hide buffers
 #+begin_src emacs-lisp
 (setq inhibit-startup-buffer-menu t)
-#+end_src
-
-** Clipboard
-#+begin_src emacs-lisp
-(use-package simpleclip
-  :straight t
-  :config
-  (setq interprogram-cut-function 'simpleclip-set-contents
-        interprogram-paste-function 'simpleclip-get-contents)
-  (simpleclip-mode 1))
 #+end_src
 
 ** save-place
@@ -136,7 +96,40 @@
   (add-hook 'prog-mode-hook 'indent-guide-mode))
 #+end_src
 
+* OS settings
+#+begin_src emacs-lisp
+(setq-default mac-escape-modifier nil
+              mac-option-modifier 'meta
+              mac-right-command-modifier 'meta
+              mac-right-option-modifier 'nil)
+
+(global-set-key (kbd "s-,") 'menu-set-font)
+(global-set-key (kbd "M-,") 'menu-set-font)
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package ultra-scroll
+  :straight (ultra-scroll :type git :host github :repo "jdtsmith/ultra-scroll")
+  :config
+  (ultra-scroll-mode))
+
+(use-package simpleclip
+  :straight t
+  :config
+  (setq interprogram-cut-function 'simpleclip-set-contents
+        interprogram-paste-function 'simpleclip-get-contents)
+  (simpleclip-mode 1))
+#+end_src
+
 * Customization
+** Theme
+#+begin_src emacs-lisp
+(load (expand-file-name "lisp/theme-packages.el" user-emacs-directory))
+(load-theme 'ef-eagle)
+(niva/update-theme-faces)
+(make-frame-visible)
+#+end_src
+
 ** Colors
 #+begin_src emacs-lisp
 (require 'color-operations)
@@ -696,17 +689,6 @@ Don't prompt project switch action
   (global-set-key (kbd "C-c t") 'treemacs))
 #+end_src
 
-#+begin_src emacs-lisp
-(setq-default mac-escape-modifier nil
-              mac-option-modifier 'meta
-              mac-right-command-modifier 'meta
-              mac-right-option-modifier 'nil)
-
-(global-set-key (kbd "s-,") 'menu-set-font)
-(global-set-key (kbd "M-,") 'menu-set-font)
-#+end_src
-
-
 ** Other
 #+begin_src emacs-lisp
 (global-auto-revert-mode t)
@@ -714,11 +696,6 @@ Don't prompt project switch action
 #+end_src
 
 * Performance
-** Native compilation
-#+begin_src emacs-lisp
-(setq warning-minimum-level :error)
-#+end_src
-
 ** Garbage collection
 #+begin_src emacs-lisp
 (setq-default garbage-collection-messages t
@@ -1155,110 +1132,7 @@ Don't prompt project switch action
 (defvar niva/run-test-command-history nil)
 #+end_src
 
-* Terminal
-** eshell
-*** -
-#+begin_src emacs-lisp
-(use-package eshell
-  :straight (:type built-in)
-  :defer t
-  :defines eshell-prompt-function
-  :config
-  (defalias 'ff 'find-file)
-  (add-hook 'shell-mode-hook 'with-editor-export-editor)
-  (add-hook 'eshell-mode-hook
-            (lambda ()
-              (define-key eshell-hist-mode-map (kbd "C-c C-l") nil)
-              (define-key eshell-hist-mode-map (kbd "M-s")     nil)
-              (define-key eshell-mode-map      (kbd "C-a")     'eshell-bol)
-              (define-key eshell-mode-map      (kbd "C-l")     'eshell/clear)
-              (define-key eshell-mode-map      (kbd "C-r")     'eshell-isearch-backward)
-              (define-key eshell-mode-map      (kbd "C-u")     'eshell-kill-input)))
-
-  (setq eshell-ask-to-save-history 'always
-        eshell-banner-message ""
-        eshell-cmpl-cycle-completions t
-        eshell-cmpl-ignore-case t
-        eshell-destroy-buffer-when-process-dies nil
-        eshell-error-if-no-glob t
-        eshell-glob-case-insensitive t
-        eshell-hist-ignoredups t
-        eshell-history-size 65535
-        eshell-input-filter (lambda (input) (not (string-match-p "\\`\\s-+" input)))
-        eshell-kill-processes-on-exit t
-        eshell-scroll-to-bottom-on-input 'this
-        eshell-scroll-to-bottom-on-output nil))
-
-(setq system-name (car (split-string system-name "\\.")))
-(setq eshell-prompt-regexp "^.+@.+:.+> ")
-(setq eshell-prompt-function
-      (lambda ()
-        (concat
-         (propertize (user-login-name) 'face 'font-lock-keyword-face)
-         (propertize (format "@%s" (system-name)) 'face 'default)
-         (propertize ":" 'face 'font-lock-doc-face)
-         (propertize (abbreviate-file-name (eshell/pwd)) 'face 'font-lock-type-face)
-         (propertize " $" 'face 'font-lock-doc-face)
-         (propertize " " 'face 'default))))
-
-(advice-add 'eshell/clear :override
-            (defun niva--eshell/clear (&optional scrollback)
-              (interactive)
-              (let ((inhibit-read-only t))
-                (erase-buffer)
-                (eshell-send-input))))
-#+end_src
-
-*** eshell-syntax-highlighting
-#+begin_src emacs-lisp
-(use-package eshell-syntax-highlighting
-  :defer t
-  :straight t
-  :hook (eshell-mode . eshell-syntax-highlighting-mode))
-#+end_src
-
-*** Kill buffer on quit
-#+begin_src emacs-lisp
-(defun niva/term-handle-exit (&optional process-name msg)
-  "Kill buffer on quit"
-  (kill-buffer (current-buffer)))
-
-(advice-add 'term-handle-exit :after 'niva/term-handle-exit)
-#+end_src
-
-*** Log coloring
-#+begin_src disabled
-  (defun niva/font-lock-comment-annotations ()
-    "Colorize keywords in eshell buffers"
-    (interactive)
-    (font-lock-add-keywords
-     nil
-     '(("\\<\\(.*ERR.*\\)"                                            1 'compilation-error   t)
-       ("\\<\\(.*INFO.*\\)"                                           1 'compilation-info    t)
-       ("\\<\\(.*DEBUG.*\\)"                                          1 'compilation-info    t)
-       ("\\<\\(.*WARN.*\\)"                                           1 'compilation-warning t)
-       ("\\<\\(.*DEBUG: --- CMD: POLL(60) REPLY: ISTATR(49) ---.*\\)" 1 'completions-common-part t)
-       ("\\<\\(.*DEBUG: --- CMD: OUT(68) REPLY: ACK(40) ---.*\\)"     1 'completions-common-part t))))
-
-  (add-hook 'eshell-mode-hook 'niva/font-lock-comment-annotations)
-#+end_src
-
-*** Alias
-#+begin_src emacs-lisp
-(defalias 'ff    "for i in ${eshell-flatten-list $*} {find-file $i}")
-(defalias 'emacs "ff")
-(defalias 'fo    "find-file-other-window $1")
-(defalias 'ts    "ts '[%Y-%m-%d %H:%M:%S]'")
-#+end_src
-
-** exec-path-from-shell
-#+begin_src emacs-lisp
-(use-package exec-path-from-shell
-  :straight t
-  :init (exec-path-from-shell-initialize))
-#+end_src
-
-* Compilation mode
+** Compilation mode
 #+begin_src emacs-lisp
 (use-package xterm-color
   :straight t
@@ -1353,13 +1227,109 @@ Don't prompt project switch action
   (advice-add 'compilation-filter :around #'niva/advice-compilation-filter))
 #+end_src
 
-* Org Mode
+* Eshell
+** eshell
 #+begin_src emacs-lisp
-(dolist (face '(org-level-1 org-level-2 org-level-3 org-level-4 org-level-5
-                            org-level-6 org-level-7 org-level-8 org-ellipsis)))
+(use-package eshell
+  :straight (:type built-in)
+  :defer t
+  :defines eshell-prompt-function
+  :config
+  (defalias 'ff 'find-file)
+  (add-hook 'shell-mode-hook 'with-editor-export-editor)
+  (add-hook 'eshell-mode-hook
+            (lambda ()
+              (define-key eshell-hist-mode-map (kbd "C-c C-l") nil)
+              (define-key eshell-hist-mode-map (kbd "M-s")     nil)
+              (define-key eshell-mode-map      (kbd "C-a")     'eshell-bol)
+              (define-key eshell-mode-map      (kbd "C-l")     'eshell/clear)
+              (define-key eshell-mode-map      (kbd "C-r")     'eshell-isearch-backward)
+              (define-key eshell-mode-map      (kbd "C-u")     'eshell-kill-input)))
+
+  (setq eshell-ask-to-save-history 'always
+        eshell-banner-message ""
+        eshell-cmpl-cycle-completions t
+        eshell-cmpl-ignore-case t
+        eshell-destroy-buffer-when-process-dies nil
+        eshell-error-if-no-glob t
+        eshell-glob-case-insensitive t
+        eshell-hist-ignoredups t
+        eshell-history-size 65535
+        eshell-input-filter (lambda (input) (not (string-match-p "\\`\\s-+" input)))
+        eshell-kill-processes-on-exit t
+        eshell-scroll-to-bottom-on-input 'this
+        eshell-scroll-to-bottom-on-output nil))
+
+(setq system-name (car (split-string system-name "\\.")))
+(setq eshell-prompt-regexp "^.+@.+:.+> ")
+(setq eshell-prompt-function
+      (lambda ()
+        (concat
+         (propertize (user-login-name) 'face 'font-lock-keyword-face)
+         (propertize (format "@%s" (system-name)) 'face 'default)
+         (propertize ":" 'face 'font-lock-doc-face)
+         (propertize (abbreviate-file-name (eshell/pwd)) 'face 'font-lock-type-face)
+         (propertize " $" 'face 'font-lock-doc-face)
+         (propertize " " 'face 'default))))
+
+(advice-add 'eshell/clear :override
+            (defun niva--eshell/clear (&optional scrollback)
+              (interactive)
+              (let ((inhibit-read-only t))
+                (erase-buffer)
+                (eshell-send-input))))
 #+end_src
 
-** org
+** eshell-syntax-highlighting
++begin_src emacs-lisp
+use-package eshell-syntax-highlighting
+ :defer t
+ :straight t
+ :hook (eshell-mode . eshell-syntax-highlighting-mode))
++end_src
+
+** Kill buffer on quit
++begin_src emacs-lisp
+defun niva/term-handle-exit (&optional process-name msg)
+ "Kill buffer on quit"
+ (kill-buffer (current-buffer)))
+
+advice-add 'term-handle-exit :after 'niva/term-handle-exit)
++end_src
+
+** Log coloring
++begin_src disabled
+ (defun niva/font-lock-comment-annotations ()
+   "Colorize keywords in eshell buffers"
+   (interactive)
+   (font-lock-add-keywords
+    nil
+    '(("\\<\\(.*ERR.*\\)"                                            1 'compilation-error   t)
+      ("\\<\\(.*INFO.*\\)"                                           1 'compilation-info    t)
+      ("\\<\\(.*DEBUG.*\\)"                                          1 'compilation-info    t)
+      ("\\<\\(.*WARN.*\\)"                                           1 'compilation-warning t)
+      ("\\<\\(.*DEBUG: --- CMD: POLL(60) REPLY: ISTATR(49) ---.*\\)" 1 'completions-common-part t)
+      ("\\<\\(.*DEBUG: --- CMD: OUT(68) REPLY: ACK(40) ---.*\\)"     1 'completions-common-part t))))
+
+ (add-hook 'eshell-mode-hook 'niva/font-lock-comment-annotations)
++end_src
+
+** Alias
+#+begin_src emacs-lisp
+(defalias 'ff    "for i in ${eshell-flatten-list $*} {find-file $i}")
+(defalias 'emacs "ff")
+(defalias 'fo    "find-file-other-window $1")
+(defalias 'ts    "ts '[%Y-%m-%d %H:%M:%S]'")
+#+end_src
+
+** exec-path-from-shell
+#+begin_src emacs-lisp
+(use-package exec-path-from-shell
+  :straight t
+  :init (exec-path-from-shell-initialize))
+#+end_src
+
+* Org Mode
 #+begin_src emacs-lisp
 (setq org-hide-emphasis-markers t
       org-fontify-quote-and-verse-blocks t
@@ -1704,6 +1674,8 @@ Use org mode in scratch buffer
 
   (define-key elfeed-show-mode-map (kbd "å") 'elfeed-show-next)
   (define-key elfeed-show-mode-map (kbd "¨") 'elfeed-show-prev))
+
+(use-package elfeed-summary :straight t :defer t :after elfeed)
 #+end_src
 
 ** elfeed-protocol
