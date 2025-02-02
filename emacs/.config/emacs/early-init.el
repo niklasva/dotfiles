@@ -18,17 +18,7 @@
                     '(tool-bar-lines          . 0)
                     '(ns-transparent-titlebar . t)
                     '(ns-appearance           . light)
-                    '(visibility              . nil)
-                    '(undecorated-round       . t)
-                    '(font                    . "MxPlus IBM VGA 8x16 16"))))
-
-                                        ; (custom-theme-set-faces 'user '(default ((t (:font "MxPlus ToshibaSat 8x16 16" :weight unspecified :height unspecified)))))
-
-(custom-theme-set-faces 'user '(default ((t (:font "MxPlus IBM VGA 8x16 16" :weight unspecified :height unspecified)))))
-
-;; (custom-theme-set-faces 'user '(default ((t (:font "MxPlus AST PremiumExec 20" :weight unspecified :height unspecified)))))
-
-(setq ns-antialias-text nil)
+                    '(visibility              . t))))
 
 (use-package benchmark-init
   :straight t
