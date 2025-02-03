@@ -73,6 +73,21 @@
               scroll-conservatively 5
               compilation-scroll-output t
               scroll-preserve-screen-position t)
+
+(setq inhibit-startup-message t
+      inhibit-startup-echo-area-message t)
+
+(global-visual-line-mode t)
+(diminish 'visual-line-mode)
+(global-hl-line-mode -1)
+
+(setq blink-cursor-interval 0.6)
+(setq blink-cursor-blinks 0)
+(blink-cursor-mode 1)
+(setq fringes-outside-margins t)
+
+(setq-default left-fringe-width 12
+              right-fringe-width 12)
 #+end_src
 
 ** Hide buffers
@@ -136,75 +151,20 @@
 #+end_src
 
 ** GUI settings
-*** -
-#+begin_src emacs-lisp
-(setq inhibit-startup-message t
-      inhibit-startup-echo-area-message t)
-
-(global-visual-line-mode t)
-(diminish 'visual-line-mode)
-(global-hl-line-mode -1)
-#+end_src
-
-*** Cursor
-#+begin_src emacs-lisp
-(setq blink-cursor-interval 0.6)
-(setq blink-cursor-blinks 0)
-(blink-cursor-mode 1)
-(setq fringes-outside-margins t)
-
-(setq-default left-fringe-width 12
-              right-fringe-width 12)
-#+end_src
-
-*** Window management
-**** help-window-select
-Always move cursor to help window.
-#+begin_src emacs-lisp
-(setq help-window-select t)
-#+end_src
-
-**** winner-mode
-#+begin_src emacs-lisp
-(winner-mode 1)
-#+end_src
-
-*** tab-bar-echo-area
-#+begin_src emacs-lisp
-(use-package tab-bar-echo-area
-  :straight t
-  :config
-  (setq-default tab-bar-show nil)
-  (tab-bar-echo-area-mode 1))
-#+end_src
-
 ** Display time
 #+begin_src emacs-lisp
-(setq display-time-format " %H:%M ")
-(setq display-time-interval 60)
-(setq display-time-default-load-average nil)
-
-(setq display-time-string-forms
-      '((propertize
-         (format-time-string display-time-format now)
-         'help-echo (format-time-string "%a %b %e, %Y" now))
-        " "))
+(setq-default display-time-format " %H:%M "
+              display-time-interval 60
+              display-time-default-load-average nil
+              display-time-string-forms '((propertize (format-time-string display-time-format now) 'help-echo (format-time-string "%a %b %e, %Y" now)) " "))
 (display-time-mode -1)
 #+end_src
 
 ** Font
-
-*** Reset
-#+begin_src emacs-lisp
-(set-face-attribute 'fixed-pitch nil :family 'unspecified)
-#+end_src
-
-*** Remove font weight
 #+begin_src emacs-lisp
 (defun niva/remove-font-weight ()
   "Set weights to regular on common faces"
   (interactive)
-
   (set-face-attribute 'bold               nil :weight 'unspecified)
   (set-face-attribute 'buffer-menu-buffer nil :weight 'unspecified)
   (set-face-attribute 'compilation-error  nil :weight 'unspecified)
@@ -214,10 +174,10 @@ Always move cursor to help window.
   (set-face-attribute 'outline-2          nil :weight 'unspecified)
   (set-face-attribute 'outline-3          nil :weight 'unspecified)
   (set-face-attribute 'tooltip            nil :inherit 'default))
-;; (add-hook 'prog-mode-hook 'niva/remove-font-weight)
+(set-face-attribute 'fixed-pitch nil :family 'unspecified)
 #+end_src
 
-** Solaire
+** solaire-mode
 #+begin_src emacs-lisp
 (use-package solaire-mode
   :straight t
@@ -230,6 +190,27 @@ Always move cursor to help window.
 (add-hook 'eshell-mode-hook      (lambda () (solaire-mode t) (solaire-mode-reset)))
 (add-hook 'gptel-mode-hook       (lambda () (solaire-mode t) (solaire-mode-reset)))
 (add-hook 'read-only-mode-hook   (lambda () (solaire-mode t) (solaire-mode-reset)))
+#+end_src
+
+* Window management
+** help-window-select
+Always move cursor to help window.
+#+begin_src emacs-lisp
+(setq help-window-select t)
+#+end_src
+
+** winner-mode
+#+begin_src emacs-lisp
+(winner-mode 1)
+#+end_src
+
+** tab-bar-echo-area
+#+begin_src emacs-lisp
+(use-package tab-bar-echo-area
+  :straight t
+  :config
+  (setq-default tab-bar-show nil)
+  (tab-bar-echo-area-mode 1))
 #+end_src
 
 * Controls
