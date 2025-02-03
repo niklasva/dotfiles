@@ -1725,7 +1725,7 @@ Use org mode in scratch buffer
   :straight (gptel :host github :repo "karthink/gptel" branch "master")
   :config
 
-  (setq ollama-backend (gptel-make-ollama "ollama" :host "localhost:11434" :stream t :models '("llama3:latest" "deepseek-coder:6.7b-instruct")))
+  (setq ollama-backend (gptel-make-ollama "ollama" :host "localhost:11434" :stream t :models '("deepseek-r1:14b" "deepseek-r1:8b")))
 
   (setq-default gptel-default-mode #'org-mode
                 gptel-max-tokens 4096
