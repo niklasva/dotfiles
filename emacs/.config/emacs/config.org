@@ -1715,6 +1715,7 @@ Use org mode in scratch buffer
     (evil-define-key 'normal elfeed-search-mode-map (kbd "k") #'evil-previous-line)
     (evil-define-key 'normal elfeed-search-mode-map (kbd "j") #'evil-next-line)
     (evil-define-key 'normal elfeed-search-mode-map (kbd "x") #'(lambda () (interactive) (elfeed-search-untag-all-unread) (next-line)))
+    (evil-define-key 'normal elfeed-search-mode-map (kbd "X") #'(lambda () (interactive) (elfeed-search-untag-all-unread) (previous-line)))
     (evil-define-key 'normal elfeed-show-mode-map   (kbd "'") #'niva/elfeed--move-paragraph-up)
     (evil-define-key 'normal elfeed-show-mode-map   (kbd ";") #'niva/elfeed--move-paragraph-down)
     (evil-define-key 'normal elfeed-search-mode-map "r" 'elfeed-update)
