@@ -150,8 +150,6 @@
 * Customization
 ** Theme
 #+begin_src emacs-lisp
-(load (expand-file-name "lisp/theme-packages.el" user-emacs-directory))
-(load-theme 'ef-eagle)
 (niva/update-theme-faces)
 (make-frame-visible)
 #+end_src

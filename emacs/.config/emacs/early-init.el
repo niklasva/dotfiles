@@ -26,7 +26,7 @@
 (load (expand-file-name "lisp/init-straight.el" user-emacs-directory))
 
 (setq-default header-line-format (buffer-file-name))
-
+(load (expand-file-name "lisp/theme-packages.el" user-emacs-directory))
 (use-package benchmark-init :straight t :config (add-hook 'after-init-hook 'benchmark-init/deactivate))
 
 (setq-default frame-resize-pixelwise t
@@ -36,7 +36,6 @@
               ns-use-native-fullscreen t
               ns-use-proxy-icon nil
               ns-use-thin-smoothing t)
-
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
 (tooltip-mode nil)
