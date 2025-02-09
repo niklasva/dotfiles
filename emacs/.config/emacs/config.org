@@ -1675,7 +1675,8 @@ Use org mode in scratch buffer
   (setq elfeed-search-title-max-width 120)
   (setq elfeed-search-filter "+unread")
   (setq elfeed-show-truncate-long-urls nil)
-  (setq shr-inhibit-images t)
+
+  (setq shr-inhibit-images niva-inhibit-elfeed-images)
 
   (require 'niva-elfeed)
 

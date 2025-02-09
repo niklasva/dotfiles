@@ -7,7 +7,7 @@
                     '(height                  . 45)
                     '(min-width               . 1)
                     '(width                   . 155)
-                    '(internal-border-width   . 20)
+                    '(internal-border-width   . 10)
                     '(vertical-scroll-bars    . nil)
                     '(tool-bar-lines          . 0)
                     '(ns-transparent-titlebar . t)
