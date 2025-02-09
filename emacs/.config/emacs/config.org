@@ -1783,6 +1783,40 @@ Use org mode in scratch buffer
 
 #+end_src
 
+** Mastodon
+#+begin_src emacs-lisp
+(use-package mastodon
+  :straight (:host codeberg :repo "martianh/mastodon.el")
+  :config
+  (setq mastodon-active-user "@niklasva"
+        mastodon-instance-url "https://social.tchncs.de"
+        mastodon-tl--show-avatars t
+        mastodon-tl--horiz-bar ""
+        mastodon-tl--after-update-marker t
+        mastodon-tl--display-media-p t
+        mastodon-tl--no-fill-on-render t
+        mastodon-tl--show-stats nil
+        mastodon-tl--timeline-posts-count "40")
+  (defun my-mastodon-more () (interactive) (mastodon-tl--more))
+
+  (add-hook 'mastodon-mode-hook (lambda ()
+                                  (setq-local visual-fill-column-center-text nil
+                                              visual-fill-column-fringes-outside-margins t
+                                              visual-fill-column-width 80)
+                                  (visual-fill-column-mode))))
+
+(use-package mastodon-alt
+  :after mastodon
+  :straight (:host github :repo "rougier/mastodon-alt")
+  :config
+  (mastodon-alt-tl-activate)
+  (setq mastodon-alt-tl-box-width 70
+        mastodon-media--preview-max-height 150)
+  (defun mastodon-alt-tl--toot-status (toot))
+  (advice-add 'mastodon-tl--byline :filter-return (lambda (ret) (string-remove-suffix "\n" ret)))
+  (advice-remove 'mastodon-tl--byline #'mastodon-alt-tl--byline)
+  (advice-remove 'mastodon-media--process-image-response #'mastodon-alt-media--process-image-response))
+#+end_src
 * My packages
 ** hl-paragraph-mode
 #+begin_src emacs-lisp
