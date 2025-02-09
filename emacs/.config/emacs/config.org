@@ -264,42 +264,45 @@ Always move cursor to help window.
 ** Evil mode
 *** evil-mode
 #+begin_src emacs-lisp
-(use-package evil
-  :straight t
-  :init
-  (setq evil-want-integration t
-        evil-want-keybinding nil
-        evil-vsplit-window-right t
-        evil-split-window-below t
-        evil-want-C-u-scroll t
-        evil-undo-system 'undo-fu
-        evil-scroll-count 8
-        evil-respect-visual-line-mode t
-        evil-mode-line-format nil)
-  (evil-mode))
+(when niva-enable-evil-mode
+  (use-package evil
+    :straight t
+    :init
+    (setq evil-want-integration t
+          evil-want-keybinding nil
+          evil-vsplit-window-right t
+          evil-split-window-below t
+          evil-want-C-u-scroll t
+          evil-undo-system 'undo-fu
+          evil-scroll-count 8
+          evil-respect-visual-line-mode t
+          evil-mode-line-format nil)
+    (evil-mode))
 
-(with-eval-after-load 'evil-maps
-  (define-key evil-motion-state-map (kbd "RET") nil))
+  (with-eval-after-load 'evil-maps
+    (define-key evil-motion-state-map (kbd "RET") nil)))
 #+end_src
 
 *** general
 #+begin_src emacs-lisp
-(use-package general
-  :straight t
-  :config (general-evil-setup t))
+(when niva-enable-evil-mode
+  (use-package general
+    :straight t
+    :config (general-evil-setup t)))
 #+end_src
 
 *** Evil collection
 #+begin_src emacs-lisp
-(use-package evil-collection
-  :after evil
-  :straight t
-  :diminish evil-collection-unimpaired-mode
-  :delight
-  :config
-  (setq evil-collection-setup-minibuffer t)
-  (evil-collection-init)
-  (evil-set-initial-state 'dired-mode 'normal))
+(when niva-enable-evil-mode
+  (use-package evil-collection
+    :after evil
+    :straight t
+    :diminish evil-collection-unimpaired-mode
+    :delight
+    :config
+    (setq evil-collection-setup-minibuffer t)
+    (evil-collection-init)
+    (evil-set-initial-state 'dired-mode 'normal)))
 
 #+end_src
 
@@ -389,62 +392,63 @@ Don't prompt project switch action
 
 ** which-key
 #+begin_src emacs-lisp
-(use-package which-key
-  :straight t
-  :after evil
-  :diminish
-  :config
-  (setq-default which-key-popup-type 'side-window)
-  (which-key-mode))
+(when niva-enable-evil-mode
+  (use-package which-key
+    :straight t
+    :after evil
+    :diminish
+    :config
+    (setq-default which-key-popup-type 'side-window)
+    (which-key-mode))
 
-(nvmap :keymaps 'override :prefix "SPC"
-  ;; "SPC"   '(execute-extended-command          :which-key "M-x")
-  "B"     '(consult-buffer-other-window       :which-key "consult-buffer-other-window")
-  "b"     '(consult-buffer                    :which-key "consult-buffer")
-  "c C"   '(recompile                         :which-key "recompile")
-  "c a"   '(eglot-code-actions                :which-key "eglot-code-actions")
-  "c c"   '(project-compile                   :which-key "project-compile")
-  "c e"   '(consult-compile-error             :which-key "consult-compile-error")
-  "c T"   '(niva/run-test-command             :which-key "niva/run-test-command")
-  "p d"   '(project-dired                     :which-key "project-dired")
-  "d d"   '(dired                             :which-key "dired")
-  "d l"   '(devdocs-lookup                    :which-key "devdocs-lookup")
-  "d r"   '(niva/deobfuscate-region           :which-key "niva/deobfuscate-region")
-  "d u"   '(magit-diff-unstaged               :which-key "magit-diff-unstaged")
-  "e r"   '(eval-region                       :which-key "eval-region")
-  "e i"   '(eglot-inlay-hints-mode            :which-key "eglot-inlay-hints-mode")
-  "f f"   '(find-file                         :which-key "find-file")
-  "f m"   '(consult-flymake                   :which-key "consult-flymake")
-  "h p"   '(ff-get-other-file                 :which-key "ff-get-other-file")
-  "h g"   '(niva-guards                       :which-key "niva-guards")
-  "h h"   '(consult-history                   :which-key "consult-history")
-  "i m"   '(consult-imenu-multi               :which-key "consult-imenu")
-  "L n"   '(global-display-line-numbers-mode  :which-key "global-display-line-numbers-mode")
-  "l n"   '(display-line-numbers-mode         :which-key "display-line-numbers-mode")
-  "o r"   '(niva/obfuscate-region             :which-key "niva/obfuscate-region")
-  "p e"   '(profiler-stop                     :which-key "profiler-stop")
-  "p f"   '(project-find-file                 :which-key "project-find-file")
-  "p p"   '(project-switch-project            :which-key "project-switch-project")
-  "p r"   '(profiler-report                   :which-key "profiler-report")
-  "p s"   '(profiler-start                    :which-key "profiler-start")
-  "r o"   '(read-only-mode                    :which-key "read-only-mode")
-  "s h"   '(git-gutter:stage-hunk             :which-key "git-gutter:stage-hunk")
-  "t r"   '(treemacs                          :which-key "treemacs")
-  "t t"   '(toggle-truncate-lines             :which-key "Toggle truncate lines")
-  "w U"   '(winner-redo                       :which-key "winner-redo")
-  "w u"   '(winner-undo                       :which-key "winner-undo")
-  "p b"   '(consult-project-buffer            :which-key "project-list-buffers")
+  (nvmap :keymaps 'override :prefix "SPC"
+    ;; "SPC"   '(execute-extended-command       :which-key "M-x")
+    "B"     '(consult-buffer-other-window       :which-key "consult-buffer-other-window")
+    "b"     '(consult-buffer                    :which-key "consult-buffer")
+    "c C"   '(recompile                         :which-key "recompile")
+    "c a"   '(eglot-code-actions                :which-key "eglot-code-actions")
+    "c c"   '(project-compile                   :which-key "project-compile")
+    "c e"   '(consult-compile-error             :which-key "consult-compile-error")
+    "c T"   '(niva/run-test-command             :which-key "niva/run-test-command")
+    "p d"   '(project-dired                     :which-key "project-dired")
+    "d d"   '(dired                             :which-key "dired")
+    "d l"   '(devdocs-lookup                    :which-key "devdocs-lookup")
+    "d r"   '(niva/deobfuscate-region           :which-key "niva/deobfuscate-region")
+    "d u"   '(magit-diff-unstaged               :which-key "magit-diff-unstaged")
+    "e r"   '(eval-region                       :which-key "eval-region")
+    "e i"   '(eglot-inlay-hints-mode            :which-key "eglot-inlay-hints-mode")
+    "f f"   '(find-file                         :which-key "find-file")
+    "f m"   '(consult-flymake                   :which-key "consult-flymake")
+    "h p"   '(ff-get-other-file                 :which-key "ff-get-other-file")
+    "h g"   '(niva-guards                       :which-key "niva-guards")
+    "h h"   '(consult-history                   :which-key "consult-history")
+    "i m"   '(consult-imenu-multi               :which-key "consult-imenu")
+    "L n"   '(global-display-line-numbers-mode  :which-key "global-display-line-numbers-mode")
+    "l n"   '(display-line-numbers-mode         :which-key "display-line-numbers-mode")
+    "o r"   '(niva/obfuscate-region             :which-key "niva/obfuscate-region")
+    "p e"   '(profiler-stop                     :which-key "profiler-stop")
+    "p f"   '(project-find-file                 :which-key "project-find-file")
+    "p p"   '(project-switch-project            :which-key "project-switch-project")
+    "p r"   '(profiler-report                   :which-key "profiler-report")
+    "p s"   '(profiler-start                    :which-key "profiler-start")
+    "r o"   '(read-only-mode                    :which-key "read-only-mode")
+    "s h"   '(git-gutter:stage-hunk             :which-key "git-gutter:stage-hunk")
+    "t r"   '(treemacs                          :which-key "treemacs")
+    "t t"   '(toggle-truncate-lines             :which-key "Toggle truncate lines")
+    "w U"   '(winner-redo                       :which-key "winner-redo")
+    "w u"   '(winner-undo                       :which-key "winner-undo")
+    "p b"   '(consult-project-buffer            :which-key "project-list-buffers")
 
-  "gpt"   '(niva/gptel-common-buffer          :which-key "niva/gptel-common-buffer")
-  "cmd"   '(project-async-shell-command       :which-key "project-async-shell-command")
-  "elf"   '(elfeed                            :which-key "elfeed")
-  "eww"   '(eww                               :which-key "eww")
-  "rec"   '(consult-recent-file               :which-key "consult-recent-file")
-  "rip"   '(niva/consult-ripgrep-in-directory :which-key "niva/consult-ripgrep-in-directory")
-  "cir"   '(circe                             :which-key "circe")
-  "ir"    '(niva/switch-irc-buffers           :which-key "niva/switch-irc-buffers")
-  "SCR"   '(scratch-buffer                    :which-key "scratch-buffer")
-  "tsfll" '(niva/prompt-treesit-level         :which-key "niva/prompt-treesit-level"))
+    "gpt"   '(niva/gptel-common-buffer          :which-key "niva/gptel-common-buffer")
+    "cmd"   '(project-async-shell-command       :which-key "project-async-shell-command")
+    "elf"   '(elfeed                            :which-key "elfeed")
+    "eww"   '(eww                               :which-key "eww")
+    "rec"   '(consult-recent-file               :which-key "consult-recent-file")
+    "rip"   '(niva/consult-ripgrep-in-directory :which-key "niva/consult-ripgrep-in-directory")
+    "cir"   '(circe                             :which-key "circe")
+    "ir"    '(niva/switch-irc-buffers           :which-key "niva/switch-irc-buffers")
+    "SCR"   '(scratch-buffer                    :which-key "scratch-buffer")
+    "tsfll" '(niva/prompt-treesit-level         :which-key "niva/prompt-treesit-level")))
 
 (global-set-key (kbd "C-c early") (lambda () (interactive) (find-file "~/.config/emacs/early-init.el")))
 (global-set-key (kbd "C-c scr")  (lambda () (interactive) (find-file "~/dev/stuff/persist-scratch.org")))

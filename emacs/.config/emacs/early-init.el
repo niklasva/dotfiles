@@ -29,8 +29,6 @@
 
 (use-package benchmark-init :straight t :config (add-hook 'after-init-hook 'benchmark-init/deactivate))
 
-(custom-set-faces '(default ((t (:font "Iosevka Curly 14" :weight unspecified :width unspecified)))))
-
 (setq-default frame-resize-pixelwise t
               frame-title-format ""
               window-resize-pixelwise t

@@ -1,7 +1,7 @@
-(setq-default niva-use-new-config        t)
+(setq-default niva-use-new-config        nil)
 (setq-default niva-enable-evil-mode      t)
-(setq-default niva-inhibit-elfeed-images nil)
-(setq-default niva-inhibit-eww-images    nil)
+(setq-default niva-inhibit-elfeed-images t)
+(setq-default niva-inhibit-eww-images    t)
 
 (ignore-errors
   (load (expand-file-name "local-env.el" user-emacs-directory)))
