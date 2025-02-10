@@ -1713,6 +1713,11 @@ Use org mode in scratch buffer
                                           :password (niva/lookup-password :host "fever"))))
   (elfeed-protocol-enable)
 
+  (unless niva-enable-evil-mode
+    (define-key elfeed-search-mode-map (kbd "x") #'(lambda () (interactive) (elfeed-search-untag-all-unread) (next-line)))
+    (define-key elfeed-search-mode-map (kbd "X") #'(lambda () (interactive) (elfeed-search-untag-all-unread) (previous-line))))
+
+
   (define-key elfeed-search-mode-map              (kbd "I") #'niva/elfeed-toggle-images)
   (with-eval-after-load 'evil-maps
     (evil-define-key 'normal elfeed-show-mode-map "I" #'niva/elfeed-toggle-images)
