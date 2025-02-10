@@ -350,6 +350,9 @@ Always move cursor to help window.
 (global-set-key (kbd "C-c bbd")    'niva/toggle-bing-bong-dark)
 (global-set-key (kbd "C-c ct")     'consult-theme)
 
+(unless niva-enable-evil-mode
+  (global-set-key (kbd "<escape>") nil))
+
 (with-eval-after-load 'evil-maps
   (define-key evil-normal-state-map (kbd "C-<return>")   'eldoc-doc-buffer)
   (define-key evil-normal-state-map (kbd "C-x k")   'kill-current-buffer)
