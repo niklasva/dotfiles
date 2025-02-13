@@ -1855,3 +1855,10 @@ Use org mode in scratch buffer
   :config
   (add-hook 'org-mode-hook (lambda() (unless (equal (buffer-name) "*scratch*") (org-header-line-outline-mode)))))
 #+end_src
+
+#+begin_src emacs-lisp
+(advice-add 'save-buffers-kill-terminal :around
+            (lambda (orig-fun &rest args)
+              (when (y-or-n-p "Really close this Emacsclient frame? ")
+                (apply orig-fun args))))
+#+end_src
