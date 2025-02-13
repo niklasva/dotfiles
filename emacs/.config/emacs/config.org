@@ -275,7 +275,11 @@ Always move cursor to help window.
           evil-scroll-count 8
           evil-respect-visual-line-mode t
           evil-mode-line-format nil)
-    (evil-mode))
+    (evil-mode)
+    (evil-ex-define-cmd "vsplit" nil)
+    (evil-ex-define-cmd "split" nil)
+    (evil-ex-define-cmd "q" nil)
+    (evil-ex-define-cmd "w" nil))
 
   (with-eval-after-load 'evil-maps
     (define-key evil-motion-state-map (kbd "RET") nil)))
