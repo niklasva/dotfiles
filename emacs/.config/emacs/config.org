@@ -1809,13 +1809,17 @@ Use org mode in scratch buffer
         mastodon-tl--no-fill-on-render t
         mastodon-tl--show-stats nil
         mastodon-tl--timeline-posts-count "40")
-  (defun my-mastodon-more () (interactive) (mastodon-tl--more))
+  (custom-set-faces '(mastodon-display-name-face ((t (:inherit 'org-level-1)))))
 
+
+  (defun my-mastodon-more () (interactive) (mastodon-tl--more))
   (add-hook 'mastodon-mode-hook (lambda ()
                                   (setq-local visual-fill-column-center-text nil
                                               visual-fill-column-fringes-outside-margins t
+                                              visual-fill-column-extra-text-width '(-2 . 0)
                                               visual-fill-column-width 80)
-                                  (visual-fill-column-mode))))
+                                  (visual-fill-column-mode)))
+  (define-key mastodon-mode-map (kbd "C-c m")   'my-mastodon-more))
 
 (use-package mastodon-alt
   :after mastodon
