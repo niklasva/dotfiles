@@ -456,9 +456,10 @@ Don't prompt project switch action
     "tsfll" '(niva/prompt-treesit-level         :which-key "niva/prompt-treesit-level")))
 
 (global-set-key (kbd "C-c early") (lambda () (interactive) (find-file "~/.config/emacs/early-init.el")))
-(global-set-key (kbd "C-c scr")  (lambda () (interactive) (find-file "~/dev/stuff/persist-scratch.org")))
-(global-set-key (kbd "C-c conf") (lambda () (interactive) (find-file "~/.config/emacs/config.org")))
-(global-set-key (kbd "C-c ff")  'find-file)
+(global-set-key (kbd "C-c scr")   (lambda () (interactive) (find-file "~/dev/stuff/persist-scratch.org")))
+(global-set-key (kbd "C-c conf")  (lambda () (interactive) (find-file "~/.config/emacs/config.org")))
+(global-set-key (kbd "C-c ff")    'find-file)
+(global-set-key (kbd "C-c elf")   'elfeed)
 #+end_src
 
 ** Undo
