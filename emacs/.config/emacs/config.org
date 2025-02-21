@@ -508,8 +508,31 @@ Don't prompt project switch action
 (use-package hydra
   :straight t
   :config
-  (setq hydra-is-helpful nil)
+  (setq-default hydra-is-helpful t)
+
+  (defhydra hydra-win-resize (:prefix "C-c w")
+  "Resize window"
+  ("C-j" (lambda () (interactive) (shrink-window 4)) "↓ shrink")
+  ("C-k" (lambda () (interactive) (enlarge-window 4)) "↑ enlarge")
+  ("C-h" (lambda () (interactive) (shrink-window-horizontally 8)) "← shrink")
+  ("C-l" (lambda () (interactive) (enlarge-window-horizontally 8)) "→ enlarge")
+  ("h" windmove-left     "← move"    :exit t)
+  ("j" windmove-down     "↓ move"    :exit t)
+  ("k" windmove-up       "↑ move"    :exit t)
+  ("l" windmove-right    "→ move"    :exit t)
+  ("H" buf-move-left     "← swap"    :exit t)
+  ("J" buf-move-down     "↓ swap"    :exit t)
+  ("K" buf-move-up       "↑ swap"    :exit t)
+  ("L" buf-move-right    "→ swap"    :exit t)
+  ("SPC" transpose-frame "transpose" :exit t))
+  (global-set-key (kbd "C-c w") 'hydra-win-resize/body)
+
+
+  (with-eval-after-load 'org
+    (define-key org-mode-map (kbd "C-c C-w") nil))
+
   (with-eval-after-load 'evil-maps
+    (setq hydra-is-helpful nil)
     (defhydra hydra-win-resize (evil-normal-state-map "C-w")
       "Resize window"
       ("C-j" (lambda () (interactive) (evil-window-decrease-height 4)))
