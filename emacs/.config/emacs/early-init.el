@@ -23,9 +23,8 @@
 (custom-set-variables
  '(org-modules nil))
 
-(load (expand-file-name "lisp/init-straight.el" user-emacs-directory))
-
 (setq-default header-line-format (buffer-file-name))
+(load (expand-file-name "lisp/init-straight.el" user-emacs-directory))
 (load (expand-file-name "lisp/theme-packages.el" user-emacs-directory))
 (use-package benchmark-init :straight t :config (add-hook 'after-init-hook 'benchmark-init/deactivate))
 
