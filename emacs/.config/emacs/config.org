@@ -924,6 +924,17 @@ Don't prompt project switch action
   (eglot-booster-mode))
 #+end_src
 
+#+begin_src emacs-lisp
+(use-package eglot-inactive-regions
+  :after eglot
+  :straight t
+  :custom
+  (eglot-inactive-regions-style 'darken-foreground)
+  (eglot-inactive-regions-opacity 0.4)
+  :config
+  (eglot-inactive-regions-mode 1))
+#+end_src
+
 ** Flymake
 #+begin_src emacs-lisp
 (use-package flymake
