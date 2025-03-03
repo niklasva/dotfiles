@@ -1783,6 +1783,7 @@ Use org mode in scratch buffer
         mastodon-tl--display-media-p t
         mastodon-tl--no-fill-on-render t
         mastodon-tl--show-stats nil
+        mastodon-tl--expand-content-warnings t
         mastodon-tl--timeline-posts-count "40")
   (custom-set-faces '(mastodon-display-name-face ((t (:inherit 'org-level-1)))))
 
@@ -1792,17 +1793,20 @@ Use org mode in scratch buffer
                                   (setq-local visual-fill-column-center-text nil
                                               visual-fill-column-fringes-outside-margins t
                                               visual-fill-column-extra-text-width '(-2 . 0)
-                                              visual-fill-column-width 80)
+                                              fill-column 9999
+                                              visual-fill-column-width 60)
                                   (visual-fill-column-mode)))
-  (define-key mastodon-mode-map (kbd "C-c m")   'my-mastodon-more))
+  (define-key mastodon-mode-map (kbd "m")   'my-mastodon-more))
 
 (use-package mastodon-alt
   :after mastodon
   :straight (:host github :repo "rougier/mastodon-alt")
   :config
   (mastodon-alt-tl-activate)
-  (setq mastodon-alt-tl-box-width 70
-        mastodon-media--preview-max-height 150)
+  (setq mastodon-alt-tl-box-width 50
+        mastodon-media--preview-max-height 150
+        mastodon-tl--enable-relative-timestamps t
+        mastodon-tl--enable-relative-timestamps nil)
   (defun mastodon-alt-tl--toot-status (toot))
   (advice-add 'mastodon-tl--byline :filter-return (lambda (ret) (string-remove-suffix "\n" ret)))
   (advice-remove 'mastodon-tl--byline #'mastodon-alt-tl--byline)
