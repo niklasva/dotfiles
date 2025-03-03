@@ -1531,63 +1531,7 @@ Use org mode in scratch buffer
   (setq shr-use-fonts nil)
   (setq shr-max-width nil)
   (setq shr-fill-text nil)
-  (setq shr-use-colors nil)
-
-  (defun niva/create-image-content (spec size content-type flags)
-    (let ((data (if (consp spec)
-                    (car spec)
-                  spec)))
-      (cond
-       ((eq size 'original)
-        (create-image data nil t :ascent 100 :format content-type))
-       ((eq content-type 'image/svg+xml)
-        (create-image data 'svg t :ascent 100))
-       (t
-        (ignore-errors
-          (shr-rescale-image data content-type
-                             (plist-get flags :width)
-                             (plist-get flags :height)))))))
-
-  (setq niva--image-slice-divisor 1)
-  (defun niva/handle-image-params (image alt start size)
-    (let* ((image-pixel-cons (image-size image t))
-           (image-pixel-width (car image-pixel-cons))
-           (image-pixel-height (cdr image-pixel-cons))
-           (image-scroll-rows (/ (round (/ image-pixel-height (default-font-height))) niva--image-slice-divisor)))
-      ;; (when (and (> (current-column) 0) (> image-pixel-width 400))
-      ;;   (insert "\n"))
-      (insert-sliced-image image (or alt "*") nil image-scroll-rows 1)
-      (put-text-property start (point) 'image-size size)
-      (when (and shr-image-animate
-                 (cond ((fboundp 'image-multi-frame-p)
-                        (cdr (image-multi-frame-p image)))
-                       ((fboundp 'image-animated-p)
-                        (image-animated-p image))))
-        (image-animate image nil 60))
-      image))
-
-  (advice-add 'shr-put-image :override
-              (defun niva/shr-put-image (spec alt &optional flags)
-                (if (display-graphic-p)
-                    (let* ((size (cdr (assq 'size flags)))
-                           (content-type (and (consp spec)
-                                              (cadr spec)))
-                           (start (point))
-                           (image (niva/create-image-content spec size content-type flags)))
-                      (if image
-                          (niva/handle-image-params image alt start size)))
-                  (insert (or alt "")))))
-
-
-  (defun niva/shr-remove-underline-from-images (dom &optional url)
-    (let ((start (point)))
-      (shr-tag-img dom url)
-      (put-text-property start (point) 'face '(:underline nil))))
-  (setq shr-external-rendering-functions '((img . niva/shr-remove-underline-from-images)))
-
-  ;; (setq image-transform-fit-width 500)
-
-  )
+  (setq shr-use-colors nil))
 #+end_src
 
 *** shr-face
@@ -1892,4 +1836,8 @@ Use org mode in scratch buffer
             (lambda (orig-fun &rest args)
               (when (y-or-n-p "Really close this Emacsclient frame? ")
                 (apply orig-fun args))))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package iscroll :straight t)
 #+end_src
