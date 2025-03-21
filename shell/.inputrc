@@ -1,7 +1,7 @@
 set completion-ignore-case on
 set show-all-if-ambiguous on
 
-set editing-mode vi
+set editing-mode emacs
 set menu-complete-display-prefix on
 set echo-control-characters off
 
