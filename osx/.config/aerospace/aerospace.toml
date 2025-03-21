@@ -3,13 +3,14 @@ accordion-padding             = 0
 default-root-container-layout = 'accordion'
 [mode.main.binding]
     ctrl-minus = 'mode hop'
+    alt-tab    = 'mode hop'
 
 [mode.hop.binding]
     esc       = ['reload-config', 'mode main']
     ctrl-g    = ['reload-config', 'mode main']
     f         = ['layout floating tiling', 'mode main']
-    period    = 'layout tiles horizontal vertical'
-    comma     = 'layout accordion horizontal vertical'
+    period    = ['layout tiles horizontal vertical', 'mode main']
+    comma     = ['layout accordion horizontal vertical', 'mode main']
     h         = 'focus left'
     j         = 'focus down'
     k         = 'focus up'
