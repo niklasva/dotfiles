@@ -35,3 +35,7 @@ default-root-container-layout = 'accordion'
 	if.app-id                       = "org.mozilla.librewolf"
 	if.window-title-regex-substring = "Picture-in-Picture"
 	run                             = "layout floating"
+
+[[on-window-detected]]
+	if.app-id                       = "co.parakey.Parakey"
+	run                             = "layout floating"
