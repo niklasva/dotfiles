@@ -1115,7 +1115,10 @@ Don't prompt project switch action
         magit-no-confirm nil)
 
   (setq magit-section-initial-visibility-alist
-        '((stashes . hide) (untracked . hide) (unpushed . hide) ([unpulled status] . show)))
+        '((stashes . hide) (untracked . hide) (unpushed . hide) ([unpulled status] . show)
+          ([file unstaged status] . hide)
+          ([file diffbuf] . hide)
+          ([file commit stash] . hide)))
 
   (defun disable-y-or-n-p (orig-fun &rest args)
     (cl-letf (((symbol-function 'y-or-n-p) (lambda (prompt) t)))
