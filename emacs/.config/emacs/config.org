@@ -627,7 +627,11 @@ Don't prompt project switch action
   (defun niva/consult-ripgrep-in-directory ()
     (interactive)
     (let ((directory-to-search (read-directory-name "Search in directory: " nil nil t)))
-      (consult-ripgrep (expand-file-name "." directory-to-search)))))
+      (consult-ripgrep (expand-file-name "." directory-to-search))))
+
+(global-set-key (kbd "C-s") 'consult-line)
+(global-set-key (kbd "C-c s") 'consult-line-multi))
+
 #+end_src
 
 ** Marginalia
