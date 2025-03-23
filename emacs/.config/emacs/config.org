@@ -403,7 +403,7 @@ Don't prompt project switch action
     (which-key-mode))
 
   (nvmap :keymaps 'override :prefix "SPC"
-    ;; "SPC"   '(execute-extended-command       :which-key "M-x")
+    "SPC"   '(execute-extended-command          :which-key "M-x")
     "B"     '(consult-buffer-other-window       :which-key "consult-buffer-other-window")
     "b"     '(consult-buffer                    :which-key "consult-buffer")
     "c C"   '(recompile                         :which-key "recompile")
