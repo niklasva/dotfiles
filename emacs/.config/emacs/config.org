@@ -262,6 +262,7 @@ Always move cursor to help window.
 ** Evil mode
 *** evil-mode
 #+begin_src emacs-lisp
+(global-set-key (kbd "<escape>") nil)
 (when niva-enable-evil-mode
   (use-package evil
     :straight t
