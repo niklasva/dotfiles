@@ -1,6 +1,15 @@
 start-at-login                = false
 accordion-padding             = 0
 default-root-container-layout = 'accordion'
+
+[gaps]
+    inner.horizontal = 5
+    inner.vertical =   5x5
+    outer.left =       10
+    outer.bottom =     10
+    outer.top =        10
+    outer.right =      10
+
 [mode.main.binding]
     ctrl-minus = 'mode hop'
     alt-tab    = 'mode hop'
