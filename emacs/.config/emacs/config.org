@@ -1005,7 +1005,6 @@ Don't prompt project switch action
                   ("\\.json\\'"         . json-ts-mode)
                   ("\\.ts\\'"           . typescript-ts-mode)
                   ("\\.tsx\\'"          . tsx-ts-mode)
-                  ("\\.css\\'"          . css-ts-mode)
                   ("\\.cmake\\'"        . cmake-ts-mode)
                   ("\\.py\\'"           . python-ts-mode)
                   ("\\.yaml\\'"         . yaml-ts-mode)
