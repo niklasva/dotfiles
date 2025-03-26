@@ -1119,8 +1119,12 @@ Don't prompt project switch action
       "Fringe bitmap function for use as `diff-hl-fringe-bmp-function'."
       (define-fringe-bitmap 'my-diff-hl-bmp
         (vector
-         #b10000000
-         #b00000000
+         #b0100
+         #b0010
+         #b1000
+         #b0100
+         #b0010
+         #b1000
          )
         2 8
         '(center t)))
@@ -1161,6 +1165,19 @@ Don't prompt project switch action
       (apply orig-fun args)))
 
   (advice-add 'ediff-quit :around #'disable-y-or-n-p))
+
+
+(defun my-replace-git-status (tstr)
+  (let* ((tstr (replace-regexp-in-string "Git" "" tstr))
+         (first-char (substring tstr 0 1))
+         (rest-chars (substring tstr 1)))
+    (cond
+     ((string= ":" first-char) ;;; Modified
+      (replace-regexp-in-string "^:" "*" tstr))
+     ((string= "-" first-char) ;; No change
+      (replace-regexp-in-string "^-" "-️" tstr))
+     (t tstr))))
+(advice-add #'vc-git-mode-line-string :filter-return #'my-replace-git-status)
 #+end_src
 ** Documentation
 *** markdown-mode
