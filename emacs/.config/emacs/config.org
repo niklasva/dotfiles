@@ -56,7 +56,7 @@
         evil-auto-indent t
         c-basic-offset tab-width))
 
-(dolist (hook '(c++-mode-hook c-mode-hook c++-ts-mode-hook c-ts-mode-hook)) (add-hook hook 'indent-tabs-hook))
+(dolist (hook '(c++-mode-hook c-mode-hook c++-ts-mode-hook c-ts-mode-hook cmake-ts-mode-hook)) (add-hook hook 'indent-tabs-hook))
 
 (setq org-src-strip-leading-and-trailing-blank-lines t)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
