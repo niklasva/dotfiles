@@ -891,11 +891,28 @@ Don't prompt project switch action
 
   (add-to-list 'eglot-server-programs '((python-mode python-ts-mode)
                                         "basedpyright-langserver"
+                                        "--stdio"))
+
+  (add-to-list 'eglot-server-programs '((cmake-mode cmake-ts-mode)
+                                        "neocmakelsp"
+                                        "--stdio"))
+
+  (add-to-list 'eglot-server-programs '((yaml-mode yaml-ts-mode)
+                                        "yaml-language-server"
                                         "--stdio")))
+
 
 (setq-default eglot-workspace-configuration `((:basedpyright . (:typeCheckingMode "basic"))))
 
-(dolist (hook '(c-mode-hook c++-mode-hook c-ts-mode-hook c++-ts-mode-hook python-mode-hook python-ts-mode-hook))
+(dolist (hook '(c-mode-hook
+                c-ts-mode-hook
+                c++-mode-hook
+                c++-ts-mode-hook
+                python-mode-hook
+                python-ts-mode-hook
+                cmake-ts-mode-hook
+                yaml-ts-mode-hook
+                ))
   (add-hook hook 'eglot-ensure))
 
 (advice-add 'eglot--mode-line-format :override (lambda () ""))
