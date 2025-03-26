@@ -28,7 +28,7 @@
               version-control t
               delete-old-versions t
               kept-new-versions 20
-              kept-old-versions 5
+              kept-old-versions 20
               create-lockfiles nil)
 
 (setq-default case-fold-search t)
