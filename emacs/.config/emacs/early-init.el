@@ -14,6 +14,7 @@
                     '(ns-appearance           . light)
                     '(left-fringe             . 1)
                     '(right-fringe            . 1))))
+
 (setq-default window-divider-default-right-width 24)
 (setq-default window-divider-default-places 'right-only)
 
