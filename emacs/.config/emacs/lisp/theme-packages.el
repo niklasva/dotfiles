@@ -149,6 +149,19 @@
                         '(org-block-begin-line ((t (:inherit 'default :extend t :overline t :underline nil :background "#182C32"))))
                         '(org-block-end-line   ((t (:inherit 'default :extend t :overline nil :underline t :background "#182C32"))))))
 
+    (when (or (niva/theme-is-active "nano-light") (niva/theme-is-active "nano-dark"))
+      (custom-set-faces '(mode-line-inactive ((t (:inherit mode-line))))
+                        '(mode-line-active ((t (:inherit mode-line))))
+                        '(compilation-mode-line-exit ((t (:inherit unspecified))))
+                        '(compilation-mode-line-run ((t (:inherit unspecified))))))
+
     (niva/diff-hl-fix))
   (custom-set-faces '(help-key-binding nil :box nil :background 'unspecified :foreground (face-attribute 'default :foreground))))
+
+(use-package nano-theme
+  :straight t
+  :config
+  (setq-default nano-fonts-use nil
+                nano-window-divider-show t))
+
 ;;; theme-packages.el ends here
