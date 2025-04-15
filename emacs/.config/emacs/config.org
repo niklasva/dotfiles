@@ -886,7 +886,6 @@ Don't prompt project switch action
                                          "--background-index-priority=background"
                                          "-j=8"
                                          "--log=error"
-                                         "--function-arg-placeholders"
                                          )))
 
   (add-to-list 'eglot-server-programs '((python-mode python-ts-mode)
