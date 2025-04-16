@@ -139,6 +139,10 @@
                         '(warning                     ((t (:foreground unspecified :inherit 'font-lock-builtin-face))))
                         '(font-lock-type-face         ((t (:foreground unspecified :inherit 'font-lock-builtin-face))))))
 
+    (when (niva/theme-is-active "doom-tomorrow-day")
+      (custom-set-faces
+       '(font-lock-number-face       ((t (:foreground unspecified :inherit 'font-lock-builtin-face))))))
+
     (when (or (niva/theme-is-active "nofrils-acme") (niva/theme-is-active "acme"))
       (custom-set-faces '(org-block            ((t (:background "#FFFFDC")))))
       '(org-block-begin-line ((t (:extend t :overline t :underline nil :background "#FFFFDC"))))
@@ -153,15 +157,19 @@
       (custom-set-faces '(mode-line-inactive ((t (:inherit mode-line))))
                         '(mode-line-active ((t (:inherit mode-line))))
                         '(compilation-mode-line-exit ((t (:inherit unspecified))))
-                        '(compilation-mode-line-run ((t (:inherit unspecified))))))
+                        '(compilation-mode-line-run ((t (:inherit unspecified))))
+                        '(font-lock-string-face ((t (:inherit nano-subtle :slant unspecified))))
+                        '(org-block-begin-line ((t (:inherit 'org-block :extend t :overline t   :underline nil))))
+                        '(org-block-end-line   ((t (:inherit 'org-block :extend t :overline nil :underline t))))))
 
     (niva/diff-hl-fix))
   (custom-set-faces '(help-key-binding nil :box nil :background 'unspecified :foreground (face-attribute 'default :foreground))))
 
 (use-package nano-theme
   :straight t
+  :defer t
   :config
-  (setq-default nano-fonts-use nil
-                nano-window-divider-show t))
+  (setq nano-fonts-use nil
+        nano-window-divider-show t))
 
 ;;; theme-packages.el ends here
