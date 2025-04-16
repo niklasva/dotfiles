@@ -1396,24 +1396,24 @@ Don't prompt project switch action
 #+end_src
 
 ** eshell-syntax-highlighting
-+begin_src emacs-lisp
-use-package eshell-syntax-highlighting
+#+begin_src emacs-lisp
+(use-package eshell-syntax-highlighting
  :defer t
  :straight t
  :hook (eshell-mode . eshell-syntax-highlighting-mode))
-+end_src
+#+end_src
 
 ** Kill buffer on quit
-+begin_src emacs-lisp
-defun niva/term-handle-exit (&optional process-name msg)
- "Kill buffer on quit"
- (kill-buffer (current-buffer)))
+#+begin_src emacs-lisp
+(defun niva/term-handle-exit (&optional process-name msg)
+"Kill buffer on quit"
+(kill-buffer (current-buffer)))
 
-advice-add 'term-handle-exit :after 'niva/term-handle-exit)
-+end_src
+(advice-add 'term-handle-exit :after 'niva/term-handle-exit)
+#+end_src
 
 ** Log coloring
-+begin_src disabled
+#+begin_src disabled
  (defun niva/font-lock-comment-annotations ()
    "Colorize keywords in eshell buffers"
    (interactive)
@@ -1427,7 +1427,7 @@ advice-add 'term-handle-exit :after 'niva/term-handle-exit)
       ("\\<\\(.*DEBUG: --- CMD: OUT(68) REPLY: ACK(40) ---.*\\)"     1 'completions-common-part t))))
 
  (add-hook 'eshell-mode-hook 'niva/font-lock-comment-annotations)
-+end_src
+#+end_src
 
 ** Alias
 #+begin_src emacs-lisp
