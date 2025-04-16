@@ -1542,15 +1542,8 @@ Use org mode in scratch buffer
   (when (fboundp 'niva/setup-org-roam)
     (niva/setup-org-roam))
   (org-roam-db-autosync-enable)
-  (global-set-key (kbd "C-c z z") 'org-roam-capture))
-
-(with-eval-after-load 'evil-maps
-  (defun my/org-roam-open-link ()
-    (interactive)
-    (if (and (eq major-mode 'org-mode) (string-match-p org-link-any-re (thing-at-point 'line)))
-        (call-interactively #'org-roam-node-find)
-      (evil-ret)))
-  (evil-define-key 'normal org-mode-map (kbd "RET") #'my/org-roam-open-link))
+  (global-set-key (kbd "C-c z z") 'org-roam-capture)
+  (setq-default org-roam-ui-browser-function #'xwidget-webkit-browse-url))
 #+end_src
 
 *** websocket
