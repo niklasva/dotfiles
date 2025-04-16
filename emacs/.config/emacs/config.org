@@ -41,7 +41,6 @@
 
 
 (electric-indent-mode)
-(electric-pair-mode)
 (delete-selection-mode)
 
 (setq-default evil-auto-indent t
