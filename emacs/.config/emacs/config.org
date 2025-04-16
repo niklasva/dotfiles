@@ -721,22 +721,29 @@ Don't prompt project switch action
 * File management
 ** Dired
 #+begin_src emacs-lisp
-(use-package dirtree :straight t :defer t)
+(use-package dirtree :straight t :ensure t)
 (use-package dired-subtree :straight t
   :after dired
-  :defer t
+  :ensure t
   :hook ((dired-mode . dired-hide-details-mode))
+  :bind
+  (:map dired-mode-map
+        ("<tab>" . dired-subtree-toggle)
+        ("TAB" . dired-subtree-toggle)
+        ("<backtab>" . dired-subtree-remove)
+        ("S-TAB" . dired-subtree-remove))
   :config
   (setq dired-subtree-use-backgrounds nil
-        dired-subtree-line-prefix "  │"
+        dired-subtree-line-prefix "  "
         dired-kill-when-opening-new-dired-buffer t)
+  (setq dired-subtree-line-prefix-face 'subtree))
 
-  (bind-key "<tab>" #'dired-subtree-toggle dired-mode-map))
+(setq dired-mode-hook '(dired-collapse-mode dired-hide-details-mode
+                                            dired-extra-startup))
 
 (use-package dired-collapse
   :straight t
   :after dired
-  :defer t
   :init
   (with-eval-after-load 'evil-maps
     (evil-define-key 'normal dired-mode-map (kbd "H") 'dired-up-directory)
