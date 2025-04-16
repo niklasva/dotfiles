@@ -1582,7 +1582,10 @@ Use org mode in scratch buffer
 
 ** adaptive-wrap
 #+begin_src emacs-lisp
-(use-package adaptive-wrap :straight t)
+(use-package adaptive-wrap
+  :straight t
+  :defer t
+  :hook (visual-line-mode . adaptive-wrap-prefix-mode))
 #+end_src
 
 * Web
@@ -1886,8 +1889,7 @@ Use org mode in scratch buffer
   (set-face-attribute 'hl-paragraph-face nil
                       :inherit    'region
                       :inverse-video nil
-                      :foreground 'unspecified
-                      ))
+                      :foreground 'unspecified))
 #+end_src
 
 ** org-header-line-outline
