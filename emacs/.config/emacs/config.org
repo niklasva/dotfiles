@@ -1868,6 +1868,29 @@ Use org mode in scratch buffer
                              (visual-fill-column-mode)))
 #+end_src
 
+#+begin_src emacs-lisp
+(defun niva/gptel-auto-save ()
+  (interactive)
+  (when (bound-and-true-p gptel-mode)
+    (let* ((dir "~/.gptel-chats/")
+           (buf-name (buffer-name))
+           (filename
+            (if (string-match-p "^\\*gptel" buf-name)
+                (let ((new-name (format "chat-%s" (format-time-string "%Y-%m-%d_%H-%M-%S"))))
+                  (rename-buffer new-name)
+                  (expand-file-name (concat new-name ".org") dir))
+              (expand-file-name (concat buf-name ".org") dir))))
+      (make-directory dir :parents)
+      (write-region (point-min) (point-max) filename nil 'silent)
+      (message "Chat saved to %s" filename))))
+
+(add-hook 'kill-buffer-hook #'niva/gptel-auto-save)
+
+(with-eval-after-load 'gptel
+  (define-key gptel-mode-map (kbd "C-x s") #'niva/gptel-auto-save)
+  (define-key gptel-mode-map (kbd "C-x C-s") #'niva/gptel-auto-save))
+#+end_src
+
 ** Mastodon
 #+begin_src emacs-lisp
 (use-package mastodon
