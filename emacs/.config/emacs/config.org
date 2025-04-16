@@ -101,7 +101,7 @@
 (setq-default mac-escape-modifier nil
               mac-option-modifier 'meta
               mac-right-command-modifier 'meta
-              mac-right-option-modifier 'nil)
+              mac-right-option-modifier 'meta)
 
 (global-set-key (kbd "s-,") 'menu-set-font)
 (global-set-key (kbd "M-,") 'menu-set-font)
