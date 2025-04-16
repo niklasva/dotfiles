@@ -1051,6 +1051,7 @@ Don't prompt project switch action
                   ("\\.tsx\\'"          . tsx-ts-mode)
                   ("\\.cmake\\'"        . cmake-ts-mode)
                   ("\\.py\\'"           . python-ts-mode)
+                  ("\\.rs\\'"           . rust-ts-mode)
                   ("\\.yaml\\'"         . yaml-ts-mode)
                   ("\\.clangd\\'"       . yaml-ts-mode)
                   ("\\.yml\\'"          . yaml-ts-mode)
