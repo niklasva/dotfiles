@@ -1228,11 +1228,11 @@ Don't prompt project switch action
           (doc (cdr pair)))
       (add-hook hook `(lambda () (setq-local devdocs-current-docs (list ,doc))))))
 
-(with-eval-after-load 'evil-maps
-  (define-key evil-normal-state-map (kbd "SPC g d")
-              (lambda ()
-                (interactive)
-                (devdocs-lookup nil (thing-at-point 'symbol t))))))
+  (with-eval-after-load 'evil-maps
+    (define-key evil-normal-state-map (kbd "SPC g d")
+                (lambda ()
+                  (interactive)
+                  (devdocs-lookup nil (thing-at-point 'symbol t))))))
 #+end_src
 
 ** Running tests
