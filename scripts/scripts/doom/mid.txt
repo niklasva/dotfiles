@@ -1,0 +1,1234 @@
+fwl_buzzer(0, 136, true)
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136, true)
+fwl_buzzer(165, 100, true)
+fwl_buzzer(0, 136, true)
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136, true)
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136, true)
+fwl_buzzer(147, 100, true)
+fwl_buzzer(0, 136, true)
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136, true)
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136, true)
+fwl_buzzer(131, 100, true)
+fwl_buzzer(0, 136, true)
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136, true)
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136, true)
+fwl_buzzer(116, 100, true)
+fwl_buzzer(82, 136, true)
+fwl_buzzer(0, 136, true)
+fwl_buzzer(0, 136, true)
+fwl_buzzer(82, 100, true)
+fwl_buzzer(123, 136, true)
+fwl_buzzer(0, 136, true)
+fwl_buzzer(0, 136, true)
+fwl_buzzer(131, 100, true)
+fwl_buzzer(0, 136, true)
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136, true)
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136, true)
+fwl_buzzer(165, 100, true)
+fwl_buzzer(0, 136, true)
+fwl_buzzer(0, 136, true)
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136, true)
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136, true)
+fwl_buzzer(147, 100, true)
+fwl_buzzer(0, 136, true)
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136, true)
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136, true)
+fwl_buzzer(131, 100, true)
+fwl_buzzer(0, 136, true)
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136, true)
+fwl_buzzer(82, 100, true)
+fwl_buzzer(116, 136, true)
+fwl_buzzer(0, 409, true)
+note_off channel=0 freq=116 time=0.136
+fwl_buzzer(82 time=0.136
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(165, 100, true)
+note_off channel=0 freq=165 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(147, 100, true)
+note_off channel=0 freq=147 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(131, 100, true)
+note_off channel=0 freq=131 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(116, 100, true)
+note_off channel=0 freq=116 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(123 time=0.136
+fwl_buzzer(0, 136
+note_off channel=0 freq=123, 100, true)
+fwl_buzzer(131, 100, true)
+note_off channel=0 freq=131 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(165, 100, true)
+note_off channel=0 freq=165 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(147, 100, true)
+note_off channel=0 freq=147 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(131, 100, true)
+note_off channel=0 freq=131 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(116 time=0.136
+fwl_buzzer(0, 4090905
+note_off channel=0 freq=116 time=0.136
+fwl_buzzer(82 time=0.136
+note_on  channel=1 freq=41, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+note_off channel=1 freq=41, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(165, 100, true)
+note_off channel=0 freq=165 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(147, 100, true)
+note_off channel=0 freq=147 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(131, 100, true)
+note_off channel=0 freq=131 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(116, 100, true)
+fwl_buzzer(82 time=0.136
+note_off channel=0 freq=116 time=0.136
+note_off channel=0 freq=82, 100, true)
+fwl_buzzer(82, 100, true)
+fwl_buzzer(123 time=0.136
+fwl_buzzer(0, 136
+note_off channel=0 freq=123, 100, true)
+fwl_buzzer(131, 100, true)
+note_off channel=0 freq=131 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(165, 100, true)
+note_off channel=0 freq=165 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(147, 100, true)
+note_off channel=0 freq=147 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(131, 100, true)
+note_off channel=0 freq=131 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(116 time=0.136
+fwl_buzzer(0, 4090905
+note_off channel=0 freq=116 time=0.136
+fwl_buzzer(82 time=0.136
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(165, 100, true)
+note_off channel=0 freq=165 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(147, 100, true)
+note_off channel=0 freq=147 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(131, 100, true)
+note_off channel=0 freq=131 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(116, 100, true)
+fwl_buzzer(82 time=0.136
+note_off channel=0 freq=116 time=0.136
+note_off channel=0 freq=82, 100, true)
+fwl_buzzer(82, 100, true)
+fwl_buzzer(123 time=0.136
+fwl_buzzer(0, 136
+note_off channel=0 freq=123, 100, true)
+fwl_buzzer(131, 100, true)
+note_off channel=0 freq=131 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(165, 100, true)
+note_off channel=0 freq=165 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(147, 100, true)
+note_off channel=0 freq=147 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(369, 100, true)
+fwl_buzzer(369, 100, true)
+note_on  channel=2 freq=369, 100, true)
+note_off channel=0 freq=369 time=0.06818175
+note_off channel=0 freq=369, 100, true)
+fwl_buzzer(323, 100, true)
+fwl_buzzer(323, 100, true)
+note_off channel=2 freq=369, 100, true)
+note_on  channel=2 freq=323, 100, true)
+note_off channel=0 freq=323 time=0.06818175
+note_off channel=0 freq=323, 100, true)
+fwl_buzzer(311, 100, true)
+fwl_buzzer(311, 100, true)
+note_off channel=2 freq=323, 100, true)
+note_on  channel=2 freq=311, 100, true)
+note_off channel=0 freq=311 time=0.06818175
+note_off channel=0 freq=311, 100, true)
+fwl_buzzer(369, 100, true)
+fwl_buzzer(369, 100, true)
+note_off channel=2 freq=311, 100, true)
+note_on  channel=2 freq=369, 100, true)
+note_off channel=0 freq=369 time=0.06818175
+note_off channel=0 freq=369, 100, true)
+fwl_buzzer(440, 100, true)
+fwl_buzzer(440, 100, true)
+note_off channel=2 freq=369, 100, true)
+note_on  channel=2 freq=440, 100, true)
+note_off channel=0 freq=440 time=0.06818175
+note_off channel=0 freq=440, 100, true)
+fwl_buzzer(392, 100, true)
+fwl_buzzer(392, 100, true)
+note_off channel=2 freq=440, 100, true)
+note_on  channel=2 freq=392, 100, true)
+note_off channel=0 freq=392 time=0.06818175
+note_off channel=0 freq=392, 100, true)
+fwl_buzzer(369, 100, true)
+fwl_buzzer(369, 100, true)
+note_off channel=2 freq=392, 100, true)
+note_on  channel=2 freq=369, 100, true)
+note_off channel=0 freq=369 time=0.06818175
+note_off channel=0 freq=369, 100, true)
+fwl_buzzer(311, 100, true)
+fwl_buzzer(311, 100, true)
+note_off channel=2 freq=369, 100, true)
+note_on  channel=2 freq=311, 100, true)
+note_off channel=0 freq=311 time=0.06818175
+note_off channel=0 freq=311, 100, true)
+fwl_buzzer(369, 100, true)
+fwl_buzzer(369, 100, true)
+note_off channel=2 freq=311, 100, true)
+note_on  channel=2 freq=369, 100, true)
+note_off channel=0 freq=369 time=0.06818175
+note_off channel=0 freq=369, 100, true)
+fwl_buzzer(392, 100, true)
+fwl_buzzer(392, 100, true)
+note_off channel=2 freq=369, 100, true)
+note_on  channel=2 freq=392, 100, true)
+note_off channel=0 freq=392 time=0.06818175
+note_off channel=0 freq=392, 100, true)
+fwl_buzzer(440, 100, true)
+fwl_buzzer(440, 100, true)
+note_off channel=2 freq=392, 100, true)
+note_on  channel=2 freq=440, 100, true)
+note_off channel=0 freq=440 time=0.06818175
+note_off channel=0 freq=440, 100, true)
+fwl_buzzer(493, 100, true)
+fwl_buzzer(493, 100, true)
+note_off channel=2 freq=440, 100, true)
+note_on  channel=2 freq=493, 100, true)
+note_off channel=0 freq=493 time=0.06818175
+note_off channel=0 freq=493, 100, true)
+fwl_buzzer(440, 100, true)
+fwl_buzzer(440, 100, true)
+note_off channel=2 freq=493, 100, true)
+note_on  channel=2 freq=440, 100, true)
+note_off channel=0 freq=440 time=0.06818175
+note_off channel=0 freq=440, 100, true)
+fwl_buzzer(392, 100, true)
+fwl_buzzer(392, 100, true)
+note_off channel=2 freq=440, 100, true)
+note_on  channel=2 freq=392, 100, true)
+note_off channel=0 freq=392 time=0.06818175
+note_off channel=0 freq=392, 100, true)
+fwl_buzzer(369, 100, true)
+fwl_buzzer(369, 100, true)
+note_off channel=2 freq=392, 100, true)
+note_on  channel=2 freq=369, 100, true)
+note_off channel=0 freq=369 time=0.06818175
+note_off channel=0 freq=369, 100, true)
+fwl_buzzer(311, 100, true)
+fwl_buzzer(311, 100, true)
+note_off channel=2 freq=369, 100, true)
+note_on  channel=2 freq=311, 100, true)
+note_off channel=0 freq=311 time=0.06818175
+note_off channel=0 freq=311, 100, true)
+fwl_buzzer(82, 100, true)
+note_off channel=2 freq=311, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(165, 100, true)
+note_off channel=0 freq=165 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(147, 100, true)
+note_off channel=0 freq=147 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(131, 100, true)
+note_off channel=0 freq=131 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(116, 100, true)
+fwl_buzzer(82 time=0.136
+note_off channel=0 freq=116 time=0.136
+note_off channel=0 freq=82, 100, true)
+fwl_buzzer(82, 100, true)
+fwl_buzzer(123 time=0.136
+fwl_buzzer(0, 136
+note_off channel=0 freq=123, 100, true)
+fwl_buzzer(131, 100, true)
+note_off channel=0 freq=131 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(165, 100, true)
+note_off channel=0 freq=165 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(147, 100, true)
+note_off channel=0 freq=147 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(131, 100, true)
+note_off channel=0 freq=131 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(116 time=0.136
+fwl_buzzer(0, 4090905
+note_off channel=0 freq=116 time=0.136
+fwl_buzzer(82 time=0.136
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(165, 100, true)
+note_off channel=0 freq=165 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(147, 100, true)
+note_off channel=0 freq=147 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(131, 100, true)
+note_off channel=0 freq=131 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(116, 100, true)
+fwl_buzzer(82 time=0.136
+note_off channel=0 freq=116 time=0.136
+note_off channel=0 freq=82, 100, true)
+fwl_buzzer(82, 100, true)
+fwl_buzzer(123 time=0.136
+fwl_buzzer(0, 136
+note_off channel=0 freq=123, 100, true)
+fwl_buzzer(131, 100, true)
+note_off channel=0 freq=131 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(165, 100, true)
+note_off channel=0 freq=165 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(147, 100, true)
+note_off channel=0 freq=147 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(247, 100, true)
+note_on  channel=2 freq=247, 100, true)
+note_off channel=0 freq=247 time=0.06818175
+note_on  channel=0 note=55, 100, true)
+note_off channel=2 freq=247, 100, true)
+note_on  channel=2 note=55, 100, true)
+note_off channel=0 note=55 time=0.06818175
+fwl_buzzer(165, 100, true)
+note_off channel=2 note=55, 100, true)
+note_on  channel=2 freq=165, 100, true)
+note_off channel=0 freq=165 time=0.06818175
+note_on  channel=0 note=55, 100, true)
+note_off channel=2 freq=165, 100, true)
+note_on  channel=2 note=55, 100, true)
+note_off channel=0 note=55 time=0.06818175
+fwl_buzzer(247, 100, true)
+note_off channel=2 note=55, 100, true)
+note_on  channel=2 freq=247, 100, true)
+note_off channel=0 freq=247 time=0.06818175
+note_on  channel=0 note=55, 100, true)
+note_off channel=2 freq=247, 100, true)
+note_on  channel=2 note=55, 100, true)
+note_off channel=0 note=55 time=0.06818175
+fwl_buzzer(247, 100, true)
+note_off channel=2 note=55, 100, true)
+note_on  channel=2 freq=247, 100, true)
+note_off channel=0 freq=247 time=0.06818175
+fwl_buzzer(323, 100, true)
+note_off channel=2 freq=247, 100, true)
+note_on  channel=2 freq=323, 100, true)
+note_off channel=0 freq=323 time=0.06818175
+fwl_buzzer(247, 100, true)
+note_off channel=2 freq=323, 100, true)
+note_on  channel=2 freq=247, 100, true)
+note_off channel=0 freq=247 time=0.06818175
+note_on  channel=0 note=55, 100, true)
+note_off channel=2 freq=247, 100, true)
+note_on  channel=2 note=55, 100, true)
+note_off channel=0 note=55 time=0.06818175
+fwl_buzzer(247, 100, true)
+note_off channel=2 note=55, 100, true)
+note_on  channel=2 freq=247, 100, true)
+note_off channel=0 freq=247 time=0.06818175
+note_on  channel=0 note=55, 100, true)
+note_off channel=2 freq=247, 100, true)
+note_on  channel=2 note=55, 100, true)
+note_off channel=0 note=55 time=0.06818175
+fwl_buzzer(247, 100, true)
+note_off channel=2 note=55, 100, true)
+note_on  channel=2 freq=247, 100, true)
+note_off channel=0 freq=247 time=0.06818175
+fwl_buzzer(323, 100, true)
+note_off channel=2 freq=247, 100, true)
+note_on  channel=2 freq=323, 100, true)
+note_off channel=0 freq=323 time=0.06818175
+fwl_buzzer(392, 100, true)
+note_off channel=2 freq=323, 100, true)
+note_on  channel=2 freq=392, 100, true)
+note_off channel=0 freq=392 time=0.06818175
+fwl_buzzer(493, 100, true)
+note_off channel=2 freq=392, 100, true)
+note_on  channel=2 freq=493, 100, true)
+note_off channel=0 freq=493 time=0.06818175
+note_on  channel=0 note=45, 100, true)
+note_off channel=2 freq=493, 100, true)
+note_off channel=0 note=45 time=0.136
+note_on  channel=0 note=45, 100, true)
+note_off channel=0 note=45 time=0.136
+note_on  channel=0 note=57, 100, true)
+note_off channel=0 note=57 time=0.136
+note_on  channel=0 note=45, 100, true)
+note_off channel=0 note=45 time=0.136
+note_on  channel=0 note=45, 100, true)
+note_off channel=0 note=45 time=0.136
+note_on  channel=0 note=55, 100, true)
+note_off channel=0 note=55 time=0.136
+note_on  channel=0 note=45, 100, true)
+note_off channel=0 note=45 time=0.136
+note_on  channel=0 note=45, 100, true)
+note_off channel=0 note=45 time=0.136
+note_on  channel=0 note=45 time=0.136
+note_off channel=0 note=45 time=0.136
+note_on  channel=0 note=45, 100, true)
+note_off channel=0 note=45 time=0.136
+note_on  channel=0 note=51, 100, true)
+note_on  channel=0 note=45 time=0.136
+note_off channel=0 note=51 time=0.136
+note_off channel=0 note=45, 100, true)
+note_on  channel=0 note=45, 100, true)
+fwl_buzzer(165 time=0.136
+note_off channel=0 note=45 time=0.136
+note_off channel=0 freq=165, 100, true)
+note_on  channel=0 note=53, 100, true)
+note_off channel=0 note=53 time=0.136
+note_on  channel=0 note=45, 100, true)
+note_off channel=0 note=45 time=0.136
+note_on  channel=0 note=45, 100, true)
+note_off channel=0 note=45 time=0.136
+note_on  channel=0 note=57, 100, true)
+note_off channel=0 note=57 time=0.136
+note_on  channel=0 note=45, 100, true)
+note_off channel=0 note=45 time=0.136
+note_on  channel=0 note=45, 100, true)
+note_off channel=0 note=45 time=0.136
+note_on  channel=0 note=55, 100, true)
+note_off channel=0 note=55 time=0.136
+note_on  channel=0 note=45, 100, true)
+note_off channel=0 note=45 time=0.136
+note_on  channel=0 note=45, 100, true)
+note_off channel=0 note=45 time=0.136
+note_on  channel=0 note=45 time=0.136
+note_off channel=0 note=45 time=0.136
+note_on  channel=0 note=45, 100, true)
+note_on  channel=0 note=51 time=0.136
+note_off channel=0 note=45 time=0.4090905
+note_off channel=0 note=51 time=0.136
+note_on  channel=0 note=45 time=0.136
+note_off channel=0 note=45 time=0.136
+note_on  channel=0 note=45, 100, true)
+note_off channel=0 note=45 time=0.136
+note_on  channel=0 note=57, 100, true)
+note_off channel=0 note=57 time=0.136
+note_on  channel=0 note=45, 100, true)
+note_off channel=0 note=45 time=0.136
+note_on  channel=0 note=45, 100, true)
+note_off channel=0 note=45 time=0.136
+note_on  channel=0 note=55, 100, true)
+note_off channel=0 note=55 time=0.136
+note_on  channel=0 note=45, 100, true)
+note_off channel=0 note=45 time=0.136
+note_on  channel=0 note=45, 100, true)
+note_off channel=0 note=45 time=0.136
+note_on  channel=0 note=45 time=0.136
+note_off channel=0 note=45 time=0.136
+note_on  channel=0 note=45, 100, true)
+note_off channel=0 note=45 time=0.136
+note_on  channel=0 note=51, 100, true)
+note_on  channel=0 note=45 time=0.136
+note_off channel=0 note=51 time=0.136
+note_off channel=0 note=45, 100, true)
+note_on  channel=0 note=45, 100, true)
+fwl_buzzer(165 time=0.136
+note_off channel=0 note=45 time=0.136
+note_off channel=0 freq=165, 100, true)
+note_on  channel=0 note=53, 100, true)
+note_off channel=0 note=53 time=0.136
+note_on  channel=0 note=45, 100, true)
+note_off channel=0 note=45 time=0.136
+note_on  channel=0 note=45, 100, true)
+note_off channel=0 note=45 time=0.136
+note_on  channel=0 note=57, 100, true)
+note_off channel=0 note=57 time=0.136
+note_on  channel=0 note=45, 100, true)
+note_off channel=0 note=45 time=0.136
+note_on  channel=0 note=45, 100, true)
+note_off channel=0 note=45 time=0.136
+note_on  channel=0 note=55, 100, true)
+note_off channel=0 note=55 time=0.136
+note_on  channel=0 note=45, 100, true)
+note_off channel=0 note=45 time=0.136
+note_on  channel=0 note=45, 100, true)
+note_off channel=0 note=45 time=0.136
+fwl_buzzer(323, 100, true)
+note_on  channel=2 freq=323, 100, true)
+note_off channel=0 freq=323 time=0.06818175
+note_on  channel=0 note=62, 100, true)
+note_off channel=2 freq=323, 100, true)
+note_on  channel=2 note=62, 100, true)
+note_off channel=0 note=62 time=0.06818175
+note_on  channel=0 note=60, 100, true)
+note_off channel=2 note=62, 100, true)
+note_on  channel=2 note=60, 100, true)
+note_off channel=0 note=60 time=0.06818175
+fwl_buzzer(323, 100, true)
+note_off channel=2 note=60, 100, true)
+note_on  channel=2 freq=323, 100, true)
+note_off channel=0 freq=323 time=0.06818175
+note_on  channel=0 note=60, 100, true)
+note_off channel=2 freq=323, 100, true)
+note_on  channel=2 note=60, 100, true)
+note_off channel=0 note=60 time=0.06818175
+note_on  channel=0 note=57, 100, true)
+note_off channel=2 note=60, 100, true)
+note_on  channel=2 note=57, 100, true)
+note_off channel=0 note=57 time=0.06818175
+note_on  channel=0 note=60, 100, true)
+note_off channel=2 note=57, 100, true)
+note_on  channel=2 note=60, 100, true)
+note_off channel=0 note=60 time=0.06818175
+fwl_buzzer(323, 100, true)
+note_off channel=2 note=60, 100, true)
+note_on  channel=2 freq=323, 100, true)
+note_off channel=0 freq=323 time=0.06818175
+fwl_buzzer(440, 100, true)
+note_off channel=2 freq=323, 100, true)
+note_on  channel=2 freq=440, 100, true)
+note_off channel=0 freq=440 time=0.06818175
+fwl_buzzer(323, 100, true)
+note_off channel=2 freq=440, 100, true)
+note_on  channel=2 freq=323, 100, true)
+note_off channel=0 freq=323 time=0.06818175
+note_on  channel=0 note=60, 100, true)
+note_off channel=2 freq=323, 100, true)
+note_on  channel=2 note=60, 100, true)
+note_off channel=0 note=60 time=0.06818175
+fwl_buzzer(323, 100, true)
+note_off channel=2 note=60, 100, true)
+note_on  channel=2 freq=323, 100, true)
+note_off channel=0 freq=323 time=0.06818175
+note_on  channel=0 note=60, 100, true)
+note_off channel=2 freq=323, 100, true)
+note_on  channel=2 note=60, 100, true)
+note_off channel=0 note=60 time=0.06818175
+fwl_buzzer(323, 100, true)
+note_off channel=2 note=60, 100, true)
+note_on  channel=2 freq=323, 100, true)
+note_off channel=0 freq=323 time=0.06818175
+note_on  channel=0 note=60, 100, true)
+note_off channel=2 freq=323, 100, true)
+note_on  channel=2 note=60, 100, true)
+note_off channel=0 note=60 time=0.06818175
+note_on  channel=0 note=57, 100, true)
+note_off channel=2 note=60, 100, true)
+note_on  channel=2 note=57, 100, true)
+note_off channel=0 note=57 time=0.06818175
+fwl_buzzer(82, 100, true)
+note_off channel=2 note=57, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(165, 100, true)
+note_off channel=0 freq=165 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(147, 100, true)
+note_off channel=0 freq=147 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(131, 100, true)
+note_off channel=0 freq=131 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(116, 100, true)
+fwl_buzzer(82 time=0.136
+note_off channel=0 freq=116 time=0.136
+note_off channel=0 freq=82, 100, true)
+fwl_buzzer(82, 100, true)
+fwl_buzzer(123 time=0.136
+fwl_buzzer(0, 136
+note_off channel=0 freq=123, 100, true)
+fwl_buzzer(131, 100, true)
+note_off channel=0 freq=131 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(165, 100, true)
+note_off channel=0 freq=165 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(147, 100, true)
+note_off channel=0 freq=147 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(131, 100, true)
+note_off channel=0 freq=131 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(116 time=0.136
+fwl_buzzer(0, 4090905
+note_off channel=0 freq=116 time=0.136
+fwl_buzzer(82 time=0.136
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(165, 100, true)
+note_off channel=0 freq=165 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(147, 100, true)
+note_off channel=0 freq=147 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(131, 100, true)
+note_off channel=0 freq=131 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(116, 100, true)
+fwl_buzzer(82 time=0.136
+note_off channel=0 freq=116 time=0.136
+note_off channel=0 freq=82, 100, true)
+fwl_buzzer(82, 100, true)
+fwl_buzzer(123 time=0.136
+fwl_buzzer(0, 136
+note_off channel=0 freq=123, 100, true)
+fwl_buzzer(131, 100, true)
+note_off channel=0 freq=131 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(165, 100, true)
+note_off channel=0 freq=165 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(147, 100, true)
+note_off channel=0 freq=147 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(131, 100, true)
+note_off channel=0 freq=131 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(116 time=0.136
+fwl_buzzer(0, 4090905
+note_off channel=0 freq=116 time=0.136
+note_on  channel=0 note=49 time=0.272727
+note_off channel=0 note=49 time=0.136
+note_on  channel=0 note=61, 100, true)
+note_off channel=0 note=61 time=0.136
+note_on  channel=0 note=49, 100, true)
+note_off channel=0 note=49 time=0.136
+note_on  channel=0 note=49, 100, true)
+note_off channel=0 note=49 time=0.136
+fwl_buzzer(247, 100, true)
+note_off channel=0 freq=247 time=0.136
+note_on  channel=0 note=49, 100, true)
+note_off channel=0 note=49 time=0.136
+note_on  channel=0 note=49, 100, true)
+note_off channel=0 note=49 time=0.136
+note_on  channel=0 note=57, 100, true)
+note_off channel=0 note=57 time=0.136
+note_on  channel=0 note=49, 100, true)
+note_off channel=0 note=49 time=0.136
+note_on  channel=0 note=49, 100, true)
+note_off channel=0 note=49 time=0.136
+note_on  channel=0 note=55, 100, true)
+note_on  channel=0 note=49 time=0.136
+note_off channel=0 note=55 time=0.136
+note_off channel=0 note=49, 100, true)
+note_on  channel=0 note=49, 100, true)
+note_off channel=0 note=49 time=0.272727
+note_on  channel=0 note=57, 100, true)
+note_off channel=0 note=57 time=0.136
+fwl_buzzer(123, 100, true)
+note_off channel=0 freq=123 time=0.136
+fwl_buzzer(123, 100, true)
+note_off channel=0 freq=123 time=0.136
+fwl_buzzer(123 time=0.136
+note_off channel=0 freq=123 time=0.136
+fwl_buzzer(123, 100, true)
+note_off channel=0 freq=123 time=0.136
+note_on  channel=0 note=57, 100, true)
+note_off channel=0 note=57 time=0.136
+fwl_buzzer(123, 100, true)
+note_off channel=0 freq=123 time=0.136
+fwl_buzzer(123, 100, true)
+note_off channel=0 freq=123 time=0.136
+note_on  channel=0 note=55, 100, true)
+note_off channel=0 note=55 time=0.136
+fwl_buzzer(116, 100, true)
+note_off channel=0 freq=116 time=0.136
+note_on  channel=0 note=45, 100, true)
+note_on  channel=0 note=53 time=0.136
+note_off channel=0 note=45 time=0.4090905
+note_off channel=0 note=53 time=0.136
+fwl_buzzer(82 time=0.136
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(165, 100, true)
+note_off channel=0 freq=165 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(147, 100, true)
+note_off channel=0 freq=147 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(131, 100, true)
+note_off channel=0 freq=131 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(116, 100, true)
+fwl_buzzer(82 time=0.136
+note_off channel=0 freq=116 time=0.136
+note_off channel=0 freq=82, 100, true)
+fwl_buzzer(82, 100, true)
+fwl_buzzer(123 time=0.136
+fwl_buzzer(0, 136
+note_off channel=0 freq=123, 100, true)
+fwl_buzzer(131, 100, true)
+note_off channel=0 freq=131 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(165, 100, true)
+note_off channel=0 freq=165 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(147, 100, true)
+note_off channel=0 freq=147 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(323, 100, true)
+note_on  channel=2 freq=323, 100, true)
+note_off channel=0 freq=323 time=0.06818175
+fwl_buzzer(392, 100, true)
+note_off channel=2 freq=323, 100, true)
+note_on  channel=2 freq=392, 100, true)
+note_off channel=0 freq=392 time=0.06818175
+fwl_buzzer(247, 100, true)
+note_off channel=2 freq=392, 100, true)
+note_on  channel=2 freq=247, 100, true)
+note_off channel=0 freq=247 time=0.06818175
+note_on  channel=0 note=55, 100, true)
+note_off channel=2 freq=247, 100, true)
+note_on  channel=2 note=55, 100, true)
+note_off channel=0 note=55 time=0.06818175
+fwl_buzzer(323, 100, true)
+note_off channel=2 note=55, 100, true)
+note_on  channel=2 freq=323, 100, true)
+note_off channel=0 freq=323 time=0.06818175
+fwl_buzzer(247, 100, true)
+note_off channel=2 freq=323, 100, true)
+note_on  channel=2 freq=247, 100, true)
+note_off channel=0 freq=247 time=0.06818175
+fwl_buzzer(392, 100, true)
+note_off channel=2 freq=247, 100, true)
+note_on  channel=2 freq=392, 100, true)
+note_off channel=0 freq=392 time=0.06818175
+fwl_buzzer(323, 100, true)
+note_off channel=2 freq=392, 100, true)
+note_on  channel=2 freq=323, 100, true)
+note_off channel=0 freq=323 time=0.06818175
+fwl_buzzer(392, 100, true)
+note_off channel=2 freq=323, 100, true)
+note_on  channel=2 freq=392, 100, true)
+note_off channel=0 freq=392 time=0.06818175
+fwl_buzzer(323, 100, true)
+note_off channel=2 freq=392, 100, true)
+note_on  channel=2 freq=323, 100, true)
+note_off channel=0 freq=323 time=0.06818175
+fwl_buzzer(247, 100, true)
+note_off channel=2 freq=323, 100, true)
+note_on  channel=2 freq=247, 100, true)
+note_off channel=0 freq=247 time=0.06818175
+note_on  channel=0 note=55, 100, true)
+note_off channel=2 freq=247, 100, true)
+note_on  channel=2 note=55, 100, true)
+note_off channel=0 note=55 time=0.06818175
+fwl_buzzer(323, 100, true)
+note_off channel=2 note=55, 100, true)
+note_on  channel=2 freq=323, 100, true)
+note_off channel=0 freq=323 time=0.06818175
+fwl_buzzer(392, 100, true)
+note_off channel=2 freq=323, 100, true)
+note_on  channel=2 freq=392, 100, true)
+note_off channel=0 freq=392 time=0.06818175
+fwl_buzzer(493, 100, true)
+note_off channel=2 freq=392, 100, true)
+note_on  channel=2 freq=493, 100, true)
+note_off channel=0 freq=493 time=0.06818175
+note_on  channel=0 note=76, 100, true)
+note_off channel=2 freq=493, 100, true)
+note_on  channel=2 note=76, 100, true)
+note_off channel=0 note=76 time=0.06818175
+fwl_buzzer(82, 100, true)
+note_off channel=2 note=76, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(165, 100, true)
+note_off channel=0 freq=165 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(147, 100, true)
+note_off channel=0 freq=147 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(131, 100, true)
+note_off channel=0 freq=131 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(116, 100, true)
+fwl_buzzer(82 time=0.136
+note_off channel=0 freq=116 time=0.136
+note_off channel=0 freq=82, 100, true)
+fwl_buzzer(82, 100, true)
+fwl_buzzer(123 time=0.136
+fwl_buzzer(0, 136
+note_off channel=0 freq=123, 100, true)
+fwl_buzzer(131, 100, true)
+note_off channel=0 freq=131 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(165, 100, true)
+note_off channel=0 freq=165 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(147, 100, true)
+note_off channel=0 freq=147 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(131, 100, true)
+note_off channel=0 freq=131 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(116 time=0.136
+fwl_buzzer(0, 4090905
+note_off channel=0 freq=116 time=0.136
+fwl_buzzer(82 time=0.136
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(165, 100, true)
+note_off channel=0 freq=165 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(147, 100, true)
+note_off channel=0 freq=147 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(131, 100, true)
+note_off channel=0 freq=131 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(116, 100, true)
+fwl_buzzer(82 time=0.136
+note_off channel=0 freq=116 time=0.136
+note_off channel=0 freq=82, 100, true)
+fwl_buzzer(82, 100, true)
+fwl_buzzer(123 time=0.136
+fwl_buzzer(0, 136
+note_off channel=0 freq=123, 100, true)
+fwl_buzzer(131, 100, true)
+note_off channel=0 freq=131 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(165, 100, true)
+note_off channel=0 freq=165 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(147, 100, true)
+note_off channel=0 freq=147 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(311, 100, true)
+note_on  channel=2 freq=311, 100, true)
+note_off channel=0 freq=311 time=0.06818175
+note_on  channel=0 note=60, 100, true)
+note_off channel=2 freq=311, 100, true)
+note_on  channel=2 note=60, 100, true)
+note_off channel=0 note=60 time=0.06818175
+fwl_buzzer(247, 100, true)
+note_off channel=2 note=60, 100, true)
+note_on  channel=2 freq=247, 100, true)
+note_off channel=0 freq=247 time=0.06818175
+note_on  channel=0 note=54, 100, true)
+note_off channel=2 freq=247, 100, true)
+note_on  channel=2 note=54, 100, true)
+note_off channel=0 note=54 time=0.06818175
+fwl_buzzer(369, 100, true)
+note_off channel=2 note=54, 100, true)
+note_on  channel=2 freq=369, 100, true)
+note_off channel=0 freq=369 time=0.06818175
+fwl_buzzer(311, 100, true)
+note_off channel=2 freq=369, 100, true)
+note_on  channel=2 freq=311, 100, true)
+note_off channel=0 freq=311 time=0.06818175
+note_on  channel=0 note=60, 100, true)
+note_off channel=2 freq=311, 100, true)
+note_on  channel=2 note=60, 100, true)
+note_off channel=0 note=60 time=0.06818175
+fwl_buzzer(247, 100, true)
+note_off channel=2 note=60, 100, true)
+note_on  channel=2 freq=247, 100, true)
+note_off channel=0 freq=247 time=0.06818175
+fwl_buzzer(440, 100, true)
+note_off channel=2 freq=247, 100, true)
+note_on  channel=2 freq=440, 100, true)
+note_off channel=0 freq=440 time=0.06818175
+fwl_buzzer(369, 100, true)
+note_off channel=2 freq=440, 100, true)
+note_on  channel=2 freq=369, 100, true)
+note_off channel=0 freq=369 time=0.06818175
+fwl_buzzer(311, 100, true)
+note_off channel=2 freq=369, 100, true)
+note_on  channel=2 freq=311, 100, true)
+note_off channel=0 freq=311 time=0.06818175
+note_on  channel=0 note=60, 100, true)
+note_off channel=2 freq=311, 100, true)
+note_on  channel=2 note=60, 100, true)
+note_off channel=0 note=60 time=0.06818175
+fwl_buzzer(493, 100, true)
+note_off channel=2 note=60, 100, true)
+note_on  channel=2 freq=493, 100, true)
+note_off channel=0 freq=493 time=0.06818175
+fwl_buzzer(440, 100, true)
+note_off channel=2 freq=493, 100, true)
+note_on  channel=2 freq=440, 100, true)
+note_off channel=0 freq=440 time=0.06818175
+fwl_buzzer(369, 100, true)
+note_off channel=2 freq=440, 100, true)
+note_on  channel=2 freq=369, 100, true)
+note_off channel=0 freq=369 time=0.06818175
+fwl_buzzer(311, 100, true)
+note_off channel=2 freq=369, 100, true)
+note_on  channel=2 freq=311, 100, true)
+note_off channel=0 freq=311 time=0.06818175
+fwl_buzzer(82, 100, true)
+note_off channel=2 freq=311, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+note_on  channel=0 note=55, 100, true)
+fwl_buzzer(147, 100, true)
+note_off channel=0 freq=147 time=0.136
+note_off channel=0 note=55, 100, true)
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+note_on  channel=0 note=54, 100, true)
+fwl_buzzer(131, 100, true)
+note_off channel=0 freq=131 time=0.136
+note_off channel=0 note=54, 100, true)
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+note_on  channel=0 note=45, 100, true)
+note_off channel=0 note=45 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(147, 100, true)
+fwl_buzzer(116, 100, true)
+fwl_buzzer(82 time=0.136
+note_off channel=0 freq=116 time=0.136
+note_off channel=0 freq=147, 100, true)
+note_off channel=0 freq=82, 100, true)
+fwl_buzzer(82, 100, true)
+fwl_buzzer(147 time=0.136
+fwl_buzzer(116, 100, true)
+fwl_buzzer(0, 136
+note_off channel=0 freq=116, 100, true)
+note_off channel=0 freq=147, 100, true)
+fwl_buzzer(165, 100, true)
+fwl_buzzer(123, 100, true)
+note_off channel=0 freq=123 time=0.136
+note_off channel=0 freq=165, 100, true)
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+note_on  channel=0 note=55, 100, true)
+fwl_buzzer(147, 100, true)
+note_off channel=0 freq=147 time=0.136
+note_off channel=0 note=55, 100, true)
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+note_on  channel=0 note=54, 100, true)
+fwl_buzzer(131, 100, true)
+note_off channel=0 freq=131 time=0.136
+note_off channel=0 note=54, 100, true)
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(165, 100, true)
+fwl_buzzer(123, 100, true)
+note_off channel=0 freq=123 time=0.136
+note_off channel=0 freq=165, 100, true)
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+note_on  channel=0 note=49 time=0.136
+note_on  channel=0 note=43, 100, true)
+fwl_buzzer(0, 4090905
+note_off channel=0 note=43 time=0.136
+note_off channel=0 note=49, 100, true)
+fwl_buzzer(82 time=0.136
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+note_on  channel=0 note=55, 100, true)
+fwl_buzzer(147, 100, true)
+note_off channel=0 freq=147 time=0.136
+note_off channel=0 note=55, 100, true)
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+note_on  channel=0 note=54, 100, true)
+fwl_buzzer(131, 100, true)
+note_off channel=0 freq=131 time=0.136
+note_off channel=0 note=54, 100, true)
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+note_on  channel=0 note=45, 100, true)
+note_off channel=0 note=45 time=0.136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(147, 100, true)
+fwl_buzzer(116, 100, true)
+fwl_buzzer(82 time=0.136
+note_off channel=0 freq=116 time=0.136
+note_off channel=0 freq=147, 100, true)
+note_off channel=0 freq=82, 100, true)
+fwl_buzzer(82, 100, true)
+fwl_buzzer(147 time=0.136
+fwl_buzzer(116, 100, true)
+fwl_buzzer(0, 136
+note_off channel=0 freq=116, 100, true)
+note_off channel=0 freq=147, 100, true)
+fwl_buzzer(165, 100, true)
+fwl_buzzer(123, 100, true)
+note_off channel=0 freq=123 time=0.136
+note_off channel=0 freq=165, 100, true)
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+note_on  channel=0 note=55, 100, true)
+fwl_buzzer(147, 100, true)
+note_off channel=0 freq=147 time=0.136
+note_off channel=0 note=55, 100, true)
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+note_on  channel=0 note=54, 100, true)
+fwl_buzzer(131, 100, true)
+note_off channel=0 freq=131 time=0.136
+note_off channel=0 note=54, 100, true)
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(165, 100, true)
+fwl_buzzer(123, 100, true)
+note_off channel=0 freq=123 time=0.136
+note_off channel=0 freq=165, 100, true)
+fwl_buzzer(82, 100, true)
+fwl_buzzer(0, 136
+fwl_buzzer(82, 100, true)
+note_on  channel=0 note=49 time=0.136
+note_on  channel=0 note=43, 100, true)
+fwl_buzzer(0, 4090905
+note_off channel=0 note=43 time=0.136
+note_off channel=0 note=49, 100, true)
