@@ -6,7 +6,7 @@
       (append (list '(min-height              . 1)
                     '(height                  . 45)
                     '(min-width               . 1)
-                    '(width                   . 81)
+                    '(width                   . 115)
                     '(internal-border-width   . 24)
                     '(vertical-scroll-bars    . nil)
                     '(tool-bar-lines          . 0)
@@ -35,7 +35,6 @@
 (use-package benchmark-init :straight t :config (add-hook 'after-init-hook 'benchmark-init/deactivate))
 
 (setq-default frame-resize-pixelwise t
-              frame-title-format ""
               window-resize-pixelwise t
               ns-antialias-text t
               ns-use-native-fullscreen t
