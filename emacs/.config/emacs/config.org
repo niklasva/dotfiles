@@ -1853,6 +1853,13 @@ Use org mode in scratch buffer
              '(("\\*gptel\\*" gptel-mode
                 (display-buffer-same-window))))
 
+(add-hook 'gptel-mode-hook (lambda ()
+                             (setq-local visual-fill-column-center-text nil
+                                         visual-fill-column-fringes-outside-margins t
+                                         visual-fill-column-extra-text-width '(-2 . 0)
+                                         fill-column 9999
+                                         visual-fill-column-width 80)
+                             (visual-fill-column-mode)))
 #+end_src
 
 ** Mastodon
