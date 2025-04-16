@@ -754,6 +754,30 @@ Don't prompt project switch action
   :config
   (autoload 'dired-async-mode "dired-async.el" nil t)
   (dired-async-mode 1))
+
+(use-package dired-toggle
+  :straight t
+  :ensure t
+  :bind (("C-c t" . #'dired-toggle)
+         :map dired-mode-map
+         ("q" . #'dired-toggle-quit)
+         ([remap dired-find-file] . #'dired-toggle-find-file)
+         ([remap dired-up-directory] . #'dired-toggle-up-directory)
+         ("C-c C-u" . #'dired-toggle-up-directory))
+  :config
+  (setq dired-toggle-window-size 32)
+  (setq dired-toggle-window-side 'left)
+
+  (with-eval-after-load 'evil (evil-define-key 'normal dired-mode-map (kbd "q") #'dired-toggle-quit))
+
+  (add-hook 'dired-toggle-mode-hook
+            (lambda () (interactive)
+              (variable-pitch-mode 1)
+              (visual-line-mode -1)
+              (setq-local visual-line-fringe-indicators '(nil right-curly-arrow))
+              (setq-local word-wrap nil))))
+
+(use-package dired-hacks :straight t)
 #+end_src
 
 
@@ -763,11 +787,12 @@ Don't prompt project switch action
   :straight t
   :defer t
   :config
-  (setq treemacs-no-png-images t
-        treemacs-file-follow-delay 0.03)
+  (setq treemacs-no-png-images nil
+        treemacs-file-follow-delay 0.03
+        treemacs--icon-size 16
+        )
   (set-face-attribute 'treemacs-root-face nil :height 'unspecified :weight 'unspecified)
-  (treemacs-hide-gitignored-files-mode t)
-  (global-set-key (kbd "C-c t") 'treemacs))
+  (treemacs-hide-gitignored-files-mode nil))
 #+end_src
 
 ** Other
