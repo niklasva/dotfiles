@@ -13,6 +13,7 @@
 * Defaults
 ** Defaults
 #+begin_src emacs-lisp
+(custom-set-faces '(variable-pitch ((t (:font "Arial" :height 0.85)))))
 (setq-default warning-minimum-level :error)
 (setq-default c-basic-offset 4
               c-default-style "linux"
