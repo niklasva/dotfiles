@@ -1831,11 +1831,17 @@ Use org mode in scratch buffer
   :straight (gptel :host github :repo "karthink/gptel" branch "master")
   :config
 
-  (setq ollama-backend (gptel-make-ollama "ollama" :host "localhost:11434" :stream t :models '("deepseek-r1:14b" "deepseek-r1:8b")))
+  (setq ollama-backend (gptel-make-ollama "ollama"
+                         :host "localhost:11434"
+                         :stream t
+                         :models '("deepseek-r1:14b" "deepseek-r1:8b" "gemma3:latest" "deepcoder:1.5b")))
+
+  (add-hook 'gptel-post-stream-hook 'gptel-auto-scroll)
+  (setq gptel-org-branching-context t)
 
   (setq-default gptel-default-mode #'org-mode
                 gptel-max-tokens 4096
-                gptel-prompt-prefix-alist '((org-mode . "> "))
+                gptel-prompt-prefix-alist '((org-mode . "**** "))
                 gptel-stream t
                 gptel-use-header-line nil
                 gptel-model 'gpt-4o-mini))
