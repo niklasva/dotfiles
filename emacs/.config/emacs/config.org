@@ -1181,7 +1181,7 @@ Don't prompt project switch action
      ((string= "-" first-char) ;; No change
       (replace-regexp-in-string "^-" "-️" tstr))
      (t tstr))))
-(advice-add #'vc-git-mode-line-string :filter-return #'my-replace-git-status)
+;; (advice-add #'vc-git-mode-line-string :filter-return #'my-replace-git-status)
 #+end_src
 ** Documentation
 *** markdown-mode
