@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 (setq-default niva-use-new-config        nil)
 (setq-default niva-enable-evil-mode      t)
 (setq-default niva-inhibit-elfeed-images t)

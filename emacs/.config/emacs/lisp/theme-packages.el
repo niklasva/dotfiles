@@ -1,4 +1,4 @@
-;;; theme-packages.el --- Theme-related configuration
+;;; theme-packages.el --- Theme-related configuration  -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
 
@@ -172,4 +172,5 @@
   (setq nano-fonts-use nil
         nano-window-divider-show t))
 
-;;; theme-packages.el ends here
+
+(use-package alect-themes

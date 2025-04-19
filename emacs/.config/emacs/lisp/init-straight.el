@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 (setq-default straight-base-dir "~/.cache/emacs/straight")
 (defvar bootstrap-version)
 (let ((bootstrap-file

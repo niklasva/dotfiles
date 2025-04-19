@@ -2,6 +2,10 @@
 #+OPTIONS:  toc:2
 #+STARTUP:  overview noindent
 
+#+begin_src emacs-lisp
+;; -*- lexical-binding: t -*-
+#+end_src
+
 * Imports
 #+begin_src emacs-lisp
 (use-package pinentry :straight t :config (pinentry-start))
