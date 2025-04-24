@@ -1845,10 +1845,11 @@ Use org mode in scratch buffer
 
   (setq-default gptel-default-mode #'org-mode
                 gptel-max-tokens 4096
-                gptel-prompt-prefix-alist '((org-mode . "**** "))
+                gptel-prompt-prefix-alist '((org-mode . ""))
                 gptel-stream t
                 gptel-use-header-line nil
-                gptel-model 'gpt-4o-mini))
+                gptel-model 'o4-mini
+                gptel-response-separator "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"))
 
 (with-eval-after-load 'gptel
   (define-key gptel-mode-map (kbd "C-c m") 'gptel-menu)
@@ -1859,9 +1860,7 @@ Use org mode in scratch buffer
 
 (defun niva/gptel-common-buffer () (interactive) (gptel "*gptel*" nil nil t))
 (global-set-key (kbd "C-c p") 'niva/gptel-common-buffer)
-(add-to-list 'display-buffer-alist
-             '(("\\*gptel\\*" gptel-mode
-                (display-buffer-same-window))))
+(setq gptel-display-buffer-action '(display-buffer-same-window))
 
 (add-hook 'gptel-mode-hook (lambda ()
                              (setq-local visual-fill-column-center-text nil
@@ -1873,20 +1872,53 @@ Use org mode in scratch buffer
 #+end_src
 
 #+begin_src emacs-lisp
+(defun niva/rename-gptel-buffer (my-callback)
+  (interactive)
+  (unless gptel-mode
+    (user-error "This command is intended to be used in gptel chat buffers."))
+  (let ((gptel-model 'gpt-4o-mini))
+    (gptel-request
+     (list nil
+           "What is the chat content?"
+           (concat "```" (if (eq major-mode 'org-mode) "org" "markdown") "\n"
+                   (buffer-substring-no-properties (point-min) (point-max))
+                   "\n```"))
+     :system
+     (list (format
+            "I will provide a transcript of a chat with an LLM. \
+Suggest a short and informative name for a file to store this chat in.  \
+Use the following guidelines:
+- be very concise, one very short sentence at most
+- no spaces, use underscores if required
+- return ONLY the title, no explanation or summary
+- append the extension .%s"
+            (if (eq major-mode 'org-mode) "org" "md")))
+     :callback
+     (lambda (resp info)
+       (if (stringp resp)
+           (let* ((buf    (plist-get info :buffer))
+                  (timestamp (format-time-string "%Y%m%d%H%M"))
+                  (new-name (concat timestamp "_" resp)))
+             (when (functionp my-callback)
+               (funcall my-callback new-name)))
+         (message "Error(%s): did not receive a response from the LLM."
+                  (plist-get info :status)))))))
+#+end_src
+
+#+begin_src emacs-lisp
 (defun niva/gptel-auto-save ()
   (interactive)
   (when (bound-and-true-p gptel-mode)
-    (let* ((dir "~/.gptel-chats/")
-           (buf-name (buffer-name))
-           (filename
-            (if (string-match-p "^\\*gptel" buf-name)
-                (let ((new-name (format "chat-%s" (format-time-string "%Y-%m-%d_%H-%M-%S"))))
-                  (rename-buffer new-name)
-                  (expand-file-name (concat new-name ".org") dir))
-              (expand-file-name (concat buf-name ".org") dir))))
-      (make-directory dir :parents)
-      (write-region (point-min) (point-max) filename nil 'silent)
-      (message "Chat saved to %s" filename))))
+    (when (and (string-match-p "^\\*gptel" (buffer-name)) (not (string= (buffer-string) "")))
+          (let* ((dir "~/.gptel-chats/"))
+                (niva/rename-gptel-buffer
+                 (lambda (new-name)
+                   (let* ((filename (expand-file-name new-name dir)))
+                         (rename-buffer new-name)
+                         (message filename)
+                         (make-directory dir :parents)
+                         (write-region (point-min) (point-max) filename nil 'silent)
+                         (message "Chat saved to %s" filename))))))))
 
 (add-hook 'kill-buffer-hook #'niva/gptel-auto-save)
 
