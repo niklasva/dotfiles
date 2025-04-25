@@ -17,10 +17,9 @@
 * Defaults
 ** Defaults
 #+begin_src emacs-lisp
-(custom-set-faces '(variable-pitch ((t (:font "Arial" :height 0.85)))))
 (setq-default warning-minimum-level :error)
 (setq-default c-basic-offset 4
-              c-default-style "linux"
+              c-default-style "user"
               completion-cycle-threshold t
               display-line-numbers-width 4
               confirm-kill-emacs 'y-or-n-p
