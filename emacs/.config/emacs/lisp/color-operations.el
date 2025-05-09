@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 (defun operate-hex-colors (color1 color2 operation bound-op initial)
   (let ((result "#"))
     (dotimes (i 3)
