@@ -47,7 +47,6 @@
 (delete-selection-mode)
 
 (setq-default evil-auto-indent t
-              indent-line-function 'evil-indent-line
               indent-tabs-mode nil
               tab-width 4
               org-src-tab-acts-natively t
@@ -129,9 +128,9 @@
 (defun niva/foreground-emacsclient ()
   (when (eq system-type 'darwin)
     (start-process "bring-emacs-to-front" nil
-    	           "osascript"
-	               "-e"
-	               "tell application \"Emacs\" to activate")))
+                   "osascript"
+                       "-e"
+                       "tell application \"Emacs\" to activate")))
 (add-hook 'server-after-make-frame-hook #'niva/foreground-emacsclient)
 #+end_src
 
@@ -258,7 +257,7 @@ Always move cursor to help window.
                (not (region-active-p))
                popper-open-popup-alist)
       (let ((window (caar popper-open-popup-alist)))
-	    (when (window-live-p window)
+        (when (window-live-p window)
           (delete-window window)))))
   (advice-add #'keyboard-quit :before #'+popper-close-window-hack))
 #+end_src
@@ -1426,16 +1425,16 @@ Don't prompt project switch action
 ** eshell-syntax-highlighting
 #+begin_src emacs-lisp
 (use-package eshell-syntax-highlighting
- :defer t
- :straight t
- :hook (eshell-mode . eshell-syntax-highlighting-mode))
+  :defer t
+  :straight t
+  :hook (eshell-mode . eshell-syntax-highlighting-mode))
 #+end_src
 
 ** Kill buffer on quit
 #+begin_src emacs-lisp
 (defun niva/term-handle-exit (&optional process-name msg)
-"Kill buffer on quit"
-(kill-buffer (current-buffer)))
+  "Kill buffer on quit"
+  (kill-buffer (current-buffer)))
 
 (advice-add 'term-handle-exit :after 'niva/term-handle-exit)
 #+end_src
