@@ -723,25 +723,31 @@ Don't prompt project switch action
 * File management
 ** Dired
 #+begin_src emacs-lisp
+(use-package dired
+  :straight (:type built-in)
+  :config
+  (setq-default insert-directory-program "gls"
+                dired-use-ls-dired t
+                dired-subtree-use-backgrounds nil
+                dired-listing-switches "-alh --group-directories-first"
+                dired-subtree-line-prefix "  "
+                dired-kill-when-opening-new-dired-buffer t
+                dired-subtree-line-prefix-face 'subtree))
+
 (use-package dirtree :straight t :ensure t)
-(use-package dired-subtree :straight t
+
+(use-package dired-subtree
+  :straight t
   :after dired
   :ensure t
-  :hook ((dired-mode . dired-hide-details-mode))
+  :hook ((dired-mode . dired-hide-details-mode)
+         (dired-mode . hl-line-mode))
   :bind
   (:map dired-mode-map
         ("<tab>" . dired-subtree-toggle)
         ("TAB" . dired-subtree-toggle)
         ("<backtab>" . dired-subtree-remove)
-        ("S-TAB" . dired-subtree-remove))
-  :config
-  (setq dired-subtree-use-backgrounds nil
-        dired-subtree-line-prefix "  "
-        dired-kill-when-opening-new-dired-buffer t)
-  (setq dired-subtree-line-prefix-face 'subtree))
-
-(setq dired-mode-hook '(dired-collapse-mode dired-hide-details-mode
-                                            dired-extra-startup))
+        ("S-TAB" . dired-subtree-remove)))
 
 (use-package dired-collapse
   :straight t
@@ -759,6 +765,7 @@ Don't prompt project switch action
 
 (use-package dired-toggle
   :straight t
+  :after dired
   :ensure t
   :bind (("C-c t" . #'dired-toggle)
          :map dired-mode-map
@@ -800,7 +807,6 @@ Don't prompt project switch action
 ** Other
 #+begin_src emacs-lisp
 (global-auto-revert-mode t)
-(setq vc-follow-symlinks t)
 #+end_src
 
 * Development
