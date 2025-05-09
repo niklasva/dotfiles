@@ -56,6 +56,7 @@
 (use-package colorless-themes
   :straight (:host github :repo "lthms/colorless-themes.el" :files ("colorless-themes.el" "*.el")))
 
+(use-package alect-themes          :straight t :defer t)
 (use-package almost-mono-themes    :straight t :defer t)
 (use-package basic-theme           :straight t :defer t)
 (use-package chocolate-theme       :straight t :defer t)
@@ -66,6 +67,7 @@
 (use-package parchment-theme       :straight t :defer t)
 (use-package professional-theme    :straight t :defer t)
 (use-package standard-themes       :straight t :defer t)
+(use-package moe-theme             :straight t :defer t)
 
 ;;; Modus Themes
 (use-package modus-themes
@@ -172,5 +174,4 @@
   (setq nano-fonts-use nil
         nano-window-divider-show t))
 
-
-(use-package alect-themes
+(custom-set-faces '(dired-directory ((t (:inherit link :underline nil)))))

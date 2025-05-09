@@ -25,7 +25,8 @@
  '(vertico-mouse                         ((t (:inherit highlight))))
  '(eglot-inlay-hint-face                 ((t (:inherit font-lock-comment-face :height 1.0 :italic t))))
  '(eglot-highlight-symbol-face           ((t (:inherit unspecified :underline (:style wave)))))
- '(eglot-diagnostic-tag-unnecessary-face ((t (:strike-through t)))))
+ '(eglot-diagnostic-tag-unnecessary-face ((t (:strike-through t))))
+ '(dired-directory                       ((t (:inherit link)))))
 
 ;;; Toggle function for Bing-Bong Dark
 (defun niva/toggle-bing-bong-dark ()
