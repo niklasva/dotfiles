@@ -886,13 +886,11 @@ Don't prompt project switch action
 (use-package eldoc
   :straight (:type built-in)
   :diminish
-  :defer t
   :config
   (setq-default eldoc-idle-delay 0.4
                 eldoc-echo-area-use-multiline-p t
                 eldoc-echo-area-prefer-doc-buffer t
                 eldoc-documentation-strategy #'eldoc-documentation-compose-eagerly)
-
 
   (diminish 'eldoc-mode))
 (diminish 'abbrev-mode)
@@ -903,24 +901,38 @@ Don't prompt project switch action
 #+begin_src emacs-lisp
 (use-package eglot
   :straight (:type built-in)
-  :defer t
+  :ensure t
+  :commands (eglot eglot-ensure)
+  :hook (
+         (c-mode          . eglot-ensure)
+         (c++-mode        . eglot-ensure)
+         (c-ts-mode       . eglot-ensure)
+         (c++-ts-mode     . eglot-ensure)
+         (python-mode     . eglot-ensure)
+         (python-ts-mode  . eglot-ensure)
+         (cmake-ts-mode   . eglot-ensure)
+         (yaml-ts-mode    . eglot-ensure))
+
+  :custom
+  (eglot-sync-connect 0)
+  (eglot-autoshutdown t)
+  (eglot-sync-connect nil)
+  (eglot-events-buffer-size 0)
+  (eglot-extend-to-xref t)
+  (eglot-report-progress 'messages)
+  (eglot-code-action-indications '(eldoc-hint))
+  (eglot-code-action-indicator "?")
+  (eglot-workspace-configuration `((:basedpyright . (:typeCheckingMode "basic"))))
+  ;; (setq-default eglot-send-changes-idle-time 5.0)
   :config
-  (setq-default eglot-autoshutdown t)
-  (setq-default eglot-sync-connect nil)
   (fset #'jsonrpc--log-event #'ignore)
-  (setq-default eglot-events-buffer-size 0)
-  (setq-default eglot-events-buffer-config '(:size 0))
-  (setq-default eglot-extend-to-xref t)
-  (setq-default eglot-report-progress 'messages)
-  (setq-default eglot-send-changes-idle-time 5.0)
-  (setq-default eglot-workspace-configuration `((:basedpyright . (:typeCheckingMode "basic"))))
 
   (add-to-list 'eglot-server-programs '((c-mode c++-mode c++-ts-mode) .
                                         ("/opt/homebrew/bin/clangd"
-                                         "--query-driver=/Applications/ARM/bin/arm-none-eabi-*"
+                                         "--query-driver=/Applications/ARM/bin/arm-none-eabi-g++"
                                          "--clang-tidy"
                                          "--completion-style=detailed"
-                                         "--pch-storage=memory"
+                                         ;; "--pch-storage=memory"
                                          "--header-insertion=never"
                                          "--background-index-priority=background"
                                          "-j=8"
@@ -939,16 +951,6 @@ Don't prompt project switch action
                                         "yaml-language-server"
                                         "--stdio")))
 
-
-(dolist (hook '(c-mode-hook
-                c-ts-mode-hook
-                c++-mode-hook
-                c++-ts-mode-hook
-                python-mode-hook
-                python-ts-mode-hook
-                cmake-ts-mode-hook
-                yaml-ts-mode-hook))
-  (add-hook hook 'eglot-ensure))
 
 (advice-add 'eglot--mode-line-format :override (lambda () ""))
 
@@ -987,11 +989,10 @@ Don't prompt project switch action
 
 #+begin_src emacs-lisp
 (use-package eglot-booster
+  :straight
+  (eglot-booster :type git :host github :repo "jdtsmith/eglot-booster")
   :after eglot
-  :straight (eglot-booster :type git :host github :repo "jdtsmith/eglot-booster")
-  :config
-  (setq-default eglot-booster-io-only t)
-  (eglot-booster-mode))
+  :config (eglot-booster-mode))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -999,7 +1000,7 @@ Don't prompt project switch action
   :after eglot
   :straight t
   :custom
-  (eglot-inactive-regions-style 'darken-foreground)
+  (eglot-inactive-regions-style 'shadow-face)
   (eglot-inactive-regions-opacity 0.4)
   :config
   (eglot-inactive-regions-mode 1))
@@ -1017,7 +1018,7 @@ Don't prompt project switch action
 
   (add-hook 'sh-mode-hook 'flymake-mode)
   (add-hook 'prog-mode-hook 'flymake-mode)
-  (add-hook 'text-mode-hook 'flymake-mode))
+  (add-hook 'text-mode-hook 'flymake-mode)
 
 (use-package flymake-cursor
   :straight t
@@ -1026,20 +1027,23 @@ Don't prompt project switch action
 
 (set-face-attribute 'compilation-error nil   :weight 'unspecified :background nil)
 (set-face-attribute 'compilation-warning nil :weight 'unspecified :background nil)
-;; (set-face-attribute 'warning nil             :weight 'unspecified :foreground 'unspecified :underline '(:color "orange" :style wave))
-;; (set-face-attribute 'error nil               :weight 'unspecified :foreground 'unspecified :underline '(:color "red" :style wave))
+(set-face-attribute 'warning nil             :weight 'unspecified :foreground 'unspecified :underline '(:color "orange" :style wave))
+(set-face-attribute 'error nil               :weight 'unspecified :foreground 'unspecified :underline '(:color "red" :style wave))
+
 (set-face-attribute 'flymake-warning nil     :weight 'unspecified :underline  '(:color "orange" :style wave))
 (set-face-attribute 'flymake-error nil       :weight 'unspecified :underline  '(:color "red" :style wave))
+
 (set-face-attribute 'compilation-info nil    :inherit nil :foreground "green" :weight 'unspecified)
 
 (set-face-attribute 'warning nil             :weight 'unspecified :foreground "orange")
 (set-face-attribute 'error nil               :weight 'unspecified :foreground "red")
-(set-face-attribute 'compilation-info nil    :weight 'normal :background 'unspecified :foreground (face-attribute 'ansi-color-green :foreground))
+;; (set-face-attribute 'compilation-info nil    :weight 'normal :background 'unspecified :foreground (face-attribute 'ansi-color-green :foreground))
 (set-face-attribute 'warning nil             :weight 'normal :background 'unspecified :foreground (face-attribute 'ansi-color-yellow :foreground))
 (set-face-attribute 'error nil               :weight 'normal :background 'unspecified :foreground (face-attribute 'ansi-color-red :foreground))
-(set-face-attribute 'compilation-error nil   :weight 'unspecified)
-(set-face-attribute 'compilation-warning nil :weight 'unspecified)
-;; (set-face-attribute 'warning nil             :weight 'normal :background 'unspecified :foreground (face-attribute 'ansi-color-yellow :foreground))
+;; (set-face-attribute 'compilation-error nil   :weight 'unspecified)
+;; (set-face-attribute 'compilation-warning nil :weight 'unspecified)
+;; (set-face-attribute 'warning nil             :weight 'normal :background 'unspecified :foreground (face-attribute 'ansi-color-yellow :foreground)
+)
 #+end_src
 
 ** Tree-sitter
