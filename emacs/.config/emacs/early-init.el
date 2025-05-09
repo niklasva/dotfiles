@@ -2,6 +2,9 @@
 ;;; Commentary:
 ;;; Code:
 
+(setq vc-follow-symlinks t)
+(load (expand-file-name "lisp/init-straight.el" user-emacs-directory))
+
 (setq default-frame-alist
       (append (list '(min-height              . 1)
                     '(height                  . 45)
@@ -22,7 +25,7 @@
 
 (setq-default gc-cons-threshold most-positive-fixnum)
 (setq-default vc-follow-symlinks t)
-(setq-default native-comp-speed -1)
+(setq-default native-comp-speed 2)
 (setq-default lexical-binding t)
 (setq-default gnus-init-inhibit t)
 
@@ -30,7 +33,6 @@
  '(org-modules nil))
 
 (setq-default header-line-format (buffer-file-name))
-(load (expand-file-name "lisp/init-straight.el" user-emacs-directory))
 (load (expand-file-name "lisp/theme-packages.el" user-emacs-directory))
 (use-package benchmark-init :straight t :config (add-hook 'after-init-hook 'benchmark-init/deactivate))
 

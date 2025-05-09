@@ -23,4 +23,4 @@
   (setq no-littering-etc-directory "~/.cache/emacs/etc")
   (setq no-littering-var-directory "~/.cache/emacs/var"))
 
-(use-package diminish :straight t)
+(use-package diminish :straight t :ensure t)
