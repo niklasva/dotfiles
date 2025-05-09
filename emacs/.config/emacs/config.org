@@ -1500,7 +1500,7 @@ Don't prompt project switch action
 
 ** scratch
 Use org mode in scratch buffer
-#+begin_src emacs-lisp
+#+begin_src disabled
 (setq-default initial-major-mode 'org-mode)
 #+end_src
 
