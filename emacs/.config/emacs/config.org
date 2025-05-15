@@ -14,6 +14,109 @@
 (when (file-readable-p import-file) (load import-file))
 #+end_src
 
+* Eshell
+** eshell
+#+begin_src emacs-lisp
+(use-package eshell
+  :straight (:type built-in)
+  :demand t
+  :defer t
+  :defines eshell-prompt-function
+  :config
+  (defalias 'ff 'find-file)
+  (add-hook 'shell-mode-hook 'with-editor-export-editor)
+  (add-hook 'eshell-mode-hook
+            (lambda ()
+              (define-key eshell-hist-mode-map (kbd "C-c C-l") nil)
+              (define-key eshell-hist-mode-map (kbd "M-s")     nil)
+              (define-key eshell-mode-map      (kbd "C-a")     'eshell-bol)
+              (define-key eshell-mode-map      (kbd "C-l")     'eshell/clear)
+              (define-key eshell-mode-map      (kbd "C-r")     'eshell-isearch-backward)
+              (define-key eshell-mode-map      (kbd "C-u")     'eshell-kill-input)))
+
+  (setq eshell-ask-to-save-history 'always
+        eshell-banner-message ""
+        eshell-cmpl-cycle-completions t
+        eshell-cmpl-ignore-case t
+        eshell-destroy-buffer-when-process-dies nil
+        eshell-error-if-no-glob t
+        eshell-glob-case-insensitive t
+        eshell-hist-ignoredups t
+        eshell-history-size 65535
+        eshell-input-filter (lambda (input) (not (string-match-p "\\`\\s-+" input)))
+        eshell-kill-processes-on-exit t
+        eshell-scroll-to-bottom-on-input 'this
+        eshell-scroll-to-bottom-on-output nil))
+
+(setq system-name (car (split-string system-name "\\.")))
+(setq eshell-prompt-regexp "^.+@.+:.+> ")
+(setq eshell-prompt-function
+      (lambda ()
+        (concat
+         (propertize (user-login-name) 'face 'font-lock-keyword-face)
+         (propertize (format "@%s" (system-name)) 'face 'default)
+         (propertize ":" 'face 'font-lock-doc-face)
+         (propertize (abbreviate-file-name (eshell/pwd)) 'face 'font-lock-type-face)
+         (propertize " $" 'face 'font-lock-doc-face)
+         (propertize " " 'face 'default))))
+
+(advice-add 'eshell/clear :override
+            (defun niva--eshell/clear (&optional scrollback)
+              (interactive)
+              (let ((inhibit-read-only t))
+                (erase-buffer)
+                (eshell-send-input))))
+#+end_src
+
+** eshell-syntax-highlighting
+#+begin_src emacs-lisp
+(use-package eshell-syntax-highlighting
+  :defer t
+  :straight t
+  :hook (eshell-mode . eshell-syntax-highlighting-mode))
+#+end_src
+
+** Kill buffer on quit
+#+begin_src emacs-lisp
+(defun niva/term-handle-exit (&optional process-name msg)
+  "Kill buffer on quit"
+  (kill-buffer (current-buffer)))
+
+(advice-add 'term-handle-exit :after 'niva/term-handle-exit)
+#+end_src
+
+** Log coloring
+#+begin_src disabled
+ (defun niva/font-lock-comment-annotations ()
+   "Colorize keywords in eshell buffers"
+   (interactive)
+   (font-lock-add-keywords
+    nil
+    '(("\\<\\(.*ERR.*\\)"                                            1 'compilation-error   t)
+      ("\\<\\(.*INFO.*\\)"                                           1 'compilation-info    t)
+      ("\\<\\(.*DEBUG.*\\)"                                          1 'compilation-info    t)
+      ("\\<\\(.*WARN.*\\)"                                           1 'compilation-warning t)
+      ("\\<\\(.*DEBUG: --- CMD: POLL(60) REPLY: ISTATR(49) ---.*\\)" 1 'completions-common-part t)
+      ("\\<\\(.*DEBUG: --- CMD: OUT(68) REPLY: ACK(40) ---.*\\)"     1 'completions-common-part t))))
+
+ (add-hook 'eshell-mode-hook 'niva/font-lock-comment-annotations)
+#+end_src
+
+** Alias
+#+begin_src emacs-lisp
+(defalias 'ff    "for i in ${eshell-flatten-list $*} {find-file $i}")
+(defalias 'emacs "ff")
+(defalias 'fo    "find-file-other-window $1")
+(defalias 'ts    "ts '[%Y-%m-%d %H:%M:%S]'")
+#+end_src
+
+** exec-path-from-shell
+#+begin_src emacs-lisp
+(use-package exec-path-from-shell
+  :straight t
+  :init (exec-path-from-shell-initialize))
+#+end_src
+
 * Defaults
 ** Defaults
 #+begin_src emacs-lisp
@@ -1377,108 +1480,6 @@ Don't prompt project switch action
   (add-to-list 'compilation-error-regexp-alist 'niva--compile-gcc-error)
 
   (advice-add 'compilation-filter :around #'niva/advice-compilation-filter))
-#+end_src
-
-* Eshell
-** eshell
-#+begin_src emacs-lisp
-(use-package eshell
-  :straight (:type built-in)
-  :defer t
-  :defines eshell-prompt-function
-  :config
-  (defalias 'ff 'find-file)
-  (add-hook 'shell-mode-hook 'with-editor-export-editor)
-  (add-hook 'eshell-mode-hook
-            (lambda ()
-              (define-key eshell-hist-mode-map (kbd "C-c C-l") nil)
-              (define-key eshell-hist-mode-map (kbd "M-s")     nil)
-              (define-key eshell-mode-map      (kbd "C-a")     'eshell-bol)
-              (define-key eshell-mode-map      (kbd "C-l")     'eshell/clear)
-              (define-key eshell-mode-map      (kbd "C-r")     'eshell-isearch-backward)
-              (define-key eshell-mode-map      (kbd "C-u")     'eshell-kill-input)))
-
-  (setq eshell-ask-to-save-history 'always
-        eshell-banner-message ""
-        eshell-cmpl-cycle-completions t
-        eshell-cmpl-ignore-case t
-        eshell-destroy-buffer-when-process-dies nil
-        eshell-error-if-no-glob t
-        eshell-glob-case-insensitive t
-        eshell-hist-ignoredups t
-        eshell-history-size 65535
-        eshell-input-filter (lambda (input) (not (string-match-p "\\`\\s-+" input)))
-        eshell-kill-processes-on-exit t
-        eshell-scroll-to-bottom-on-input 'this
-        eshell-scroll-to-bottom-on-output nil))
-
-(setq system-name (car (split-string system-name "\\.")))
-(setq eshell-prompt-regexp "^.+@.+:.+> ")
-(setq eshell-prompt-function
-      (lambda ()
-        (concat
-         (propertize (user-login-name) 'face 'font-lock-keyword-face)
-         (propertize (format "@%s" (system-name)) 'face 'default)
-         (propertize ":" 'face 'font-lock-doc-face)
-         (propertize (abbreviate-file-name (eshell/pwd)) 'face 'font-lock-type-face)
-         (propertize " $" 'face 'font-lock-doc-face)
-         (propertize " " 'face 'default))))
-
-(advice-add 'eshell/clear :override
-            (defun niva--eshell/clear (&optional scrollback)
-              (interactive)
-              (let ((inhibit-read-only t))
-                (erase-buffer)
-                (eshell-send-input))))
-#+end_src
-
-** eshell-syntax-highlighting
-#+begin_src emacs-lisp
-(use-package eshell-syntax-highlighting
-  :defer t
-  :straight t
-  :hook (eshell-mode . eshell-syntax-highlighting-mode))
-#+end_src
-
-** Kill buffer on quit
-#+begin_src emacs-lisp
-(defun niva/term-handle-exit (&optional process-name msg)
-  "Kill buffer on quit"
-  (kill-buffer (current-buffer)))
-
-(advice-add 'term-handle-exit :after 'niva/term-handle-exit)
-#+end_src
-
-** Log coloring
-#+begin_src disabled
- (defun niva/font-lock-comment-annotations ()
-   "Colorize keywords in eshell buffers"
-   (interactive)
-   (font-lock-add-keywords
-    nil
-    '(("\\<\\(.*ERR.*\\)"                                            1 'compilation-error   t)
-      ("\\<\\(.*INFO.*\\)"                                           1 'compilation-info    t)
-      ("\\<\\(.*DEBUG.*\\)"                                          1 'compilation-info    t)
-      ("\\<\\(.*WARN.*\\)"                                           1 'compilation-warning t)
-      ("\\<\\(.*DEBUG: --- CMD: POLL(60) REPLY: ISTATR(49) ---.*\\)" 1 'completions-common-part t)
-      ("\\<\\(.*DEBUG: --- CMD: OUT(68) REPLY: ACK(40) ---.*\\)"     1 'completions-common-part t))))
-
- (add-hook 'eshell-mode-hook 'niva/font-lock-comment-annotations)
-#+end_src
-
-** Alias
-#+begin_src emacs-lisp
-(defalias 'ff    "for i in ${eshell-flatten-list $*} {find-file $i}")
-(defalias 'emacs "ff")
-(defalias 'fo    "find-file-other-window $1")
-(defalias 'ts    "ts '[%Y-%m-%d %H:%M:%S]'")
-#+end_src
-
-** exec-path-from-shell
-#+begin_src emacs-lisp
-(use-package exec-path-from-shell
-  :straight t
-  :init (exec-path-from-shell-initialize))
 #+end_src
 
 * Org Mode
