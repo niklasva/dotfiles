@@ -1999,6 +1999,7 @@ Use the following guidelines:
 ** org-header-line-outline
 #+begin_src emacs-lisp
 (use-package org-header-line-outline
+  :disabled t
   :after org
   :straight (:host github :repo "niklasva/org-header-line-outline")
   :config
