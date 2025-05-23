@@ -10,8 +10,8 @@
 #+begin_src emacs-lisp
 (use-package pinentry :straight t :config (pinentry-start))
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
-(defvar import-file (expand-file-name "private/config.el" user-emacs-directory))
-(when (file-readable-p import-file) (load import-file))
+(defconst private-config-file (expand-file-name "private/config.el" user-emacs-directory))
+(when (file-readable-p private-config-file) (load-file private-config-file))
 #+end_src
 
 * Eshell
