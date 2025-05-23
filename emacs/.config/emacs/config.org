@@ -1916,19 +1916,23 @@ Use the following guidelines:
 #+end_src
 
 #+begin_src emacs-lisp
+(use-package org-bullets
+  :straight t)
+
 (defun niva/gptel-auto-save ()
   (interactive)
   (when (bound-and-true-p gptel-mode)
-    (when (and (string-match-p "^\\*gptel" (buffer-name)) (not (string= (buffer-string) "")))
-          (let* ((dir "~/.gptel-chats/"))
-                (niva/rename-gptel-buffer
-                 (lambda (new-name)
-                   (let* ((filename (expand-file-name new-name dir)))
-                         (rename-buffer new-name)
-                         (message filename)
-                         (make-directory dir :parents)
-                         (write-region (point-min) (point-max) filename nil 'silent)
-                         (message "Chat saved to %s" filename))))))))
+    (if (and (string-match-p "^\\*gptel" (buffer-name)) (not (string= (buffer-string) "")))
+        (let* ((dir "~/.gptel-chats/"))
+          (niva/rename-gptel-buffer
+           (lambda (new-name)
+             (let* ((filename (expand-file-name new-name dir)))
+               (make-directory dir :parents)
+               (write-file filename)
+               (rename-buffer (file-name-nondirectory (buffer-file-name)))
+               ;; (message "Chat saved to %s" filename)
+               ))))
+      (save-buffer))))
 
 (add-hook 'kill-buffer-hook #'niva/gptel-auto-save)
 
