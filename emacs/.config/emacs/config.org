@@ -564,6 +564,10 @@ Don't prompt project switch action
 (global-set-key (kbd "C-c conf")  (lambda () (interactive) (find-file "~/.config/emacs/config.org")))
 (global-set-key (kbd "C-c ff")    'find-file)
 (global-set-key (kbd "C-c elf")   'elfeed)
+
+(global-set-key (kbd "C-c c a")   (lambda () (interactive)
+                                    (when (eglot-managed-p)
+                                      (call-interactively #'eglot-code-actions))))
 #+end_src
 
 ** Undo
@@ -1005,10 +1009,8 @@ Don't prompt project switch action
 #+begin_src emacs-lisp
 (use-package eglot
   :straight (:type built-in)
-  :ensure t
-  :commands (eglot eglot-ensure)
-  :hook (
-         (c-mode          . eglot-ensure)
+  :defer t
+  :hook ((c-mode          . eglot-ensure)
          (c++-mode        . eglot-ensure)
          (c-ts-mode       . eglot-ensure)
          (c++-ts-mode     . eglot-ensure)
@@ -1099,16 +1101,15 @@ Don't prompt project switch action
 (use-package eglot-booster
   :straight
   (eglot-booster :type git :host github :repo "jdtsmith/eglot-booster")
-  :after eglot
+  :defer t
   :config (eglot-booster-mode))
 #+end_src
 
 #+begin_src emacs-lisp
 (use-package eglot-inactive-regions
-  :after eglot
   :straight t
+  :defer t
   :custom
-  (eglot-inactive-regions-style 'shadow-face)
   (eglot-inactive-regions-opacity 0.4)
   :config
   (eglot-inactive-regions-mode 1))
