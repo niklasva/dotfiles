@@ -323,8 +323,9 @@ Always move cursor to help window.
 #+begin_src emacs-lisp
 (use-package tab-bar-echo-area
   :straight t
+  :custom
+  (tab-bar-show nil)
   :config
-  (setq-default tab-bar-show nil)
   (tab-bar-echo-area-mode 1))
 #+end_src
 
@@ -372,17 +373,18 @@ Always move cursor to help window.
 (when niva-enable-evil-mode
   (use-package evil
     :straight t
+    :custom
+    (evil-want-integration t)
+    (evil-want-keybinding nil)
+    (evil-vsplit-window-right t)
+    (evil-split-window-below t)
+    (evil-want-C-u-scroll t)
+    (evil-undo-system 'undo-fu)
+    (evil-scroll-count 8)
+    (evil-respect-visual-line-mode t)
+    (evil-mode-line-format nil)
+    (evil-search-module 'evil-search)
     :init
-    (setq evil-want-integration t
-                  evil-want-keybinding nil
-                  evil-vsplit-window-right t
-                  evil-split-window-below t
-                  evil-want-C-u-scroll t
-                  evil-undo-system 'undo-fu
-                  evil-scroll-count 8
-                  evil-respect-visual-line-mode t
-                  evil-mode-line-format nil
-                  evil-search-module 'evil-search)
     (evil-mode))
 
   (with-eval-after-load 'evil-maps
@@ -405,11 +407,11 @@ Always move cursor to help window.
     :straight t
     :diminish evil-collection-unimpaired-mode
     :delight
+    :custom
+    (evil-collection-setup-minibuffer t)
     :config
-    (setq evil-collection-setup-minibuffer t)
     (evil-collection-init)
     (evil-set-initial-state 'dired-mode 'normal)))
-
 #+end_src
 
 ** savehist
@@ -576,8 +578,9 @@ Don't prompt project switch action
 #+begin_src emacs-lisp
 (use-package undo-fu
   :straight t
+  :custom
+  (undo-fu-allow-undo-in-region t)
   :config
-  (setq undo-fu-allow-undo-in-region t)
   (global-set-key (kbd "s-z")  'undo-fu-only-undo)
   (global-set-key (kbd "s-Z")  'undo-fu-only-redo)
   (with-eval-after-load 'evil-maps
@@ -589,8 +592,9 @@ Don't prompt project switch action
 #+begin_src emacs-lisp
 (use-package undo-fu-session
   :straight t
+  :custom
+  (undo-fu-session-incompatible-files '(".cache/*" "/COMMIT_EDITMSG\\'" "/git-rebase-todo\\'"))
   :config
-  (setq undo-fu-session-incompatible-files '(".cache/*" "/COMMIT_EDITMSG\\'" "/git-rebase-todo\\'"))
   (global-undo-fu-session-mode))
 #+end_src
 
@@ -598,17 +602,15 @@ Don't prompt project switch action
 #+begin_src emacs-lisp
 (use-package vundo
   :straight t
-  :config
-  (setq vundo-glyph-alist vundo-unicode-symbols
-        vundo-window-max-height 5
-        vundo-compact-display t))
+  :custom
+  (vundo-glyph-alist vundo-unicode-symbols)
+  (vundo-window-max-height 5)
+  (vundo-compact-display t))
 #+end_src
 
 ** buffer-move
-
 #+begin_src emacs-lisp
-(use-package buffer-move
-  :straight t)
+(use-package buffer-move :straight t)
 #+end_src
 
 ** Hydra
@@ -616,9 +618,9 @@ Don't prompt project switch action
 #+begin_src emacs-lisp
 (use-package hydra
   :straight t
+  :custom
+  (hydra-is-helpful t)
   :config
-  (setq-default hydra-is-helpful t)
-
   (defhydra hydra-win-resize (:prefix "C-c w")
     "Resize window"
     ("C-j" (lambda () (interactive) (shrink-window 4)) "↓ shrink")
@@ -666,16 +668,12 @@ Don't prompt project switch action
 (use-package imenu
   :straight (:type built-in)
   :defer t
-  :config
-  (setq org-imenu-depth 8))
+  :custom
+  (org-imenu-depth 8))
 #+end_src
 
 ** zoom
 #+begin_src emacs-lisp
-;; (global-unset-key (kbd "s-+"))
-;; (global-unset-key (kbd "s--"))
-;; (global-unset-key (kbd "s-0"))
-
 (global-set-key (kbd "s-O") 'global-text-scale-adjust)
 #+end_src
 
@@ -700,10 +698,10 @@ Don't prompt project switch action
 #+begin_src emacs-lisp
 (use-package vertico
   :straight t
-  :config
-  (setq-default vertico-count 10
-                vertico-resize t
-                vertico-cycle t))
+  :custom
+  (vertico-count 10)
+  (vertico-resize t)
+  (vertico-cycle t))
 
 (use-package vertico-multiform
   :straight nil
