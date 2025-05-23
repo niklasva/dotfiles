@@ -87,19 +87,19 @@
 
 ** Log coloring
 #+begin_src disabled
- (defun niva/font-lock-comment-annotations ()
-   "Colorize keywords in eshell buffers"
-   (interactive)
-   (font-lock-add-keywords
-    nil
-    '(("\\<\\(.*ERR.*\\)"                                            1 'compilation-error   t)
-      ("\\<\\(.*INFO.*\\)"                                           1 'compilation-info    t)
-      ("\\<\\(.*DEBUG.*\\)"                                          1 'compilation-info    t)
-      ("\\<\\(.*WARN.*\\)"                                           1 'compilation-warning t)
-      ("\\<\\(.*DEBUG: --- CMD: POLL(60) REPLY: ISTATR(49) ---.*\\)" 1 'completions-common-part t)
-      ("\\<\\(.*DEBUG: --- CMD: OUT(68) REPLY: ACK(40) ---.*\\)"     1 'completions-common-part t))))
+(defun niva/font-lock-comment-annotations ()
+  "Colorize keywords in eshell buffers"
+  (interactive)
+  (font-lock-add-keywords
+   nil
+   '(("\\<\\(.*ERR.*\\)"                                            1 'compilation-error   t)
+     ("\\<\\(.*INFO.*\\)"                                           1 'compilation-info    t)
+     ("\\<\\(.*DEBUG.*\\)"                                          1 'compilation-info    t)
+     ("\\<\\(.*WARN.*\\)"                                           1 'compilation-warning t)
+     ("\\<\\(.*DEBUG: --- CMD: POLL(60) REPLY: ISTATR(49) ---.*\\)" 1 'completions-common-part t)
+     ("\\<\\(.*DEBUG: --- CMD: OUT(68) REPLY: ACK(40) ---.*\\)"     1 'completions-common-part t))))
 
- (add-hook 'eshell-mode-hook 'niva/font-lock-comment-annotations)
+(add-hook 'eshell-mode-hook 'niva/font-lock-comment-annotations)
 #+end_src
 
 ** Alias
@@ -231,8 +231,8 @@
   (when (eq system-type 'darwin)
     (start-process "bring-emacs-to-front" nil
                    "osascript"
-                       "-e"
-                       "tell application \"Emacs\" to activate")))
+                   "-e"
+                   "tell application \"Emacs\" to activate")))
 (add-hook 'server-after-make-frame-hook #'niva/foreground-emacsclient)
 #+end_src
 
@@ -1520,6 +1520,7 @@ Use org mode in scratch buffer
 #+begin_src emacs-lisp
 (use-package ob-async
   :straight t
+  :defer t
   :config
   (setq ob-async-no-async-languages-alist '("jupyter")))
 #+end_src
@@ -1582,6 +1583,7 @@ Use org mode in scratch buffer
 #+begin_src emacs-lisp
 (use-package websocket
   :straight t
+  :defer t
   :after org-roam)
 #+end_src
 
@@ -1589,6 +1591,7 @@ Use org mode in scratch buffer
 #+begin_src emacs-lisp
 (use-package org-roam-ui
   :straight t
+  :defer t
   :after org-roam
   ;; :hook (after-init . org-roam-ui-mode)
   :config
@@ -1619,6 +1622,7 @@ Use org mode in scratch buffer
 #+begin_src emacs-lisp
 (use-package shr
   :straight (:type built-in)
+  :defer t
   :config
   (setq shr-use-fonts nil)
   (setq shr-max-width nil)
@@ -1630,7 +1634,9 @@ Use org mode in scratch buffer
 #+begin_src emacs-lisp
 (use-package shr-tag-pre-highlight
   :straight t
-  :init
+  :after shr
+  :defer t
+  :config
   (defun shrface-shr-tag-pre-highlight (pre)
     "Highlighting code in PRE."
     (let* ((shr-folding-mode 'none)
@@ -1660,13 +1666,13 @@ Use org mode in scratch buffer
       (insert "\n")))
   :config
   (add-to-list 'shr-external-rendering-functions
-               '(pre . shrface-shr-tag-pre-highlight)))
+               '(pre . shrface-shr-tag-pre-highlight))
 
 (add-to-list 'shr-tag-pre-highlight-lang-modes '("console" . sh))
 (add-to-list 'shr-tag-pre-highlight-lang-modes '("groovy"  . java))
 (add-to-list 'shr-tag-pre-highlight-lang-modes '("json"    . js-json))
 (add-to-list 'shr-tag-pre-highlight-lang-modes '("systemd" . conf))
-(add-to-list 'shr-tag-pre-highlight-lang-modes '("rust"    . rust-ts))
+(add-to-list 'shr-tag-pre-highlight-lang-modes '("rust"    . rust-ts)))
 
 (use-package shrface
   :straight t
@@ -1950,6 +1956,7 @@ Use the following guidelines:
 #+begin_src emacs-lisp
 (use-package mastodon
   :straight (:host codeberg :repo "martianh/mastodon.el")
+  :defer t
   :config
   (setq mastodon-active-user "@niklasva"
         mastodon-instance-url "https://social.tchncs.de"
@@ -1976,6 +1983,7 @@ Use the following guidelines:
 
 (use-package mastodon-alt
   :after mastodon
+  :defer t
   :straight (:host github :repo "rougier/mastodon-alt")
   :config
   (mastodon-alt-tl-activate)
