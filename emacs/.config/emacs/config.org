@@ -1850,16 +1850,17 @@ Use org mode in scratch buffer
                          :stream t
                          :models '("deepseek-r1:14b" "deepseek-r1:8b" "gemma3:latest" "deepcoder:1.5b")))
 
-  (add-hook 'gptel-post-stream-hook 'gptel-auto-scroll)
-  (setq gptel-org-branching-context t)
+  ;; (add-hook 'gptel-post-stream-hook 'gptel-auto-scroll)
 
-  (setq-default gptel-default-mode #'org-mode
-                gptel-max-tokens 4096
-                gptel-prompt-prefix-alist '((org-mode . ""))
-                gptel-stream t
-                gptel-use-header-line nil
-                gptel-model 'o4-mini
-                gptel-response-separator "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"))
+  (setq-default
+   gptel-default-mode #'org-mode
+   gptel-prompt-prefix-alist '((org-mode . "> "))
+   gptel-stream t
+   gptel-org-branching-context nil
+   gptel-use-header-line nil
+   gptel-model 'gpt-4.1-mini
+   gptel-org-convert-response t
+   gptel-response-separator "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"))
 
 (with-eval-after-load 'gptel
   (define-key gptel-mode-map (kbd "C-c m") 'gptel-menu)
@@ -1877,8 +1878,10 @@ Use org mode in scratch buffer
                                          visual-fill-column-fringes-outside-margins t
                                          visual-fill-column-extra-text-width '(-2 . 0)
                                          fill-column 9999
-                                         visual-fill-column-width 80)
-                             (visual-fill-column-mode)))
+                                         visual-fill-column-width 100)
+                             (visual-fill-column-mode +1)
+                             (org-bullets-mode +1)
+                             ))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1888,31 +1891,31 @@ Use org mode in scratch buffer
     (user-error "This command is intended to be used in gptel chat buffers."))
   (let ((gptel-model 'gpt-4o-mini))
     (gptel-request
-     (list nil
-           "What is the chat content?"
-           (concat "```" (if (eq major-mode 'org-mode) "org" "markdown") "\n"
-                   (buffer-substring-no-properties (point-min) (point-max))
-                   "\n```"))
-     :system
-     (list (format
-            "I will provide a transcript of a chat with an LLM. \
+        (list nil
+              "What is the chat content?"
+              (concat "```" (if (eq major-mode 'org-mode) "org" "markdown") "\n"
+                      (buffer-substring-no-properties (point-min) (point-max))
+                      "\n```"))
+      :system
+      (list (format
+             "I will provide a transcript of a chat with an LLM. \
 Suggest a short and informative name for a file to store this chat in.  \
 Use the following guidelines:
 - be very concise, one very short sentence at most
 - no spaces, use underscores if required
 - return ONLY the title, no explanation or summary
 - append the extension .%s"
-            (if (eq major-mode 'org-mode) "org" "md")))
-     :callback
-     (lambda (resp info)
-       (if (stringp resp)
-           (let* ((buf    (plist-get info :buffer))
-                  (timestamp (format-time-string "%Y%m%d%H%M"))
-                  (new-name (concat timestamp "_" resp)))
-             (when (functionp my-callback)
-               (funcall my-callback new-name)))
-         (message "Error(%s): did not receive a response from the LLM."
-                  (plist-get info :status)))))))
+             (if (eq major-mode 'org-mode) "org" "md")))
+      :callback
+      (lambda (resp info)
+        (if (stringp resp)
+            (let* ((buf    (plist-get info :buffer))
+                   (timestamp (format-time-string "%Y%m%d%H%M"))
+                   (new-name (concat timestamp "_" resp)))
+              (when (functionp my-callback)
+                (funcall my-callback new-name)))
+          (message "Error(%s): did not receive a response from the LLM."
+                   (plist-get info :status)))))))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1939,6 +1942,15 @@ Use the following guidelines:
 (with-eval-after-load 'gptel
   (define-key gptel-mode-map (kbd "C-x s") #'niva/gptel-auto-save)
   (define-key gptel-mode-map (kbd "C-x C-s") #'niva/gptel-auto-save))
+
+(defun niva/extend-br (beg end)
+  (save-excursion
+    (goto-char beg)
+    (org-table-recalculate-buffer-tables)
+    (while (search-forward "\n---\n" end t)
+      (replace-match "\n=-----------------------------------------------------------------------------------=\n"))))
+
+(add-hook 'gptel-post-response-functions #'niva/extend-br)
 #+end_src
 
 ** Mastodon
