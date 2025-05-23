@@ -2014,5 +2014,13 @@ Use the following guidelines:
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package iscroll :straight t)
+(use-package iscroll
+  :straight t
+  :diminish iscroll-mode
+  :hook ((text-mode elfeed-show-mode eww-mode shr-mode) . iscroll-mode)
+  :config
+  (evil-define-key 'normal iscroll-mode-map (kbd "k") 'iscroll-previous-line)
+  (evil-define-key 'normal iscroll-mode-map (kbd "j") 'iscroll-next-line))
+#+end_src
+
 #+end_src
