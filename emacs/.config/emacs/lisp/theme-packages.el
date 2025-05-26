@@ -72,9 +72,17 @@
 (use-package parchment-theme       :straight t :defer t)
 (use-package professional-theme    :straight t :defer t)
 (use-package standard-themes       :straight t :defer t)
-(use-package solarized-theme :straight t)
 
-;;; Modus Themes
+(use-package solarized-theme :straight t
+  :defer t
+  :config
+  :config
+  (setq-default solarized-scale-org-headlines nil
+                solarized-scale-outline-headlines nil
+                solarized-scale-markdown-headlines nil
+                solarized-high-contrast-mode-line nil))
+
+
 (use-package modus-themes
   :straight t
   :defer t
