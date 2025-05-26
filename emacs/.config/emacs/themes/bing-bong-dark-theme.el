@@ -1,4 +1,6 @@
-;;; bing-bong-dark-theme.el --- My custom Bing-Bong dark theme
+;;; bing-bong-dark-theme.el --- -*- lexical-binding: t; -*-
+;;; Commentary:
+;;; Code:
 ;;; Commentary:
 ;; Defines the `bing-bong-dark` theme and a toggle function.
 

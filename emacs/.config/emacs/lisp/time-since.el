@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 (defvar my-last-timestamp nil
   "Variable to store the last timestamp.")
 

@@ -1,4 +1,4 @@
-;;; bing-bong-light-theme.el --- My custom Bing-Bong light theme
+;;; bing-bong-light-theme.el --- -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;; Defines the `bing-bong-light` theme and a toggle function.
 
