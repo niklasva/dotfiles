@@ -49,6 +49,10 @@
   :straight (:host github :repo "protesilaos/ef-themes")
   :defer t)
 
+(use-package doric-themes
+  :straight (:host github :repo "protesilaos/doric-themes")
+  :defer t)
+
 (use-package os1-theme
   :straight (:type git :host github :repo "sashimacs/os1-theme")
   :defer t)
@@ -62,12 +66,13 @@
 (use-package chocolate-theme       :straight t :defer t)
 (use-package color-theme-modern    :straight t :defer t)
 (use-package goose-theme           :straight t :defer t)
+(use-package moe-theme             :straight t :defer t)
 (use-package naysayer-theme        :straight t :defer t)
 (use-package paper-theme           :straight t :defer t)
 (use-package parchment-theme       :straight t :defer t)
 (use-package professional-theme    :straight t :defer t)
 (use-package standard-themes       :straight t :defer t)
-(use-package moe-theme             :straight t :defer t)
+(use-package solarized-theme :straight t)
 
 ;;; Modus Themes
 (use-package modus-themes
@@ -99,10 +104,13 @@
   "Adjust certain face settings depending on the active theme."
   (interactive)
   (ignore-errors
-    (when (null custom-enabled-themes)
-      (custom-set-faces '(org-block            ((t (:inherit 'default))))
-                        '(org-block-begin-line ((t (:inherit 'org-block :extend t :overline t   :underline nil))))
-                        '(org-block-end-line   ((t (:inherit 'org-block :extend t :overline nil :underline t))))))
+    (when (or (null custom-enabled-themes) (niva/theme-is-active "bing-bong-light"))
+      (custom-set-faces
+       '(org-block            ((t (:inherit 'default))))
+       '(org-block-begin-line ((t (:inherit 'org-block :extend t :overline t   :underline nil))))
+       '(org-block-end-line   ((t (:inherit 'org-block :extend t :overline nil :underline t))))
+       '(eglot-highlight-symbol-face ((t (:underline nil :bold t)))))
+      )
 
     (when (niva/theme-is-active "ryerson")
       (custom-set-faces '(font-lock-comment-face ((t (:inherit 'unspecified :foreground "lightblue"))))
@@ -174,4 +182,10 @@
   (setq nano-fonts-use nil
         nano-window-divider-show t))
 
-(custom-set-faces '(dired-directory ((t (:inherit link :underline nil)))))
+(with-eval-after-load 'eglot
+  (custom-set-faces '(eglot-highlight-symbol-face ((t (:underline nil :bold t))))))
+
+(with-eval-after-load 'dired
+  (custom-set-faces '(dired-directory ((t (:inherit link :underline nil))))))
+
+;;; theme-packages.el ends here
