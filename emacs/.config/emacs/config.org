@@ -197,6 +197,9 @@
 
 (setq inhibit-startup-buffer-menu t)
 
+(setq pp-use-max-width t)
+(setq pp-max-width 120)
+
 (save-place-mode +1)
 #+end_src
 
