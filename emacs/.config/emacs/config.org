@@ -192,8 +192,8 @@
 (blink-cursor-mode 1)
 (setq fringes-outside-margins t)
 
-(setq-default left-fringe-width 12
-              right-fringe-width 12)
+(setq-default left-fringe-width 8
+              right-fringe-width 8)
 
 (setq inhibit-startup-buffer-menu t)
 
