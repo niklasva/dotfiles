@@ -636,8 +636,7 @@ Don't prompt project switch action
     ("K" buf-move-up       "↑ swap"    :exit t)
     ("L" buf-move-right    "→ swap"    :exit t)
     ("SPC" transpose-frame "transpose" :exit t))
-  (global-set-key (kbd "C-c w") 'hydra-win-resize/body)
-
+  (bind-key* "C-c w" #'hydra-win-resize/body)
 
   (with-eval-after-load 'org
     (define-key org-mode-map (kbd "C-c C-w") nil))
