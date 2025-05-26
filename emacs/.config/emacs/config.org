@@ -1485,6 +1485,10 @@ Don't prompt project switch action
       '(("TODO" . org-todo)
         ("STARTED" . (:foreground "darkorange3" :weight bold))
         ("REVIEW" . (:foreground "darkblue" :weight bold))))
+
+(dolist (face '(org-level-1 org-level-2 org-level-3 org-level-4
+               org-level-5 org-level-6 org-level-7 org-level-8))
+  (set-face-attribute face nil :inherit 'unspecified :weight 'unspecified :height 1.0))
 #+end_src
 
 ** scratch
