@@ -782,6 +782,7 @@ Don't prompt project switch action
 #+begin_src emacs-lisp
 (use-package corfu
   :straight t
+  :hook (prog-mode . corfu-mode)
   :config
   (setq corfu-cycle t
         corfu-auto t
@@ -790,11 +791,7 @@ Don't prompt project switch action
         corfu-auto-prefix 2
         corfu-count 5
         corfu-bar-width 0.0)
-
-  (global-corfu-mode t)
   (corfu-popupinfo-mode))
-
-(add-hook 'eshell-mode-hook (lambda () (setq-local corfu-auto t) (setq-local corfu-preselect 'prompt)))
 
 (use-package orderless
   :straight t
@@ -1759,7 +1756,6 @@ Use org mode in scratch buffer
   (setq elfeed-search-title-max-width 120)
   (setq elfeed-search-filter "+unread")
   (setq elfeed-show-truncate-long-urls nil)
-
   (setq shr-inhibit-images niva-inhibit-elfeed-images)
 
   (require 'niva-elfeed)
