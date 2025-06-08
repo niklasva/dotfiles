@@ -2,6 +2,20 @@
 ;;; Commentary:
 ;;; Code:
 
+(require 'server)
+
+(defun my/redirect-to-running-server ()
+  (when (and (not (daemonp))
+             (server-running-p))
+    (let ((args (append '("-c") command-line-args-left)))
+      (apply #'call-process "/opt/homebrew/bin/emacsclient" nil 0 nil args))
+    (kill-emacs)))
+
+(my/redirect-to-running-server)
+
+(unless (server-running-p)
+  (server-start))
+
 (setq vc-follow-symlinks t)
 (load (expand-file-name "lisp/init-straight.el" user-emacs-directory))
 
