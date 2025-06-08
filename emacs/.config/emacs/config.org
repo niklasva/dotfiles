@@ -1,9 +1,9 @@
-#+PROPERTY: header-args :results silent
+#+PROPERTY: header-args:emacs-lisp :comments link :tangle ~/.config/emacs/config.el :results silent
 #+OPTIONS:  toc:2
 #+STARTUP:  overview noindent
 
-#+begin_src emacs-lisp
-;; -*- lexical-binding: t -*-
+#+begin_src emacs-lisp  :comments no
+;;; -*- lexical-binding: t; -*-
 #+end_src
 
 * Imports
