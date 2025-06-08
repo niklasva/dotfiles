@@ -259,7 +259,7 @@
 * Customization
 ** Theme
 #+begin_src emacs-lisp
-(niva/update-theme-faces)
+(ignore-errors (niva/update-theme-faces))
 (make-frame-visible)
 #+end_src
 
@@ -332,6 +332,18 @@ Always move cursor to help window.
   (tab-bar-echo-area-mode 1))
 #+end_src
 
+** frame-decorations
+#+begin_src emacs-lisp
+(defun niva/toggle-frame-decorations (&optional frame)
+  (interactive)
+  (let* ((frame (or frame (selected-frame)))
+         (now   (frame-parameter frame 'undecorated)))
+    (set-frame-parameter frame 'undecorated (not now))))
+
+(global-set-key (kbd "C-c <backspace>") 'niva/toggle-frame-decorations)
+(global-set-key (kbd "C-c <return>") 'niva/toggle-frame-decorations)
+#+end_src
+
 ** Popper
 #+begin_src emacs-lisp
 (use-package popper
@@ -347,7 +359,6 @@ Always move cursor to help window.
           "\\*Compile-Log\\*"
           ;; compilation-mode
           "^\\*eldoc.*\\*.*$" eldoc-mode
-          elfeed-search-mode
           "\\*Flycheck errors\\*$" " \\*Flycheck checker\\*$"
           ;; "\\*ChatGPT\\*$" gptel-mode
           ;; "\\*gptel\\*$" gptel-mode

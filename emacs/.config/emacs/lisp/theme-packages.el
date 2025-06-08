@@ -113,16 +113,25 @@
   (interactive)
   (ignore-errors
     (when (or (null custom-enabled-themes) (niva/theme-is-active "bing-bong-light"))
-      (custom-set-faces
-       '(org-block            ((t (:inherit 'default))))
-       '(org-block-begin-line ((t (:inherit 'org-block :extend t :overline t   :underline nil))))
-       '(org-block-end-line   ((t (:inherit 'org-block :extend t :overline nil :underline t))))
-       '(eglot-highlight-symbol-face ((t (:underline nil :bold t)))))
-      )
+      (custom-set-faces '(org-block                   ((t (:inherit 'default))))
+                        '(org-block-begin-line        ((t (:inherit 'org-block :extend t :overline t   :underline nil))))
+                        '(org-block-end-line          ((t (:inherit 'org-block :extend t :overline nil :underline t))))
+                        '(eglot-highlight-symbol-face ((t (:underline nil :bold t))))))
 
-    (when (niva/theme-is-active "ryerson")
-      (custom-set-faces '(font-lock-comment-face ((t (:inherit 'unspecified :foreground "lightblue"))))
-                        '(org-block              ((t (:inherit 'default :foreground 'unspecified))))))
+    (when (niva/theme-is-active "doric")
+      (custom-set-faces '(font-lock-type-face          ((t :inherit unspecified :bold t)))
+                        '(font-lock-builtin-face       ((t (:inherit unspecified :bold t))))
+                        '(font-lock-variable-name-face ((t (:inherit unspecified))))))
+
+    (when (niva/theme-is-active "doom-tomorrow-day")
+      (custom-set-faces '(font-lock-number-face ((t (:foreground unspecified :inherit 'font-lock-builtin-face))))))
+
+    (when (niva/theme-is-active "doom-tomorrow-night")
+      (custom-set-faces '(font-lock-number-face       ((t (:foreground unspecified :inherit 'font-lock-builtin-face))))
+                        '(font-lock-variable-use-face ((t (:foreground unspecified :inherit 'default))))
+                        '(font-lock-constant-face     ((t (:foreground unspecified :inherit 'font-lock-number-face))))
+                        '(warning                     ((t (:foreground unspecified :inherit 'font-lock-builtin-face))))
+                        '(font-lock-type-face         ((t (:foreground unspecified :inherit 'font-lock-builtin-face))))))
 
     (when (niva/theme-is-active "less")
       (custom-set-faces '(elfeed-search-unread-title-face ((t :inherit 'default :foreground 'unspecified)))
@@ -140,6 +149,15 @@
                         '(flymake-note-echo    ((t (:background "black" :box t :inverse-video nil :bold t))))
                         '(link                 ((t (:inherit 'font-lock-comment-face))))))
 
+    (when (niva/theme-is-active "acme")
+      (custom-set-faces '(org-block ((t (:background "#FFFFDC"))))
+                        '(org-block-begin-line ((t (:extend t :overline t :underline nil :background "#FFFFDC"))))
+                        '(org-block-end-line   ((t (:extend t :overline nil :underline t :background "#FFFFDC"))))))
+
+    (when (niva/theme-is-active "ryerson")
+      (custom-set-faces '(font-lock-comment-face ((t (:inherit 'unspecified :foreground "lightblue"))))
+                        '(org-block              ((t (:inherit 'default :foreground 'unspecified))))))
+
     (when (niva/theme-is-active "sitaramv-solaris")
       (custom-set-faces '(org-block                       ((t (:inherit 'default :background "black"))))
                         '(org-block-begin-line            ((t (:background "black"))))
@@ -150,38 +168,27 @@
                         '(elfeed-search-unread-title-face ((t (:foreground "white"))))
                         '(font-lock-preprocessor-face     ((t (:foreground "green"))))))
 
-    (when (niva/theme-is-active "doom-tomorrow-night")
-      (custom-set-faces '(font-lock-number-face       ((t (:foreground unspecified :inherit 'font-lock-builtin-face))))
-                        '(font-lock-variable-use-face ((t (:foreground unspecified :inherit 'default))))
-                        '(font-lock-constant-face     ((t (:foreground unspecified :inherit 'font-lock-number-face))))
-                        '(warning                     ((t (:foreground unspecified :inherit 'font-lock-builtin-face))))
-                        '(font-lock-type-face         ((t (:foreground unspecified :inherit 'font-lock-builtin-face))))))
-
-    (when (niva/theme-is-active "doom-tomorrow-day")
-      (custom-set-faces
-       '(font-lock-number-face       ((t (:foreground unspecified :inherit 'font-lock-builtin-face))))))
-
-    (when (or (niva/theme-is-active "nofrils-acme") (niva/theme-is-active "acme"))
-      (custom-set-faces '(org-block            ((t (:background "#FFFFDC")))))
-      '(org-block-begin-line ((t (:extend t :overline t :underline nil :background "#FFFFDC"))))
-      '(org-block-end-line   ((t (:extend t :overline nil :underline t :background "#FFFFDC")))))
-
     (when (or (niva/theme-is-active "wombat") (niva/theme-is-active "naysayer"))
       (custom-set-faces '(org-block            ((t (:background "#182C32"))))
                         '(org-block-begin-line ((t (:inherit 'default :extend t :overline t :underline nil :background "#182C32"))))
                         '(org-block-end-line   ((t (:inherit 'default :extend t :overline nil :underline t :background "#182C32"))))))
 
-    (when (or (niva/theme-is-active "nano-light") (niva/theme-is-active "nano-dark"))
-      (custom-set-faces '(mode-line-inactive ((t (:inherit mode-line))))
-                        '(mode-line-active ((t (:inherit mode-line))))
+    (when (or (niva/theme-is-active "nano"))
+      (custom-set-faces '(mode-line-inactive         ((t (:inherit mode-line))))
+                        '(mode-line-active           ((t (:inherit mode-line))))
                         '(compilation-mode-line-exit ((t (:inherit unspecified))))
-                        '(compilation-mode-line-run ((t (:inherit unspecified))))
-                        '(font-lock-string-face ((t (:inherit nano-subtle :slant unspecified))))
-                        '(org-block-begin-line ((t (:inherit 'org-block :extend t :overline t   :underline nil))))
-                        '(org-block-end-line   ((t (:inherit 'org-block :extend t :overline nil :underline t))))))
+                        '(compilation-mode-line-run  ((t (:inherit unspecified))))
+                        '(font-lock-string-face      ((t (:inherit nano-subtle :slant unspecified))))
+                        '(org-block-begin-line       ((t (:inherit 'org-block :extend t :overline t   :underline nil))))
+                        '(org-block-end-line         ((t (:inherit 'org-block :extend t :overline nil :underline t))))))
 
-    (niva/diff-hl-fix))
-  (custom-set-faces '(help-key-binding nil :box nil :background 'unspecified :foreground (face-attribute 'default :foreground))))
+    (custom-set-faces '(help-key-binding nil :box nil :background 'unspecified :foreground (face-attribute 'default :foreground)))
+    (custom-set-faces '(elfeed-search-unread-title-face ((t :inherit 'default :underline nil :bold t :foreground unspecified)))
+                      '(elfeed-search-title-face        ((t (:inherit 'shadow :underline nil :foreground unspecified))))
+                      '(elfeed-search-feed-face         ((t (:inherit 'default :underline nil :foreground unspecified))))
+                      '(elfeed-search-tag-face          ((t (:inherit 'shadow :underline nil :foreground unspecified))))
+                      '(elfeed-search-date-face         ((t (:inherit 'org-agenda-date :underline nil :foreground unspecified)))))
+    (niva/diff-hl-fix)))
 
 (use-package nano-theme
   :straight t

@@ -10,11 +10,12 @@
                     '(height                  . 45)
                     '(min-width               . 1)
                     '(width                   . 115)
-                    '(internal-border-width   . 24)
+                    '(internal-border-width   . 5)
                     '(vertical-scroll-bars    . nil)
                     '(tool-bar-lines          . 0)
                     '(ns-transparent-titlebar . t)
                     '(ns-appearance           . light)
+                    '(undecorated             . nil)
                     '(left-fringe             . 1)
                     '(right-fringe            . 1))))
 
