@@ -15,7 +15,15 @@
       (goto-char (point-max))
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
-(use-package org :straight t)
+
+(use-package org :straight (
+        :type git
+			  :repo "https://code.orgmode.org/bzg/org-mode.git"
+			  :local-repo "org"
+			  :depth full
+			  :pre-build (straight-recipes-org-elpa--build)
+			  :build (:not autoloads)
+			  :files (:defaults "lisp/*.el" ("etc/styles/" "etc/styles/*"))))
 
 (use-package no-littering
   :straight t
