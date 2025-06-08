@@ -463,6 +463,24 @@ Always move cursor to help window.
 (global-set-key (kbd "C-c bbd")    'niva/toggle-bing-bong-dark)
 (global-set-key (kbd "C-c ct")     'consult-theme)
 
+(defun niva/new-untitled-frame ()
+  (interactive)
+  (let* ((buf   (generate-new-buffer "untitled"))
+         (frame (make-frame)))
+    (select-frame-set-input-focus frame)
+    (set-window-buffer (frame-root-window frame) buf)
+    (with-current-buffer buf
+      (fundamental-mode)
+      (setq buffer-offer-save t))))
+
+(global-set-key (kbd "s-n") #'niva/new-untitled-frame)
+
+(defun niva/kill-untitled-buffers ()
+  (interactive)
+  (dolist (buf (buffer-list))
+    (when (string-match-p "\\`untitled" (buffer-name buf))
+      (kill-buffer buf))))
+
 (unless niva-enable-evil-mode
   (global-set-key (kbd "<escape>") nil))
 
