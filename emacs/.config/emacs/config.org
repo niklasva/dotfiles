@@ -2007,6 +2007,19 @@ Use the following guidelines:
 (add-hook 'gptel-post-response-functions #'niva/extend-br)
 #+end_src
 
+** minuet
+#+begin_src emacs-lisp
+(use-package plz :straight t)
+(use-package minuet
+  :straight (:host github :repo "milanglacier/minuet-ai.el" :type git)
+  :config
+  (setq minuet-auto-suggestion-throttle-delay 1.5)
+  (setq minuet-auto-suggestion-debounce-delay 0.6)
+  (setq minuet-provider 'openai)
+  (plist-put minuet-openai-options :model "gpt-4.1-nano")
+  (setenv "OPENAI_API_KEY" (niva/lookup-password :host "api.openai.com")))
+#+end_src
+
 ** Mastodon
 #+begin_src emacs-lisp
 (use-package mastodon
