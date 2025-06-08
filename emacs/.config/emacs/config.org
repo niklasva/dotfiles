@@ -2104,4 +2104,49 @@ Use the following guidelines:
   (evil-define-key 'normal iscroll-mode-map (kbd "j") 'iscroll-next-line))
 #+end_src
 
+#+begin_src emacs-lisp
+(add-hook 'emacs-lisp-mode-hook
+          (lambda ()
+            (when (and buffer-file-name
+                       (string-match-p "config\\.el$" buffer-file-name))
+              (outline-minor-mode 1)
+              (setq-local outline-regexp ";; \\[\\[file:"))))
+#+end_src
+* Other
+#+begin_src emacs-lisp
+(advice-add 'save-buffers-kill-terminal :around
+            (lambda (orig-fun &rest args)
+              (when (y-or-n-p "Really close this Emacsclient frame? ")
+                (apply orig-fun args))))
+
+(use-package iscroll
+  :straight t
+  :diminish iscroll-mode
+  :hook ((text-mode elfeed-show-mode eww-mode shr-mode) . iscroll-mode)
+  :config
+  (evil-define-key 'normal iscroll-mode-map (kbd "k") 'iscroll-previous-line)
+  (evil-define-key 'normal iscroll-mode-map (kbd "j") 'iscroll-next-line))
+
+(use-package mixed-pitch
+  :straight t
+  :defer nil
+  :diminish mixed-pitch-mode
+  :hook ((eww-mode         . mixed-pitch-mode)
+         (elfeed-show-mode . mixed-pitch-mode)
+         (gptel-mode       . mixed-pitch-mode))
+  :config
+  (setq mixed-pitch-set-height t)
+  (custom-set-faces '(variable-pitch ((t (:font "Arial" :height 0.9))))))
+
+(use-package elastic-indent
+  :straight (elastic-indent :host github :repo "jyp/elastic-modes"))
+
+(use-package elastic-table
+  :straight (elastic-table :host github :repo "jyp/elastic-modes"))
+
+
+#+end_src
+* Footer
+#+begin_src emacs-lisp :comments no
+;;; config.el ends here
 #+end_src
