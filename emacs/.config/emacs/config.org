@@ -148,6 +148,7 @@
 
 (electric-indent-mode)
 (delete-selection-mode)
+(context-menu-mode)
 
 (setq-default evil-auto-indent t
               indent-tabs-mode nil
@@ -342,6 +343,7 @@ Always move cursor to help window.
 
 (global-set-key (kbd "C-c <backspace>") 'niva/toggle-frame-decorations)
 (global-set-key (kbd "C-c <return>") 'niva/toggle-frame-decorations)
+(global-set-key (kbd "C-c C-<return>") 'niva/toggle-frame-decorations)
 #+end_src
 
 ** Popper
