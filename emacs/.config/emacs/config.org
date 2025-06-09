@@ -1061,9 +1061,13 @@ Don't prompt project switch action
   (eglot-report-progress 'messages)
   (eglot-code-action-indications '(eldoc-hint))
   (eglot-code-action-indicator "?")
-  (eglot-workspace-configuration `((:basedpyright . (:typeCheckingMode "standard"))))
   ;; (setq-default eglot-send-changes-idle-time 5.0)
   :config
+  (setq-default eglot-workspace-configuration
+                '(:basedpyright (:typeCheckingMode "recommended")
+                                :basedpyright.analysis (:diagnosticSeverityOverrides
+                                                        (:reportUnusedCallResult "none")
+                                                        :inlayHints (:callArgumentNames :json-false))))
   (fset #'jsonrpc--log-event #'ignore)
 
   (add-to-list 'eglot-server-programs '((c-mode c++-mode c++-ts-mode) .
