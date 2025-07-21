@@ -1325,7 +1325,8 @@ Don't prompt project switch action
   :config
   (setq ediff-split-window-function 'split-window-horizontally
         ediff-window-setup-function 'ediff-setup-windows-plain
-        magit-no-confirm nil)
+        magit-no-confirm nil
+        magit-git-executable "/opt/homebrew/bin/git")
 
   (setq magit-section-initial-visibility-alist
         '((stashes . hide) (untracked . hide) (unpushed . hide) ([unpulled status] . show)
