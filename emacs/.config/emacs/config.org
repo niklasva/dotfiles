@@ -1792,18 +1792,34 @@ Use org mode in scratch buffer
 (use-package elfeed
   :straight t
   :defer t
-  :hook (elfeed-search-mode . elfeed-update)
+  ;; :hook (elfeed-search-mode . elfeed-update)
   :config
   (setq elfeed-search-title-max-width 120)
   (setq elfeed-search-filter "+unread")
   (setq elfeed-show-truncate-long-urls nil)
   (setq shr-inhibit-images niva-inhibit-elfeed-images)
+  (require 'niva-elfeed))
 
-  (require 'niva-elfeed)
+;; (add-to-list 'display-buffer-alist
+;;              '(("\\*elfeed-show\\*"
+;;                 (display-buffer-same-window))))
 
-  (add-to-list 'display-buffer-alist
-               '(("\\*elfeed-show\\*"
-                  (display-buffer-same-window)))))
+;; mark every elfeed-search window as sacred
+
+
+(defun niva/elfeed-search-hook ()
+  (elfeed-update)
+  (set-window-dedicated-p (selected-window) t)
+  (visual-line-mode 0)
+  (setf (cdr (assq 'truncation   fringe-indicator-alist)) '(nil nil)
+        (cdr (assq 'continuation fringe-indicator-alist)) '(nil nil))
+  (setq-local truncate-lines t))
+
+(add-hook 'elfeed-search-mode-hook #'niva/elfeed-search-hook)
+(add-hook 'elfeed-show-mode-hook (lambda ()
+                                   (hl-line-mode 1)
+                                   (blink-cursor-mode 0)))
+                                   ;; (setq-local evil-normal-state-cursor '(nil))
 
 (use-package elfeed-summary
   :straight t
@@ -1827,10 +1843,6 @@ Use org mode in scratch buffer
               (search (:title . "slashdot")    (:filter . "Slashdot"))
               (search (:title . "pluralistic") (:filter . "pluralistic"))
               (search (:title . "unread")      (:filter . "+unread")))))))
-
-            ;; (group
-            ;;  (:title . "Searches")
-            ;;  (:elements
 #+end_src
 
 ** elfeed-protocol

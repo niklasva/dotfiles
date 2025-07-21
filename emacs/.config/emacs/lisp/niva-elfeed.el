@@ -119,8 +119,10 @@
             (propertize title-column 'face title-faces 'kbd-help title) " "
             (format "%-30s" (format "%s (%s)" (propertize feed-title 'face 'elfeed-search-feed-face) tags-str)))))
 
+(defvar-local niva/elfeed-last-feed nil)
+
 (defun niva/elfeed-search-print-entry--single-line-alt (entry)
-  (let* ((date (format "%-12s " (relative-date (elfeed-entry-date entry))))
+  (let* ((date (format "%-15s " (relative-date (elfeed-entry-date entry))))
          (title (or (elfeed-meta entry :title) (elfeed-entry-title entry) ""))
          (title-faces (elfeed-search--faces (elfeed-entry-tags entry)))
          (feed (elfeed-entry-feed entry))
@@ -132,27 +134,35 @@
          (tags-str (mapconcat
                     (lambda (s) (propertize s 'face 'elfeed-search-tag-face))
                     tags ","))
-         (title-width (- (window-width) 20 elfeed-search-trailing-width))
+         (title-width (- (window-width) 25 elfeed-search-trailing-width))
          (title-column (elfeed-format-column
                         title (elfeed-clamp
                                elfeed-search-title-min-width
                                title-width
                                elfeed-search-title-max-width)
                         :left)))
+
+    (unless (string= feed-title niva/elfeed-last-feed)
+      (insert (propertize "b" 'display `(space :align-to 0 :height 1.8))))
+    (setq niva/elfeed-last-feed feed-title)
+
     (insert (propertize date 'face 'elfeed-search-date-face) " "
             (format "%-20s " (format "%s" (propertize feed-title 'face 'elfeed-search-feed-face) tags-str))
-            (propertize title-column 'face title-faces 'kbd-help title) " "
-            (format "%-10s " tags-str)
-            )))
+            (propertize title 'face title-faces 'kbd-help title) " "
+            (format " (%s) " tags-str))))
+
 
 (setq elfeed-search-print-entry-function #'niva/elfeed-search-print-entry--single-line-alt)
 
+(setq elfeed-search-sort-function
+      (lambda (a b)
+        (let ((feed-a (elfeed-feed-title (elfeed-entry-feed a)))
+              (feed-b (elfeed-feed-title (elfeed-entry-feed b))))
+          (if (string= feed-a feed-b)
+              (> (elfeed-entry-date a) (elfeed-entry-date b)) ; newest first
+            (string-lessp feed-a feed-b)))))
+
 (with-eval-after-load 'elfeed
-  (defun elfeed ()
-    (interactive)
-    (switch-to-buffer (elfeed-search-buffer))
-    (unless (eq major-mode 'elfeed-search-mode)
-      (elfeed-search-mode)))
 
   (defun niva/elfeed-switch (buff)
     ;; (popper--bury-all)
