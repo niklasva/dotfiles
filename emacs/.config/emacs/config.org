@@ -426,6 +426,8 @@ Always move cursor to help window.
     :custom
     (evil-collection-setup-minibuffer t)
     :config
+    (setq evil-collection-mode-list
+      (remove 'xwidgets evil-collection-mode-list))
     (evil-collection-init)
     (evil-set-initial-state 'dired-mode 'normal)))
 #+end_src
