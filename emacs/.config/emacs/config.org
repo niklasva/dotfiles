@@ -297,7 +297,7 @@
 #+end_src
 
 ** solaire-mode
-#+begin_src emacs-lisp
+#+begin_src disabled
 (use-package solaire-mode
   :straight t
   :config
