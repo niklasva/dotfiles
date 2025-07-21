@@ -761,10 +761,33 @@ Don't prompt project switch action
 #+begin_src emacs-lisp
 (use-package consult
   :straight t
+  :bind (("C-s"   . consult-line)
+         ("C-M-l" . consult-focus-lines)
+         ("C-x b" . consult-buffer)
+         ("C-x 4 b" . consult-buffer-other-window)
+         ("M-y"   . consult-yank-pop))
   :config
+
+
+  (setq consult-preview-key '(:debounce 0.5 any))
+
+  (consult-customize
+   consult--source-buffer
+   consult--source-hidden-buffer
+   consult--source-project-buffer
+   consult-line
+   :preview-key 'any)
+
+  (consult-customize
+   consult--source-recent-file
+   ;; consult--source-project-file
+   consult--source-bookmark
+   :preview-key '("M-." "C-SPC" :debounce 1.0 any))
+
   (consult-customize
    consult-theme
    :preview-key '("M-." "C-SPC" :debounce 0.5 any))
+
   (setq consult-ripgrep-args "rg \
             --null \
             --line-buffered \
