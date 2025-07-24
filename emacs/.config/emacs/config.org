@@ -1990,31 +1990,31 @@ Use org mode in scratch buffer
     (user-error "This command is intended to be used in gptel chat buffers."))
   (let ((gptel-model 'gpt-4o-mini))
     (gptel-request
-        (list nil
-              "What is the chat content?"
-              (concat "```" (if (eq major-mode 'org-mode) "org" "markdown") "\n"
-                      (buffer-substring-no-properties (point-min) (point-max))
-                      "\n```"))
-      :system
-      (list (format
-             "I will provide a transcript of a chat with an LLM. \
+     (list nil
+           "What is the chat content?"
+           (concat "```" (if (eq major-mode 'org-mode) "org" "markdown") "\n"
+                   (buffer-substring-no-properties (point-min) (point-max))
+                   "\n```"))
+     :system
+     (list (format
+            "I will provide a transcript of a chat with an LLM. \
 Suggest a short and informative name for a file to store this chat in.  \
 Use the following guidelines:
 - be very concise, one very short sentence at most
 - no spaces, use underscores if required
 - return ONLY the title, no explanation or summary
 - append the extension .%s"
-             (if (eq major-mode 'org-mode) "org" "md")))
-      :callback
-      (lambda (resp info)
-        (if (stringp resp)
-            (let* ((buf    (plist-get info :buffer))
-                   (timestamp (format-time-string "%Y%m%d%H%M"))
-                   (new-name (concat timestamp "_" resp)))
-              (when (functionp my-callback)
-                (funcall my-callback new-name)))
-          (message "Error(%s): did not receive a response from the LLM."
-                   (plist-get info :status)))))))
+            (if (eq major-mode 'org-mode) "org" "md")))
+     :callback
+     (lambda (resp info)
+       (if (stringp resp)
+           (let* ((buf    (plist-get info :buffer))
+                  (timestamp (format-time-string "%Y%m%d%H%M"))
+                  (new-name (concat timestamp "_" resp)))
+             (when (functionp my-callback)
+               (funcall my-callback new-name)))
+         (message "Error(%s): did not receive a response from the LLM."
+                  (plist-get info :status)))))))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -2057,12 +2057,28 @@ Use the following guidelines:
 (use-package plz :straight t)
 (use-package minuet
   :straight (:host github :repo "milanglacier/minuet-ai.el" :type git)
+  :defer t
   :config
-  (setq minuet-auto-suggestion-throttle-delay 1.5)
-  (setq minuet-auto-suggestion-debounce-delay 0.6)
-  (setq minuet-provider 'openai)
-  (plist-put minuet-openai-options :model "gpt-4.1-nano")
-  (setenv "OPENAI_API_KEY" (niva/lookup-password :host "api.openai.com")))
+  (setq minuet-provider 'openai-compatible)
+  (setq minuet-request-timeout 3.5)
+  (setq minuet-auto-suggestion-throttle-delay 1.5) ;; Increase to reduce costs and avoid rate limits
+  (setq minuet-auto-suggestion-debounce-delay 0.6) ;; Increase to reduce costs and avoid rate limits
+
+  ;; (setq minuet-provider 'openai)
+  ;; (plist-put minuet-openai-options :model "gpt-4.1-nano")
+  ;; (setenv "OPENAI_API_KEY" (niva/lookup-password :host "api.openai.com"))
+
+
+  (setq minuet-context-window 512)
+  (plist-put minuet-openai-fim-compatible-options :end-point "http://localhost:11434/v1/completions")
+  (plist-put minuet-openai-fim-compatible-options :model "qwen2.5-coder:1.5b")
+  (plist-put minuet-openai-fim-compatible-options :name "Ollama")
+  (plist-put minuet-openai-fim-compatible-options :api-key "TERM")
+
+
+  (minuet-set-optional-options minuet-openai-compatible-options :provider '(:sort "throughput"))
+  (minuet-set-optional-options minuet-openai-compatible-options :max_tokens 56)
+  (minuet-set-optional-options minuet-openai-compatible-options :top_p 0.9))
 #+end_src
 
 ** Mastodon
