@@ -4,6 +4,10 @@
 
 #+begin_src emacs-lisp  :comments no
 ;;; -*- lexical-binding: t; -*-
+(setq initial-major-mode 'fundamental-mode)
+(advice-add #'display-startup-echo-area-message :override #'ignore)
+(advice-add #'display-startup-screen :override #'ignore)
+;; (setq read-process-output-max (* 64 1024))  ; 64kb
 #+end_src
 
 * Imports
@@ -639,6 +643,7 @@ Don't prompt project switch action
 #+begin_src emacs-lisp
 (use-package vundo
   :straight t
+  :defer t
   :custom
   (vundo-glyph-alist vundo-unicode-symbols)
   (vundo-window-max-height 5)
@@ -889,6 +894,7 @@ Don't prompt project switch action
 #+begin_src emacs-lisp
 (use-package dired
   :straight (:type built-in)
+  :defer t
   :config
   (setq-default insert-directory-program "gls"
                 dired-use-ls-dired t
@@ -898,7 +904,9 @@ Don't prompt project switch action
                 dired-kill-when-opening-new-dired-buffer t
                 dired-subtree-line-prefix-face 'subtree))
 
-(use-package dirtree :straight t :ensure t)
+(use-package dirtree
+  :straight t
+  :defer t)
 
 (use-package dired-subtree
   :straight t
@@ -1208,6 +1216,7 @@ Don't prompt project switch action
 #+begin_src emacs-lisp
 (use-package kotlin-ts-mode
   :straight t
+  :defer t
   :after treesit)
 
 (use-package treesit
@@ -1263,22 +1272,27 @@ Don't prompt project switch action
 #+begin_src emacs-lisp
 (use-package apheleia
   :straight t
+  :defer t
+  :init
+  (add-hook 'prog-mode-hook #'apheleia-mode)
   :config
   (setq-default apheleia-mode-lighter nil)
-  (setf (alist-get 'ruff apheleia-formatters)           '("ruff" "format" "--silent" "-"))
-  (setf (alist-get 'ruff-isort apheleia-formatters)     '("ruff" "check" "--fix" "--select" "I" "-"))
 
-  (setf (alist-get 'python-mode apheleia-mode-alist)    '(ruff ruff-isort))
-  (setf (alist-get 'python-ts-mode apheleia-mode-alist) '(ruff ruff-isort))
-  (setf (alist-get 'sh-mode apheleia-mode-alist)        '(shfmt))
-  (setf (alist-get 'bash-ts-mode apheleia-mode-alist)   '(shfmt))
-  (setf (alist-get 'c++-ts-mode apheleia-mode-alist)    '(clang-format))
-  (setf (alist-get 'c++-mode apheleia-mode-alist)       '(clang-format))
-  (setf (alist-get 'cmake-mode apheleia-mode-alist)     '(cmake-format))
-  (setf (alist-get 'cmake-ts-mode apheleia-mode-alist)  '(cmake-format))
-  (setf (alist-get 'c-ts-mode apheleia-mode-alist)    nil)
-  (setf (alist-get 'c-mode apheleia-mode-alist)       nil)
-  (apheleia-global-mode +1))
+  (dolist (fmt '((ruff       . ("ruff" "format" "--silent" "-"))
+                 (ruff-isort . ("ruff" "check" "--fix" "--select" "I" "-"))))
+    (setf (alist-get (car fmt) apheleia-formatters) (cdr fmt)))
+
+  (dolist (mode '((python-mode     . (ruff ruff-isort))
+                  (python-ts-mode  . (ruff ruff-isort))
+                  (sh-mode         . (shfmt))
+                  (bash-ts-mode    . (shfmt))
+                  (c++-mode        . (clang-format))
+                  (c++-ts-mode     . (clang-format))
+                  (cmake-mode      . (cmake-format))
+                  (cmake-ts-mode   . (cmake-format))
+                  (c-mode          . nil)
+                  (c-ts-mode       . nil)))
+    (setf (alist-get (car mode) apheleia-mode-alist) (cdr mode))))
 #+end_src
 
 
@@ -1309,7 +1323,7 @@ Don't prompt project switch action
 
 (use-package diff-hl
   :straight t
-  :ensure t
+  :defer t
   :config
 
   (defun my-diff-hl-fringe-bmp-function (_type _pos)
@@ -1383,6 +1397,7 @@ Don't prompt project switch action
 #+begin_src emacs-lisp
 (use-package markdown-mode
   :straight t
+  :defer t
   :config
   (setq markdown-list-item-bullets '(""))
   (set-face-attribute 'markdown-code-face nil :background 'unspecified)
@@ -1406,6 +1421,7 @@ Don't prompt project switch action
 #+begin_src emacs-lisp
 (use-package devdocs
   :straight t
+  :defer t
   :init
   (defvar lps/devdocs-alist
     '((python-ts-mode-hook     . "python~3.12")

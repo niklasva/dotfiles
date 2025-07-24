@@ -1,5 +1,10 @@
 ;; -*- lexical-binding: t; -*-
 (setq-default straight-base-dir "~/.cache/emacs/straight")
+
+(setq-default straight-vc-git-default-clone-depth 0
+              straight-check-for-modifications '(check-on-save find-when-checking)
+              straight-repository-branch "develop")
+
 (defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name
@@ -15,15 +20,6 @@
       (goto-char (point-max))
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
-
-(use-package org :straight (
-        :type git
-			  :repo "https://code.orgmode.org/bzg/org-mode.git"
-			  :local-repo "org"
-			  :depth full
-			  :pre-build (straight-recipes-org-elpa--build)
-			  :build (:not autoloads)
-			  :files (:defaults "lisp/*.el" ("etc/styles/" "etc/styles/*"))))
 
 (use-package no-littering
   :straight t
