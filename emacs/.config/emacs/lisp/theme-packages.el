@@ -6,8 +6,7 @@
 (setq custom-safe-themes t)
 (add-to-list 'custom-theme-load-path (concat user-emacs-directory "themes"))
 
-;; Bing Bong
-(use-package bing-bong-dark-theme  :commands (niva/toggle-bing-bong-dark)  :load-path "themes")
+;; Bing Bong (use-package bing-bong-dark-theme  :commands (niva/toggle-bing-bong-dark)  :load-path "themes")
 (use-package bing-bong-light-theme :commands (niva/toggle-bing-bong-light) :load-path "themes")
 
 ;;; Kaolin Themes
@@ -143,6 +142,8 @@
     (when (niva/theme-is-active "naysayer")
       (custom-set-faces '(mode-line-inactive   ((t (:box t))))
                         '(mode-line            ((t (:box t))))
+                        '(org-block-begin-line ((t (:inherit 'org-block :extend t :overline t   :underline nil))))
+                        '(org-block-end-line   ((t (:inherit 'org-block :extend t :overline nil :underline t))))
                         '(default              ((t (:foreground "#DACAAE"))))
                         '(header-line          ((t (:foreground unspecified :background unspecified :inherit 'mode-line-inactive :box t))))
                         '(flymake-error-echo   ((t (:background "black" :box t :inverse-video nil :bold t))))
@@ -188,9 +189,10 @@
                         '(org-block-begin-line ((t (:inherit 'default :extend t :overline t :underline nil :background "#182C32"))))
                         '(org-block-end-line   ((t (:inherit 'default :extend t :overline nil :underline t :background "#182C32"))))))
 
-    (when (or (niva/theme-is-active "nano"))
+    (when (niva/theme-is-active "nano")
       (custom-set-faces '(mode-line-inactive         ((t (:inherit mode-line))))
                         '(mode-line-active           ((t (:inherit mode-line))))
+                        '(vertical-border            ((t (:inherit nano-faded :foreground nil))))
                         '(compilation-mode-line-exit ((t (:inherit unspecified))))
                         '(compilation-mode-line-run  ((t (:inherit unspecified))))
                         '(font-lock-string-face      ((t (:inherit nano-subtle :slant unspecified))))
@@ -223,8 +225,7 @@
   :straight t
   :defer t
   :config
-  (setq nano-fonts-use nil
-        nano-window-divider-show t))
+  (setq-default nano-fonts-use nil))
 
 (custom-set-faces '(font-lock-comment-delimiter-face ((t (:inherit font-lock-comment-face)))))
 
@@ -232,10 +233,10 @@
   (custom-set-faces
    `(eglot-inlay-hint-face
      ((t :inherit 'default
-         ;; :font "Arial"
+         :font "Arial"
          :height 0.8
          :italic nil
-         :inherit 'org-block-begin-line)))
+         :inherit 'org-block)))
    '(eglot-highlight-symbol-face
      ((t :underline nil
          :bold t)))))
