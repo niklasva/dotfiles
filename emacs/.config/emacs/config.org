@@ -321,15 +321,21 @@ Always move cursor to help window.
 
 ** frame-decorations
 #+begin_src emacs-lisp
+
+(defun niva/toggle-internal-border-width (&optional frame)
+  (interactive)
+  (let* ((frame (or frame (selected-frame)))
+         (now   (frame-parameter frame 'internal-border-width)))
+    (set-frame-parameter frame 'internal-border-width
+                         (if (= now 45) 5 45))))
+
 (defun niva/toggle-frame-decorations (&optional frame)
   (interactive)
   (let* ((frame (or frame (selected-frame)))
          (now   (frame-parameter frame 'undecorated)))
     (set-frame-parameter frame 'undecorated (not now))))
 
-(global-set-key (kbd "C-c <backspace>") 'niva/toggle-frame-decorations)
-(global-set-key (kbd "C-c <return>") 'niva/toggle-frame-decorations)
-(global-set-key (kbd "C-c C-<return>") 'niva/toggle-frame-decorations)
+(global-set-key (kbd "C-c <backspace>") 'niva/toggle-internal-border-width)
 #+end_src
 
 ** Popper
