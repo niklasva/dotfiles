@@ -231,17 +231,19 @@
 
 ** Garbage collection
 #+begin_src emacs-lisp
-(setq-default garbage-collection-messages t
-              gc-cons-threshold (* 16 1024 1024 1024))
+(setq garbage-collection-messages t)
 
 (defvar niva/gc-timer nil)
+(defun niva/do-garbage-collect ()
+  (message "do focus loss garbage collect")
+  (garbage-collect))
 
 (defun niva/garbage-collect-on-focus-lost ()
+  (setq gc-cons-threshold (* 1024 1024 1024))
   (if (frame-focus-state)
       (when (timerp niva/gc-timer)
         (cancel-timer niva/gc-timer))
-    (setq my/gc-timer (run-with-idle-timer 180 nil #'garbage-collect))))
-
+    (setq my/gc-timer (run-with-idle-timer 300 nil #'niva/do-garbage-collect))))
 (add-function :after after-focus-change-function #'niva/garbage-collect-on-focus-lost)
 #+end_src
 
@@ -284,18 +286,17 @@
 #+end_src
 
 ** solaire-mode
-#+begin_src disabled
+#+begin_src emacs-lisp
 (use-package solaire-mode
   :straight t
   :config
-  (solaire-global-mode t)
-  (solaire-mode-reset))
-(setq solaire-global-mode-hook nil)
+  (solaire-global-mode t))
+;; (setq solaire-global-mode-hook nil)
 
-(add-hook 'compilation-mode-hook (lambda () (solaire-mode t) (solaire-mode-reset)))
-(add-hook 'eshell-mode-hook      (lambda () (solaire-mode t) (solaire-mode-reset)))
-(add-hook 'gptel-mode-hook       (lambda () (solaire-mode t) (solaire-mode-reset)))
-(add-hook 'read-only-mode-hook   (lambda () (solaire-mode t) (solaire-mode-reset)))
+;; (add-hook 'compilation-mode-hook (lambda () (solaire-mode t) (solaire-mode-reset)))
+;; (add-hook 'eshell-mode-hook      (lambda () (solaire-mode t) (solaire-mode-reset)))
+;; (add-hook 'gptel-mode-hook       (lambda () (solaire-mode t) (solaire-mode-reset)))
+;; (add-hook 'read-only-mode-hook   (lambda () (solaire-mode t) (solaire-mode-reset)))
 #+end_src
 
 * Window management
@@ -521,9 +522,13 @@ Always move cursor to help window.
   (define-key evil-normal-state-map (kbd "M-<")        'ns-next-frame)
   (define-key evil-normal-state-map (kbd "M->")        'ns-prev-frame)
   (define-key evil-normal-state-map (kbd "s-<")        'ns-next-frame)
-  (define-key evil-normal-state-map (kbd "s->")        'ns-prev-frame)
-  (define-key evil-normal-state-map (kbd "C-w h")      (lambda() (interactive) (condition-case nil (windmove-left) (error (ns-next-frame)))))
-  (define-key evil-normal-state-map (kbd "C-w l")      (lambda() (interactive) (condition-case nil (windmove-right) (error (ns-prev-frame))))))
+  (define-key evil-normal-state-map (kbd "s->")        'ns-prev-frame))
+
+  ;; (define-key evil-normal-state-map (kbd "C-w <SPC>")  (lambda () (interactive) (message "Warning! Use C-x w t")))
+  ;; (define-key evil-normal-state-map (kbd "C-w h")      (lambda () (interactive) (message "Warning! Use C-x o")))
+  ;; (define-key evil-normal-state-map (kbd "C-w j")      (lambda () (interactive) (message "Warning! Use C-x o")))
+  ;; (define-key evil-normal-state-map (kbd "C-w k")      (lambda () (interactive) (message "Warning! Use C-x o")))
+  ;; (define-key evil-normal-state-map (kbd "C-w l")      (lambda () (interactive) (message "Warning! Use C-x o")))
 #+end_src
 
 *** Project
@@ -541,7 +546,7 @@ Don't prompt project switch action
   (which-key-popup-type 'side-window)
   (which-key-idle-delay 1.5)
   :config
-  (which-key-mode))
+  (which-key-mode)
 
 (when niva-enable-evil-mode
   (nvmap :keymaps 'override :prefix "SPC"
@@ -591,11 +596,14 @@ Don't prompt project switch action
     "cir"   '(circe                             :which-key "circe")
     "ir"    '(niva/switch-irc-buffers           :which-key "niva/switch-irc-buffers")
     "SCR"   '(scratch-buffer                    :which-key "scratch-buffer")
-    "tsfll" '(niva/prompt-treesit-level         :which-key "niva/prompt-treesit-level")))
+    "tsfll" '(niva/prompt-treesit-level         :which-key "niva/prompt-treesit-level"))))
 
+(global-set-key (kbd "C-c Ln")     'global-display-line-numbers-mode)
+(global-set-key (kbd "C-c ln")     'display-line-numbers-mode)
 (global-set-key (kbd "C-c early")  (lambda () (interactive) (find-file "~/.config/emacs/early-init.el")))
 (global-set-key (kbd "C-c scr")    (lambda () (interactive) (find-file "~/dev/stuff/persist-scratch.org")))
 (global-set-key (kbd "C-c conf")   (lambda () (interactive) (find-file "~/.config/emacs/config.org")))
+(global-set-key (kbd "C-c local")   (lambda () (interactive) (find-file "~/.config/emacs/local-env.el")))
 (global-set-key (kbd "C-c ff")     'find-file)
 (global-set-key (kbd "C-c elf")    'elfeed)
 (global-set-key (kbd "C-c cc")     'project-compile)
@@ -654,7 +662,7 @@ Don't prompt project switch action
   :custom
   (hydra-is-helpful t)
   :config
-  (defhydra hydra-win-resize (:prefix "C-c w")
+  (defhydra hydra-win-resize (:prefix "C-c C-w")
     "Resize window"
     ("C-j" (lambda () (interactive) (shrink-window 4)) "↓ shrink")
     ("C-k" (lambda () (interactive) (enlarge-window 4)) "↑ enlarge")
@@ -664,12 +672,16 @@ Don't prompt project switch action
     ("j" windmove-down     "↓ move"    :exit t)
     ("k" windmove-up       "↑ move"    :exit t)
     ("l" windmove-right    "→ move"    :exit t)
+    ;; ("h" (lambda () (message "use C-x o")) "← move"    :exit t)
+    ;; ("j" (lambda () (message "use C-x o")) "↓ move"    :exit t)
+    ;; ("k" (lambda () (message "use C-x o")) "↑ move"    :exit t)
+    ;; ("l" (lambda () (message "use C-x o")) "→ move"    :exit t)
     ("H" buf-move-left     "← swap"    :exit t)
     ("J" buf-move-down     "↓ swap"    :exit t)
     ("K" buf-move-up       "↑ swap"    :exit t)
     ("L" buf-move-right    "→ swap"    :exit t)
     ("SPC" transpose-frame "transpose" :exit t))
-  (bind-key* "C-c w" #'hydra-win-resize/body)
+  (bind-key* "C-c C-w" #'hydra-win-resize/body)
 
   (with-eval-after-load 'org
     (define-key org-mode-map (kbd "C-c C-w") nil))
@@ -779,11 +791,15 @@ Don't prompt project switch action
    consult--source-recent-file
    ;; consult--source-project-file
    consult--source-bookmark
-   :preview-key '("M-." "C-SPC" :debounce 1.0 any))
+   :preview-key '("M-." "C-SPC" :debounce 0.2 any))
 
   (consult-customize
    consult-theme
-   :preview-key '("M-." "C-SPC" :debounce 0.5 any))
+   :preview-key '("M-." "C-SPC" :debounce 0.3 any))
+
+  (consult-customize
+   consult-ripgrep
+   :preview-key '("M-." "C-SPC" :debounce 0 any))
 
   (setq consult-ripgrep-args "rg \
             --null \
@@ -808,7 +824,6 @@ Don't prompt project switch action
 
   (global-set-key (kbd "C-s") 'consult-line)
   (global-set-key (kbd "C-c s") 'consult-line-multi))
-
 #+end_src
 
 ** Marginalia
@@ -821,8 +836,9 @@ Don't prompt project switch action
 
 ** Yasnippet
 #+begin_src emacs-lisp
-(require 'org-tempo)
-(add-to-list 'org-modules 'org-tempo t)
+(with-eval-after-load 'org
+  (require 'org-tempo)
+  (add-to-list 'org-modules 'org-tempo t))
 (use-package yasnippet-snippets :straight t :defer t)
 
 (use-package yasnippet
@@ -901,7 +917,7 @@ Don't prompt project switch action
 (use-package dired-subtree
   :straight t
   :after dired
-  :ensure t
+  :defer t
   :hook ((dired-mode . dired-hide-details-mode)
          (dired-mode . hl-line-mode))
   :bind
@@ -914,13 +930,16 @@ Don't prompt project switch action
 (use-package dired-collapse
   :straight t
   :after dired
+  :defer t
   :init
   (with-eval-after-load 'evil-maps
     (evil-define-key 'normal dired-mode-map (kbd "H") 'dired-up-directory)
     (evil-define-key 'normal dired-mode-map (kbd "L") 'dired-find-file))
   (add-hook 'dired-mode-hook 'dired-collapse-mode))
 
-(use-package async :straight t
+(use-package async
+  :straight t
+  :defer t
   :config
   (autoload 'dired-async-mode "dired-async.el" nil t)
   (dired-async-mode 1))
@@ -928,7 +947,7 @@ Don't prompt project switch action
 (use-package dired-toggle
   :straight t
   :after dired
-  :ensure t
+  :defer t
   :bind (("C-c t" . #'dired-toggle)
          :map dired-mode-map
          ("q" . #'dired-toggle-quit)
@@ -943,12 +962,14 @@ Don't prompt project switch action
 
   (add-hook 'dired-toggle-mode-hook
             (lambda () (interactive)
-              (variable-pitch-mode 1)
+              ;; (variable-pitch-mode 1)
               (visual-line-mode -1)
               (setq-local visual-line-fringe-indicators '(nil right-curly-arrow))
               (setq-local word-wrap nil))))
 
-(use-package dired-hacks :straight t)
+(use-package dired-hacks
+  :straight t
+  :defer t)
 #+end_src
 
 
@@ -964,11 +985,6 @@ Don't prompt project switch action
         )
   (set-face-attribute 'treemacs-root-face nil :height 'unspecified :weight 'unspecified)
   (treemacs-hide-gitignored-files-mode nil))
-#+end_src
-
-** Other
-#+begin_src emacs-lisp
-(global-auto-revert-mode t)
 #+end_src
 
 * Development
@@ -1017,27 +1033,28 @@ Don't prompt project switch action
   :defer t
   :bind ("C-c j p" . tempo-template-org-src-jupyter-:session-py))
 ;; Copied from nowislewis/nowisemacs
-(defun my/org-babel-execute-src-block (&optional _arg info _params)
-  "Load language if needed"
-  (let* ((lang (nth 0 info))
-         (sym (cond ((member (downcase lang) '("c" "cpp" "c++")) 'C)
-                    ((member (downcase lang) '("jupyter-python")) 'jupyter)
-                    ((member (downcase lang) '("sh" "bash" "zsh")) 'shell)
-                    (t (intern lang))))
-         (backup-languages org-babel-load-languages))
-    (unless (assoc sym backup-languages)
-      (condition-case err
-          (progn
-            (org-babel-do-load-languages 'org-babel-load-languages (list (cons sym t)))
-            (setq-default org-babel-load-languages (append (list (cons sym t)) backup-languages)))
-        (file-missing
-         (setq-default org-babel-load-languages backup-languages)
-         err)))))
-(advice-add 'org-babel-execute-src-block :before #'my/org-babel-execute-src-block )
+(with-eval-after-load 'org
+  (defun my/org-babel-execute-src-block (&optional _arg info _params)
+    "Load language if needed"
+    (let* ((lang (nth 0 info))
+           (sym (cond ((member (downcase lang) '("c" "cpp" "c++")) 'C)
+                      ((member (downcase lang) '("jupyter-python")) 'jupyter)
+                      ((member (downcase lang) '("sh" "bash" "zsh")) 'shell)
+                      (t (intern lang))))
+           (backup-languages org-babel-load-languages))
+      (unless (assoc sym backup-languages)
+        (condition-case err
+            (progn
+              (org-babel-do-load-languages 'org-babel-load-languages (list (cons sym t)))
+              (setq-default org-babel-load-languages (append (list (cons sym t)) backup-languages)))
+          (file-missing
+           (setq-default org-babel-load-languages backup-languages)
+           err)))))
+  (advice-add 'org-babel-execute-src-block :before #'my/org-babel-execute-src-block )
 
-(setq org-babel-default-header-args:jupyter '((:kernel . "python") (:async . "yes")))
-(add-to-list 'org-src-lang-modes '("jupyter" . python))
-(setq-default org-confirm-babel-evaluate nil)
+  (setq org-babel-default-header-args:jupyter '((:kernel . "python") (:async . "yes")))
+  (add-to-list 'org-src-lang-modes '("jupyter" . python))
+(setq-default org-confirm-babel-evaluate nil))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1051,10 +1068,13 @@ Don't prompt project switch action
 
 (use-package eldoc
   :straight (:type built-in)
+  :defer t
   :diminish
   :config
+  ;; (setq max-mini-window-height 1.0)
+  ;; (setq eldoc-echo-area-use-multiline-p 'truncate-sym-name-if-fit)
   (setq-default eldoc-idle-delay 0.2
-                eldoc-echo-area-use-multiline-p t
+                ;; eldoc-echo-area-use-multiline-p t
                 eldoc-echo-area-prefer-doc-buffer t
                 eldoc-documentation-strategy #'eldoc-documentation-compose-eagerly)
 
@@ -1065,6 +1085,7 @@ Don't prompt project switch action
 ** Language server
 *** Eglot
 #+begin_src emacs-lisp
+(run-with-idle-timer 10 nil (lambda () (require 'eglot)))
 (use-package eglot
   :straight (:type built-in)
   :defer t
@@ -1081,31 +1102,31 @@ Don't prompt project switch action
   (eglot-sync-connect 0)
   (eglot-autoshutdown t)
   (eglot-sync-connect nil)
-  (eglot-events-buffer-size 0)
-  (eglot-extend-to-xref t)
-  (eglot-report-progress 'messages)
+  ;; (eglot-events-buffer-size 0)
+  ;; (eglot-extend-to-xref t)
+  ;; (eglot-report-progress 'messages)
   (eglot-code-action-indications '(eldoc-hint))
   (eglot-code-action-indicator "?")
   ;; (setq-default eglot-send-changes-idle-time 5.0)
   :config
   (setq-default eglot-workspace-configuration
-                '(:basedpyright (:typeCheckingMode "recommended")
-                                :basedpyright.analysis (:diagnosticSeverityOverrides
-                                                        (:reportUnusedCallResult "none")
-                                                        :inlayHints (:callArgumentNames :json-false))))
+                '((:basedpyright . (:typeCheckingMode "recommended"
+                                                      :analysis (:diagnosticSeverityOverrides
+                                                                 (:reportUnusedCallResult "none")
+                                                                 :inlayHints (:callArgumentNames :json-false))))))
   (fset #'jsonrpc--log-event #'ignore)
 
   (add-to-list 'eglot-server-programs '((c-mode c++-mode c++-ts-mode) .
-                                        ("/opt/homebrew/bin/clangd"
+                                        ("/opt/homebrew/opt/llvm/bin/clangd"
                                          "--query-driver=/Applications/ARM/bin/arm-none-eabi-g++"
                                          "--clang-tidy"
-                                         "--completion-style=detailed"
+                                         ;; "--completion-style=detailed"
+                                         "--completion-style=bundled"
                                          ;; "--pch-storage=memory"
+                                         "--pch-storage=disk"
                                          "--header-insertion=never"
-                                         "--background-index-priority=background"
-                                         "-j=8"
-                                         "--log=error"
-                                         )))
+                                         ;; "--background-index-priority=background"
+                                         "-j=8")))
 
   (add-to-list 'eglot-server-programs '((python-mode python-ts-mode)
                                         "basedpyright-langserver"
@@ -1355,7 +1376,8 @@ Don't prompt project switch action
   (setq ediff-split-window-function 'split-window-horizontally
         ediff-window-setup-function 'ediff-setup-windows-plain
         magit-no-confirm nil
-        magit-git-executable "/opt/homebrew/bin/git")
+        magit-git-executable "/opt/homebrew/bin/git"
+        magit-auto-revert-immediately t)
 
   (setq magit-section-initial-visibility-alist
         '((stashes . hide) (untracked . hide) (unpushed . hide) ([unpulled status] . show)
@@ -1545,74 +1567,84 @@ Don't prompt project switch action
 
 * Org Mode
 #+begin_src emacs-lisp
-(setq org-hide-emphasis-markers t
-      org-fontify-quote-and-verse-blocks t
-      org-ellipsis " .."
-      org-use-sub-superscripts nil)
-(set-face-attribute 'org-ellipsis nil :foreground 'unspecified :underline 'unspecified)
+(with-eval-after-load 'org
+  (setq org-hide-emphasis-markers t
+        org-fontify-quote-and-verse-blocks t
+        org-ellipsis " .."
+        org-use-sub-superscripts nil)
+  (set-face-attribute 'org-ellipsis nil :foreground 'unspecified :underline 'unspecified)
 
-(setq org-todo-keywords
-      '((sequence "TODO" "STARTED" "REVIEW" "|" "DONE" "CANCELED")))
+  (setq org-todo-keywords
+        '((sequence "TODO" "STARTED" "REVIEW" "|" "DONE" "CANCELED")))
 
-(setq org-todo-keyword-faces
-      '(("TODO" . org-todo)
-        ("STARTED" . (:foreground "darkorange3" :weight bold))
-        ("REVIEW" . (:foreground "darkblue" :weight bold))))
+  (setq org-todo-keyword-faces
+        '(("TODO" . org-todo)
+          ("STARTED" . (:foreground "darkorange3" :weight bold))
+          ("REVIEW" . (:foreground "darkblue" :weight bold))))
 
-(dolist (face '(org-level-1 org-level-2 org-level-3 org-level-4
-               org-level-5 org-level-6 org-level-7 org-level-8))
-  (set-face-attribute face nil :inherit 'unspecified :weight 'unspecified :height 1.0))
+  (dolist (face '(org-level-1 org-level-2 org-level-3 org-level-4
+                              org-level-5 org-level-6 org-level-7 org-level-8))
+    (set-face-attribute face nil :weight 'unspecified :height 1.0))
+
+(setq org-capture-templates
+      '(("t" "Todo or Note" entry (file+headline "~/org/notes.org" "Inbox")
+         "* TODO %?\ncaptured: %u")))
+
+(global-set-key (kbd "C-c o c") 'org-capture))
+  ;; (dolist (face '(org-level-1 org-level-2 org-level-3 org-level-4
+  ;;                org-level-5 org-level-6 org-level-7 org-level-8))
+  ;;   (set-face-attribute face nil :inherit 'unspecified :weight 'unspecified :height 1.0)))
 #+end_src
 
 ** scratch
 Use org mode in scratch buffer
 #+begin_src disabled
-(setq-default initial-major-mode 'org-mode)
+(with-eval-after-load 'org
+  (setq-default initial-major-mode 'org-mode))
 #+end_src
 
 ** org-tempo
 #+begin_src emacs-lisp
-(require 'org-tempo)
-(add-to-list 'org-modules 'org-tempo)
-(dolist (pair '(("sh"   . "src sh")
-                ("el"   . "src emacs-lisp")
-                ("els"  . "src emacs-lisp :results silent")
-                ("sc"   . "src scheme")
-                ("ts"   . "src typescript")
-                ("py"   . "src python")
-                ("go"   . "src go")
-                ("yaml" . "src yaml")
-                ("json" . "src json")
-                ("jp"   . "src jupyter :session py")
-                ("cpp"  . "src cpp")))
-  (add-to-list 'org-structure-template-alist pair))
+(with-eval-after-load 'org
+  (require 'org-tempo)
+  (add-to-list 'org-modules 'org-tempo)
+  (dolist (pair '(("sh"   . "src sh")
+                  ("el"   . "src emacs-lisp")
+                  ("els"  . "src emacs-lisp :results silent")
+                  ("sc"   . "src scheme")
+                  ("ts"   . "src typescript")
+                  ("py"   . "src python")
+                  ("go"   . "src go")
+                  ("yaml" . "src yaml")
+                  ("json" . "src json")
+                  ("jp"   . "src jupyter :session py")
+                  ("cpp"  . "src cpp")))
+    (add-to-list 'org-structure-template-alist pair)))
 #+end_src
 
 ** ob-async
 #+begin_src emacs-lisp
-(use-package ob-async
-  :straight t
-  :defer t
-  :config
-  (setq ob-async-no-async-languages-alist '("jupyter")))
+(with-eval-after-load 'org
+  (use-package ob-async
+    :straight t
+    :defer t
+    :config
+    (setq ob-async-no-async-languages-alist '("jupyter"))))
 #+end_src
 
 ** org code blocks
 #+begin_src emacs-lisp
-(defun ek/babel-ansi ()
-  (when-let ((beg (org-babel-where-is-src-block-result nil nil)))
-    (save-excursion
-      (goto-char beg)
-      (when (looking-at org-babel-result-regexp)
-        (let ((end (org-babel-result-end))
-              (ansi-color-context-region nil))
-          (ansi-color-apply-on-region beg end))))))
-(add-hook 'org-babel-after-execute-hook 'ek/babel-ansi)
-
-#+end_src
-
-#+begin_src emacs-lisp
-(setq org-confirm-babel-evaluate nil)
+(with-eval-after-load 'org
+  (setq org-confirm-babel-evaluate nil)
+  (defun ek/babel-ansi ()
+    (when-let ((beg (org-babel-where-is-src-block-result nil nil)))
+      (save-excursion
+        (goto-char beg)
+        (when (looking-at org-babel-result-regexp)
+          (let ((end (org-babel-result-end))
+                (ansi-color-context-region nil))
+            (ansi-color-apply-on-region beg end))))))
+  (add-hook 'org-babel-after-execute-hook 'ek/babel-ansi))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1642,6 +1674,7 @@ Use org mode in scratch buffer
 (use-package org-roam
   :defer t
   :straight t
+  :after org
   :config
   (when (fboundp 'niva/setup-org-roam)
     (niva/setup-org-roam))
@@ -1766,7 +1799,6 @@ Use org mode in scratch buffer
 
 (add-hook 'eww-mode-hook
           (lambda ()
-            (hl-line-mode +1)
             (setq-local evil-normal-state-cursor '(hollow))))
 #+end_src
 
@@ -1850,7 +1882,6 @@ Use org mode in scratch buffer
 
 (add-hook 'elfeed-search-mode-hook #'niva/elfeed-search-hook)
 (add-hook 'elfeed-show-mode-hook (lambda ()
-                                   (hl-line-mode 1)
                                    (blink-cursor-mode 0)))
                                    ;; (setq-local evil-normal-state-cursor '(nil))
 
