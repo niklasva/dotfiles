@@ -7,15 +7,6 @@
 (setq initial-major-mode 'fundamental-mode)
 (advice-add #'display-startup-echo-area-message :override #'ignore)
 (advice-add #'display-startup-screen :override #'ignore)
-;; (setq read-process-output-max (* 64 1024))  ; 64kb
-#+end_src
-
-* Imports
-#+begin_src emacs-lisp
-(use-package pinentry :straight t :config (pinentry-start))
-(add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
-(defconst private-config-file (expand-file-name "private/config.el" user-emacs-directory))
-(when (file-readable-p private-config-file) (load-file private-config-file))
 #+end_src
 
 * Eshell
@@ -114,13 +105,6 @@
 (defalias 'ts    "ts '[%Y-%m-%d %H:%M:%S]'")
 #+end_src
 
-** exec-path-from-shell
-#+begin_src emacs-lisp
-(use-package exec-path-from-shell
-  :straight t
-  :init (exec-path-from-shell-initialize))
-#+end_src
-
 * Defaults
 ** Defaults
 #+begin_src emacs-lisp
@@ -186,8 +170,6 @@
               compilation-scroll-output t
               scroll-preserve-screen-position t)
 
-(setq inhibit-startup-message t
-      inhibit-startup-echo-area-message t)
 
 (global-visual-line-mode t)
 (global-hl-line-mode -1)
@@ -265,7 +247,6 @@
 ** Theme
 #+begin_src emacs-lisp
 (ignore-errors (niva/update-theme-faces))
-(make-frame-visible)
 #+end_src
 
 ** Colors

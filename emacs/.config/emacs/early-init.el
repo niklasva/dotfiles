@@ -2,22 +2,21 @@
 ;;; Commentary:
 ;;; Code:
 
-(require 'server)
-
-(defun my/redirect-to-running-server ()
-  (when (and (not (daemonp))
-             (server-running-p))
-    (let ((args (append '("-c") command-line-args-left)))
-      (apply #'call-process "/opt/homebrew/bin/emacsclient" nil 0 nil args))
-    (kill-emacs)))
-
-(my/redirect-to-running-server)
-
-(unless (server-running-p)
-  (server-start))
+;; (require 'server)
+;;
+;; (defun my/redirect-to-running-server ()
+;;   (when (and (not (daemonp))
+;;              (server-running-p))
+;;     (let ((args (append '("-c") command-line-args-left)))
+;;       (apply #'call-process "/opt/homebrew/bin/emacsclient" nil 0 nil args))
+;;     (kill-emacs)))
+;;
+;; (my/redirect-to-running-server)
+;;
+;; (unless (server-running-p)
+;;   (server-start))
 
 (setq vc-follow-symlinks t)
-(load (expand-file-name "lisp/init-straight.el" user-emacs-directory))
 
 (setq default-frame-alist
       (append (list '(min-height              . 1)
@@ -31,6 +30,7 @@
                     '(ns-appearance           . light)
                     '(undecorated             . nil)
                     '(left-fringe             . 1)
+                    '(visibility              . nil)
                     '(right-fringe            . 1))))
 
 (setq-default window-divider-default-right-width 24)
@@ -48,8 +48,6 @@
  '(org-modules nil))
 
 (setq-default header-line-format (buffer-file-name))
-(load (expand-file-name "lisp/theme-packages.el" user-emacs-directory))
-(use-package benchmark-init :straight t :config (add-hook 'after-init-hook 'benchmark-init/deactivate))
 
 (setq-default frame-resize-pixelwise t
               window-resize-pixelwise t
