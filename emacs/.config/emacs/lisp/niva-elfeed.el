@@ -151,8 +151,39 @@
             (propertize title 'face title-faces 'kbd-help title) " "
             (format " (%s) " tags-str))))
 
+(defun niva/elfeed-search-print-entry--single-line-alt-mixed (entry)
+  (let* ((date (format "%-9s " (relative-date (elfeed-entry-date entry))))
+         (title (or (elfeed-meta entry :title) (elfeed-entry-title entry) ""))
+         (title-faces (elfeed-search--faces (elfeed-entry-tags entry)))
+         (feed (elfeed-entry-feed entry))
+         (feed-title
+          (when feed
+            (or (elfeed-meta feed :title) (elfeed-feed-title feed))))
+         (tags (mapcar #'symbol-name (elfeed-entry-tags entry)))
+         (tags (delete "star" (delete "unread" tags)))
+         (tags-str (mapconcat
+                    (lambda (s) (propertize s 'face 'elfeed-search-tag-face))
+                    tags ","))
+         (title-width (- (window-width) 25 elfeed-search-trailing-width))
+         (title-column (elfeed-format-column
+                        title (elfeed-clamp
+                               elfeed-search-title-min-width
+                               title-width
+                               elfeed-search-title-max-width)
+                        :left)))
 
-(setq elfeed-search-print-entry-function #'niva/elfeed-search-print-entry--single-line-alt)
+    (unless (string= feed-title niva/elfeed-last-feed)
+      (insert (propertize "b" 'display `(space :align-to 0 :height 2.1))))
+    (setq niva/elfeed-last-feed feed-title)
+
+    (insert (propertize date 'face 'elfeed-search-date-face)
+            "  \t"
+            (format "%s: " (propertize feed-title 'face title-faces))
+            (propertize title 'face title-faces 'kbd-help title) " "
+            (format " (%s) " tags-str))))
+
+
+(setq elfeed-search-print-entry-function #'niva/elfeed-search-print-entry--single-line-alt-mixed)
 
 (setq elfeed-search-sort-function
       (lambda (a b)
