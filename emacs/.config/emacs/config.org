@@ -342,10 +342,11 @@ Always move cursor to help window.
 #+begin_src emacs-lisp
 (use-package popper
   :straight t
+  :ensure t
   :bind (:map popper-mode-map
               ("C-<TAB>"   . popper-cycle)
               ("C-c <TAB>"   . popper-toggle))
-  :hook (emacs-startup . popper-mode)
+  :hook (prog-mode . popper-mode)
 
   :init
   (setq popper-reference-buffers
@@ -354,12 +355,13 @@ Always move cursor to help window.
           ;; compilation-mode
           "^\\*eldoc.*\\*.*$" eldoc-mode
           "\\*Flycheck errors\\*$" " \\*Flycheck checker\\*$"
-          ;; "\\*ChatGPT\\*$" gptel-mode
+          ;; "\\*ChatGPT\\*$"
           ;; "\\*gptel\\*$" gptel-mode
           ))
 
   :config
-  (popper-echo-mode 1)
+  (popper-echo-mode +1)
+  (popper-mode +1)
 
   ;; HACK: close popper window with `C-g'
   (defun +popper-close-window-hack (&rest _)
