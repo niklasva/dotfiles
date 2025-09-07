@@ -116,7 +116,7 @@
               display-line-numbers-width 4
               confirm-kill-emacs 'y-or-n-p
               ring-bell-function 'ignore
-              column-number-mode t)
+              column-number-mode nil)
 
 (setq-default backup-directory-alist '(("." . "~/.cache/emacs/backup"))
               auto-save-file-name-transforms '((".*" "~/.cache/emacs/auto-save/" t))
@@ -138,6 +138,7 @@
 (electric-indent-mode)
 (delete-selection-mode)
 (context-menu-mode)
+(repeat-mode)
 
 (setq-default evil-auto-indent t
               indent-tabs-mode nil
@@ -145,7 +146,7 @@
               org-src-tab-acts-natively t
               org-edit-src-content-indentation 0
               org-indent-indentation-per-level 2
-              org-indent-mode-turns-on-hiding-stars nil)
+              org-indent-mode-turns-on-hiding-stars t)
 
 (defun indent-tabs-hook ()
   (setq tab-width 4
