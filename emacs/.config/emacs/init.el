@@ -1,5 +1,6 @@
 ;; -*- lexical-binding: t; -*-
 
+(defvar my-after-init-complete-hook nil)
 (setq-default niva-use-new-config        nil)
 (setq-default niva-enable-evil-mode      t)
 (setq-default niva-inhibit-elfeed-images t)
@@ -37,4 +38,5 @@
    (if niva-use-new-config
        (org-babel-load-file (expand-file-name "new-init.el" user-emacs-directory))
      (org-babel-load-file (expand-file-name "config.org" user-emacs-directory)))
-   (setq inhibit-message nil)))
+   (setq inhibit-message nil)
+   (run-hooks 'my-after-init-complete-hook)))
