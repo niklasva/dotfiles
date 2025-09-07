@@ -2,11 +2,12 @@
 #+OPTIONS:  toc:2
 #+STARTUP:  overview noindent
 
+
 #+begin_src emacs-lisp  :comments no
 ;;; -*- lexical-binding: t; -*-
 (setq initial-major-mode 'fundamental-mode)
 (advice-add #'display-startup-echo-area-message :override #'ignore)
-(advice-add #'display-startup-screen :override #'ignore)
+(advice-add #'display-startup-screen            :override #'ignore)
 #+end_src
 
 * Eshell
@@ -715,6 +716,7 @@ Don't prompt project switch action
   :hook
   (embark-collect-mode . consult-preview-at-point-mode))
 #+end_src
+
 * Completion
 ** Vertico
 #+begin_src emacs-lisp
@@ -755,8 +757,6 @@ Don't prompt project switch action
          ("C-x 4 b" . consult-buffer-other-window)
          ("M-y"   . consult-yank-pop))
   :config
-
-
   (setq consult-preview-key '(:debounce 0.5 any))
 
   (consult-customize
@@ -1940,44 +1940,39 @@ Use org mode in scratch buffer
   :defer t
   :straight (gptel :host github :repo "karthink/gptel" branch "master")
   :config
-
   (setq ollama-backend (gptel-make-ollama "ollama"
                          :host "localhost:11434"
                          :stream t
                          :models '("deepseek-r1:14b" "deepseek-r1:8b" "gemma3:latest" "deepcoder:1.5b")))
 
-  ;; (add-hook 'gptel-post-stream-hook 'gptel-auto-scroll)
 
-  (setq-default
-   gptel-default-mode #'org-mode
-   gptel-prompt-prefix-alist '((org-mode . "> "))
-   gptel-stream t
-   gptel-org-branching-context nil
-   gptel-use-header-line nil
-   gptel-model 'gpt-4.1-mini
-   gptel-org-convert-response t
-   gptel-response-separator "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"))
+  (setq gptel-default-mode #'org-mode
+        gptel-prompt-prefix-alist '((org-mode . "> "))
+        gptel-stream t
+        gptel-org-branching-context nil
+        gptel-org-convert-response t
+        gptel-response-separator "\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n")
+  )
 
-(with-eval-after-load 'gptel
-  (define-key gptel-mode-map (kbd "C-c m") 'gptel-menu)
-  (with-eval-after-load 'evil-maps
-    (evil-define-key 'normal gptel-mode-map (kbd "q") 'switch-to-prev-buffer)
-    (evil-define-key 'normal gptel-mode-map (kbd "C-g") 'delete-window)
-    (add-hook 'gptel-mode-hook 'evil-insert-state)))
+  (with-eval-after-load 'gptel
+    (define-key gptel-mode-map (kbd "C-c m") 'gptel-menu)
+    (with-eval-after-load 'evil-maps
+      (evil-define-key 'normal gptel-mode-map (kbd "q") 'switch-to-prev-buffer)
+      (evil-define-key 'normal gptel-mode-map (kbd "C-g") 'delete-window)
+      (add-hook 'gptel-mode-hook 'evil-insert-state)))
 
-(defun niva/gptel-common-buffer () (interactive) (gptel "*gptel*" nil nil t))
-(global-set-key (kbd "C-c p") 'niva/gptel-common-buffer)
-(setq gptel-display-buffer-action '(display-buffer-same-window))
+  (defun niva/gptel-common-buffer () (interactive) (gptel "*gptel*" nil nil t))
+  (global-set-key (kbd "C-c p") 'niva/gptel-common-buffer)
+  (setq gptel-display-buffer-action '(display-buffer-same-window))
 
-(add-hook 'gptel-mode-hook (lambda ()
-                             (setq-local visual-fill-column-center-text nil
-                                         visual-fill-column-fringes-outside-margins t
-                                         visual-fill-column-extra-text-width '(-2 . 0)
-                                         fill-column 9999
-                                         visual-fill-column-width 100)
-                             (visual-fill-column-mode +1)
-                             (org-bullets-mode +1)
-                             ))
+  (add-hook 'gptel-mode-hook (lambda ()
+                               (setq-local visual-fill-column-center-text nil
+                                           visual-fill-column-fringes-outside-margins t
+                                           visual-fill-column-extra-text-width '(-2 . 0)
+                                           fill-column 9999
+                                           visual-fill-column-width 100)
+                               (visual-fill-column-mode +1)
+                               (org-bullets-mode +1)))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -2122,6 +2117,7 @@ Use the following guidelines:
   (advice-remove 'mastodon-tl--byline #'mastodon-alt-tl--byline)
   (advice-remove 'mastodon-media--process-image-response #'mastodon-alt-media--process-image-response))
 #+end_src
+
 * My packages
 ** hl-paragraph-mode
 #+begin_src emacs-lisp
@@ -2170,6 +2166,7 @@ Use the following guidelines:
               (outline-minor-mode 1)
               (setq-local outline-regexp ";; \\[\\[file:"))))
 #+end_src
+
 * Other
 #+begin_src emacs-lisp
 (advice-add 'save-buffers-kill-terminal :around
