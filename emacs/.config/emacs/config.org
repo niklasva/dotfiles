@@ -1567,6 +1567,7 @@ Don't prompt project switch action
 
 * Org Mode
 #+begin_src emacs-lisp
+(use-package org-bullets :straight t)
 (with-eval-after-load 'org
   (setq org-hide-emphasis-markers t
         org-fontify-quote-and-verse-blocks t
@@ -1973,145 +1974,6 @@ Use org mode in scratch buffer
 (use-package relative-date :straight (relative-date :host github :repo "rougier/relative-date"))
 #+end_src
 
-** gptel
-#+begin_src emacs-lisp
-(use-package gptel
-  :diminish gptel-mode
-  :defer t
-  :straight (gptel :host github :repo "karthink/gptel" branch "master")
-  :config
-  (setq ollama-backend (gptel-make-ollama "ollama"
-                         :host "localhost:11434"
-                         :stream t
-                         :models '("deepseek-r1:14b" "deepseek-r1:8b" "gemma3:latest" "deepcoder:1.5b")))
-
-
-  (setq gptel-default-mode #'org-mode
-        gptel-prompt-prefix-alist '((org-mode . "> "))
-        gptel-stream t
-        gptel-org-branching-context nil
-        gptel-org-convert-response t
-        gptel-response-separator "\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n")
-  )
-
-  (with-eval-after-load 'gptel
-    (define-key gptel-mode-map (kbd "C-c m") 'gptel-menu)
-    (with-eval-after-load 'evil-maps
-      (evil-define-key 'normal gptel-mode-map (kbd "q") 'switch-to-prev-buffer)
-      (evil-define-key 'normal gptel-mode-map (kbd "C-g") 'delete-window)
-      (add-hook 'gptel-mode-hook 'evil-insert-state)))
-
-  (defun niva/gptel-common-buffer () (interactive) (gptel "*gptel*" nil nil t))
-  (global-set-key (kbd "C-c p") 'niva/gptel-common-buffer)
-  (setq gptel-display-buffer-action '(display-buffer-same-window))
-
-  (add-hook 'gptel-mode-hook (lambda ()
-                               (setq-local visual-fill-column-center-text nil
-                                           visual-fill-column-fringes-outside-margins t
-                                           visual-fill-column-extra-text-width '(-2 . 0)
-                                           fill-column 9999
-                                           visual-fill-column-width 100)
-                               (visual-fill-column-mode +1)
-                               (org-bullets-mode +1)))
-#+end_src
-
-#+begin_src emacs-lisp
-(defun niva/rename-gptel-buffer (my-callback)
-  (interactive)
-  (unless gptel-mode
-    (user-error "This command is intended to be used in gptel chat buffers."))
-  (let ((gptel-model 'gpt-4o-mini))
-    (gptel-request
-     (list nil
-           "What is the chat content?"
-           (concat "```" (if (eq major-mode 'org-mode) "org" "markdown") "\n"
-                   (buffer-substring-no-properties (point-min) (point-max))
-                   "\n```"))
-     :system
-     (list (format
-            "I will provide a transcript of a chat with an LLM. \
-Suggest a short and informative name for a file to store this chat in.  \
-Use the following guidelines:
-- be very concise, one very short sentence at most
-- no spaces, use underscores if required
-- return ONLY the title, no explanation or summary
-- append the extension .%s"
-            (if (eq major-mode 'org-mode) "org" "md")))
-     :callback
-     (lambda (resp info)
-       (if (stringp resp)
-           (let* ((buf    (plist-get info :buffer))
-                  (timestamp (format-time-string "%Y%m%d%H%M"))
-                  (new-name (concat timestamp "_" resp)))
-             (when (functionp my-callback)
-               (funcall my-callback new-name)))
-         (message "Error(%s): did not receive a response from the LLM."
-                  (plist-get info :status)))))))
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package org-bullets
-  :straight t)
-
-(defun niva/gptel-auto-save ()
-  (interactive)
-  (when (bound-and-true-p gptel-mode)
-    (if (and (string-match-p "^\\*gptel" (buffer-name)) (not (string= (buffer-string) "")))
-        (let* ((dir "~/.gptel-chats/"))
-          (niva/rename-gptel-buffer
-           (lambda (new-name)
-             (let* ((filename (expand-file-name new-name dir)))
-               (make-directory dir :parents)
-               (write-file filename)
-               (rename-buffer (file-name-nondirectory (buffer-file-name)))
-               ;; (message "Chat saved to %s" filename)
-               ))))
-      (save-buffer))))
-
-(add-hook 'kill-buffer-hook #'niva/gptel-auto-save)
-
-(with-eval-after-load 'gptel
-  (define-key gptel-mode-map (kbd "C-x s") #'niva/gptel-auto-save)
-  (define-key gptel-mode-map (kbd "C-x C-s") #'niva/gptel-auto-save))
-
-(defun niva/extend-br (beg end)
-  (save-excursion
-    (goto-char beg)
-    (org-table-recalculate-buffer-tables)
-    (while (search-forward "\n---\n" end t)
-      (replace-match "\n=-----------------------------------------------------------------------------------=\n"))))
-
-(add-hook 'gptel-post-response-functions #'niva/extend-br)
-#+end_src
-
-** minuet
-#+begin_src emacs-lisp
-(use-package plz :straight t)
-(use-package minuet
-  :straight (:host github :repo "milanglacier/minuet-ai.el" :type git)
-  :defer t
-  :config
-  (setq minuet-provider 'openai-compatible)
-  (setq minuet-request-timeout 3.5)
-  (setq minuet-auto-suggestion-throttle-delay 1.5) ;; Increase to reduce costs and avoid rate limits
-  (setq minuet-auto-suggestion-debounce-delay 0.6) ;; Increase to reduce costs and avoid rate limits
-
-  ;; (setq minuet-provider 'openai)
-  ;; (plist-put minuet-openai-options :model "gpt-4.1-nano")
-  ;; (setenv "OPENAI_API_KEY" (niva/lookup-password :host "api.openai.com"))
-
-
-  (setq minuet-context-window 512)
-  (plist-put minuet-openai-fim-compatible-options :end-point "http://localhost:11434/v1/completions")
-  (plist-put minuet-openai-fim-compatible-options :model "qwen2.5-coder:1.5b")
-  (plist-put minuet-openai-fim-compatible-options :name "Ollama")
-  (plist-put minuet-openai-fim-compatible-options :api-key "TERM")
-
-
-  (minuet-set-optional-options minuet-openai-compatible-options :provider '(:sort "throughput"))
-  (minuet-set-optional-options minuet-openai-compatible-options :max_tokens 56)
-  (minuet-set-optional-options minuet-openai-compatible-options :top_p 0.9))
-#+end_src
 
 ** Mastodon
 #+begin_src emacs-lisp
@@ -2222,25 +2084,9 @@ Use the following guidelines:
   (evil-define-key 'normal iscroll-mode-map (kbd "k") 'iscroll-previous-line)
   (evil-define-key 'normal iscroll-mode-map (kbd "j") 'iscroll-next-line))
 
-(use-package mixed-pitch
-  :straight t
-  :defer nil
-  :diminish mixed-pitch-mode
-  :hook ((eww-mode         . mixed-pitch-mode)
-         (elfeed-show-mode . mixed-pitch-mode)
-         (gptel-mode       . mixed-pitch-mode))
-  :config
-  (setq mixed-pitch-set-height t)
-  (custom-set-faces '(variable-pitch ((t (:font "Arial" :height 0.9))))))
-
-(use-package elastic-indent
-  :straight (elastic-indent :host github :repo "jyp/elastic-modes"))
-
-(use-package elastic-table
-  :straight (elastic-table :host github :repo "jyp/elastic-modes"))
-
-
+;;   (custom-set-faces '(variable-pitch ((t (:font "Arial" :height 0.9))))))
 #+end_src
+
 * Footer
 #+begin_src emacs-lisp :comments no
 ;;; config.el ends here
