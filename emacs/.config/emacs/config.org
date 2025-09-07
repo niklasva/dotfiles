@@ -329,7 +329,7 @@ Always move cursor to help window.
   (let* ((frame (or frame (selected-frame)))
          (now   (frame-parameter frame 'internal-border-width)))
     (set-frame-parameter frame 'internal-border-width
-                         (if (= now 45) 5 45))))
+                         (if (= now 40) 5 40))))
 
 (defun niva/toggle-frame-decorations (&optional frame)
   (interactive)
@@ -1080,6 +1080,12 @@ Don't prompt project switch action
 
   (diminish 'eldoc-mode))
 (diminish 'abbrev-mode)
+
+(use-package eldoc-box :straight t
+  :config
+  (setq eldoc-box-clear-with-C-g t)
+  (with-eval-after-load 'evil
+    (define-key evil-normal-state-map (kbd "C-c k") 'eldoc-box-help-at-point)))
 #+end_src
 
 ** Language server
@@ -1851,6 +1857,16 @@ Use org mode in scratch buffer
 #+begin_src emacs-lisp
 ;; (setq browse-url-browser-function (lambda (url session) (other-window 1) (xwidget-webkit-browse-url url)))
 (setq-default xwidget-webkit-cookie-file (expand-file-name "webkit-cookies.txt" no-littering-var-directory))
+;; 
+;; (use-package xwidgete :straight t)
+;; 
+;; (define-key xwidget-webkit-mode-map (kbd "<escape>") #'evil-force-normal-state)
+;; (define-key xwidget-webkit-edit-mode-map (kbd "<escape>") #'evil-force-normal-state)
+;; 
+;; (add-hook 'xwidget-webkit-edit-mode-hook
+;;           (lambda ()
+;;             (deactivate-input-method)
+;;             (setq-local input-method-function nil)))
 #+end_src
 
 ** elfeed
@@ -2054,10 +2070,10 @@ Use org mode in scratch buffer
 (use-package iscroll
   :straight t
   :diminish iscroll-mode
-  :hook ((text-mode elfeed-show-mode eww-mode shr-mode) . iscroll-mode)
-  :config
-  (evil-define-key 'normal iscroll-mode-map (kbd "k") 'iscroll-previous-line)
-  (evil-define-key 'normal iscroll-mode-map (kbd "j") 'iscroll-next-line))
+  :hook ((text-mode elfeed-show-mode eww-mode shr-mode) . iscroll-mode))
+  ;; :config
+  ;; (evil-define-key 'normal iscroll-mode-map (kbd "k") 'iscroll-previous-line)
+  ;; (evil-define-key 'normal iscroll-mode-map (kbd "j") 'iscroll-next-line))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -2084,6 +2100,15 @@ Use org mode in scratch buffer
   (evil-define-key 'normal iscroll-mode-map (kbd "k") 'iscroll-previous-line)
   (evil-define-key 'normal iscroll-mode-map (kbd "j") 'iscroll-next-line))
 
+;; (use-package mixed-pitch
+;;   :straight t
+;;   :defer nil
+;;   :diminish mixed-pitch-mode
+;;   :hook ((eww-mode         . mixed-pitch-mode)
+;;          (elfeed-show-mode . mixed-pitch-mode)
+;;          (gptel-mode       . mixed-pitch-mode))
+;;   :config
+;;   (setq mixed-pitch-set-height t)
 ;;   (custom-set-faces '(variable-pitch ((t (:font "Arial" :height 0.9))))))
 #+end_src
 
