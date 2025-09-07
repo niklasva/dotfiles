@@ -16,6 +16,8 @@
 ;; (unless (server-running-p)
 ;;   (server-start))
 
+(setq gc-cons-threshold most-positive-fixnum)
+
 (setq vc-follow-symlinks t)
 
 (setq default-frame-alist
@@ -52,7 +54,7 @@
 (setq-default frame-resize-pixelwise t
               window-resize-pixelwise t
               ns-antialias-text t
-              ns-use-native-fullscreen t
+              ns-use-native-fullscreen nil
               ns-use-proxy-icon nil
               ns-use-thin-smoothing t)
 (scroll-bar-mode -1)
