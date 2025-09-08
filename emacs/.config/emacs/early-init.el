@@ -28,8 +28,8 @@
                     '(internal-border-width   . 5)
                     '(vertical-scroll-bars    . nil)
                     '(tool-bar-lines          . 0)
-                    '(ns-transparent-titlebar . t)
-                    '(ns-appearance           . light)
+                    '(ns-transparent-titlebar . nil)
+                    '(ns-appearance           . dark)
                     '(undecorated             . nil)
                     '(left-fringe             . 1)
                     '(visibility              . nil)
@@ -54,9 +54,9 @@
 (setq-default frame-resize-pixelwise t
               window-resize-pixelwise t
               ns-antialias-text t
-              ns-use-native-fullscreen nil
+              ns-use-native-fullscreen t
               ns-use-proxy-icon nil
-              ns-use-thin-smoothing t)
+              ns-use-thin-smoothing nil)
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
 (tooltip-mode nil)

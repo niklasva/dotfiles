@@ -38,30 +38,31 @@
         eshell-error-if-no-glob t
         eshell-glob-case-insensitive t
         eshell-hist-ignoredups t
-        eshell-history-size 65535
-        eshell-input-filter (lambda (input) (not (string-match-p "\\`\\s-+" input)))
+        eshell-history-size most-positive-fixnum
         eshell-kill-processes-on-exit t
-        eshell-scroll-to-bottom-on-input 'this
-        eshell-scroll-to-bottom-on-output nil))
+        eshell-scroll-to-bottom-on-input 'all
+        eshell-scroll-to-bottom-on-output 'all)
 
-(setq system-name (car (split-string system-name "\\.")))
-(setq eshell-prompt-regexp "^.+@.+:.+> ")
-(setq eshell-prompt-function
-      (lambda ()
-        (concat
-         (propertize (user-login-name) 'face 'font-lock-keyword-face)
-         (propertize (format "@%s" (system-name)) 'face 'default)
-         (propertize ":" 'face 'font-lock-doc-face)
-         (propertize (abbreviate-file-name (eshell/pwd)) 'face 'font-lock-type-face)
-         (propertize " $" 'face 'font-lock-doc-face)
-         (propertize " " 'face 'default))))
+  (setq pcomplete-cycle-completions nil)
 
-(advice-add 'eshell/clear :override
-            (defun niva--eshell/clear (&optional scrollback)
-              (interactive)
-              (let ((inhibit-read-only t))
-                (erase-buffer)
-                (eshell-send-input))))
+  (setq system-name (car (split-string system-name "\\.")))
+  (setq eshell-prompt-regexp "^.+@.+:.+> ")
+  (setq eshell-prompt-function
+        (lambda ()
+          (concat
+           (propertize (user-login-name) 'face 'font-lock-keyword-face)
+           (propertize (format "@%s" (system-name)) 'face 'default)
+           (propertize ":" 'face 'font-lock-doc-face)
+           (propertize (abbreviate-file-name (eshell/pwd)) 'face 'font-lock-type-face)
+           (propertize " $" 'face 'font-lock-doc-face)
+           (propertize " " 'face 'default))))
+
+  (advice-add 'eshell/clear :override
+              (defun niva--eshell/clear (&optional scrollback)
+                (interactive)
+                (let ((inhibit-read-only t))
+                  (erase-buffer)
+                  (eshell-send-input)))))
 #+end_src
 
 ** eshell-syntax-highlighting
@@ -112,7 +113,6 @@
 (setq-default warning-minimum-level :error)
 (setq-default c-basic-offset 4
               c-default-style "user"
-              completion-cycle-threshold t
               display-line-numbers-width 4
               confirm-kill-emacs 'y-or-n-p
               ring-bell-function 'ignore
@@ -290,13 +290,18 @@
 (use-package solaire-mode
   :straight t
   :config
-  (solaire-global-mode t))
-;; (setq solaire-global-mode-hook nil)
+  (defun solaire-mode-real-buffer-custom-p ()
+    (cond ((string= (buffer-name (buffer-base-buffer)) "*scratch*") t)
+          ((buffer-file-name (buffer-base-buffer)) t)
+          (t nil)))
 
-;; (add-hook 'compilation-mode-hook (lambda () (solaire-mode t) (solaire-mode-reset)))
-;; (add-hook 'eshell-mode-hook      (lambda () (solaire-mode t) (solaire-mode-reset)))
-;; (add-hook 'gptel-mode-hook       (lambda () (solaire-mode t) (solaire-mode-reset)))
-;; (add-hook 'read-only-mode-hook   (lambda () (solaire-mode t) (solaire-mode-reset)))
+  (setq solaire-mode-real-buffer-fn #'solaire-mode-real-buffer-custom-p)
+  (solaire-global-mode t)
+
+(add-hook 'compilation-mode-hook (lambda () (solaire-mode t) (solaire-mode-reset)))
+(add-hook 'eshell-mode-hook      (lambda () (solaire-mode t) (solaire-mode-reset)))
+(add-hook 'gptel-mode-hook       (lambda () (solaire-mode t) (solaire-mode-reset)))
+(add-hook 'read-only-mode-hook   (lambda () (solaire-mode t) (solaire-mode-reset))))
 #+end_src
 
 * Window management
@@ -323,7 +328,6 @@ Always move cursor to help window.
 
 ** frame-decorations
 #+begin_src emacs-lisp
-
 (defun niva/toggle-internal-border-width (&optional frame)
   (interactive)
   (let* ((frame (or frame (selected-frame)))
@@ -336,6 +340,27 @@ Always move cursor to help window.
   (let* ((frame (or frame (selected-frame)))
          (now   (frame-parameter frame 'undecorated)))
     (set-frame-parameter frame 'undecorated (not now))))
+
+(defun niva/toggle-frame-decorations (&optional frame)
+  (interactive)
+  (let* ((frame (or frame (selected-frame)))
+         (now   (frame-parameter frame 'undecorated)))
+    (set-frame-parameter frame 'undecorated (not now))))
+(defun niva/toggle-ns-transparent-titlebar ()
+  (interactive)
+  (let ((current-setting (frame-parameter nil 'ns-transparent-titlebar)))
+    (set-frame-parameter nil 'ns-transparent-titlebar
+                         (if (= current-setting t)
+                             nil
+                           t))))
+
+(defun niva/toggle-ns-appearance ()
+  (interactive)
+  (let ((current-appearance (frame-parameter nil 'ns-appearance)))
+    (set-frame-parameter nil 'ns-appearance
+                         (if (equal current-appearance 'dark)
+                             'light
+                           'dark))))
 
 (global-set-key (kbd "C-c <backspace>") 'niva/toggle-internal-border-width)
 #+end_src
@@ -556,11 +581,20 @@ Don't prompt project switch action
 (use-package which-key
   :straight t
   :diminish
-  :custom
-  (which-key-popup-type 'side-window)
-  (which-key-idle-delay 1.5)
   :config
-  (which-key-mode)
+  (setq which-key-side-window-location 'bottom
+	    which-key-sort-order #'which-key-key-order-alpha
+	    which-key-sort-uppercase-first nil
+	    which-key-add-column-padding 1
+	    which-key-max-display-columns nil
+	    which-key-min-display-lines 6
+	    which-key-side-window-slot -10
+	    which-key-side-window-max-height 0.25
+	    which-key-idle-delay 0.6
+	    which-key-max-description-length 25
+	    which-key-allow-imprecise-window-fit t
+        which-key-separator " → " )
+  (which-key-mode))
 
 (when niva-enable-evil-mode
   (nvmap :keymaps 'override :prefix "SPC"
@@ -659,7 +693,6 @@ Don't prompt project switch action
   :straight t
   :defer t
   :custom
-  (vundo-glyph-alist vundo-unicode-symbols)
   (vundo-window-max-height 5)
   (vundo-compact-display t))
 #+end_src
@@ -787,11 +820,11 @@ Don't prompt project switch action
 #+begin_src emacs-lisp
 (use-package consult
   :straight t
-  :bind (("C-s"   . consult-line)
-         ("C-M-l" . consult-focus-lines)
-         ("C-x b" . consult-buffer)
+  :bind (("C-s"     . consult-line)
+         ("C-M-l"   . consult-focus-lines)
+         ("C-x b"   . consult-buffer)
          ("C-x 4 b" . consult-buffer-other-window)
-         ("M-y"   . consult-yank-pop))
+         ("M-y"     . consult-yank-pop))
   :config
   (setq consult-preview-key '(:debounce 0.5 any))
 
@@ -804,9 +837,8 @@ Don't prompt project switch action
 
   (consult-customize
    consult--source-recent-file
-   ;; consult--source-project-file
    consult--source-bookmark
-   :preview-key '("M-." "C-SPC" :debounce 0.2 any))
+   :preview-key '("M-." "C-SPC" :debounce 0.5 any))
 
   (consult-customize
    consult-theme
@@ -867,7 +899,8 @@ Don't prompt project switch action
 #+begin_src emacs-lisp
 (use-package corfu
   :straight t
-  :hook (prog-mode . corfu-mode)
+  :hook ((prog-mode . corfu-mode)
+         (eshell-mode . corfu-mode))
   :config
   (setq corfu-cycle t
         corfu-auto t
@@ -895,19 +928,6 @@ Don't prompt project switch action
   (add-to-list 'completion-at-point-functions #'cape-elisp-block)
   (add-to-list 'completion-at-point-functions #'cape-elisp-symbol)
   (add-to-list 'completion-at-point-functions #'cape-keyword))
-
-(use-package kind-icon
-  :straight t
-  :after corfu
-  :defer t
-  :config
-  (setq kind-icon-use-icons t
-        kind-icon-default-face 'corfu-default
-        kind-icon-blend-background nil
-        kind-icon-blend-frac 0.08
-        kind-icon-default-style '(:padding -1 :stroke 0 :margin 0 :radius 0 :height 1.0 :scale 1.0)
-        kind-icon-formatted 'variable)
-  (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
 #+end_src
 
 * File management
@@ -1872,12 +1892,12 @@ Use org mode in scratch buffer
 #+begin_src emacs-lisp
 ;; (setq browse-url-browser-function (lambda (url session) (other-window 1) (xwidget-webkit-browse-url url)))
 (setq-default xwidget-webkit-cookie-file (expand-file-name "webkit-cookies.txt" no-littering-var-directory))
-;; 
+;;
 ;; (use-package xwidgete :straight t)
-;; 
+;;
 ;; (define-key xwidget-webkit-mode-map (kbd "<escape>") #'evil-force-normal-state)
 ;; (define-key xwidget-webkit-edit-mode-map (kbd "<escape>") #'evil-force-normal-state)
-;; 
+;;
 ;; (add-hook 'xwidget-webkit-edit-mode-hook
 ;;           (lambda ()
 ;;             (deactivate-input-method)
