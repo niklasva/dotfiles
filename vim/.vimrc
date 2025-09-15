@@ -21,6 +21,7 @@ set nowrap
 set number
 set report=0
 set shiftwidth=4
+set shm+=I
 set shortmess+=c
 set showcmd
 set smarttab
@@ -31,9 +32,6 @@ set tabstop=4
 set undodir=~/.vimundo/
 set undofile
 set updatetime=300
-
-let base16colorspace=256
-" colorscheme base16-3024
 
 let mapleader = " "
 nnoremap <silent> <leader>ws        :call TrimWhitespace()<CR>
