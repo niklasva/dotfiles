@@ -370,9 +370,6 @@ Always move cursor to help window.
 (use-package popper
   :straight t
   :ensure t
-  :bind (:map popper-mode-map
-              ("C-<TAB>"   . popper-cycle)
-              ("C-c <TAB>"   . popper-toggle))
   :hook (prog-mode . popper-mode)
 
   :init
@@ -653,9 +650,11 @@ Don't prompt project switch action
 (global-set-key (kbd "C-c conf")   (lambda () (interactive) (find-file "~/.config/emacs/config.org")))
 (global-set-key (kbd "C-c local")  (lambda () (interactive) (find-file "~/.config/emacs/local-env.el")))
 (global-set-key (kbd "C-c ff")     'find-file)
-(global-set-key (kbd "C-c e r")    'eval-region)
+(global-set-key (kbd "C-c er")    'eval-region)
 (global-set-key (kbd "C-c elf")    'elfeed)
 (global-set-key (kbd "C-x p h")    'ff-get-other-file)
+(global-set-key (kbd "C-c no")   (lambda () (interactive) (find-file "~/org/notes.org")))
+(global-set-key (kbd "C-c rip") 'niva/consult-ripgrep-in-directory)
 
 (global-set-key (kbd "C-c c a")   (lambda () (interactive)
                                     (when (eglot-managed-p)
