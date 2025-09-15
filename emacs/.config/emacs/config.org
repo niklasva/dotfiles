@@ -2194,6 +2194,9 @@ Use org mode in scratch buffer
 (use-package vterm
   :straight t
   :defer t
+  :bind
+  (:map vterm-mode-map
+        ("C-c <escape>" . vterm-send-escape))
   :config
   (setq vterm-timer-delay nil))
 
