@@ -19,24 +19,25 @@
 ;; Don't show eldoc mode at startup
 (diminish 'eldoc-mode)
 
+(defun niva/init ()
+  (setq inhibit-message t)
+  (use-package org :straight t)
+  (use-package pinentry :straight t :config (pinentry-start))
+  (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
+  (defconst private-config-file (expand-file-name "private/config.el" user-emacs-directory))
+  (when (file-readable-p private-config-file) (load-file private-config-file))
+  (require 'time-since)
+
+  (use-package exec-path-from-shell
+    :straight t
+    :init (exec-path-from-shell-initialize))
+
+  (if niva-use-new-config
+      (org-babel-load-file (expand-file-name "new-init.el" user-emacs-directory))
+    (org-babel-load-file (expand-file-name "config.org" user-emacs-directory)))
+  (setq inhibit-message nil)
+  (run-hooks 'my-after-init-complete-hook))
+
 ;; Quiet init
-(run-with-idle-timer
- 0.01 nil
- (lambda ()
-   (setq inhibit-message t)
-   (use-package org :straight t)
-   (use-package pinentry :straight t :config (pinentry-start))
-   (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
-   (defconst private-config-file (expand-file-name "private/config.el" user-emacs-directory))
-   (when (file-readable-p private-config-file) (load-file private-config-file))
-   (require 'time-since)
-
-   (use-package exec-path-from-shell
-     :straight t
-     :init (exec-path-from-shell-initialize))
-
-   (if niva-use-new-config
-       (org-babel-load-file (expand-file-name "new-init.el" user-emacs-directory))
-     (org-babel-load-file (expand-file-name "config.org" user-emacs-directory)))
-   (setq inhibit-message nil)
-   (run-hooks 'my-after-init-complete-hook)))
+(run-with-idle-timer 0.01 nil 'niva/init)
+;; (niva/init)

@@ -38,7 +38,8 @@
         eshell-error-if-no-glob t
         eshell-glob-case-insensitive t
         eshell-hist-ignoredups t
-        eshell-history-size most-positive-fixnum
+        eshell-history-size 4096
+        eshell-input-filter (lambda (input) (not (string-match-p "\\`\\s-+" input)))
         eshell-kill-processes-on-exit t
         eshell-scroll-to-bottom-on-input 'all
         eshell-scroll-to-bottom-on-output 'all)
@@ -160,11 +161,6 @@
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 (recentf-mode 1)
-(setq history-length 9999
-      history-delete-duplicates t
-      recentf-max-saved-items 1000
-      recentf-auto-cleanup 'never
-      recentf-auto-save-timer (run-with-idle-timer 600 t 'recentf-save-list))
 
 (setq-default maximum-scroll-margin 1
               scroll-margin 0
@@ -235,11 +231,11 @@
 
 (defvar niva/gc-timer nil)
 (defun niva/do-garbage-collect ()
+  (setq gc-cons-threshold (* 1024 1024 1024))
   (message "do focus loss garbage collect")
   (garbage-collect))
 
 (defun niva/garbage-collect-on-focus-lost ()
-  (setq gc-cons-threshold (* 1024 1024 1024))
   (if (frame-focus-state)
       (when (timerp niva/gc-timer)
         (cancel-timer niva/gc-timer))
@@ -692,6 +688,7 @@ Don't prompt project switch action
   :straight t
   :defer t
   :custom
+  ;; (vundo-glyph-alist vundo-unicode-symbols)
   (vundo-window-max-height 5)
   (vundo-compact-display t))
 #+end_src
@@ -819,10 +816,12 @@ Don't prompt project switch action
 #+begin_src emacs-lisp
 (use-package consult
   :straight t
+  :ensure t
   :bind (("C-s"     . consult-line)
          ("C-M-l"   . consult-focus-lines)
          ("C-x b"   . consult-buffer)
          ("C-x 4 b" . consult-buffer-other-window)
+         ("M-s" . consult-history)
          ("M-y"     . consult-yank-pop))
   :config
   (setq consult-preview-key '(:debounce 0.5 any))
@@ -860,6 +859,8 @@ Don't prompt project switch action
             --hidden \
             --follow \
             --glob \"!.git/*\"")
+
+  (add-to-list 'consult-mode-histories '(compilation-mode compile-history))
 
   (setq consult-preview-max-count 50)
 
@@ -927,6 +928,19 @@ Don't prompt project switch action
   (add-to-list 'completion-at-point-functions #'cape-elisp-block)
   (add-to-list 'completion-at-point-functions #'cape-elisp-symbol)
   (add-to-list 'completion-at-point-functions #'cape-keyword))
+
+;; (use-package kind-icon
+;;   :straight t
+;;   :after corfu
+;;   :defer t
+;;   :config
+;;   (setq kind-icon-use-icons t
+;;         kind-icon-default-face 'corfu-default
+;;         kind-icon-blend-background nil
+;;         kind-icon-blend-frac 0.08
+;;         kind-icon-default-style '(:padding -1 :stroke 0 :margin 0 :radius 0 :height 1.0 :scale 1.0)
+;;         kind-icon-formatted 'variable)
+;;   (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
 #+end_src
 
 * File management
@@ -1127,7 +1141,7 @@ Don't prompt project switch action
 #+begin_src emacs-lisp
 (run-with-idle-timer 10 nil (lambda () (require 'eglot)))
 (use-package eglot
-  :straight (:type built-in)
+  :straight t
   :defer t
   :hook ((c-mode          . eglot-ensure)
          (c++-mode        . eglot-ensure)
@@ -1591,7 +1605,14 @@ Don't prompt project switch action
                  1 2 3
                  nil 1))
 
+  (add-to-list 'compilation-error-regexp-alist-alist
+               '(niva--compile-sil-passed
+                 ".*PASSED.*"
+                 nil nil nil
+                 0 1))
+
   (setq compilation-error-regexp-alist nil)
+  (add-to-list 'compilation-error-regexp-alist 'niva--compile-sil-passed)
   (add-to-list 'compilation-error-regexp-alist 'niva--compile-warning)
   (add-to-list 'compilation-error-regexp-alist 'niva--compile-error)
   (add-to-list 'compilation-error-regexp-alist 'niva--compile-mbed-error)
@@ -1965,6 +1986,9 @@ Use org mode in scratch buffer
 (use-package elfeed-protocol
   :straight t
   :after elfeed
+  :defer t
+  :init
+  (elfeed-protocol-enable)
   :config
   (require 'niva-elfeed-protocol)
   (setq elfeed-use-curl t
@@ -1976,7 +2000,6 @@ Use org mode in scratch buffer
         elfeed-protocol-feeds (list (list niva/elfeed-fever-url
                                           :api-url niva/elfeed-api-url
                                           :password (niva/lookup-password :host "fever"))))
-  (elfeed-protocol-enable)
 
   (unless niva-enable-evil-mode
     (define-key elfeed-search-mode-map (kbd "x") #'(lambda () (interactive) (elfeed-search-untag-all-unread) (next-line)))
@@ -2026,7 +2049,7 @@ Use org mode in scratch buffer
 
 
 ** Mastodon
-#+begin_src emacs-lisp
+#+begin_src disabled
 (use-package mastodon
   :straight (:host codeberg :repo "martianh/mastodon.el")
   :defer t
@@ -2128,6 +2151,7 @@ Use org mode in scratch buffer
 
 (use-package iscroll
   :straight t
+  :defer t
   :diminish iscroll-mode
   :hook ((text-mode elfeed-show-mode eww-mode shr-mode) . iscroll-mode)
   :config
@@ -2144,6 +2168,39 @@ Use org mode in scratch buffer
 ;;   :config
 ;;   (setq mixed-pitch-set-height t)
 ;;   (custom-set-faces '(variable-pitch ((t (:font "Arial" :height 0.9))))))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package nerd-icons
+  :straight t
+  :defer t
+  :config
+  (setq nerd-icons-color-icons t))
+
+(use-package nerd-icons-completion
+  :straight t
+  :defer t
+  :config
+  (nerd-icons-completion-mode))
+(use-package nerd-icons-corfu
+  :straight t
+  :defer t
+  :after corfu
+  :init
+  (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package vterm
+  :straight t
+  :defer t
+  :config
+  (setq vterm-timer-delay nil))
+
+(setq scroll-margin 1
+      scroll-conservatively 101
+      scroll-step 1
+      auto-window-vscroll nil)
 #+end_src
 
 * Footer
