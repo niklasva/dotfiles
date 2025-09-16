@@ -96,7 +96,6 @@
 ;; mode: emacs-lisp
 ;; outline-minor-mode: t
 ;; outline-regexp: ";;;+ "
-;; eval: (outline-hide-sublevels 1)
+;; eval: (progn (require 'outline) (outline-hide-sublevels 1))
 ;; End:
-
 ;;; -------------------------------------------------------------------------

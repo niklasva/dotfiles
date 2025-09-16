@@ -17,14 +17,16 @@
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
 (defconst private-config-file (expand-file-name "private/config.el" user-emacs-directory))
-
 (when (file-readable-p private-config-file) (load-file private-config-file))
-(let* ((org (expand-file-name "config.org" user-emacs-directory))
-       (el  (expand-file-name "config.el"  user-emacs-directory)))
-  (when (file-newer-than-file-p org el)
-    (require 'org)
-    (org-babel-tangle-file org el))
-  (load el nil 'nomessage))
+
+(load-file (expand-file-name "config-new.el"  user-emacs-directory))
+
+;; (let* ((org (expand-file-name "config.org" user-emacs-directory))
+;;        (el  (expand-file-name "config.el"  user-emacs-directory)))
+;;   (when (file-newer-than-file-p org el)
+;;     (require 'org)
+;;     (org-babel-tangle-file org el))
+;;   (load el nil 'nomessage))
 
 (setq inhibit-message nil)
 (setq inhibit-redisplay nil)
