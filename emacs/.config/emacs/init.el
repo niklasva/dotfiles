@@ -2,6 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 ;;; ----------------------------------------------------------------------------
+
 ;;; Startup --------------------------------------------------------------------
 (defvar my-after-init-complete-hook nil)
 
@@ -100,23 +101,6 @@
   (kill-buffer (current-buffer)))
 
 (advice-add 'term-handle-exit :after 'niva/term-handle-exit)
-
-;; ;; ** Log coloring
-;; ;; #+begin_src disabled
-;; ;; (defun niva/font-lock-comment-annotations ()
-;; ;;   "Colorize keywords in eshell buffers"
-;; ;;   (interactive)
-;; ;;   (font-lock-add-keywords
-;; ;;    nil
-;; ;;    '(("\\<\\(.*ERR.*\\)"                                            1 'compilation-error   t)
-;; ;;      ("\\<\\(.*INFO.*\\)"                                           1 'compilation-info    t)
-;; ;;      ("\\<\\(.*DEBUG.*\\)"                                          1 'compilation-info    t)
-;; ;;      ("\\<\\(.*WARN.*\\)"                                           1 'compilation-warning t)
-;; ;;      ("\\<\\(.*DEBUG: --- CMD: POLL(60) REPLY: ISTATR(49) ---.*\\)" 1 'completions-common-part t)
-;; ;;      ("\\<\\(.*DEBUG: --- CMD: OUT(68) REPLY: ACK(40) ---.*\\)"     1 'completions-common-part t))))
-;; ;;
-;; ;; (add-hook 'eshell-mode-hook 'niva/font-lock-comment-annotations)
-;; ;; #+end_src
 
 ;;;; Alias ---------------------------------------------------------------------
 (defalias 'ff    "for i in ${eshell-flatten-list $*} {find-file $i}")
@@ -257,9 +241,6 @@
 ;;; Customization --------------------------------------------------------------
 ;;;; Theme ---------------------------------------------------------------------
 ;;(ignore-errors (niva/update-theme-faces))
-
-;;;; Colors --------------------------------------------------------------------
-(require 'color-operations)
 
 ;;;; GUI settings --------------------------------------------------------------
 ;;;; Display time --------------------------------------------------------------
@@ -560,56 +541,6 @@
 	    which-key-allow-imprecise-window-fit t
         which-key-separator " → " )
   (which-key-mode))
-
-;; (when niva-enable-evil-mode
-;;   (nvmap :keymaps 'override :prefix "SPC"
-;;     "SPC"   '((lambda () (interactive) (niva/show-command-keys 'execute-extended-command          )) :which-key "M-x")
-;;     "B"     '((lambda () (interactive) (niva/show-command-keys 'consult-buffer-other-window       )) :which-key "consult-buffer-other-window")
-;;     "b"     '((lambda () (interactive) (niva/show-command-keys 'consult-buffer                    )) :which-key "consult-buffer")
-;;     "c C"   '((lambda () (interactive) (niva/show-command-keys 'recompile                         )) :which-key "recompile")
-;;     "c a"   '((lambda () (interactive) (niva/show-command-keys 'eglot-code-actions                )) :which-key "eglot-code-actions")
-;;     "c c"   '((lambda () (interactive) (niva/show-command-keys 'project-compile                   )) :which-key "project-compile")
-;;     "c e"   '((lambda () (interactive) (niva/show-command-keys 'consult-compile-error             )) :which-key "consult-compile-error")
-;;     "c T"   '((lambda () (interactive) (niva/show-command-keys 'niva/run-test-command             )) :which-key "niva/run-test-command")
-;;     "p d"   '((lambda () (interactive) (niva/show-command-keys 'project-dired                     )) :which-key "project-dired")
-;;     "d d"   '((lambda () (interactive) (niva/show-command-keys 'dired                             )) :which-key "dired")
-;;     "d l"   '((lambda () (interactive) (niva/show-command-keys 'devdocs-lookup                    )) :which-key "devdocs-lookup")
-;;     "d r"   '((lambda () (interactive) (niva/show-command-keys 'niva/deobfuscate-region           )) :which-key "niva/deobfuscate-region")
-;;     "d u"   '((lambda () (interactive) (niva/show-command-keys 'magit-diff-unstaged               )) :which-key "magit-diff-unstaged")
-;;     "e r"   '((lambda () (interactive) (niva/show-command-keys 'eval-region                       )) :which-key "eval-region")
-;;     "e i"   '((lambda () (interactive) (niva/show-command-keys 'eglot-inlay-hints-mode            )) :which-key "eglot-inlay-hints-mode")
-;;     "f f"   '((lambda () (interactive) (niva/show-command-keys 'find-file                         )) :which-key "find-file")
-;;     "f m"   '((lambda () (interactive) (niva/show-command-keys 'consult-flymake                   )) :which-key "consult-flymake")
-;;     "h p"   '((lambda () (interactive) (niva/show-command-keys 'ff-get-other-file                 )) :which-key "ff-get-other-file")
-;;     "h g"   '((lambda () (interactive) (niva/show-command-keys 'niva-guards                       )) :which-key "niva-guards")
-;;     "h h"   '((lambda () (interactive) (niva/show-command-keys 'consult-history                   )) :which-key "consult-history")
-;;     "i m"   '((lambda () (interactive) (niva/show-command-keys 'consult-imenu-multi               )) :which-key "consult-imenu")
-;;     "L n"   '((lambda () (interactive) (niva/show-command-keys 'global-display-line-numbers-mode  )) :which-key "global-display-line-numbers-mode")
-;;     "l n"   '((lambda () (interactive) (niva/show-command-keys 'display-line-numbers-mode         )) :which-key "display-line-numbers-mode")
-;;     "o r"   '((lambda () (interactive) (niva/show-command-keys 'niva/obfuscate-region             )) :which-key "niva/obfuscate-region")
-;;     "p e"   '((lambda () (interactive) (niva/show-command-keys 'profiler-stop                     )) :which-key "profiler-stop")
-;;     "p f"   '((lambda () (interactive) (niva/show-command-keys 'project-find-file                 )) :which-key "project-find-file")
-;;     "p p"   '((lambda () (interactive) (niva/show-command-keys 'project-switch-project            )) :which-key "project-switch-project")
-;;     "p r"   '((lambda () (interactive) (niva/show-command-keys 'profiler-report                   )) :which-key "profiler-report")
-;;     "p s"   '((lambda () (interactive) (niva/show-command-keys 'profiler-start                    )) :which-key "profiler-start")
-;;     "r o"   '((lambda () (interactive) (niva/show-command-keys 'read-only-mode                    )) :which-key "read-only-mode")
-;;     "s h"   '((lambda () (interactive) (niva/show-command-keys 'git-gutter:stage-hunk             )) :which-key "git-gutter:stage-hunk")
-;;     "t r"   '((lambda () (interactive) (niva/show-command-keys 'treemacs                          )) :which-key "treemacs")
-;;     "t t"   '((lambda () (interactive) (niva/show-command-keys 'toggle-truncate-lines             )) :which-key "Toggle truncate lines")
-;;     "w U"   '((lambda () (interactive) (niva/show-command-keys 'winner-redo                       )) :which-key "winner-redo")
-;;     "w u"   '((lambda () (interactive) (niva/show-command-keys 'winner-undo                       )) :which-key "winner-undo")
-;;     "p b"   '((lambda () (interactive) (niva/show-command-keys 'consult-project-buffer            )) :which-key "project-list-buffers")
-;;
-;;     "gpt"   '((lambda () (interactive) (niva/show-command-keys 'niva/gptel-common-buffer          )) :which-key "niva/gptel-common-buffer")
-;;     "cmd"   '((lambda () (interactive) (niva/show-command-keys 'project-async-shell-command       )) :which-key "project-async-shell-command")
-;;     "elf"   '((lambda () (interactive) (niva/show-command-keys 'elfeed                            )) :which-key "elfeed")
-;;     "eww"   '((lambda () (interactive) (niva/show-command-keys 'eww                               )) :which-key "eww")
-;;     "rec"   '((lambda () (interactive) (niva/show-command-keys 'consult-recent-file               )) :which-key "consult-recent-file")
-;;     "rip"   '((lambda () (interactive) (niva/show-command-keys 'niva/consult-ripgrep-in-directory )) :which-key "niva/consult-ripgrep-in-directory")
-;;     "cir"   '((lambda () (interactive) (niva/show-command-keys 'circe                             )) :which-key "circe")
-;;     "ir"    '((lambda () (interactive) (niva/show-command-keys 'niva/switch-irc-buffers           )) :which-key "niva/switch-irc-buffers")
-;;     "SCR"   '((lambda () (interactive) (niva/show-command-keys 'scratch-buffer                    )) :which-key "scratch-buffer")
-;;     "tsfll" '((lambda () (interactive) (niva/show-command-keys 'niva/prompt-treesit-level         )) :which-key "niva/prompt-treesit-level")))
 
 (global-set-key (kbd "C-c Ln")     'global-display-line-numbers-mode)
 (global-set-key (kbd "C-c ln")     'display-line-numbers-mode)
@@ -982,6 +913,7 @@
 ;;;;; zmq ----------------------------------------------------------------------
 (use-package zmq
   :ensure (zmq :host github :repo "nnicandro/emacs-zmq"))
+
 ;;;;; jupyter ------------------------------------------------------------------
 ;; (use-package jupyter
 ;;   :ensure (jupyter :type git :host github :repo "emacs-jupyter/jupyter")
@@ -1041,7 +973,7 @@
 
 ;;;; Language server -----------------------------------------------------------
 ;;;;; Eglot --------------------------------------------------------------------
-;; (run-with-idle-timer 10 nil (lambda () (require 'eglot)))
+(run-with-idle-timer 10 nil (lambda () (require 'eglot)))
 (use-package eglot
   :ensure nil
   :defer t
@@ -1166,12 +1098,6 @@
   (add-hook 'text-mode-hook 'flymake-mode)
 
   (global-set-key (kbd "C-c f m")   'consult-flymake))
-
-;; (use-package flymake-cursor
-;;   :ensure t
-;;   :defer t
-;;   :config
-;;   (setq-default flymake-cursor-number-of-errors-to-display 3))
 
 ;;;; Tree-sitter ---------------------------------------------------------------
 (use-package kotlin-ts-mode
@@ -1329,18 +1255,6 @@
 
   (advice-add 'ediff-quit :around #'disable-y-or-n-p))
 
-
-(defun my-replace-git-status (tstr)
-  (let* ((tstr (replace-regexp-in-string "Git" "" tstr))
-         (first-char (substring tstr 0 1))
-         (rest-chars (substring tstr 1)))
-    (cond
-     ((string= ":" first-char) ;;; Modified
-      (replace-regexp-in-string "^:" "*" tstr))
-     ((string= "-" first-char) ;; No change
-      (replace-regexp-in-string "^-" "-️" tstr))
-     (t tstr))))
-;; (advice-add #'vc-git-mode-line-string :filter-return #'my-replace-git-status)
 ;;;; Documentation -------------------------------------------------------------
 ;;;;; markdown-mode ------------------------------------------------------------
 (use-package markdown-mode
@@ -1525,16 +1439,6 @@
            "* TODO %?\ncaptured: %u")))
 
   (global-set-key (kbd "C-c o c") 'org-capture))
-;; (dolist (face '(org-level-1 org-level-2 org-level-3 org-level-4
-;;                org-level-5 org-level-6 org-level-7 org-level-8))
-;;   (set-face-attribute face nil :inherit 'unspecified :weight 'unspecified :height 1.0)))
-
-;;;; scratch -------------------------------------------------------------------
-;; Use org mode in scratch buffer
-;; ;; #+begin_src disabled
-;; ;; (with-eval-after-load 'org
-;; ;;   (setq-default initial-major-mode 'org-mode))
-;; ;; #+end_src
 
 ;;;; org-tempo -----------------------------------------------------------------
 (with-eval-after-load 'org
@@ -1562,28 +1466,6 @@
     (setq ob-async-no-async-languages-alist '("jupyter"))))
 
 ;;;; org code blocks -----------------------------------------------------------
-(with-eval-after-load 'org
-  (setq org-confirm-babel-evaluate nil)
-  (defun ek/babel-ansi ()
-    (when-let ((beg (org-babel-where-is-src-block-result nil nil)))
-      (save-excursion
-        (goto-char beg)
-        (when (looking-at org-babel-result-regexp)
-          (let ((end (org-babel-result-end))
-                (ansi-color-context-region nil))
-            (ansi-color-apply-on-region beg end))))))
-  (add-hook 'org-babel-after-execute-hook 'ek/babel-ansi))
-
-(defun narrow-to-region-indirect (start end)
-  "Restrict editing in this buffer to the current region, indirectly."
-  (interactive "r")
-  (deactivate-mark)
-  (let ((buf (clone-indirect-buffer nil nil)))
-    (with-current-buffer buf
-      (narrow-to-region start end))
-    (switch-to-buffer buf)))
-
-;; Disable < matching with (
 (defun niva/org-syntax-remove-angle-bracket-match ()
   "Disable < matching with ("
   (interactive)
@@ -1593,35 +1475,35 @@
 (add-hook 'org-mode-hook #'niva/org-syntax-remove-angle-bracket-match)
 
 ;;;; org-roam ------------------------------------------------------------------
-;; (use-package org-roam
-;;   :ensure t
-;;   :defer t
-;;   :after org
-;;   :config
-;;   (when (fboundp 'niva/setup-org-roam)
-;;     (niva/setup-org-roam))
-;;   (org-roam-db-autosync-enable)
-;;   (global-set-key (kbd "C-c z z") 'org-roam-capture)
-;;   (setq-default org-roam-ui-browser-function #'xwidget-webkit-browse-url))
+(use-package org-roam
+  :ensure t
+  :defer t
+  :after org
+  :config
+  (when (fboundp 'niva/setup-org-roam)
+    (niva/setup-org-roam))
+  (org-roam-db-autosync-enable)
+  (global-set-key (kbd "C-c z z") 'org-roam-capture)
+  (setq-default org-roam-ui-browser-function #'xwidget-webkit-browse-url))
 
 ;;;;; websocket ----------------------------------------------------------------
 
-;; (use-package websocket
-;;   :ensure t
-;;   :defer t
-;;   :after org-roam)
+(use-package websocket
+  :ensure t
+  :defer t
+  :after org-roam)
 
 ;;;;; org-roam-ui --------------------------------------------------------------
-;; (use-package org-roam-ui
-;;   :ensure t
-;;   :defer t
-;;   :after org-roam
-;;   ;; :hook (after-init . org-roam-ui-mode)
-;;   :config
-;;   (setq org-roam-ui-sync-theme t
-;;         org-roam-ui-follow t
-;;         org-roam-ui-open-on-start nil
-;;         org-roam-ui-update-on-save t))
+(use-package org-roam-ui
+  :ensure t
+  :defer t
+  :after org-roam
+  ;; :hook (after-init . org-roam-ui-mode)
+  :config
+  (setq org-roam-ui-sync-theme t
+        org-roam-ui-follow t
+        org-roam-ui-open-on-start nil
+        org-roam-ui-update-on-save t))
 
 ;;;; visual-fill-column --------------------------------------------------------
 (use-package visual-fill-column
@@ -1750,20 +1632,6 @@
   (setq-local shr-inhibit-images (not shr-inhibit-images))
   (eww-reload))
 
-;;;; webkit --------------------------------------------------------------------
-;; (setq browse-url-browser-function (lambda (url session) (other-window 1) (xwidget-webkit-browse-url url)))
-;; (setq-default xwidget-webkit-cookie-file (expand-file-name "webkit-cookies.txt" no-littering-var-directory))
-;;
-;; (use-package xwidgete :ensure t)
-;;
-;; (define-key xwidget-webkit-mode-map (kbd "<escape>") #'evil-force-normal-state)
-;; (define-key xwidget-webkit-edit-mode-map (kbd "<escape>") #'evil-force-normal-state)
-;;
-;; (add-hook 'xwidget-webkit-edit-mode-hook
-;;           (lambda ()
-;;             (deactivate-input-method)
-;;             (setq-local input-method-function nil)))
-
 ;;;; elfeed --------------------------------------------------------------------
 (use-package elfeed
   :ensure t
@@ -1882,60 +1750,6 @@
 (use-package relative-date :ensure (relative-date :host github :repo "rougier/relative-date"))
 
 
-;;;; Mastodon ------------------------------------------------------------------
-;; ;; #+begin_src disabled
-;; ;; (use-package mastodon
-;; ;;   :ensure (:host codeberg :repo "martianh/mastodon.el")
-;; ;;   :defer t
-;; ;;   :config
-;; ;;   (setq mastodon-active-user "@niklasva"
-;; ;;         mastodon-instance-url "https://social.tchncs.de"
-;; ;;         mastodon-tl--show-avatars t
-;; ;;         mastodon-tl--horiz-bar ""
-;; ;;         mastodon-tl--after-update-marker t
-;; ;;         mastodon-tl--display-media-p t
-;; ;;         mastodon-tl--no-fill-on-render t
-;; ;;         mastodon-tl--show-stats nil
-;; ;;         mastodon-tl--expand-content-warnings t
-;; ;;         mastodon-tl--timeline-posts-count "40")
-;; ;;   (custom-set-faces '(mastodon-display-name-face ((t (:inherit 'org-level-1)))))
-;; ;;
-;; ;;
-;; ;;   (defun my-mastodon-more () (interactive) (mastodon-tl--more))
-;; ;;   (add-hook 'mastodon-mode-hook (lambda ()
-;; ;;                                   (setq-local visual-fill-column-center-text nil
-;; ;;                                               visual-fill-column-fringes-outside-margins t
-;; ;;                                               visual-fill-column-extra-text-width '(-2 . 0)
-;; ;;                                               fill-column 9999
-;; ;;                                               visual-fill-column-width 60)
-;; ;;                                   (visual-fill-column-mode)))
-;; ;;   (define-key mastodon-mode-map (kbd "m")   'my-mastodon-more))
-;; ;;
-;; ;; (use-package mastodon-alt
-;; ;;   :after mastodon
-;; ;;   :defer t
-;; ;;   :ensure (:host github :repo "rougier/mastodon-alt")
-;; ;;   :config
-;; ;;   (mastodon-alt-tl-activate)
-;; ;;   (setq mastodon-alt-tl-box-width 50
-;; ;;         mastodon-media--preview-max-height 150
-;; ;;         mastodon-tl--enable-relative-timestamps t
-;; ;;         mastodon-tl--enable-relative-timestamps nil)
-;; ;;   (defun mastodon-alt-tl--toot-status (toot))
-;; ;;   (advice-add 'mastodon-tl--byline :filter-return (lambda (ret) (string-remove-suffix "\n" ret)))
-;; ;;   (advice-remove 'mastodon-tl--byline #'mastodon-alt-tl--byline)
-;; ;;   (advice-remove 'mastodon-media--process-image-response #'mastodon-alt-media--process-image-response))
-;; ;; #+end_src
-
-;;; My packages ----------------------------------------------------------------
-;; (use-package iscroll
-;;   :ensure t
-;;   :diminish iscroll-mode
-;;   :hook ((text-mode elfeed-show-mode eww-mode shr-mode) . iscroll-mode))
-;;   ;; :config
-;;   ;; (evil-define-key 'normal iscroll-mode-map (kbd "k") 'iscroll-previous-line)
-;;   ;; (evil-define-key 'normal iscroll-mode-map (kbd "j") 'iscroll-next-line))
-
 (add-hook 'emacs-lisp-mode-hook
           (lambda ()
             (when (and buffer-file-name
@@ -1944,10 +1758,10 @@
               (setq-local outline-regexp ";; \\[\\[file:"))))
 
 ;;; Other ----------------------------------------------------------------------
-;; (advice-add 'save-buffers-kill-terminal :around
-;;             (lambda (orig-fun &rest args)
-;;               (when (y-or-n-p "Really close this Emacsclient frame? ")
-;;                 (apply orig-fun args))))
+(advice-add 'save-buffers-kill-terminal :around
+            (lambda (orig-fun &rest args)
+              (when (y-or-n-p "Really close this Emacsclient frame? ")
+                (apply orig-fun args))))
 
 (use-package iscroll
   :ensure t
