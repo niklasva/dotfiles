@@ -8,6 +8,11 @@
 ;; (setq initial-major-mode 'fundamental-mode)
 (advice-add #'display-startup-echo-area-message :override #'ignore)
 (advice-add #'display-startup-screen            :override #'ignore)
+
+(add-to-list 'safe-local-eval-forms      '(outline-minor-mode))
+(add-to-list 'safe-local-eval-forms      '(outline-hide-sublevels 1))
+(add-to-list 'safe-local-variable-values '(outline-minor-mode . t))
+(add-to-list 'safe-local-variable-values '(outline-regexp . ";;;+ "))
 #+end_src
 
 * Eshell

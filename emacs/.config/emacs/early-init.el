@@ -1,6 +1,7 @@
 ;;; early-init.el --- -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
+;;; -------------------------------------------------------------------------
 
 ;;; Startup/window behavior -------------------------------------------------
 (setq frame-inhibit-implied-resize nil
@@ -89,3 +90,13 @@
 
 ;;; Bootstrap straight.el ---------------------------------------------------
 (load (expand-file-name "lisp/init-elpaca.el" user-emacs-directory))
+
+;;; Local variables ---------------------------------------------------------
+;; Local Variables:
+;; mode: emacs-lisp
+;; outline-minor-mode: t
+;; outline-regexp: ";;;+ "
+;; eval: (outline-hide-sublevels 1)
+;; End:
+
+;;; -------------------------------------------------------------------------
