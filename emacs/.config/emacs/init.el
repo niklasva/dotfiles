@@ -21,17 +21,11 @@
 (defconst private-config-file (expand-file-name "private/config.el" user-emacs-directory))
 (when (file-readable-p private-config-file) (load-file private-config-file))
 
-
 (run-hooks 'my-after-init-complete-hook)
 
 (advice-add #'display-startup-echo-area-message :override #'ignore)
 (advice-add #'display-startup-screen            :override #'ignore)
 
-(add-to-list 'safe-local-eval-forms      '(outline-minor-mode))
-(add-to-list 'safe-local-eval-forms      '(outline-hide-sublevels 1))
-(add-to-list 'safe-local-variable-values '(outline-minor-mode . t))
-(add-to-list 'safe-local-variable-values '(outline-regexp . ";;;+ "))
-(add-to-list 'safe-local-variable-values '(eval progn (require 'outline) (outline-hide-sublevels 1)))
 
 ;;; Defaults -------------------------------------------------------------------
 ;;;; Defaults ------------------------------------------------------------------
@@ -514,7 +508,7 @@
 (global-set-key (kbd "C-c ln")     'display-line-numbers-mode)
 (global-set-key (kbd "C-c early")  (lambda () (interactive) (find-file "~/.config/emacs/early-init.el")))
 (global-set-key (kbd "C-c scr")    (lambda () (interactive) (find-file "~/dev/stuff/persist-scratch.org")))
-(global-set-key (kbd "C-c conf")   (lambda () (interactive) (find-file "~/.config/emacs/config.org")))
+(global-set-key (kbd "C-c conf")   (lambda () (interactive) (find-file "~/.config/emacs/init.el")))
 (global-set-key (kbd "C-c local")  (lambda () (interactive) (find-file "~/.config/emacs/local-env.el")))
 (global-set-key (kbd "C-c ff")     'find-file)
 (global-set-key (kbd "C-c er")    'eval-region)
@@ -827,7 +821,14 @@
   "Kill buffer on quit"
   (kill-buffer (current-buffer)))
 
+(defun niva/vterm-handle-exit (process event)
+  "Kill vterm buffer after PROCESS exits with EVENT."
+  (let ((buffer (process-buffer process)))
+    (when (buffer-live-p buffer)
+      (kill-buffer buffer))))
+
 (advice-add 'term-handle-exit :after 'niva/term-handle-exit)
+(add-hook 'vterm-exit-functions #'niva/vterm-handle-exit)
 
 ;;;; Alias ---------------------------------------------------------------------
 (defalias 'ff    "for i in ${eshell-flatten-list $*} {find-file $i}")
@@ -1822,6 +1823,13 @@
 (setq inhibit-redisplay nil)
 
 ;;; Local variables ------------------------------------------------------------
+
+(add-to-list 'safe-local-eval-forms      '(outline-minor-mode))
+(add-to-list 'safe-local-eval-forms      '(outline-hide-sublevels 1))
+(add-to-list 'safe-local-variable-values '(outline-minor-mode . t))
+(add-to-list 'safe-local-variable-values '(outline-regexp . ";;;+ "))
+(add-to-list 'safe-local-variable-values '(eval progn (require 'outline) (outline-hide-sublevels 1)))
+
 ;; Local Variables:
 ;; mode: emacs-lisp
 ;; outline-minor-mode: t
@@ -1829,3 +1837,4 @@
 ;; eval: (progn (require 'outline) (outline-hide-sublevels 1))
 ;; End:
 ;;; ----------------------------------------------------------------------------
+;;; init.el ends here

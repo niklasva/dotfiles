@@ -20,7 +20,7 @@
     (left-fringe             . 1)
     (right-fringe            . 1)
     (vertical-scroll-bars    . nil)
-    (tool-bar-lines          . 1)
+    (tool-bar-lines          . 0)
     (undecorated             . nil)
     (visible                 . nil)
     (ns-appearance           . 'dark)
@@ -100,3 +100,4 @@
 ;; eval: (progn (require 'outline) (outline-hide-sublevels 1))
 ;; End:
 ;;; -------------------------------------------------------------------------
+;;; early-init.el ends here
