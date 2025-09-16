@@ -11,8 +11,8 @@
 
 ;;; Kaolin Themes
 (use-package kaolin-themes
-  :straight (:host github :repo "ogdenwebb/emacs-kaolin-themes")
-  :defer t
+  :ensure (:host github :repo "ogdenwebb/emacs-kaolin-themes")
+  :defer nil
   :config
   (setq kaolin-themes-bold t
         kaolin-themes-comments-style 'contrast
@@ -24,7 +24,7 @@
 
 ;;; Doom Themes
 (use-package doom-themes
-  :straight t
+  :ensure t
   :defer t
   :custom
   (doom-themes-org-config)
@@ -39,38 +39,36 @@
 
 ;;; Other theme packages
 (use-package acme-theme
-  :straight t
+  :ensure t
   :defer t
   :config
   (setq-default acme-theme-black-fg t))
 
-(use-package ef-themes          :straight (:host github :repo "protesilaos/ef-themes")                :defer t)
-(use-package orangey-bits-theme :straight (:host github :repo "emacsfodder/emacs-theme-orangey-bits") :defer t)
-(use-package cyanometric-theme  :straight (:host github :repo "emacsfodder/emacs-theme-cyanometric")  :defer t)
-(use-package vegetative-theme   :straight (:host github :repo "emacsfodder/emacs-theme-vegetative")   :defer t)
-(use-package dark-krystal-theme :straight (:host github :repo "emacsfodder/emacs-dark-krystal-theme") :defer t)
-(use-package doric-themes       :straight (:host github :repo "protesilaos/doric-themes")             :defer t)
-(use-package os1-theme          :straight (:host github :repo "sashimacs/os1-theme")                  :defer t)
-(use-package south              :straight (:host github :repo "sophiebosio/south")                    :defer t)
-(use-package mruber-darker      :straight (:host github :repo "monteiroliveira/mruber-darker-theme")  :defer t)
-(use-package colorless-themes   :straight (:host github :repo "lthms/colorless-themes.el"             :files ("colorless-themes.el" "*.el")))
+(use-package ef-themes          :ensure (:host github :repo "protesilaos/ef-themes")                :defer nil)
+(use-package orangey-bits-theme :ensure (:host github :repo "emacsfodder/emacs-theme-orangey-bits") :defer nil)
+(use-package cyanometric-theme  :ensure (:host github :repo "emacsfodder/emacs-theme-cyanometric")  :defer nil)
+(use-package vegetative-theme   :ensure (:host github :repo "emacsfodder/emacs-theme-vegetative")   :defer nil)
+(use-package dark-krystal-theme :ensure (:host github :repo "emacsfodder/emacs-dark-krystal-theme") :defer nil)
+(use-package doric-themes       :ensure (:host github :repo "protesilaos/doric-themes")             :defer nil)
+(use-package os1-theme          :ensure (:host github :repo "sashimacs/os1-theme")                  :defer nil)
+(use-package colorless-themes   :ensure (:host github :repo "lthms/colorless-themes.el"             :files ("colorless-themes.el" "*.el")))
 
-(use-package alect-themes          :straight t :defer t)
-(use-package almost-mono-themes    :straight t :defer t)
-(use-package basic-theme           :straight t :defer t)
-(use-package chocolate-theme       :straight t :defer t)
-(use-package color-theme-modern    :straight t :defer t)
-(use-package goose-theme           :straight t :defer t)
-(use-package moe-theme             :straight t :defer t)
-(use-package naysayer-theme        :straight t :defer t)
-(use-package paper-theme           :straight t :defer t)
-(use-package parchment-theme       :straight t :defer t)
-(use-package professional-theme    :straight t :defer t)
-(use-package standard-themes       :straight t :defer t)
-(use-package tomorrow-night-deepblue-theme :straight t :defer t)
+(use-package alect-themes          :ensure t :defer t)
+(use-package almost-mono-themes    :ensure t :defer t)
+(use-package basic-theme           :ensure t :defer t)
+(use-package chocolate-theme       :ensure t :defer t)
+(use-package color-theme-modern    :ensure t :defer t)
+(use-package goose-theme           :ensure t :defer t)
+(use-package moe-theme             :ensure t :defer t)
+(use-package naysayer-theme        :ensure t :defer t)
+(use-package paper-theme           :ensure t :defer t)
+(use-package parchment-theme       :ensure t :defer t)
+(use-package professional-theme    :ensure t :defer t)
+(use-package standard-themes       :ensure t :defer t)
+(use-package tomorrow-night-deepblue-theme :ensure t :defer t)
 
 (use-package solarized-theme
-  :straight t
+  :ensure t
   :defer t
   :custom
   (solarized-scale-org-headlines nil)
@@ -81,7 +79,7 @@
   (solarized-high-contrast-mode-line nil))
 
 (use-package lambda-themes
-  :straight (:host github :repo "lambda-emacs/lambda-themes")
+  :ensure (:host github :repo "lambda-emacs/lambda-themes")
   :defer t
   :config
   (setq-default lambda-themes-set-italic-comments t)
@@ -89,7 +87,7 @@
   (setq-default lambda-themes-set-variable-pitch t))
 
 (use-package modus-themes
-  :straight t
+  :ensure t
   :defer t
   :config
   (setq modus-themes-bold-constructs nil
@@ -222,7 +220,7 @@
     (niva/diff-hl-fix)))
 
 (use-package nano-theme
-  :straight t
+  :ensure t
   :defer t
   :config
   (setq-default nano-fonts-use nil))
@@ -244,4 +242,5 @@
 (with-eval-after-load 'dired
   (custom-set-faces '(dired-directory ((t (:inherit link :underline nil))))))
 
+(provide 'theme-packages)
 ;;; theme-packages.el ends here

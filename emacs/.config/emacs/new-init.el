@@ -14,14 +14,14 @@
 (use-package gptel
   :diminish gptel-mode
   :defer t
-  :straight (gptel :host github :repo "karthink/gptel" branch "master")
+  :ensure (gptel :host github :repo "karthink/gptel" branch "master")
   :config
   (setq gptel-default-mode #'org-mode
         gptel-prompt-prefix-alist '((org-mode . "> "))))
 
-(use-package exec-path-from-shell :straight t :init (exec-path-from-shell-initialize))
-(use-package consult :straight t :bind (("C-x b" . consult-buffer)))
-(use-package orderless :straight t)
+(use-package exec-path-from-shell :ensure t :init (exec-path-from-shell-initialize))
+(use-package consult :ensure t :bind (("C-x b" . consult-buffer)))
+(use-package orderless :ensure t)
 
 (global-completion-preview-mode)
 (setq completion-styles '(orderless basic)

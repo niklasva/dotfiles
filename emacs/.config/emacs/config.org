@@ -5,7 +5,7 @@
 
 #+begin_src emacs-lisp  :comments no
 ;;; -*- lexical-binding: t; -*-
-(setq initial-major-mode 'fundamental-mode)
+;; (setq initial-major-mode 'fundamental-mode)
 (advice-add #'display-startup-echo-area-message :override #'ignore)
 (advice-add #'display-startup-screen            :override #'ignore)
 #+end_src
@@ -14,9 +14,7 @@
 ** eshell
 #+begin_src emacs-lisp
 (use-package eshell
-  :straight (:type built-in)
-  :demand t
-  :defer t
+  :ensure nil
   :defines eshell-prompt-function
   :config
   (defalias 'ff 'find-file)
@@ -70,7 +68,7 @@
 #+begin_src emacs-lisp
 (use-package eshell-syntax-highlighting
   :defer t
-  :straight t
+  :ensure t
   :hook (eshell-mode . eshell-syntax-highlighting-mode))
 #+end_src
 
@@ -83,22 +81,22 @@
 (advice-add 'term-handle-exit :after 'niva/term-handle-exit)
 #+end_src
 
-** Log coloring
-#+begin_src disabled
-(defun niva/font-lock-comment-annotations ()
-  "Colorize keywords in eshell buffers"
-  (interactive)
-  (font-lock-add-keywords
-   nil
-   '(("\\<\\(.*ERR.*\\)"                                            1 'compilation-error   t)
-     ("\\<\\(.*INFO.*\\)"                                           1 'compilation-info    t)
-     ("\\<\\(.*DEBUG.*\\)"                                          1 'compilation-info    t)
-     ("\\<\\(.*WARN.*\\)"                                           1 'compilation-warning t)
-     ("\\<\\(.*DEBUG: --- CMD: POLL(60) REPLY: ISTATR(49) ---.*\\)" 1 'completions-common-part t)
-     ("\\<\\(.*DEBUG: --- CMD: OUT(68) REPLY: ACK(40) ---.*\\)"     1 'completions-common-part t))))
-
-(add-hook 'eshell-mode-hook 'niva/font-lock-comment-annotations)
-#+end_src
+;; ** Log coloring
+;; #+begin_src disabled
+;; (defun niva/font-lock-comment-annotations ()
+;;   "Colorize keywords in eshell buffers"
+;;   (interactive)
+;;   (font-lock-add-keywords
+;;    nil
+;;    '(("\\<\\(.*ERR.*\\)"                                            1 'compilation-error   t)
+;;      ("\\<\\(.*INFO.*\\)"                                           1 'compilation-info    t)
+;;      ("\\<\\(.*DEBUG.*\\)"                                          1 'compilation-info    t)
+;;      ("\\<\\(.*WARN.*\\)"                                           1 'compilation-warning t)
+;;      ("\\<\\(.*DEBUG: --- CMD: POLL(60) REPLY: ISTATR(49) ---.*\\)" 1 'completions-common-part t)
+;;      ("\\<\\(.*DEBUG: --- CMD: OUT(68) REPLY: ACK(40) ---.*\\)"     1 'completions-common-part t))))
+;;
+;; (add-hook 'eshell-mode-hook 'niva/font-lock-comment-annotations)
+;; #+end_src
 
 ** Alias
 #+begin_src emacs-lisp
@@ -115,7 +113,7 @@
 (setq-default c-basic-offset 4
               c-default-style "user"
               display-line-numbers-width 4
-              confirm-kill-emacs 'y-or-n-p
+              ;; confirm-kill-emacs 'y-or-n-p
               ring-bell-function 'ignore
               column-number-mode nil)
 
@@ -161,6 +159,11 @@
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 (recentf-mode 1)
+(setq history-length 9999
+      history-delete-duplicates t
+      recentf-max-saved-items 1000
+      recentf-auto-cleanup 'never
+      recentf-auto-save-timer (run-with-idle-timer 600 t 'recentf-save-list))
 
 (setq-default maximum-scroll-margin 1
               scroll-margin 0
@@ -171,10 +174,6 @@
 
 (global-visual-line-mode t)
 (global-hl-line-mode -1)
-
-(setq blink-cursor-interval 0.6)
-(setq blink-cursor-blinks 0)
-(blink-cursor-mode 1)
 (setq fringes-outside-margins t)
 
 (setq-default left-fringe-width 8
@@ -184,6 +183,10 @@
 
 (setq pp-use-max-width t)
 (setq pp-max-width 120)
+
+(add-hook 'emacs-lisp-mode-hook
+          (lambda ()
+            (add-hook 'before-save-hook #'indent-region nil t)))
 
 (save-place-mode +1)
 #+end_src
@@ -201,12 +204,12 @@
 
 #+begin_src emacs-lisp
 (use-package ultra-scroll
-  :straight (ultra-scroll :type git :host github :repo "jdtsmith/ultra-scroll")
+  :ensure (ultra-scroll :type git :host github :repo "jdtsmith/ultra-scroll")
   :config
   (ultra-scroll-mode))
 
 (use-package simpleclip
-  :straight t
+  :ensure t
   :config
   (setq interprogram-cut-function 'simpleclip-set-contents
         interprogram-paste-function 'simpleclip-get-contents)
@@ -246,7 +249,7 @@
 * Customization
 ** Theme
 #+begin_src emacs-lisp
-(ignore-errors (niva/update-theme-faces))
+;;(ignore-errors (niva/update-theme-faces))
 #+end_src
 
 ** Colors
@@ -284,7 +287,7 @@
 ** solaire-mode
 #+begin_src emacs-lisp
 (use-package solaire-mode
-  :straight t
+  :ensure t
   :config
   (defun solaire-mode-real-buffer-custom-p ()
     (cond ((string= (buffer-name (buffer-base-buffer)) "*scratch*") t)
@@ -315,7 +318,7 @@ Always move cursor to help window.
 ** tab-bar-echo-area
 #+begin_src emacs-lisp
 (use-package tab-bar-echo-area
-  :straight t
+  :ensure t
   :custom
   (tab-bar-show nil)
   :config
@@ -364,11 +367,10 @@ Always move cursor to help window.
 ** Popper
 #+begin_src emacs-lisp
 (use-package popper
-  :straight t
   :ensure t
+  :defer t
   :hook (prog-mode . popper-mode)
-
-  :init
+  :config
   (setq popper-reference-buffers
         '("Output\\*$" "\\*Pp Eval Output\\*$"
           "\\*Compile-Log\\*"
@@ -379,7 +381,6 @@ Always move cursor to help window.
           ;; "\\*gptel\\*$" gptel-mode
           ))
 
-  :config
   (popper-echo-mode +1)
   (popper-mode +1)
 
@@ -402,7 +403,7 @@ Always move cursor to help window.
 (global-set-key (kbd "<escape>") nil)
 (when niva-enable-evil-mode
   (use-package evil
-    :straight t
+    :ensure t
     :custom
     (evil-want-integration t)
     (evil-want-keybinding nil)
@@ -414,8 +415,10 @@ Always move cursor to help window.
     (evil-respect-visual-line-mode t)
     (evil-mode-line-format nil)
     (evil-search-module 'evil-search)
-    :init
-    (evil-mode))
+    :config
+    (add-hook 'emacs-startup-hook
+          (lambda ()
+            (run-with-idle-timer 0.2 nil (lambda () (evil-mode 1))))))
 
   (with-eval-after-load 'evil-maps
     (define-key evil-motion-state-map (kbd "RET") nil)))
@@ -425,47 +428,44 @@ Always move cursor to help window.
 #+begin_src emacs-lisp
 (when niva-enable-evil-mode
   (use-package general
-    :straight t
+    :ensure t
+    :defer t
     :config (general-evil-setup t)))
 #+end_src
 
 *** Evil collection
 #+begin_src emacs-lisp
-(when niva-enable-evil-mode
-  (use-package evil-collection
-    :after evil
-    :straight t
-    :diminish evil-collection-unimpaired-mode
-    :delight
-    :custom
-    (evil-collection-setup-minibuffer t)
-    :config
-    (setq evil-collection-mode-list
-      (remove 'xwidgets evil-collection-mode-list))
-    (evil-collection-init)
-    (evil-set-initial-state 'dired-mode 'normal)))
+;; (when niva-enable-evil-mode
+;;   (use-package evil-collection
+;;     :ensure t
+;;     :diminish evil-collection-unimpaired-mode
+;;     :delight
+;;     :custom
+;;     (evil-collection-setup-minibuffer t)
+;;     :config
+;;     (setq evil-collection-mode-list
+;;       (remove 'xwidgets evil-collection-mode-list))
+;;       (run-with-idle-timer 0.1 nil (lambda () (
+;;     (evil-collection-init 1)
+;;     (evil-set-initial-state 'dired-mode 'normal))))))
 #+end_src
 
 ** savehist
 #+begin_src emacs-lisp
 (use-package savehist
-  :straight t
-  :init
+  :ensure nil
+  :config
   (savehist-mode))
 #+end_src
 
 ** Window management
 *** transpose-frame
 #+begin_src emacs-lisp
-(use-package transpose-frame :straight t)
+(use-package transpose-frame :ensure t)
 #+end_src
 
 ** Keybindings
 *** -
-
-#+begin_src emacs-lisp
-(use-package bind-key :straight t)
-#+end_src
 
 #+begin_src emacs-lisp
 (global-set-key                    (kbd "C-j")  nil)
@@ -569,10 +569,9 @@ Don't prompt project switch action
         (message "%s → %s" command pretty)
       (message "%s is not bound to any *key* (only menu-bar or none)" command))))
 
-(niva/show-command-keys 'consult-buffer)
-
 (use-package which-key
-  :straight t
+  :ensure t
+  :demand t
   :diminish
   :config
   (setq which-key-side-window-location 'bottom
@@ -589,55 +588,55 @@ Don't prompt project switch action
         which-key-separator " → " )
   (which-key-mode))
 
-(when niva-enable-evil-mode
-  (nvmap :keymaps 'override :prefix "SPC"
-    "SPC"   '((lambda () (interactive) (niva/show-command-keys 'execute-extended-command          )) :which-key "M-x")
-    "B"     '((lambda () (interactive) (niva/show-command-keys 'consult-buffer-other-window       )) :which-key "consult-buffer-other-window")
-    "b"     '((lambda () (interactive) (niva/show-command-keys 'consult-buffer                    )) :which-key "consult-buffer")
-    "c C"   '((lambda () (interactive) (niva/show-command-keys 'recompile                         )) :which-key "recompile")
-    "c a"   '((lambda () (interactive) (niva/show-command-keys 'eglot-code-actions                )) :which-key "eglot-code-actions")
-    "c c"   '((lambda () (interactive) (niva/show-command-keys 'project-compile                   )) :which-key "project-compile")
-    "c e"   '((lambda () (interactive) (niva/show-command-keys 'consult-compile-error             )) :which-key "consult-compile-error")
-    "c T"   '((lambda () (interactive) (niva/show-command-keys 'niva/run-test-command             )) :which-key "niva/run-test-command")
-    "p d"   '((lambda () (interactive) (niva/show-command-keys 'project-dired                     )) :which-key "project-dired")
-    "d d"   '((lambda () (interactive) (niva/show-command-keys 'dired                             )) :which-key "dired")
-    "d l"   '((lambda () (interactive) (niva/show-command-keys 'devdocs-lookup                    )) :which-key "devdocs-lookup")
-    "d r"   '((lambda () (interactive) (niva/show-command-keys 'niva/deobfuscate-region           )) :which-key "niva/deobfuscate-region")
-    "d u"   '((lambda () (interactive) (niva/show-command-keys 'magit-diff-unstaged               )) :which-key "magit-diff-unstaged")
-    "e r"   '((lambda () (interactive) (niva/show-command-keys 'eval-region                       )) :which-key "eval-region")
-    "e i"   '((lambda () (interactive) (niva/show-command-keys 'eglot-inlay-hints-mode            )) :which-key "eglot-inlay-hints-mode")
-    "f f"   '((lambda () (interactive) (niva/show-command-keys 'find-file                         )) :which-key "find-file")
-    "f m"   '((lambda () (interactive) (niva/show-command-keys 'consult-flymake                   )) :which-key "consult-flymake")
-    "h p"   '((lambda () (interactive) (niva/show-command-keys 'ff-get-other-file                 )) :which-key "ff-get-other-file")
-    "h g"   '((lambda () (interactive) (niva/show-command-keys 'niva-guards                       )) :which-key "niva-guards")
-    "h h"   '((lambda () (interactive) (niva/show-command-keys 'consult-history                   )) :which-key "consult-history")
-    "i m"   '((lambda () (interactive) (niva/show-command-keys 'consult-imenu-multi               )) :which-key "consult-imenu")
-    "L n"   '((lambda () (interactive) (niva/show-command-keys 'global-display-line-numbers-mode  )) :which-key "global-display-line-numbers-mode")
-    "l n"   '((lambda () (interactive) (niva/show-command-keys 'display-line-numbers-mode         )) :which-key "display-line-numbers-mode")
-    "o r"   '((lambda () (interactive) (niva/show-command-keys 'niva/obfuscate-region             )) :which-key "niva/obfuscate-region")
-    "p e"   '((lambda () (interactive) (niva/show-command-keys 'profiler-stop                     )) :which-key "profiler-stop")
-    "p f"   '((lambda () (interactive) (niva/show-command-keys 'project-find-file                 )) :which-key "project-find-file")
-    "p p"   '((lambda () (interactive) (niva/show-command-keys 'project-switch-project            )) :which-key "project-switch-project")
-    "p r"   '((lambda () (interactive) (niva/show-command-keys 'profiler-report                   )) :which-key "profiler-report")
-    "p s"   '((lambda () (interactive) (niva/show-command-keys 'profiler-start                    )) :which-key "profiler-start")
-    "r o"   '((lambda () (interactive) (niva/show-command-keys 'read-only-mode                    )) :which-key "read-only-mode")
-    "s h"   '((lambda () (interactive) (niva/show-command-keys 'git-gutter:stage-hunk             )) :which-key "git-gutter:stage-hunk")
-    "t r"   '((lambda () (interactive) (niva/show-command-keys 'treemacs                          )) :which-key "treemacs")
-    "t t"   '((lambda () (interactive) (niva/show-command-keys 'toggle-truncate-lines             )) :which-key "Toggle truncate lines")
-    "w U"   '((lambda () (interactive) (niva/show-command-keys 'winner-redo                       )) :which-key "winner-redo")
-    "w u"   '((lambda () (interactive) (niva/show-command-keys 'winner-undo                       )) :which-key "winner-undo")
-    "p b"   '((lambda () (interactive) (niva/show-command-keys 'consult-project-buffer            )) :which-key "project-list-buffers")
-
-    "gpt"   '((lambda () (interactive) (niva/show-command-keys 'niva/gptel-common-buffer          )) :which-key "niva/gptel-common-buffer")
-    "cmd"   '((lambda () (interactive) (niva/show-command-keys 'project-async-shell-command       )) :which-key "project-async-shell-command")
-    "elf"   '((lambda () (interactive) (niva/show-command-keys 'elfeed                            )) :which-key "elfeed")
-    "eww"   '((lambda () (interactive) (niva/show-command-keys 'eww                               )) :which-key "eww")
-    "rec"   '((lambda () (interactive) (niva/show-command-keys 'consult-recent-file               )) :which-key "consult-recent-file")
-    "rip"   '((lambda () (interactive) (niva/show-command-keys 'niva/consult-ripgrep-in-directory )) :which-key "niva/consult-ripgrep-in-directory")
-    "cir"   '((lambda () (interactive) (niva/show-command-keys 'circe                             )) :which-key "circe")
-    "ir"    '((lambda () (interactive) (niva/show-command-keys 'niva/switch-irc-buffers           )) :which-key "niva/switch-irc-buffers")
-    "SCR"   '((lambda () (interactive) (niva/show-command-keys 'scratch-buffer                    )) :which-key "scratch-buffer")
-    "tsfll" '((lambda () (interactive) (niva/show-command-keys 'niva/prompt-treesit-level         )) :which-key "niva/prompt-treesit-level")))
+;; (when niva-enable-evil-mode
+;;   (nvmap :keymaps 'override :prefix "SPC"
+;;     "SPC"   '((lambda () (interactive) (niva/show-command-keys 'execute-extended-command          )) :which-key "M-x")
+;;     "B"     '((lambda () (interactive) (niva/show-command-keys 'consult-buffer-other-window       )) :which-key "consult-buffer-other-window")
+;;     "b"     '((lambda () (interactive) (niva/show-command-keys 'consult-buffer                    )) :which-key "consult-buffer")
+;;     "c C"   '((lambda () (interactive) (niva/show-command-keys 'recompile                         )) :which-key "recompile")
+;;     "c a"   '((lambda () (interactive) (niva/show-command-keys 'eglot-code-actions                )) :which-key "eglot-code-actions")
+;;     "c c"   '((lambda () (interactive) (niva/show-command-keys 'project-compile                   )) :which-key "project-compile")
+;;     "c e"   '((lambda () (interactive) (niva/show-command-keys 'consult-compile-error             )) :which-key "consult-compile-error")
+;;     "c T"   '((lambda () (interactive) (niva/show-command-keys 'niva/run-test-command             )) :which-key "niva/run-test-command")
+;;     "p d"   '((lambda () (interactive) (niva/show-command-keys 'project-dired                     )) :which-key "project-dired")
+;;     "d d"   '((lambda () (interactive) (niva/show-command-keys 'dired                             )) :which-key "dired")
+;;     "d l"   '((lambda () (interactive) (niva/show-command-keys 'devdocs-lookup                    )) :which-key "devdocs-lookup")
+;;     "d r"   '((lambda () (interactive) (niva/show-command-keys 'niva/deobfuscate-region           )) :which-key "niva/deobfuscate-region")
+;;     "d u"   '((lambda () (interactive) (niva/show-command-keys 'magit-diff-unstaged               )) :which-key "magit-diff-unstaged")
+;;     "e r"   '((lambda () (interactive) (niva/show-command-keys 'eval-region                       )) :which-key "eval-region")
+;;     "e i"   '((lambda () (interactive) (niva/show-command-keys 'eglot-inlay-hints-mode            )) :which-key "eglot-inlay-hints-mode")
+;;     "f f"   '((lambda () (interactive) (niva/show-command-keys 'find-file                         )) :which-key "find-file")
+;;     "f m"   '((lambda () (interactive) (niva/show-command-keys 'consult-flymake                   )) :which-key "consult-flymake")
+;;     "h p"   '((lambda () (interactive) (niva/show-command-keys 'ff-get-other-file                 )) :which-key "ff-get-other-file")
+;;     "h g"   '((lambda () (interactive) (niva/show-command-keys 'niva-guards                       )) :which-key "niva-guards")
+;;     "h h"   '((lambda () (interactive) (niva/show-command-keys 'consult-history                   )) :which-key "consult-history")
+;;     "i m"   '((lambda () (interactive) (niva/show-command-keys 'consult-imenu-multi               )) :which-key "consult-imenu")
+;;     "L n"   '((lambda () (interactive) (niva/show-command-keys 'global-display-line-numbers-mode  )) :which-key "global-display-line-numbers-mode")
+;;     "l n"   '((lambda () (interactive) (niva/show-command-keys 'display-line-numbers-mode         )) :which-key "display-line-numbers-mode")
+;;     "o r"   '((lambda () (interactive) (niva/show-command-keys 'niva/obfuscate-region             )) :which-key "niva/obfuscate-region")
+;;     "p e"   '((lambda () (interactive) (niva/show-command-keys 'profiler-stop                     )) :which-key "profiler-stop")
+;;     "p f"   '((lambda () (interactive) (niva/show-command-keys 'project-find-file                 )) :which-key "project-find-file")
+;;     "p p"   '((lambda () (interactive) (niva/show-command-keys 'project-switch-project            )) :which-key "project-switch-project")
+;;     "p r"   '((lambda () (interactive) (niva/show-command-keys 'profiler-report                   )) :which-key "profiler-report")
+;;     "p s"   '((lambda () (interactive) (niva/show-command-keys 'profiler-start                    )) :which-key "profiler-start")
+;;     "r o"   '((lambda () (interactive) (niva/show-command-keys 'read-only-mode                    )) :which-key "read-only-mode")
+;;     "s h"   '((lambda () (interactive) (niva/show-command-keys 'git-gutter:stage-hunk             )) :which-key "git-gutter:stage-hunk")
+;;     "t r"   '((lambda () (interactive) (niva/show-command-keys 'treemacs                          )) :which-key "treemacs")
+;;     "t t"   '((lambda () (interactive) (niva/show-command-keys 'toggle-truncate-lines             )) :which-key "Toggle truncate lines")
+;;     "w U"   '((lambda () (interactive) (niva/show-command-keys 'winner-redo                       )) :which-key "winner-redo")
+;;     "w u"   '((lambda () (interactive) (niva/show-command-keys 'winner-undo                       )) :which-key "winner-undo")
+;;     "p b"   '((lambda () (interactive) (niva/show-command-keys 'consult-project-buffer            )) :which-key "project-list-buffers")
+;;
+;;     "gpt"   '((lambda () (interactive) (niva/show-command-keys 'niva/gptel-common-buffer          )) :which-key "niva/gptel-common-buffer")
+;;     "cmd"   '((lambda () (interactive) (niva/show-command-keys 'project-async-shell-command       )) :which-key "project-async-shell-command")
+;;     "elf"   '((lambda () (interactive) (niva/show-command-keys 'elfeed                            )) :which-key "elfeed")
+;;     "eww"   '((lambda () (interactive) (niva/show-command-keys 'eww                               )) :which-key "eww")
+;;     "rec"   '((lambda () (interactive) (niva/show-command-keys 'consult-recent-file               )) :which-key "consult-recent-file")
+;;     "rip"   '((lambda () (interactive) (niva/show-command-keys 'niva/consult-ripgrep-in-directory )) :which-key "niva/consult-ripgrep-in-directory")
+;;     "cir"   '((lambda () (interactive) (niva/show-command-keys 'circe                             )) :which-key "circe")
+;;     "ir"    '((lambda () (interactive) (niva/show-command-keys 'niva/switch-irc-buffers           )) :which-key "niva/switch-irc-buffers")
+;;     "SCR"   '((lambda () (interactive) (niva/show-command-keys 'scratch-buffer                    )) :which-key "scratch-buffer")
+;;     "tsfll" '((lambda () (interactive) (niva/show-command-keys 'niva/prompt-treesit-level         )) :which-key "niva/prompt-treesit-level")))
 
 (global-set-key (kbd "C-c Ln")     'global-display-line-numbers-mode)
 (global-set-key (kbd "C-c ln")     'display-line-numbers-mode)
@@ -661,7 +660,7 @@ Don't prompt project switch action
 *** undo-fu
 #+begin_src emacs-lisp
 (use-package undo-fu
-  :straight t
+  :ensure t
   :custom
   (undo-fu-allow-undo-in-region t)
   :config
@@ -675,7 +674,7 @@ Don't prompt project switch action
 *** undo-fu-session
 #+begin_src emacs-lisp
 (use-package undo-fu-session
-  :straight t
+  :ensure t
   :custom
   (undo-fu-session-incompatible-files '(".cache/*" "/COMMIT_EDITMSG\\'" "/git-rebase-todo\\'"))
   :config
@@ -685,7 +684,7 @@ Don't prompt project switch action
 *** vundo
 #+begin_src emacs-lisp
 (use-package vundo
-  :straight t
+  :ensure t
   :defer t
   :custom
   ;; (vundo-glyph-alist vundo-unicode-symbols)
@@ -695,14 +694,14 @@ Don't prompt project switch action
 
 ** buffer-move
 #+begin_src emacs-lisp
-(use-package buffer-move :straight t)
+(use-package buffer-move :ensure t)
 #+end_src
 
 ** Hydra
 
 #+begin_src emacs-lisp
 (use-package hydra
-  :straight t
+  :ensure t
   :custom
   (hydra-is-helpful t)
   :config
@@ -754,7 +753,7 @@ Don't prompt project switch action
 ** imenu
 #+begin_src emacs-lisp
 (use-package imenu
-  :straight (:type built-in)
+  :ensure nil
   :defer t
   :custom
   (org-imenu-depth 8))
@@ -768,7 +767,7 @@ Don't prompt project switch action
 ** embark
 #+begin_src emacs-lisp
 (use-package embark
-  :straight t
+  :ensure t
   :bind (("C-." . embark-act)
          ("M-." . embark-dwim)
          :map minibuffer-local-map
@@ -777,7 +776,7 @@ Don't prompt project switch action
          ("D" . denote-region)))
 
 (use-package embark-consult
-  :straight t
+  :ensure t
   :hook
   (embark-collect-mode . consult-preview-at-point-mode))
 #+end_src
@@ -786,37 +785,25 @@ Don't prompt project switch action
 ** Vertico
 #+begin_src emacs-lisp
 (use-package vertico
-  :straight t
-  :custom
-  (vertico-count 10)
-  (vertico-resize t)
-  (vertico-cycle t))
-
-(use-package vertico-multiform
-  :straight nil
-  :load-path "straight/repos/vertico/extensions"
-  :after vertico
+  :ensure t
   :config
+  (setq vertico-count 10)
+  (setq vertico-resize t)
+  (setq vertico-cycle t)
   (setq-default vertico-sort-function #'vertico-sort-history-alpha
                 vertico-multiform-commands
                 '((consult-theme (vertico-sort-function . vertico-sort-alpha))))
 
   (vertico-mode)
-  (vertico-multiform-mode))
-
-(use-package vertico-mouse
-  :straight nil
-  :load-path "straight/repos/vertico/extensions"
-  :after vertico
-  :config
+  (vertico-multiform-mode)
   (vertico-mouse-mode +1))
 #+end_src
 
 ** Consult
 #+begin_src emacs-lisp
 (use-package consult
-  :straight t
   :ensure t
+  :demand t
   :bind (("C-s"     . consult-line)
          ("C-M-l"   . consult-focus-lines)
          ("C-x b"   . consult-buffer)
@@ -876,8 +863,8 @@ Don't prompt project switch action
 ** Marginalia
 #+begin_src emacs-lisp
 (use-package marginalia
-  :straight t
-  :init
+  :ensure t
+  :config
   (marginalia-mode))
 #+end_src
 
@@ -886,10 +873,10 @@ Don't prompt project switch action
 (with-eval-after-load 'org
   (require 'org-tempo)
   (add-to-list 'org-modules 'org-tempo t))
-(use-package yasnippet-snippets :straight t :defer t)
+(use-package yasnippet-snippets :ensure t :defer t)
 
 (use-package yasnippet
-  :straight t
+  :ensure t
   :defer t
   :diminish yas-minor-mode
   :config (yas-global-mode 1))
@@ -898,7 +885,8 @@ Don't prompt project switch action
 ** Corfu
 #+begin_src emacs-lisp
 (use-package corfu
-  :straight t
+  :ensure t
+  :defer t
   :hook ((prog-mode . corfu-mode)
          (eshell-mode . corfu-mode))
   :config
@@ -912,14 +900,15 @@ Don't prompt project switch action
   (corfu-popupinfo-mode))
 
 (use-package orderless
-  :straight t
-  :init
+  :ensure t
+  :config
   (setq completion-styles '(orderless basic)
         completion-category-defaults nil
         completion-category-overrides '((file (styles . (partial-completion))))))
 
 (use-package cape
-  :straight t
+  :ensure t
+  :defer t
   :config
   (setq cape-elisp-symbol-wrapper nil
         cape-dabbrev-min-length 4)
@@ -928,26 +917,13 @@ Don't prompt project switch action
   (add-to-list 'completion-at-point-functions #'cape-elisp-block)
   (add-to-list 'completion-at-point-functions #'cape-elisp-symbol)
   (add-to-list 'completion-at-point-functions #'cape-keyword))
-
-;; (use-package kind-icon
-;;   :straight t
-;;   :after corfu
-;;   :defer t
-;;   :config
-;;   (setq kind-icon-use-icons t
-;;         kind-icon-default-face 'corfu-default
-;;         kind-icon-blend-background nil
-;;         kind-icon-blend-frac 0.08
-;;         kind-icon-default-style '(:padding -1 :stroke 0 :margin 0 :radius 0 :height 1.0 :scale 1.0)
-;;         kind-icon-formatted 'variable)
-;;   (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
 #+end_src
 
 * File management
 ** Dired
 #+begin_src emacs-lisp
 (use-package dired
-  :straight (:type built-in)
+  :ensure nil
   :defer t
   :config
   (setq-default insert-directory-program "gls"
@@ -958,12 +934,12 @@ Don't prompt project switch action
                 dired-kill-when-opening-new-dired-buffer t
                 dired-subtree-line-prefix-face 'subtree))
 
-(use-package dirtree
-  :straight t
-  :defer t)
+;; (use-package dirtree
+;;   :ensure t
+;;   :defer t)
 
 (use-package dired-subtree
-  :straight t
+  :ensure t
   :after dired
   :defer t
   :hook ((dired-mode . dired-hide-details-mode)
@@ -976,24 +952,24 @@ Don't prompt project switch action
         ("S-TAB" . dired-subtree-remove)))
 
 (use-package dired-collapse
-  :straight t
+  :ensure t
   :after dired
   :defer t
-  :init
+  :config
   (with-eval-after-load 'evil-maps
     (evil-define-key 'normal dired-mode-map (kbd "H") 'dired-up-directory)
     (evil-define-key 'normal dired-mode-map (kbd "L") 'dired-find-file))
   (add-hook 'dired-mode-hook 'dired-collapse-mode))
 
 (use-package async
-  :straight t
+  :ensure t
   :defer t
   :config
   (autoload 'dired-async-mode "dired-async.el" nil t)
   (dired-async-mode 1))
 
 (use-package dired-toggle
-  :straight t
+  :ensure t
   :after dired
   :defer t
   :bind (("C-c t" . #'dired-toggle)
@@ -1015,16 +991,16 @@ Don't prompt project switch action
               (setq-local visual-line-fringe-indicators '(nil right-curly-arrow))
               (setq-local word-wrap nil))))
 
-(use-package dired-hacks
-  :straight t
-  :defer t)
+;; (use-package dired-hacks
+;;   :ensure t
+;;   :defer t)
 #+end_src
 
 
 ** treemacs
 #+begin_src emacs-lisp
 (use-package treemacs
-  :straight t
+  :ensure t
   :defer t
   :config
   (setq treemacs-no-png-images nil
@@ -1072,41 +1048,41 @@ Don't prompt project switch action
 *** zmq
 #+begin_src emacs-lisp
 (use-package zmq
-  :straight (zmq :host github :repo "nnicandro/emacs-zmq"))
+  :ensure (zmq :host github :repo "nnicandro/emacs-zmq"))
 #+end_src
 *** jupyter
 #+begin_src emacs-lisp
-(use-package jupyter
-  :straight (jupyter :type git :host github :repo "emacs-jupyter/jupyter")
-  :defer t
-  :bind ("C-c j p" . tempo-template-org-src-jupyter-:session-py))
-;; Copied from nowislewis/nowisemacs
-(with-eval-after-load 'org
-  (defun my/org-babel-execute-src-block (&optional _arg info _params)
-    "Load language if needed"
-    (let* ((lang (nth 0 info))
-           (sym (cond ((member (downcase lang) '("c" "cpp" "c++")) 'C)
-                      ((member (downcase lang) '("jupyter-python")) 'jupyter)
-                      ((member (downcase lang) '("sh" "bash" "zsh")) 'shell)
-                      (t (intern lang))))
-           (backup-languages org-babel-load-languages))
-      (unless (assoc sym backup-languages)
-        (condition-case err
-            (progn
-              (org-babel-do-load-languages 'org-babel-load-languages (list (cons sym t)))
-              (setq-default org-babel-load-languages (append (list (cons sym t)) backup-languages)))
-          (file-missing
-           (setq-default org-babel-load-languages backup-languages)
-           err)))))
-  (advice-add 'org-babel-execute-src-block :before #'my/org-babel-execute-src-block )
-
-  (setq org-babel-default-header-args:jupyter '((:kernel . "python") (:async . "yes")))
-  (add-to-list 'org-src-lang-modes '("jupyter" . python))
-(setq-default org-confirm-babel-evaluate nil))
+;; (use-package jupyter
+;;   :ensure (jupyter :type git :host github :repo "emacs-jupyter/jupyter")
+;;   :defer t
+;;   :bind ("C-c j p" . tempo-template-org-src-jupyter-:session-py))
+;; ;; Copied from nowislewis/nowisemacs
+;; (with-eval-after-load 'org
+;;   (defun my/org-babel-execute-src-block (&optional _arg info _params)
+;;     "Load language if needed"
+;;     (let* ((lang (nth 0 info))
+;;            (sym (cond ((member (downcase lang) '("c" "cpp" "c++")) 'C)
+;;                       ((member (downcase lang) '("jupyter-python")) 'jupyter)
+;;                       ((member (downcase lang) '("sh" "bash" "zsh")) 'shell)
+;;                       (t (intern lang))))
+;;            (backup-languages org-babel-load-languages))
+;;       (unless (assoc sym backup-languages)
+;;         (condition-case err
+;;             (progn
+;;               (org-babel-do-load-languages 'org-babel-load-languages (list (cons sym t)))
+;;               (setq-default org-babel-load-languages (append (list (cons sym t)) backup-languages)))
+;;           (file-missing
+;;            (setq-default org-babel-load-languages backup-languages)
+;;            err)))))
+;;   (advice-add 'org-babel-execute-src-block :before #'my/org-babel-execute-src-block )
+;;
+;;   (setq org-babel-default-header-args:jupyter '((:kernel . "python") (:async . "yes")))
+;;   (add-to-list 'org-src-lang-modes '("jupyter" . python))
+;; (setq-default org-confirm-babel-evaluate nil))
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package pyenv :straight t :defer t)
+;; (use-package pyenv :ensure t :defer t)
 #+end_src
 
 ** Eldoc
@@ -1115,8 +1091,7 @@ Don't prompt project switch action
       max-mini-window-height 2)
 
 (use-package eldoc
-  :straight (:type built-in)
-  :defer t
+  :ensure nil
   :diminish
   :config
   ;; (setq max-mini-window-height 1.0)
@@ -1126,10 +1101,12 @@ Don't prompt project switch action
                 eldoc-echo-area-prefer-doc-buffer t
                 eldoc-documentation-strategy #'eldoc-documentation-compose-eagerly)
 
-  (diminish 'eldoc-mode))
-(diminish 'abbrev-mode)
+  ;; (diminish 'eldoc-mode)
+  )
+;; (diminish 'abbrev-mode)
 
-(use-package eldoc-box :straight t
+(use-package eldoc-box
+  :ensure t
   :config
   (setq eldoc-box-clear-with-C-g t)
   (with-eval-after-load 'evil
@@ -1139,9 +1116,9 @@ Don't prompt project switch action
 ** Language server
 *** Eglot
 #+begin_src emacs-lisp
-(run-with-idle-timer 10 nil (lambda () (require 'eglot)))
+;; (run-with-idle-timer 10 nil (lambda () (require 'eglot)))
 (use-package eglot
-  :straight t
+  :ensure nil
   :defer t
   :hook ((c-mode          . eglot-ensure)
          (c++-mode        . eglot-ensure)
@@ -1236,7 +1213,7 @@ Don't prompt project switch action
 
 #+begin_src emacs-lisp
 (use-package eglot-booster
-  :straight
+  :ensure
   (eglot-booster :type git :host github :repo "jdtsmith/eglot-booster")
   :defer t
   :config (eglot-booster-mode))
@@ -1244,8 +1221,9 @@ Don't prompt project switch action
 
 #+begin_src emacs-lisp
 (use-package eglot-inactive-regions
-  :straight t
+  :ensure t
   :defer t
+  :after eglot
   :custom
   (eglot-inactive-regions-opacity 0.4)
   :config
@@ -1255,7 +1233,7 @@ Don't prompt project switch action
 ** Flymake
 #+begin_src emacs-lisp
 (use-package flymake
-  :straight (:type built-in)
+  :ensure nil
   :defer t
   :config
   (setq flymake-start-on-save-buffer t
@@ -1270,23 +1248,22 @@ Don't prompt project switch action
 
   (global-set-key (kbd "C-c f m")   'consult-flymake))
 
-(use-package flymake-cursor
-  :straight t
-  :defer t
-  :config
-  (setq-default flymake-cursor-number-of-errors-to-display 3))
+;; (use-package flymake-cursor
+;;   :ensure t
+;;   :defer t
+;;   :config
+;;   (setq-default flymake-cursor-number-of-errors-to-display 3))
 #+end_src
 
 ** Tree-sitter
 #+begin_src emacs-lisp
 (use-package kotlin-ts-mode
-  :straight t
+  :ensure t
   :defer t
   :after treesit)
 
 (use-package treesit
-  :straight (:type built-in)
-  :ensure t
+  :ensure nil
   :config
   (add-to-list 'treesit-extra-load-path "~/.cache/emacs/tree-sitter")
   (setq-default c-ts-mode-indent-offset   tab-width
@@ -1336,13 +1313,11 @@ Don't prompt project switch action
 *** Apheleia
 #+begin_src emacs-lisp
 (use-package apheleia
-  :straight t
-  :defer t
+  :ensure t
   :init
+  ;; Turn on apheleia in all programming buffers.
   (add-hook 'prog-mode-hook #'apheleia-mode)
   :config
-  (setq-default apheleia-mode-lighter nil)
-
   (dolist (fmt '((ruff       . ("ruff" "format" "--silent" "-"))
                  (ruff-isort . ("ruff" "check" "--fix" "--select" "I" "-"))))
     (setf (alist-get (car fmt) apheleia-formatters) (cdr fmt)))
@@ -1387,7 +1362,7 @@ Don't prompt project switch action
    )
 
 (use-package diff-hl
-  :straight t
+  :ensure t
   :defer t
   :config
 
@@ -1424,7 +1399,7 @@ Don't prompt project switch action
 *** magit
 #+begin_src emacs-lisp
 (use-package magit
-  :straight t
+  :ensure t
   :defer t
   :config
   (setq ediff-split-window-function 'split-window-horizontally
@@ -1462,7 +1437,7 @@ Don't prompt project switch action
 *** markdown-mode
 #+begin_src emacs-lisp
 (use-package markdown-mode
-  :straight t
+  :ensure t
   :defer t
   :config
   (setq markdown-list-item-bullets '(""))
@@ -1474,7 +1449,7 @@ Don't prompt project switch action
 *** helpful
 #+begin_src emacs-lisp
 (use-package helpful
-  :straight (:host github :repo "wilfred/helpful")
+  :ensure (:host github :repo "wilfred/helpful")
   :bind (("C-h f" . helpful-callable)
 		 ("C-h v" . helpful-variable)
 		 ("C-h k" . helpful-key)
@@ -1486,9 +1461,9 @@ Don't prompt project switch action
 *** devdocs
 #+begin_src emacs-lisp
 (use-package devdocs
-  :straight t
+  :ensure t
   :defer t
-  :init
+  :config
   (defvar lps/devdocs-alist
     '((python-ts-mode-hook     . "python~3.12")
       (c-ts-mode-hook          . "c")
@@ -1527,7 +1502,7 @@ Don't prompt project switch action
 ** Compilation mode
 #+begin_src emacs-lisp
 (use-package xterm-color
-  :straight t
+  :ensure t
   :config
   (defun from-face (face)
     (face-attribute face :foreground))
@@ -1547,7 +1522,7 @@ Don't prompt project switch action
   (funcall f proc (xterm-color-filter string)))
 
 (use-package compile
-  :straight (:type built-in)
+  :ensure nil
   :config
   (setq compilation-error-regexp-alist (delete 'gnu compilation-error-regexp-alist))
 
@@ -1628,7 +1603,7 @@ Don't prompt project switch action
 
 * Org Mode
 #+begin_src emacs-lisp
-(use-package org-bullets :straight t)
+(use-package org-bullets :ensure t :defer t)
 (with-eval-after-load 'org
   (setq org-hide-emphasis-markers t
         org-fontify-quote-and-verse-blocks t
@@ -1660,10 +1635,10 @@ Don't prompt project switch action
 
 ** scratch
 Use org mode in scratch buffer
-#+begin_src disabled
-(with-eval-after-load 'org
-  (setq-default initial-major-mode 'org-mode))
-#+end_src
+;; #+begin_src disabled
+;; (with-eval-after-load 'org
+;;   (setq-default initial-major-mode 'org-mode))
+;; #+end_src
 
 ** org-tempo
 #+begin_src emacs-lisp
@@ -1688,7 +1663,7 @@ Use org mode in scratch buffer
 #+begin_src emacs-lisp
 (with-eval-after-load 'org
   (use-package ob-async
-    :straight t
+    :ensure t
     :defer t
     :config
     (setq ob-async-no-async-languages-alist '("jupyter"))))
@@ -1733,53 +1708,52 @@ Use org mode in scratch buffer
 
 ** org-roam
 #+begin_src emacs-lisp
-(use-package org-roam
-  :defer t
-  :straight t
-  :after org
-  :config
-  (when (fboundp 'niva/setup-org-roam)
-    (niva/setup-org-roam))
-  (org-roam-db-autosync-enable)
-  (global-set-key (kbd "C-c z z") 'org-roam-capture)
-  (setq-default org-roam-ui-browser-function #'xwidget-webkit-browse-url))
+;; (use-package org-roam
+;;   :ensure t
+;;   :defer t
+;;   :after org
+;;   :config
+;;   (when (fboundp 'niva/setup-org-roam)
+;;     (niva/setup-org-roam))
+;;   (org-roam-db-autosync-enable)
+;;   (global-set-key (kbd "C-c z z") 'org-roam-capture)
+;;   (setq-default org-roam-ui-browser-function #'xwidget-webkit-browse-url))
 #+end_src
 
 *** websocket
 
 #+begin_src emacs-lisp
-(use-package websocket
-  :straight t
-  :defer t
-  :after org-roam)
+;; (use-package websocket
+;;   :ensure t
+;;   :defer t
+;;   :after org-roam)
 #+end_src
 
 *** org-roam-ui
 #+begin_src emacs-lisp
-(use-package org-roam-ui
-  :straight t
-  :defer t
-  :after org-roam
-  ;; :hook (after-init . org-roam-ui-mode)
-  :config
-  (setq org-roam-ui-sync-theme t
-        org-roam-ui-follow t
-        org-roam-ui-open-on-start nil
-        org-roam-ui-update-on-save t))
+;; (use-package org-roam-ui
+;;   :ensure t
+;;   :defer t
+;;   :after org-roam
+;;   ;; :hook (after-init . org-roam-ui-mode)
+;;   :config
+;;   (setq org-roam-ui-sync-theme t
+;;         org-roam-ui-follow t
+;;         org-roam-ui-open-on-start nil
+;;         org-roam-ui-update-on-save t))
 #+end_src
 
 ** visual-fill-column
 #+begin_src emacs-lisp
 (use-package visual-fill-column
-  :straight t)
+  :ensure t)
 #+end_src
 
 ** adaptive-wrap
 #+begin_src emacs-lisp
 (use-package adaptive-wrap
-  :straight t
+  :ensure t
   :defer t
-  :diminish visual-line-mode
   :hook (visual-line-mode . adaptive-wrap-prefix-mode))
 #+end_src
 
@@ -1788,7 +1762,7 @@ Use org mode in scratch buffer
 *** shr
 #+begin_src emacs-lisp
 (use-package shr
-  :straight (:type built-in)
+  :ensure nil
   :defer t
   :config
   (setq shr-use-fonts nil)
@@ -1800,7 +1774,7 @@ Use org mode in scratch buffer
 *** shr-face
 #+begin_src emacs-lisp
 (use-package shr-tag-pre-highlight
-  :straight t
+  :ensure t
   :after shr
   :defer t
   :config
@@ -1842,7 +1816,7 @@ Use org mode in scratch buffer
 (add-to-list 'shr-tag-pre-highlight-lang-modes '("rust"    . rust-ts)))
 
 (use-package shrface
-  :straight t
+  :ensure t
   :defer t
   :config
   (shrface-basic)
@@ -1911,9 +1885,9 @@ Use org mode in scratch buffer
 ** webkit
 #+begin_src emacs-lisp
 ;; (setq browse-url-browser-function (lambda (url session) (other-window 1) (xwidget-webkit-browse-url url)))
-(setq-default xwidget-webkit-cookie-file (expand-file-name "webkit-cookies.txt" no-littering-var-directory))
+;; (setq-default xwidget-webkit-cookie-file (expand-file-name "webkit-cookies.txt" no-littering-var-directory))
 ;;
-;; (use-package xwidgete :straight t)
+;; (use-package xwidgete :ensure t)
 ;;
 ;; (define-key xwidget-webkit-mode-map (kbd "<escape>") #'evil-force-normal-state)
 ;; (define-key xwidget-webkit-edit-mode-map (kbd "<escape>") #'evil-force-normal-state)
@@ -1927,7 +1901,7 @@ Use org mode in scratch buffer
 ** elfeed
 #+begin_src emacs-lisp
 (use-package elfeed
-  :straight t
+  :ensure t
   :defer t
   ;; :hook (elfeed-search-mode . elfeed-update)
   :config
@@ -1958,7 +1932,7 @@ Use org mode in scratch buffer
                                    ;; (setq-local evil-normal-state-cursor '(nil))
 
 (use-package elfeed-summary
-  :straight t
+  :ensure t
   :defer t
   :after elfeed
   :config
@@ -1984,11 +1958,9 @@ Use org mode in scratch buffer
 ** elfeed-protocol
 #+begin_src emacs-lisp
 (use-package elfeed-protocol
-  :straight t
+  :ensure t
   :after elfeed
   :defer t
-  :init
-  (elfeed-protocol-enable)
   :config
   (require 'niva-elfeed-protocol)
   (setq elfeed-use-curl t
@@ -2038,99 +2010,72 @@ Use org mode in scratch buffer
                 (forward-line 1)))))
 
     (evil-define-key 'normal eww-mode-map   (kbd "'") #'niva/eww--move-paragraph-up)
-    (evil-define-key 'normal eww-mode-map   (kbd ";") #'niva/eww--move-paragraph-down)))
+    (evil-define-key 'normal eww-mode-map   (kbd ";") #'niva/eww--move-paragraph-down))
+
+  (elfeed-protocol-enable))
 #+end_src
 
 
 *** Customization
 #+begin_src emacs-lisp
-(use-package relative-date :straight (relative-date :host github :repo "rougier/relative-date"))
+(use-package relative-date :ensure (relative-date :host github :repo "rougier/relative-date"))
 #+end_src
 
 
 ** Mastodon
-#+begin_src disabled
-(use-package mastodon
-  :straight (:host codeberg :repo "martianh/mastodon.el")
-  :defer t
-  :config
-  (setq mastodon-active-user "@niklasva"
-        mastodon-instance-url "https://social.tchncs.de"
-        mastodon-tl--show-avatars t
-        mastodon-tl--horiz-bar ""
-        mastodon-tl--after-update-marker t
-        mastodon-tl--display-media-p t
-        mastodon-tl--no-fill-on-render t
-        mastodon-tl--show-stats nil
-        mastodon-tl--expand-content-warnings t
-        mastodon-tl--timeline-posts-count "40")
-  (custom-set-faces '(mastodon-display-name-face ((t (:inherit 'org-level-1)))))
-
-
-  (defun my-mastodon-more () (interactive) (mastodon-tl--more))
-  (add-hook 'mastodon-mode-hook (lambda ()
-                                  (setq-local visual-fill-column-center-text nil
-                                              visual-fill-column-fringes-outside-margins t
-                                              visual-fill-column-extra-text-width '(-2 . 0)
-                                              fill-column 9999
-                                              visual-fill-column-width 60)
-                                  (visual-fill-column-mode)))
-  (define-key mastodon-mode-map (kbd "m")   'my-mastodon-more))
-
-(use-package mastodon-alt
-  :after mastodon
-  :defer t
-  :straight (:host github :repo "rougier/mastodon-alt")
-  :config
-  (mastodon-alt-tl-activate)
-  (setq mastodon-alt-tl-box-width 50
-        mastodon-media--preview-max-height 150
-        mastodon-tl--enable-relative-timestamps t
-        mastodon-tl--enable-relative-timestamps nil)
-  (defun mastodon-alt-tl--toot-status (toot))
-  (advice-add 'mastodon-tl--byline :filter-return (lambda (ret) (string-remove-suffix "\n" ret)))
-  (advice-remove 'mastodon-tl--byline #'mastodon-alt-tl--byline)
-  (advice-remove 'mastodon-media--process-image-response #'mastodon-alt-media--process-image-response))
-#+end_src
+;; #+begin_src disabled
+;; (use-package mastodon
+;;   :ensure (:host codeberg :repo "martianh/mastodon.el")
+;;   :defer t
+;;   :config
+;;   (setq mastodon-active-user "@niklasva"
+;;         mastodon-instance-url "https://social.tchncs.de"
+;;         mastodon-tl--show-avatars t
+;;         mastodon-tl--horiz-bar ""
+;;         mastodon-tl--after-update-marker t
+;;         mastodon-tl--display-media-p t
+;;         mastodon-tl--no-fill-on-render t
+;;         mastodon-tl--show-stats nil
+;;         mastodon-tl--expand-content-warnings t
+;;         mastodon-tl--timeline-posts-count "40")
+;;   (custom-set-faces '(mastodon-display-name-face ((t (:inherit 'org-level-1)))))
+;;
+;;
+;;   (defun my-mastodon-more () (interactive) (mastodon-tl--more))
+;;   (add-hook 'mastodon-mode-hook (lambda ()
+;;                                   (setq-local visual-fill-column-center-text nil
+;;                                               visual-fill-column-fringes-outside-margins t
+;;                                               visual-fill-column-extra-text-width '(-2 . 0)
+;;                                               fill-column 9999
+;;                                               visual-fill-column-width 60)
+;;                                   (visual-fill-column-mode)))
+;;   (define-key mastodon-mode-map (kbd "m")   'my-mastodon-more))
+;;
+;; (use-package mastodon-alt
+;;   :after mastodon
+;;   :defer t
+;;   :ensure (:host github :repo "rougier/mastodon-alt")
+;;   :config
+;;   (mastodon-alt-tl-activate)
+;;   (setq mastodon-alt-tl-box-width 50
+;;         mastodon-media--preview-max-height 150
+;;         mastodon-tl--enable-relative-timestamps t
+;;         mastodon-tl--enable-relative-timestamps nil)
+;;   (defun mastodon-alt-tl--toot-status (toot))
+;;   (advice-add 'mastodon-tl--byline :filter-return (lambda (ret) (string-remove-suffix "\n" ret)))
+;;   (advice-remove 'mastodon-tl--byline #'mastodon-alt-tl--byline)
+;;   (advice-remove 'mastodon-media--process-image-response #'mastodon-alt-media--process-image-response))
+;; #+end_src
 
 * My packages
-** hl-paragraph-mode
 #+begin_src emacs-lisp
-(use-package hl-paragraph-mode
-  :straight (:host github :repo "niklasva/hl-paragraph-mode")
-  :config
-  (setq hl-paragraph-highlight-entire-line t)
-  (set-face-attribute 'hl-paragraph-face nil
-                      :inherit    'region
-                      :inverse-video nil
-                      :foreground 'unspecified))
-#+end_src
-
-** org-header-line-outline
-#+begin_src emacs-lisp
-(use-package org-header-line-outline
-  :disabled t
-  :after org
-  :straight (:host github :repo "niklasva/org-header-line-outline")
-  :config
-  (add-hook 'org-mode-hook (lambda() (unless (equal (buffer-name) "*scratch*") (org-header-line-outline-mode)))))
-#+end_src
-
-#+begin_src emacs-lisp
-(advice-add 'save-buffers-kill-terminal :around
-            (lambda (orig-fun &rest args)
-              (when (y-or-n-p "Really close this Emacsclient frame? ")
-                (apply orig-fun args))))
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package iscroll
-  :straight t
-  :diminish iscroll-mode
-  :hook ((text-mode elfeed-show-mode eww-mode shr-mode) . iscroll-mode))
-  ;; :config
-  ;; (evil-define-key 'normal iscroll-mode-map (kbd "k") 'iscroll-previous-line)
-  ;; (evil-define-key 'normal iscroll-mode-map (kbd "j") 'iscroll-next-line))
+;; (use-package iscroll
+;;   :ensure t
+;;   :diminish iscroll-mode
+;;   :hook ((text-mode elfeed-show-mode eww-mode shr-mode) . iscroll-mode))
+;;   ;; :config
+;;   ;; (evil-define-key 'normal iscroll-mode-map (kbd "k") 'iscroll-previous-line)
+;;   ;; (evil-define-key 'normal iscroll-mode-map (kbd "j") 'iscroll-next-line))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -2144,13 +2089,13 @@ Use org mode in scratch buffer
 
 * Other
 #+begin_src emacs-lisp
-(advice-add 'save-buffers-kill-terminal :around
-            (lambda (orig-fun &rest args)
-              (when (y-or-n-p "Really close this Emacsclient frame? ")
-                (apply orig-fun args))))
+;; (advice-add 'save-buffers-kill-terminal :around
+;;             (lambda (orig-fun &rest args)
+;;               (when (y-or-n-p "Really close this Emacsclient frame? ")
+;;                 (apply orig-fun args))))
 
 (use-package iscroll
-  :straight t
+  :ensure t
   :defer t
   :diminish iscroll-mode
   :hook ((text-mode elfeed-show-mode eww-mode shr-mode) . iscroll-mode)
@@ -2159,7 +2104,7 @@ Use org mode in scratch buffer
   (evil-define-key 'normal iscroll-mode-map (kbd "j") 'iscroll-next-line))
 
 ;; (use-package mixed-pitch
-;;   :straight t
+;;   :ensure t
 ;;   :defer nil
 ;;   :diminish mixed-pitch-mode
 ;;   :hook ((eww-mode         . mixed-pitch-mode)
@@ -2172,27 +2117,28 @@ Use org mode in scratch buffer
 
 #+begin_src emacs-lisp
 (use-package nerd-icons
-  :straight t
+  :ensure t
   :defer t
   :config
   (setq nerd-icons-color-icons t))
 
 (use-package nerd-icons-completion
-  :straight t
+  :ensure t
   :defer t
   :config
   (nerd-icons-completion-mode))
+
 (use-package nerd-icons-corfu
-  :straight t
+  :ensure t
   :defer t
   :after corfu
-  :init
+  :config
   (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
 #+end_src
 
 #+begin_src emacs-lisp
 (use-package vterm
-  :straight t
+  :ensure t
   :defer t
   :bind
   (:map vterm-mode-map
@@ -2200,7 +2146,7 @@ Use org mode in scratch buffer
   :config
   (setq vterm-timer-delay nil))
 
-(setq scroll-margin 1
+(setq scroll-margin 0
       scroll-conservatively 101
       scroll-step 1
       auto-window-vscroll nil)

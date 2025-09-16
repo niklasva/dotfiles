@@ -4,7 +4,7 @@
 
 
 (use-package circe
-  :straight t
+  :ensure t
   :defer t
   :config
   (setq lui-fill-column                     80
