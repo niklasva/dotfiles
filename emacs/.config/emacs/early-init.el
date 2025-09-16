@@ -5,24 +5,26 @@
 
 ;;; Startup/window behavior -------------------------------------------------
 (setq frame-inhibit-implied-resize nil
-      frame-resize-pixelwise t
-      window-resize-pixelwise t)
+      frame-resize-pixelwise       t
+      window-resize-pixelwise      t)
 
 (setq inhibit-redisplay t
-      inhibit-message t)
+      inhibit-message   t)
 
 (defconst my/init-frame-params
-  '((min-height . 1)
-    (height . 40)
-    (min-width . 1)
-    (width . 120)
-    (internal-border-width . 10)
-    (left-fringe . 1)
-    (right-fringe . 1)
-    (vertical-scroll-bars . nil)
-    (tool-bar-lines . 1)
-    (undecorated . nil)
-    (visible . t))
+  '((min-height              . 1)
+    (height                  . 40)
+    (min-width               . 1)
+    (width                   . 120)
+    (internal-border-width   . 10)
+    (left-fringe             . 1)
+    (right-fringe            . 1)
+    (vertical-scroll-bars    . nil)
+    (tool-bar-lines          . 1)
+    (undecorated             . nil)
+    (visible                 . nil)
+    (ns-appearance           . 'dark)
+    (ns-transparent-titlebar . t))
   "Initial frame parameters applied both before and after init.")
 
 (defun my/init-apply-frame-params ()
@@ -63,24 +65,23 @@
 (my/init-refresh-exec-path)
 
 ;;; General behavior --------------------------------------------------------
-(setq gc-cons-threshold most-positive-fixnum
-      gc-cons-percentage 0.6
+(setq gc-cons-threshold         most-positive-fixnum
+      gc-cons-percentage        0.6
       package-enable-at-startup nil
-      package-quickstart nil
-      site-run-file nil
-      inhibit-startup-screen t
-      inhibit-startup-message t
-      use-file-dialog nil
-      use-dialog-box nil
-      auto-mode-case-fold nil
-      ns-antialias-text t
-      ns-use-native-fullscreen t
-      ns-use-proxy-icon nil
-      ns-use-thin-smoothing nil
-      custom-file (expand-file-name "custom.el" user-emacs-directory)
-      vc-follow-symlinks t
-      gnus-init-inhibit t
-      native-comp-async-report-warnings-errors 'silent)
+      package-quickstart        nil
+      site-run-file             nil
+      inhibit-startup-screen    t
+      inhibit-startup-message   t
+      use-file-dialog           nil
+      use-dialog-box            nil
+      auto-mode-case-fold       nil
+      ns-antialias-text         t
+      ns-use-native-fullscreen  t
+      ns-use-proxy-icon         nil
+      ns-use-thin-smoothing     nil
+      custom-file               (expand-file-name "custom.el" user-emacs-directory)
+      vc-follow-symlinks        t
+      gnus-init-inhibit         t)
 
 (unless (eq system-type 'darwin)
   (menu-bar-mode -1))

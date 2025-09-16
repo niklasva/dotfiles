@@ -6,7 +6,6 @@
 ;;; Startup --------------------------------------------------------------------
 (defvar my-after-init-complete-hook nil)
 
-
 (setq niva-use-new-config        nil
       niva-enable-evil-mode      t
       niva-inhibit-elfeed-images t
@@ -17,14 +16,11 @@
 (load (expand-file-name "lisp/theme-packages.el" user-emacs-directory))
 (load (expand-file-name "local-env.el" user-emacs-directory))
 
-
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
 (defconst private-config-file (expand-file-name "private/config.el" user-emacs-directory))
 (when (file-readable-p private-config-file) (load-file private-config-file))
 
-(setq inhibit-message nil)
-(setq inhibit-redisplay nil)
 
 (run-hooks 'my-after-init-complete-hook)
 
@@ -36,77 +32,6 @@
 (add-to-list 'safe-local-variable-values '(outline-minor-mode . t))
 (add-to-list 'safe-local-variable-values '(outline-regexp . ";;;+ "))
 (add-to-list 'safe-local-variable-values '(eval progn (require 'outline) (outline-hide-sublevels 1)))
-
-;;; Eshell ---------------------------------------------------------------------
-;;;; eshell --------------------------------------------------------------------
-(use-package eshell
-  :ensure nil
-  :defines eshell-prompt-function
-  :config
-  (defalias 'ff 'find-file)
-  (add-hook 'shell-mode-hook 'with-editor-export-editor)
-  (add-hook 'eshell-mode-hook
-            (lambda ()
-              (define-key eshell-hist-mode-map (kbd "C-c C-l") nil)
-              (define-key eshell-hist-mode-map (kbd "M-s")     nil)
-              (define-key eshell-mode-map      (kbd "C-a")     'eshell-bol)
-              (define-key eshell-mode-map      (kbd "C-l")     'eshell/clear)
-              (define-key eshell-mode-map      (kbd "C-r")     'eshell-isearch-backward)
-              (define-key eshell-mode-map      (kbd "C-u")     'eshell-kill-input)))
-
-  (setq eshell-ask-to-save-history 'always
-        eshell-banner-message ""
-        eshell-cmpl-cycle-completions t
-        eshell-cmpl-ignore-case t
-        eshell-destroy-buffer-when-process-dies nil
-        eshell-error-if-no-glob t
-        eshell-glob-case-insensitive t
-        eshell-hist-ignoredups t
-        eshell-history-size 4096
-        eshell-input-filter (lambda (input) (not (string-match-p "\\`\\s-+" input)))
-        eshell-kill-processes-on-exit t
-        eshell-scroll-to-bottom-on-input 'all
-        eshell-scroll-to-bottom-on-output 'all)
-
-  (setq pcomplete-cycle-completions nil)
-
-  (setq system-name (car (split-string system-name "\\.")))
-  (setq eshell-prompt-regexp "^.+@.+:.+> ")
-  (setq eshell-prompt-function
-        (lambda ()
-          (concat
-           (propertize (user-login-name) 'face 'font-lock-keyword-face)
-           (propertize (format "@%s" (system-name)) 'face 'default)
-           (propertize ":" 'face 'font-lock-doc-face)
-           (propertize (abbreviate-file-name (eshell/pwd)) 'face 'font-lock-type-face)
-           (propertize " $" 'face 'font-lock-doc-face)
-           (propertize " " 'face 'default))))
-
-  (advice-add 'eshell/clear :override
-              (defun niva--eshell/clear (&optional scrollback)
-                (interactive)
-                (let ((inhibit-read-only t))
-                  (erase-buffer)
-                  (eshell-send-input)))))
-
-;;;; eshell-syntax-highlighting ------------------------------------------------
-(use-package eshell-syntax-highlighting
-  :defer t
-  :ensure t
-  :hook (eshell-mode . eshell-syntax-highlighting-mode))
-
-;;;; Kill buffer on quit -------------------------------------------------------
-(defun niva/term-handle-exit (&optional process-name msg)
-  "Kill buffer on quit"
-  (kill-buffer (current-buffer)))
-
-(advice-add 'term-handle-exit :after 'niva/term-handle-exit)
-
-;;;; Alias ---------------------------------------------------------------------
-(defalias 'ff    "for i in ${eshell-flatten-list $*} {find-file $i}")
-(defalias 'emacs "ff")
-(defalias 'fo    "find-file-other-window $1")
-(defalias 'ts    "ts '[%Y-%m-%d %H:%M:%S]'")
 
 ;;; Defaults -------------------------------------------------------------------
 ;;;; Defaults ------------------------------------------------------------------
@@ -250,7 +175,7 @@
               display-time-string-forms '((propertize (format-time-string display-time-format now) 'help-echo (format-time-string "%a %b %e, %Y" now)) " "))
 (display-time-mode -1)
 
-;;;; Font ----------------------------------------------------------------------
+;;;; Remove font weight  --------------------------------------------------------
 (defun niva/remove-font-weight ()
   "Set weights to regular on common faces"
   (interactive)
@@ -264,6 +189,18 @@
   (set-face-attribute 'outline-3          nil :weight 'unspecified)
   (set-face-attribute 'tooltip            nil :inherit 'default))
 (set-face-attribute 'fixed-pitch nil :family 'unspecified)
+
+;;;; mixed-pitch-mode -----------------------------------------------------------
+;; (use-package mixed-pitch
+;;   :ensure t
+;;   :defer nil
+;;   :diminish mixed-pitch-mode
+;;   :hook ((eww-mode         . mixed-pitch-mode)
+;;          (elfeed-show-mode . mixed-pitch-mode)
+;;          (gptel-mode       . mixed-pitch-mode))
+;;   :config
+;;   (setq mixed-pitch-set-height t)
+;;   (custom-set-faces '(variable-pitch ((t (:font "Arial" :height 0.9))))))
 
 ;;;; solaire-mode --------------------------------------------------------------
 (use-package solaire-mode
@@ -281,6 +218,27 @@
   (add-hook 'eshell-mode-hook      (lambda () (solaire-mode t) (solaire-mode-reset)))
   (add-hook 'gptel-mode-hook       (lambda () (solaire-mode t) (solaire-mode-reset)))
   (add-hook 'read-only-mode-hook   (lambda () (solaire-mode t) (solaire-mode-reset))))
+
+;;;; icons
+(use-package nerd-icons
+  :ensure t
+  :defer t
+  :config
+  (setq nerd-icons-color-icons t))
+
+(use-package nerd-icons-completion
+  :ensure t
+  :defer t
+  :config
+  (nerd-icons-completion-mode))
+
+(use-package nerd-icons-corfu
+  :ensure t
+  :defer t
+  :after corfu
+  :config
+  (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
+
 
 ;;; Window management ----------------------------------------------------------
 ;;;; help-window-select --------------------------------------------------------
@@ -364,6 +322,16 @@
         (when (window-live-p window)
           (delete-window window)))))
   (advice-add #'keyboard-quit :before #'+popper-close-window-hack))
+
+;;;; iscroll
+(use-package iscroll
+  :ensure t
+  :defer t
+  :diminish iscroll-mode
+  :hook ((text-mode elfeed-show-mode eww-mode shr-mode) . iscroll-mode)
+  :config
+  (evil-define-key 'normal iscroll-mode-map (kbd "k") 'iscroll-previous-line)
+  (evil-define-key 'normal iscroll-mode-map (kbd "j") 'iscroll-next-line))
 
 ;;; Controls -------------------------------------------------------------------
 ;;;; Evil mode -----------------------------------------------------------------
@@ -795,6 +763,87 @@
   (add-to-list 'completion-at-point-functions #'cape-elisp-block)
   (add-to-list 'completion-at-point-functions #'cape-elisp-symbol)
   (add-to-list 'completion-at-point-functions #'cape-keyword))
+
+;;; Terminal -------------------------------------------------------------------
+;;;; eshell --------------------------------------------------------------------
+(use-package eshell
+  :ensure nil
+  :defines eshell-prompt-function
+  :config
+  (defalias 'ff 'find-file)
+  (add-hook 'shell-mode-hook 'with-editor-export-editor)
+  (add-hook 'eshell-mode-hook
+            (lambda ()
+              (define-key eshell-hist-mode-map (kbd "C-c C-l") nil)
+              (define-key eshell-hist-mode-map (kbd "M-s")     nil)
+              (define-key eshell-mode-map      (kbd "C-a")     'eshell-bol)
+              (define-key eshell-mode-map      (kbd "C-l")     'eshell/clear)
+              (define-key eshell-mode-map      (kbd "C-r")     'eshell-isearch-backward)
+              (define-key eshell-mode-map      (kbd "C-u")     'eshell-kill-input)))
+
+  (setq eshell-ask-to-save-history 'always
+        eshell-banner-message ""
+        eshell-cmpl-cycle-completions t
+        eshell-cmpl-ignore-case t
+        eshell-destroy-buffer-when-process-dies nil
+        eshell-error-if-no-glob t
+        eshell-glob-case-insensitive t
+        eshell-hist-ignoredups t
+        eshell-history-size 4096
+        eshell-input-filter (lambda (input) (not (string-match-p "\\`\\s-+" input)))
+        eshell-kill-processes-on-exit t
+        eshell-scroll-to-bottom-on-input 'all
+        eshell-scroll-to-bottom-on-output 'all)
+
+  (setq pcomplete-cycle-completions nil)
+
+  (setq system-name (car (split-string system-name "\\.")))
+  (setq eshell-prompt-regexp "^.+@.+:.+> ")
+  (setq eshell-prompt-function
+        (lambda ()
+          (concat
+           (propertize (user-login-name) 'face 'font-lock-keyword-face)
+           (propertize (format "@%s" (system-name)) 'face 'default)
+           (propertize ":" 'face 'font-lock-doc-face)
+           (propertize (abbreviate-file-name (eshell/pwd)) 'face 'font-lock-type-face)
+           (propertize " $" 'face 'font-lock-doc-face)
+           (propertize " " 'face 'default))))
+
+  (advice-add 'eshell/clear :override
+              (defun niva--eshell/clear (&optional scrollback)
+                (interactive)
+                (let ((inhibit-read-only t))
+                  (erase-buffer)
+                  (eshell-send-input)))))
+
+;;;; eshell-syntax-highlighting ------------------------------------------------
+(use-package eshell-syntax-highlighting
+  :defer t
+  :ensure t
+  :hook (eshell-mode . eshell-syntax-highlighting-mode))
+
+;;;; Kill buffer on quit -------------------------------------------------------
+(defun niva/term-handle-exit (&optional process-name msg)
+  "Kill buffer on quit"
+  (kill-buffer (current-buffer)))
+
+(advice-add 'term-handle-exit :after 'niva/term-handle-exit)
+
+;;;; Alias ---------------------------------------------------------------------
+(defalias 'ff    "for i in ${eshell-flatten-list $*} {find-file $i}")
+(defalias 'emacs "ff")
+(defalias 'fo    "find-file-other-window $1")
+(defalias 'ts    "ts '[%Y-%m-%d %H:%M:%S]'")
+
+;;;; vterm ---------------------------------------------------------------------
+(use-package vterm
+  :ensure t
+  :defer t
+  :bind
+  (:map vterm-mode-map
+        ("C-c <escape>" . vterm-send-escape))
+  :config
+  (setq vterm-timer-delay nil))
 
 ;;; File management ------------------------------------------------------------
 ;;;; Dired ---------------------------------------------------------------------
@@ -1763,58 +1812,14 @@
               (when (y-or-n-p "Really close this Emacsclient frame? ")
                 (apply orig-fun args))))
 
-(use-package iscroll
-  :ensure t
-  :defer t
-  :diminish iscroll-mode
-  :hook ((text-mode elfeed-show-mode eww-mode shr-mode) . iscroll-mode)
-  :config
-  (evil-define-key 'normal iscroll-mode-map (kbd "k") 'iscroll-previous-line)
-  (evil-define-key 'normal iscroll-mode-map (kbd "j") 'iscroll-next-line))
-
-;; (use-package mixed-pitch
-;;   :ensure t
-;;   :defer nil
-;;   :diminish mixed-pitch-mode
-;;   :hook ((eww-mode         . mixed-pitch-mode)
-;;          (elfeed-show-mode . mixed-pitch-mode)
-;;          (gptel-mode       . mixed-pitch-mode))
-;;   :config
-;;   (setq mixed-pitch-set-height t)
-;;   (custom-set-faces '(variable-pitch ((t (:font "Arial" :height 0.9))))))
-
-(use-package nerd-icons
-  :ensure t
-  :defer t
-  :config
-  (setq nerd-icons-color-icons t))
-
-(use-package nerd-icons-completion
-  :ensure t
-  :defer t
-  :config
-  (nerd-icons-completion-mode))
-
-(use-package nerd-icons-corfu
-  :ensure t
-  :defer t
-  :after corfu
-  :config
-  (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
-
-(use-package vterm
-  :ensure t
-  :defer t
-  :bind
-  (:map vterm-mode-map
-        ("C-c <escape>" . vterm-send-escape))
-  :config
-  (setq vterm-timer-delay nil))
-
 (setq scroll-margin 0
       scroll-conservatively 101
       scroll-step 1
       auto-window-vscroll nil)
+
+;;; End ------------------------------------------------------------------------
+(setq inhibit-message nil)
+(setq inhibit-redisplay nil)
 
 ;;; Local variables ------------------------------------------------------------
 ;; Local Variables:
