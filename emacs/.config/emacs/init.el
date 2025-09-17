@@ -361,19 +361,19 @@
     :config (general-evil-setup t)))
 
 ;;;;; Evil collection ----------------------------------------------------------
-;; (when niva-enable-evil-mode
-;;   (use-package evil-collection
-;;     :ensure t
-;;     :diminish evil-collection-unimpaired-mode
-;;     :delight
-;;     :custom
-;;     (evil-collection-setup-minibuffer t)
-;;     :config
-;;     (setq evil-collection-mode-list
-;;       (remove 'xwidgets evil-collection-mode-list))
-;;       (run-with-idle-timer 0.1 nil (lambda () (
-;;     (evil-collection-init 1)
-;;     (evil-set-initial-state 'dired-mode 'normal))))))
+(when niva-enable-evil-mode
+  (use-package evil-collection
+    :ensure t
+    :diminish evil-collection-unimpaired-mode
+    :delight
+    :custom
+    (evil-collection-setup-minibuffer t)
+    :config
+    (setq evil-collection-mode-list
+          (remove 'xwidgets evil-collection-mode-list))
+    (run-with-idle-timer 0.1 nil (lambda () (
+                                             (evil-collection-init 1)
+                                             (evil-set-initial-state 'dired-mode 'normal))))))
 
 ;;;; savehist ------------------------------------------------------------------
 (use-package savehist
