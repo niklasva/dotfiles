@@ -44,15 +44,15 @@
   :config
   (setq-default acme-theme-black-fg t))
 
-(use-package ef-themes          :ensure (:host github :repo "protesilaos/ef-themes")                :defer nil)
-(use-package orangey-bits-theme :ensure (:host github :repo "emacsfodder/emacs-theme-orangey-bits") :defer nil)
-(use-package cyanometric-theme  :ensure (:host github :repo "emacsfodder/emacs-theme-cyanometric")  :defer nil)
-(use-package vegetative-theme   :ensure (:host github :repo "emacsfodder/emacs-theme-vegetative")   :defer nil)
-(use-package dark-krystal-theme :ensure (:host github :repo "emacsfodder/emacs-dark-krystal-theme") :defer nil)
-(use-package doric-themes       :ensure (:host github :repo "protesilaos/doric-themes")             :defer nil)
-(use-package os1-theme          :ensure (:host github :repo "sashimacs/os1-theme")                  :defer nil)
+(use-package ef-themes          :ensure (:host github :repo "protesilaos/ef-themes")                :defer t)
+(use-package orangey-bits-theme :ensure (:host github :repo "emacsfodder/emacs-theme-orangey-bits") :defer t)
+(use-package cyanometric-theme  :ensure (:host github :repo "emacsfodder/emacs-theme-cyanometric")  :defer t)
+(use-package color-theme-sanityinc-tomorrow  :ensure (:host github :repo "purcell/color-theme-sanityinc-tomorrow")  :defer t)
+(use-package vegetative-theme   :ensure (:host github :repo "emacsfodder/emacs-theme-vegetative")   :defer t)
+(use-package dark-krystal-theme :ensure (:host github :repo "emacsfodder/emacs-dark-krystal-theme") :defer t)
+(use-package doric-themes       :ensure (:host github :repo "protesilaos/doric-themes")             :defer t)
+(use-package os1-theme          :ensure (:host github :repo "sashimacs/os1-theme")                  :defer t)
 (use-package colorless-themes   :ensure (:host github :repo "lthms/colorless-themes.el"             :files ("colorless-themes.el" "*.el")))
-
 (use-package alect-themes          :ensure t :defer t)
 (use-package almost-mono-themes    :ensure t :defer t)
 (use-package basic-theme           :ensure t :defer t)
@@ -67,6 +67,12 @@
 (use-package standard-themes       :ensure t :defer t)
 (use-package tomorrow-night-deepblue-theme :ensure t :defer t)
 
+(use-package catppuccin-theme :ensure (:host github :repo "catppuccin/emacs")
+  :defer t
+  :init
+  (setq catppuccin-italic-comments t)
+  (setq catppuccin-italic-variables t)
+  (setq catppuccin-italic-blockquotes t))
 (use-package solarized-theme
   :ensure t
   :defer t
@@ -205,11 +211,25 @@
        '(org-block-begin-line        ((t (:background nil :inherit 'org-block :extend t :overline t   :underline nil))))
        '(org-block-end-line          ((t (:background nil :inherit 'org-block :extend t :overline nil :underline t))))))
 
-    ;; (when (niva/theme-is-active "orangey-bits")
-    ;;   (set-face-foreground 'default "#FFB240"))
+    (when (niva/theme-is-active "orangey-bits")
+      (custom-set-faces '(line-number ((t (:foreground unspecified :inherit font-lock-comment-face))))
+                        '(shadow      ((t (:foreground unspecified :inherit link-visited))))
+                        '(org-level-1                 ((t (:foreground unspecified :inherit outline-1))))
+                        '(org-level-2                 ((t (:foreground unspecified :inherit outline-2))))
+                        '(org-level-3                 ((t (:foreground unspecified :inherit outline-3))))
+                        '(org-level-4                 ((t (:foreground unspecified :inherit outline-4))))
+                        '(org-table                   ((t (:foreground unspecified :inherit unspecified))))
+                        '(org-block                   ((t (:inherit 'default :background "black" :extend t))))
+                        '(org-block-begin-line        ((t (:inherit 'shadow :foreground "#A06537" :foreground "#471000" :background "black" :overline t :underline nil :extend t))))
+                        '(org-block-end-line          ((t (:inherit 'org-block-begin-line :foreground "#471000" :background "black" :overline nil :underline t :extend t)))))
+      (set-face-foreground 'default "#ffe0a0")
+      )
 
-    ;; (when (niva/theme-is-active "vegetative")
-    ;;   (set-face-foreground 'default "#58B22C"))
+    (when (niva/theme-is-active "vegetative")
+      (set-face-foreground 'default "#58B22C"))
+
+    (when (niva/theme-is-active "lambda")
+      (custom-set-faces '(vertical-border ((t (:foreground unspecified :inherit corfu-border))))))
 
     (custom-set-faces '(help-key-binding nil :box nil :background 'unspecified :foreground (face-attribute 'default :foreground)))
     (custom-set-faces '(elfeed-search-unread-title-face ((t :inherit 'default :underline nil :bold nil :foreground unspecified)))

@@ -33,7 +33,7 @@
 (setq-default c-basic-offset 4
               c-default-style "user"
               display-line-numbers-width 4
-              ;; confirm-kill-emacs 'y-or-n-p
+              confirm-kill-emacs 'y-or-n-p
               ring-bell-function 'ignore
               column-number-mode nil)
 
@@ -53,8 +53,6 @@
 
 (global-display-line-numbers-mode -1)
 
-
-(electric-indent-mode)
 (delete-selection-mode)
 (context-menu-mode)
 (repeat-mode)
@@ -158,45 +156,7 @@
 (add-function :after after-focus-change-function #'niva/garbage-collect-on-focus-lost)
 
 ;;; Customization --------------------------------------------------------------
-;;;; Theme ---------------------------------------------------------------------
-;;(ignore-errors (niva/update-theme-faces))
-
-;;;; GUI settings --------------------------------------------------------------
-;;;; Display time --------------------------------------------------------------
-(setq-default display-time-format " %H:%M "
-              display-time-interval 60
-              display-time-default-load-average nil
-              display-time-string-forms '((propertize (format-time-string display-time-format now) 'help-echo (format-time-string "%a %b %e, %Y" now)) " "))
-(display-time-mode -1)
-
-;;;; Remove font weight  --------------------------------------------------------
-(defun niva/remove-font-weight ()
-  "Set weights to regular on common faces"
-  (interactive)
-  (set-face-attribute 'bold               nil :weight 'unspecified)
-  (set-face-attribute 'buffer-menu-buffer nil :weight 'unspecified)
-  (set-face-attribute 'compilation-error  nil :weight 'unspecified)
-  (set-face-attribute 'default            nil :weight 'unspecified)
-  (set-face-attribute 'help-key-binding   nil :weight 'unspecified :family 'unspecified :box 'unspecified :inherit 'default)
-  (set-face-attribute 'outline-1          nil :weight 'unspecified)
-  (set-face-attribute 'outline-2          nil :weight 'unspecified)
-  (set-face-attribute 'outline-3          nil :weight 'unspecified)
-  (set-face-attribute 'tooltip            nil :inherit 'default))
-(set-face-attribute 'fixed-pitch nil :family 'unspecified)
-
-;;;; mixed-pitch-mode -----------------------------------------------------------
-;; (use-package mixed-pitch
-;;   :ensure t
-;;   :defer nil
-;;   :diminish mixed-pitch-mode
-;;   :hook ((eww-mode         . mixed-pitch-mode)
-;;          (elfeed-show-mode . mixed-pitch-mode)
-;;          (gptel-mode       . mixed-pitch-mode))
-;;   :config
-;;   (setq mixed-pitch-set-height t)
-;;   (custom-set-faces '(variable-pitch ((t (:font "Arial" :height 0.9))))))
-
-;;;; solaire-mode --------------------------------------------------------------
+;;;; solaire-mode
 (use-package solaire-mode
   :ensure t
   :config
@@ -211,8 +171,8 @@
   (add-hook 'compilation-mode-hook (lambda () (solaire-mode t) (solaire-mode-reset)))
   (add-hook 'eshell-mode-hook      (lambda () (solaire-mode t) (solaire-mode-reset)))
   (add-hook 'gptel-mode-hook       (lambda () (solaire-mode t) (solaire-mode-reset)))
-  (add-hook 'read-only-mode-hook   (lambda () (solaire-mode t) (solaire-mode-reset))))
-
+  (add-hook 'read-only-mode-hook   (lambda () (solaire-mode t) (solaire-mode-reset)))
+  (add-hook 'org-mode-hook         (lambda () (when (string-match-p "notes\\.org$" (buffer-file-name)) (solaire-mode 1)))))
 ;;;; icons
 (use-package nerd-icons
   :ensure t
@@ -232,7 +192,6 @@
   :after corfu
   :config
   (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
-
 
 ;;; Window management ----------------------------------------------------------
 ;;;; help-window-select --------------------------------------------------------
@@ -256,7 +215,7 @@
   (let* ((frame (or frame (selected-frame)))
          (now   (frame-parameter frame 'internal-border-width)))
     (set-frame-parameter frame 'internal-border-width
-                         (if (= now 40) 5 40))))
+                         (if (= now 60) 5 60))))
 
 (defun niva/toggle-frame-decorations (&optional frame)
   (interactive)
@@ -371,9 +330,8 @@
     :config
     (setq evil-collection-mode-list
           (remove 'xwidgets evil-collection-mode-list))
-    (run-with-idle-timer 0.1 nil (lambda () (
-                                             (evil-collection-init 1)
-                                             (evil-set-initial-state 'dired-mode 'normal))))))
+    (evil-collection-init)
+    (evil-set-initial-state 'dired-mode 'normal)))
 
 ;;;; savehist ------------------------------------------------------------------
 (use-package savehist
@@ -388,29 +346,30 @@
 ;;;; Keybindings ---------------------------------------------------------------
 ;;;;; - ------------------------------------------------------------------------
 
-(global-set-key                    (kbd "C-j")  nil)
-(global-set-key                    (kbd "<f1>") nil)
-(global-set-key                    (kbd "<f2>") nil)
-(global-set-key                    (kbd "<f3>") nil)
-(global-set-key                    (kbd "<f4>") nil)
-(global-set-key (kbd "€")          (kbd "$"))
-(global-set-key (kbd "s-n")        (kbd "M-n"))
-(global-set-key (kbd "s-p")        (kbd "M-p"))
-(global-set-key (kbd "s-f")        (kbd "M-f"))
-(global-set-key (kbd "s-b")        (kbd "M-b"))
-(global-set-key (kbd "s-m")        nil)
-(global-set-key (kbd "s-s")        nil)
-(global-set-key (kbd "s-q")        nil)
-(global-set-key (kbd "C-x b")      'consult-buffer)
-(global-set-key (kbd "C-x C-b")    'consult-buffer)
-(global-set-key (kbd "s-q")        'save-buffers-kill-terminal)
-(global-set-key (kbd "s-<return>") 'toggle-frame-fullscreen)
-(global-set-key (kbd "s-t")        'tab-new)
-(global-set-key (kbd "s-w")        'delete-frame)
-(global-set-key (kbd "s-z")        nil)
-(global-set-key (kbd "C-c bbl")    'niva/toggle-bing-bong-light)
-(global-set-key (kbd "C-c bbd")    'niva/toggle-bing-bong-dark)
-(global-set-key (kbd "C-c ct")     'consult-theme)
+(global-set-key (kbd "C-j")                   nil)
+(global-set-key (kbd "<f1>")                  nil)
+(global-set-key (kbd "<f2>")                  nil)
+(global-set-key (kbd "<f3>")                  nil)
+(global-set-key (kbd "<f4>")                  nil)
+(global-set-key (kbd "€")                     (kbd "$"))
+(global-set-key (kbd "s-n")                   (kbd "M-n"))
+(global-set-key (kbd "s-p")                   (kbd "M-p"))
+(global-set-key (kbd "s-f")                   (kbd "M-f"))
+(global-set-key (kbd "s-b")                   (kbd "M-b"))
+(global-set-key (kbd "s-m")                   nil)
+(global-set-key (kbd "s-s")                   nil)
+(global-set-key (kbd "s-q")                   nil)
+(global-set-key (kbd "C-x b")                 'consult-buffer)
+(global-set-key (kbd "C-x C-b")               'consult-buffer)
+(global-set-key (kbd "s-q")                   'save-buffers-kill-terminal)
+(global-set-key (kbd "s-<return>")            'toggle-frame-fullscreen)
+(global-set-key (kbd "s-t")                   'tab-new)
+(global-set-key (kbd "s-w")                   'delete-frame)
+(global-set-key (kbd "s-z")                   nil)
+(global-set-key (kbd "C-c bbl")               'niva/toggle-bing-bong-light)
+(global-set-key (kbd "C-c bbd")               'niva/toggle-bing-bong-dark)
+(global-set-key (kbd "C-c ct")                'consult-theme)
+(global-set-key (kbd "C-x <escape> <escape>") nil)
 
 (defun niva/new-untitled-frame ()
   (interactive)
@@ -513,10 +472,9 @@
 (global-set-key (kbd "C-c ff")     'find-file)
 (global-set-key (kbd "C-c er")    'eval-region)
 (global-set-key (kbd "C-c elf")    'elfeed)
-(global-set-key (kbd "C-x p h")    'ff-get-other-file)
+(global-set-key (kbd "C-x ph")    'ff-get-other-file)
 (global-set-key (kbd "C-c no")   (lambda () (interactive) (find-file "~/org/notes.org")))
 (global-set-key (kbd "C-c rip") 'niva/consult-ripgrep-in-directory)
-
 (global-set-key (kbd "C-c c a")   (lambda () (interactive)
                                     (when (eglot-managed-p)
                                       (call-interactively #'eglot-code-actions))))
@@ -680,18 +638,18 @@
    :preview-key '("M-." "C-SPC" :debounce 0 any))
 
   (setq consult-ripgrep-args "rg \
-            --null \
-            --line-buffered \
-            --color=never \
-            --max-columns=1000 \
-            --path-separator / \
-            --smart-case \
-            --no-heading \
-            --with-filename \
-            --line-number \
-            --hidden \
-            --follow \
-            --glob \"!.git/*\"")
+  --null \
+  --line-buffered \
+  --color=never \
+  --max-columns=1000 \
+  --path-separator / \
+  --smart-case \
+  --no-heading \
+  --with-filename \
+  --line-number \
+  --hidden \
+  --follow \
+  --glob \"!.git/*\"")
 
   (add-to-list 'consult-mode-histories '(compilation-mode compile-history))
 
@@ -1159,7 +1117,8 @@
   :ensure nil
   :config
   (add-to-list 'treesit-extra-load-path "~/.cache/emacs/tree-sitter")
-  (setq-default c-ts-mode-indent-offset   tab-width
+  (setq-default c-ts-mode-indent-offset    tab-width
+                c-ts-common-indent-offset  tab-width
                 json-ts-mode-indent-offset 4
                 treesit-language-source-alist '((bash         "https://github.com/tree-sitter/tree-sitter-bash")
                                                 (c            "https://github.com/tree-sitter/tree-sitter-c")
@@ -1212,7 +1171,6 @@
   (dolist (fmt '((ruff       . ("ruff" "format" "--silent" "-"))
                  (ruff-isort . ("ruff" "check" "--fix" "--select" "I" "-"))))
     (setf (alist-get (car fmt) apheleia-formatters) (cdr fmt)))
-
   (dolist (mode '((python-mode     . (ruff ruff-isort))
                   (python-ts-mode  . (ruff ruff-isort))
                   (sh-mode         . (shfmt))
@@ -1443,11 +1401,11 @@
                  1 2 3
                  nil 1))
 
-  (add-to-list 'compilation-error-regexp-alist-alist
-               '(niva--compile-sil-passed
-                 ".*PASSED.*"
-                 nil nil nil
-                 0 1))
+  ;; (add-to-list 'compilation-error-regexp-alist-alist
+  ;;              '(niva--compile-sil-passed
+  ;;                "^.*[  PASSED  ].*$"
+  ;;                nil nil nil
+  ;;                0 1))
 
   (setq compilation-error-regexp-alist nil)
   (add-to-list 'compilation-error-regexp-alist 'niva--compile-sil-passed)
@@ -1473,16 +1431,17 @@
   (set-face-attribute 'org-ellipsis nil :foreground 'unspecified :underline 'unspecified)
 
   (setq org-todo-keywords
-        '((sequence "TODO" "STARTED" "REVIEW" "|" "DONE" "CANCELED")))
+        '((sequence "TODO" "STARTED" "REVIEW" "REJECTED" "|" "DONE" "CANCELED")))
 
   (setq org-todo-keyword-faces
         '(("TODO" . org-todo)
-          ("STARTED" . (:foreground "darkorange3" :weight bold))
-          ("REVIEW" . (:foreground "darkblue" :weight bold))))
+          ("STARTED"  . (:foreground "darkorange3" :weight bold))
+          ("REVIEW"   . (:foreground "lightblue"   :weight bold))
+          ("REJECTED" . (:foreground "darkorange3" :weight bold))))
 
   (dolist (face '(org-level-1 org-level-2 org-level-3 org-level-4
                               org-level-5 org-level-6 org-level-7 org-level-8))
-    (set-face-attribute face nil :weight 'unspecified :height 1.0))
+    (set-face-attribute face nil :weight 'unspecified :foreground 'unspecified :height 1.0))
 
   (setq org-capture-templates
         '(("t" "Todo or Note" entry (file+headline "~/org/notes.org" "Inbox")

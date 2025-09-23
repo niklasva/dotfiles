@@ -16,7 +16,7 @@
     (height                  . 40)
     (min-width               . 1)
     (width                   . 120)
-    (internal-border-width   . 10)
+    (internal-border-width   . 1)
     (left-fringe             . 1)
     (right-fringe            . 1)
     (vertical-scroll-bars    . nil)
@@ -37,8 +37,7 @@
 
 ;;; Paths -------------------------------------------------------------------
 (defconst my/init-exec-path-dirs
-  '("/usr/local/bin"
-    "/Users/niklas/.pyenv/shims"
+  '( "/Users/niklas/.pyenv/shims"
     "/Users/niklas/.pyenv/bin"
     "/Users/niklas/scripts"
     "/Users/niklas/.local/bin"
@@ -51,7 +50,9 @@
     "/Applications/ARM/bin"
     "/opt/homebrew/bin"
     "/opt/homebrew/sbin"
-    "/Applications/Xcode.app/Contents/Developer/usr/bin")
+    "/Applications/Xcode.app/Contents/Developer/usr/bin"
+    "/Library/Frameworks/Mono.framework/Versions/Current/Commands"
+    "/usr/local/bin")
   "Directories pushed into `exec-path` during early init.")
 
 (defun my/init-refresh-exec-path ()
