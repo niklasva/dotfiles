@@ -1404,17 +1404,30 @@
                  1 2 3
                  nil 1))
 
-  ;; (add-to-list 'compilation-error-regexp-alist-alist
-  ;;              '(niva--compile-sil-passed
-  ;;                "^.*[  PASSED  ].*$"
-  ;;                nil nil nil
-  ;;                0 1))
+  (add-to-list 'compilation-mode-font-lock-keywords
+               '("^\\[\\s-*PASSED\\s-*\\].*$" 0 'compilation-info))
+  (add-to-list 'compilation-mode-font-lock-keywords
+               '("^\\[\\s-*FAILED\\s-*\\].*$" 0 'compilation-error))
+
+  (add-to-list 'compilation-error-regexp-alist-alist
+               '(niva--compile-gtest-failure
+                 "^\\(.+\\):\\([0-9]+\\): Failure"
+                 1 2 nil
+                 2 1))
+
+  (add-to-list 'compilation-error-regexp-alist-alist
+               '(niva--compile-gtest-summary
+                 "^[\\t ]+\\(\\(?:\\./\\|\\.\\./\\|~/\\|/\\)[^:[:space:]]*\\):\\([0-9]+\\)\\(?:[[:space:]:]\\|$\\)"
+                 1 2 nil
+                 1 1))
+
 
   (setq compilation-error-regexp-alist nil)
-  (add-to-list 'compilation-error-regexp-alist 'niva--compile-sil-passed)
   (add-to-list 'compilation-error-regexp-alist 'niva--compile-warning)
   (add-to-list 'compilation-error-regexp-alist 'niva--compile-error)
   (add-to-list 'compilation-error-regexp-alist 'niva--compile-mbed-error)
+  (add-to-list 'compilation-error-regexp-alist 'niva--compile-gtest-failure)
+  (add-to-list 'compilation-error-regexp-alist 'niva--compile-gtest-summary)
   (add-to-list 'compilation-error-regexp-alist 'niva--compile-include)
   (add-to-list 'compilation-error-regexp-alist 'niva--compile-include2)
   (add-to-list 'compilation-error-regexp-alist 'niva--compile-gcc-required)
