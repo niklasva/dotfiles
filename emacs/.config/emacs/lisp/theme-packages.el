@@ -231,7 +231,10 @@
     (when (niva/theme-is-active "lambda")
       (custom-set-faces '(vertical-border ((t (:foreground unspecified :inherit corfu-border))))))
 
-    (custom-set-faces '(help-key-binding nil :box nil :background 'unspecified :foreground (face-attribute 'default :foreground)))
+    (custom-set-faces
+     `(help-key-binding ((t (:box nil
+                                  :background unspecified
+                                  :foreground ,(face-attribute 'default :foreground))))))
     (custom-set-faces '(elfeed-search-unread-title-face ((t :inherit 'default :underline nil :bold nil :foreground unspecified)))
                       '(elfeed-search-title-face        ((t (:inherit 'shadow :underline nil :foreground unspecified))))
                       '(elfeed-search-feed-face         ((t (:inherit 'default :underline nil :foreground unspecified))))

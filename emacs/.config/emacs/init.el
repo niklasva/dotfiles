@@ -14,7 +14,9 @@
 (use-package pinentry :ensure t :defer t :config (pinentry-start))
 
 (load (expand-file-name "lisp/theme-packages.el" user-emacs-directory))
-(load (expand-file-name "local-env.el" user-emacs-directory))
+(let ((local-env-file (expand-file-name "local-env.el" user-emacs-directory)))
+  (when (file-readable-p local-env-file)
+    (load local-env-file nil 'nomessage)))
 
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
@@ -151,8 +153,9 @@
 (defun niva/garbage-collect-on-focus-lost ()
   (if (frame-focus-state)
       (when (timerp niva/gc-timer)
-        (cancel-timer niva/gc-timer))
-    (setq my/gc-timer (run-with-idle-timer 300 nil #'niva/do-garbage-collect))))
+        (cancel-timer niva/gc-timer)
+        (setq niva/gc-timer nil))
+    (setq niva/gc-timer (run-with-idle-timer 300 nil #'niva/do-garbage-collect))))
 (add-function :after after-focus-change-function #'niva/garbage-collect-on-focus-lost)
 
 ;;; Customization --------------------------------------------------------------
