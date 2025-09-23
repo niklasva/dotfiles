@@ -1342,6 +1342,90 @@
           ]))
 
 (add-hook 'compilation-filter-hook 'ansi-color-compilation-filter)
+(require 'rx)
+
+(defconst niva/compilation-xml-regexp
+  (rx line-start (* (any "\t "))
+      "<"
+      (or (seq "?xml")
+          (seq (? "/")
+               (or "testsuites" "testsuite" "testcase" "failure" "failures"
+                   "errors" "error" "skipped"))))
+  "Regexp matching gtest XML output in compilation buffers.")
+
+(defconst niva/compilation-info-regexp
+  (rx line-start (* (any digit ":" "." space)) "[" "INFO" "]")
+  "Regexp matching INFO log lines in compilation buffers.")
+
+(defun niva/compilation--hide-line (label)
+  (let* ((bol (line-beginning-position))
+         (eol (min (1+ (line-end-position)) (point-max)))
+         (tooltip (concat label " (niva)")))
+    (add-text-properties bol eol `(invisible niva-compilation-hidden
+                                             font-lock-face shadow
+                                             help-echo ,tooltip
+                                             niva-compilation-hidden t))))
+
+(defun niva/compilation--apply-region (start end)
+  (when (< start end)
+    (save-excursion
+      (goto-char start)
+      (while (re-search-forward niva/compilation-xml-regexp end t)
+        (niva/compilation--hide-line "Hidden XML"))
+      (goto-char start)
+      (while (re-search-forward niva/compilation-info-regexp end t)
+        (niva/compilation--hide-line "Hidden INFO log")))))
+
+(defun niva/compilation-hide-noise ()
+  "Hide XML/INFO noise in compilation buffers according to preference."
+  (when (and (derived-mode-p 'compilation-mode)
+             (boundp 'compilation-filter-start))
+    (let ((start (max (point-min) compilation-filter-start))
+          (end (point))
+          (inhibit-read-only t))
+      (if niva/compilation-hide-info
+          (progn
+            (add-to-invisibility-spec 'niva-compilation-hidden)
+            (niva/compilation--apply-region start end))
+        (remove-from-invisibility-spec 'niva-compilation-hidden)
+        (remove-text-properties start end
+                                '(invisible nil
+                                            niva-compilation-hidden nil
+                                            font-lock-face nil
+                                            help-echo nil))))))
+
+(defun niva/compilation--apply-hide-info (buffer)
+  (with-current-buffer buffer
+    (when (derived-mode-p 'compilation-mode)
+      (let ((inhibit-read-only t))
+        (if niva/compilation-hide-info
+            (progn
+              (add-to-invisibility-spec 'niva-compilation-hidden)
+              (niva/compilation--apply-region (point-min) (point-max)))
+          (remove-from-invisibility-spec 'niva-compilation-hidden)
+          (remove-text-properties (point-min) (point-max)
+                                  '(invisible nil
+                                              niva-compilation-hidden nil
+                                              font-lock-face nil
+                                              help-echo nil)))))))
+
+(defun niva/compilation-mode-setup ()
+  (niva/compilation--apply-hide-info (current-buffer)))
+
+(defun niva/compilation--set-hide-info (symbol value)
+  (set-default symbol value)
+  (dolist (buffer (buffer-list))
+    (niva/compilation--apply-hide-info buffer)))
+
+(defcustom niva/compilation-hide-info t
+  "When non-nil, hide XML and INFO lines in compilation buffers."
+  :type 'boolean
+  :group 'compile
+  :set #'niva/compilation--set-hide-info)
+
+(add-hook 'compilation-filter-hook #'niva/compilation-hide-noise)
+(add-hook 'compilation-mode-hook #'niva/compilation-mode-setup)
+
 (defun niva/advice-compilation-filter (f proc string)
   (funcall f proc (xterm-color-filter string)))
 
@@ -1415,9 +1499,12 @@
                  1 2 nil
                  2 1))
 
+  (add-to-list 'compilation-mode-font-lock-keywords
+               '("\\ \\ \\ \\ \\ \\ \\ OK\\ " 0 'compilation-info))
+
   (add-to-list 'compilation-error-regexp-alist-alist
                '(niva--compile-gtest-summary
-                 "^[\\t ]+\\(\\(?:\\./\\|\\.\\./\\|~/\\|/\\)[^:[:space:]]*\\):\\([0-9]+\\)\\(?:[[:space:]:]\\|$\\)"
+                 "^[\\t ]+\\(\\(?:\\./\\|\\.\\./\\|~/\\|/\\)[^:[:space:]]*\\):\\([0-9]+\\)\\(?:[: ]\\|$\\)"
                  1 2 nil
                  1 1))
 

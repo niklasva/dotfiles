@@ -123,7 +123,6 @@
   (ignore-errors
     (when (or (null custom-enabled-themes) (niva/theme-is-active "bing-bong-light"))
       (custom-set-faces
-       '(default                   ((t (:foreground "#000"))))
        '(org-block                   ((t (:inherit 'default))))
        '(org-block-begin-line        ((t (:inherit 'org-block :extend t :overline t   :underline nil))))
        '(org-block-end-line          ((t (:inherit 'org-block :extend t :overline nil :underline t))))
