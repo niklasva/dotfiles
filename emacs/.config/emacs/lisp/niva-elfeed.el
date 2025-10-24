@@ -120,6 +120,7 @@
             (format "%-30s" (format "%s (%s)" (propertize feed-title 'face 'elfeed-search-feed-face) tags-str)))))
 
 (defvar-local niva/elfeed-last-feed nil)
+(defvar-local niva/elfeed-last-tags nil)
 
 (defun niva/elfeed-search-print-entry--single-line-alt (entry)
   (let* ((date (format "%-13s " (relative-date (elfeed-entry-date entry))))
@@ -161,7 +162,7 @@
 
 
 (defun niva/elfeed-search-print-entry--single-line-alt-mixed (entry)
-  (let* ((date (format "%-9s " (relative-date (elfeed-entry-date entry))))
+  (let* ((date (format "%-8s " (relative-date (elfeed-entry-date entry))))
          (title (or (elfeed-meta entry :title) (elfeed-entry-title entry) ""))
          (feed (elfeed-entry-feed entry))
          (feed-title (when feed (or (elfeed-meta feed :title)
@@ -173,23 +174,28 @@
                     tags ","))
          (read-p (not (memq 'unread (elfeed-entry-tags entry)))))
 
-    (let* ((same-feed (string= feed-title niva/elfeed-last-feed))
+    (let* (
+           (same-feed (string= feed-title niva/elfeed-last-feed))
+           (same-tags (string= tags-str niva/elfeed-last-tags))
            (beg (point)))
       (insert (propertize date 'face 'elfeed-search-date-face)
-              "  \t"
-              (propertize feed-title 'face 'elfeed-search-feed-face)
-              ": "
+              " "
+              (format "%-10s" (propertize feed-title 'face 'elfeed-search-feed-face))
+              " "
               (propertize title 'face 'default) " "
               (format " (%s) " tags-str))
 
-      (unless same-feed
-        (add-face-text-property beg (point) '(:overline "gray30" :extend t) nil))
+      ;; (unless same-feed
+      ;;   (add-face-text-property beg (point) '(:overline "gray80" :extend t) nil))
+      (unless same-tags
+        (add-face-text-property beg (point) '(:overline "gray65" :extend t) nil))
 
       (when read-p
         (let ((gray (or (face-foreground 'shadow nil t) "gray55")))
           (add-face-text-property beg (point) (list :foreground gray) nil))))
 
-    (setq niva/elfeed-last-feed feed-title)))
+    (setq niva/elfeed-last-feed feed-title)
+    (setq niva/elfeed-last-tags tags-str)))
 
 ;; optional: define once if you prefer a face symbol
 (defface niva/elfeed-read-dim
@@ -205,6 +211,30 @@
           (if (string= feed-a feed-b)
               (> (elfeed-entry-date a) (elfeed-entry-date b)) ; newest first
             (string-lessp feed-a feed-b)))))
+
+(defun my/elfeed-entry-sort-by-tag-name-date (a b)
+  "Sort Elfeed entries by tag, then feed name, then newest first."
+  (let* ((a-tags (sort (mapcar #'symbol-name (elfeed-entry-tags a)) #'string<))
+         (b-tags (sort (mapcar #'symbol-name (elfeed-entry-tags b)) #'string<))
+         (a-tag (car a-tags))
+         (b-tag (car b-tags))
+         (a-feed (elfeed-entry-feed a))
+         (b-feed (elfeed-entry-feed b))
+         (a-title (or (elfeed-feed-title a-feed) ""))
+         (b-title (or (elfeed-feed-title b-feed) ""))
+         (a-date (elfeed-entry-date a))
+         (b-date (elfeed-entry-date b)))
+    (cond
+     ;; by tag (alphabetically)
+     ((and a-tag b-tag (not (string= a-tag b-tag)))
+      (string< a-tag b-tag))
+     ;; by feed name (alphabetically)
+     ((not (string= a-title b-title))
+      (string< a-title b-title))
+     ;; finally by date (newest first)
+     (t (> a-date b-date)))))
+
+(setq elfeed-search-sort-function #'my/elfeed-entry-sort-by-tag-name-date)
 
 (with-eval-after-load 'elfeed
 
