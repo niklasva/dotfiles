@@ -44,8 +44,8 @@
               backup-by-copying t
               version-control t
               delete-old-versions t
-              kept-new-versions 20
-              kept-old-versions 20
+              kept-new-versions 256
+              kept-old-versions 0
               create-lockfiles nil)
 
 (setq-default case-fold-search t)
@@ -53,7 +53,9 @@
 (add-hook 'window-setup-hook 'delete-other-windows)
 (fset 'yes-or-no-p 'y-or-n-p)
 
-(global-display-line-numbers-mode -1)
+;;(global-display-line-numbers-mode -1)
+;; (global-display-line-numbers-mode 1)
+;; (global-hl-line-mode 1)
 
 (delete-selection-mode)
 (context-menu-mode)
@@ -93,7 +95,6 @@
 
 
 (global-visual-line-mode t)
-(global-hl-line-mode -1)
 (setq fringes-outside-margins t)
 
 (setq-default left-fringe-width 8
@@ -104,9 +105,9 @@
 (setq pp-use-max-width t)
 (setq pp-max-width 120)
 
-(add-hook 'emacs-lisp-mode-hook
-          (lambda ()
-            (add-hook 'before-save-hook #'indent-region nil t)))
+;; (add-hook 'emacs-lisp-mode-hook
+;;           (lambda ()
+;;             (add-hook 'before-save-hook #'indent-region nil t)))
 
 (save-place-mode +1)
 
@@ -158,24 +159,14 @@
     (setq niva/gc-timer (run-with-idle-timer 300 nil #'niva/do-garbage-collect))))
 (add-function :after after-focus-change-function #'niva/garbage-collect-on-focus-lost)
 
-;;; Customization --------------------------------------------------------------
-;;;; solaire-mode
-(use-package solaire-mode
+;;; Backups --------------------------------------------------------------------
+(use-package async-backup
   :ensure t
+  :hook (after-save-hook . async-backup)
   :config
-  (defun solaire-mode-real-buffer-custom-p ()
-    (cond ((string= (buffer-name (buffer-base-buffer)) "*scratch*") t)
-          ((buffer-file-name (buffer-base-buffer)) t)
-          (t nil)))
+  (setq async-backup-location "~/.cache/emacs/async-backup"))
 
-  (setq solaire-mode-real-buffer-fn #'solaire-mode-real-buffer-custom-p)
-  (solaire-global-mode t)
-
-  (add-hook 'compilation-mode-hook (lambda () (solaire-mode t) (solaire-mode-reset)))
-  (add-hook 'eshell-mode-hook      (lambda () (solaire-mode t) (solaire-mode-reset)))
-  (add-hook 'gptel-mode-hook       (lambda () (solaire-mode t) (solaire-mode-reset)))
-  (add-hook 'read-only-mode-hook   (lambda () (solaire-mode t) (solaire-mode-reset)))
-  (add-hook 'org-mode-hook         (lambda () (when (string-match-p "notes\\.org$" (buffer-file-name)) (solaire-mode 1)))))
+;;; Customization --------------------------------------------------------------
 ;;;; icons
 (use-package nerd-icons
   :ensure t
@@ -248,6 +239,7 @@
                            'dark))))
 
 (global-set-key (kbd "C-c <backspace>") 'niva/toggle-internal-border-width)
+(global-set-key (kbd "C-c RET") 'niva/toggle-frame-decorations)
 
 ;;;; Popper --------------------------------------------------------------------
 (use-package popper
@@ -279,7 +271,7 @@
           (delete-window window)))))
   (advice-add #'keyboard-quit :before #'+popper-close-window-hack))
 
-;;;; iscroll
+;;;; iscroll -------------------------------------------------------------------
 (use-package iscroll
   :ensure t
   :defer t
@@ -372,6 +364,7 @@
 (global-set-key (kbd "C-c bbl")               'niva/toggle-bing-bong-light)
 (global-set-key (kbd "C-c bbd")               'niva/toggle-bing-bong-dark)
 (global-set-key (kbd "C-c ct")                'consult-theme)
+(global-set-key (kbd "C-c wu")                'winner-undo)
 (global-set-key (kbd "C-x <escape> <escape>") nil)
 
 (defun niva/new-untitled-frame ()
@@ -618,7 +611,7 @@
          ("M-s" . consult-history)
          ("M-y"     . consult-yank-pop))
   :config
-  (setq consult-preview-key '(:debounce 0.5 any))
+  (setq consult-preview-key '(:debounce 0.0 any))
 
   (consult-customize
    consult--source-buffer
@@ -638,7 +631,7 @@
 
   (consult-customize
    consult-ripgrep
-   :preview-key '("M-." "C-SPC" :debounce 0 any))
+   :preview-key '("M-." "C-SPC" :debounce 0.2 any))
 
   (setq consult-ripgrep-args "rg \
   --null \
@@ -666,6 +659,16 @@
   (global-set-key (kbd "C-s") 'consult-line)
   (global-set-key (kbd "C-c s") 'consult-line-multi))
 
+(use-package affe
+  :ensure t
+  :config
+  (consult-customize affe-grep :preview-key 'any)
+  (defun affe-orderless-regexp-compiler (input _type _ignorecase)
+    (setq input (cdr (orderless-compile input)))
+    (cons input (apply-partially #'orderless--highlight input t)))
+  (setq affe-regexp-compiler #'affe-orderless-regexp-compiler)
+  (setq affe-count 10))
+
 ;;;; Marginalia ----------------------------------------------------------------
 (use-package marginalia
   :ensure t
@@ -687,9 +690,8 @@
 ;;;; Corfu ---------------------------------------------------------------------
 (use-package corfu
   :ensure t
-  :defer t
-  :hook ((prog-mode . corfu-mode)
-         (eshell-mode . corfu-mode))
+  :init
+  (global-corfu-mode)
   :config
   (setq corfu-cycle t
         corfu-auto t
@@ -698,7 +700,25 @@
         corfu-auto-prefix 2
         corfu-count 5
         corfu-bar-width 0.0)
-  (corfu-popupinfo-mode))
+  (corfu-popupinfo-mode 1))
+
+;; --- Prescient (history + smart ranking) ---
+(use-package prescient
+  :ensure t
+  :config
+  ;; persist usage across sessions
+  (prescient-persist-mode 1)
+  ;; disable any length-based bias
+  (setq prescient-sort-length-enable nil))
+
+;; --- Corfu + Prescient bridge ---
+(use-package corfu-prescient
+  :ensure t
+  :after (corfu prescient)
+  :config
+  ;; enable prescient for corfu completions:
+  ;; ranks by recency/frequency, alpha as tiebreaker
+  (corfu-prescient-mode 1))
 
 (use-package orderless
   :ensure t
@@ -770,6 +790,10 @@
                 (let ((inhibit-read-only t))
                   (erase-buffer)
                   (eshell-send-input)))))
+
+(use-package fish-completion :ensure t
+  :config
+  (global-fish-completion-mode))
 
 ;;;; eshell-syntax-highlighting ------------------------------------------------
 (use-package eshell-syntax-highlighting
@@ -965,9 +989,11 @@
   :diminish
   :config
   ;; (setq max-mini-window-height 1.0)
-  ;; (setq eldoc-echo-area-use-multiline-p 'truncate-sym-name-if-fit)
-  (setq-default eldoc-idle-delay 0.2
-                ;; eldoc-echo-area-use-multiline-p t
+  (setq message-truncate-lines nil)
+  (setq resize-mini-windows t)
+  (setq max-mini-window-height 0.33)
+  (setq-default eldoc-idle-delay 0.4
+                eldoc-echo-area-use-multiline-p t
                 eldoc-echo-area-prefer-doc-buffer t
                 eldoc-documentation-strategy #'eldoc-documentation-compose-eagerly)
 
@@ -1009,7 +1035,7 @@
   ;; (setq-default eglot-send-changes-idle-time 5.0)
   :config
   (setq-default eglot-workspace-configuration
-                '((:basedpyright . (:typeCheckingMode "recommended"
+                '((:basedpyright . (:typeCheckingMode "basic"
                                                       :analysis (:diagnosticSeverityOverrides
                                                                  (:reportUnusedCallResult "none")
                                                                  :inlayHints (:callArgumentNames :json-false))))))
@@ -1017,7 +1043,7 @@
 
   (add-to-list 'eglot-server-programs '((c-mode c++-mode c++-ts-mode) .
                                         ("/opt/homebrew/opt/llvm/bin/clangd"
-                                         "--query-driver=/Applications/ARM/bin/arm-none-eabi-g++"
+                                         "--query-driver=/opt/arm-gnu-toolchain-13.2.Rel1-darwin-arm64-arm-none-eabi/bin/arm-none-eabi-g++"
                                          "--clang-tidy"
                                          ;; "--completion-style=detailed"
                                          "--completion-style=bundled"
@@ -1033,12 +1059,7 @@
 
   (add-to-list 'eglot-server-programs '((cmake-mode cmake-ts-mode)
                                         "neocmakelsp"
-                                        "--stdio"))
-
-  (add-to-list 'eglot-server-programs '((yaml-mode yaml-ts-mode)
-                                        "yaml-language-server"
                                         "--stdio")))
-
 
 (advice-add 'eglot--mode-line-format :override (lambda () ""))
 
@@ -1211,7 +1232,7 @@
 
 (use-package diff-hl
   :ensure t
-  :defer t
+  :demand t
   :config
 
   (defun my-diff-hl-fringe-bmp-function (_type _pos)
@@ -1240,7 +1261,7 @@
                                        ))
 
   ;; (add-hook 'prog-mode-hook 'niva/diff-hl-fix)
-  (diff-hl-margin-mode)
+  ;; (diff-hl-margin-mode)
   (global-diff-hl-mode))
 
 ;;;;; magit --------------------------------------------------------------------
@@ -1259,6 +1280,31 @@
           ([file unstaged status] . hide)
           ([file diffbuf] . hide)
           ([file commit stash] . hide)))
+
+  (evil-define-key 'normal magit-status-mode-map (kbd "C-c C-h") nil)
+  (evil-define-key 'normal magit-status-mode-map (kbd "C-c C-j") nil)
+  (evil-define-key 'normal magit-status-mode-map (kbd "C-c C-k") nil)
+  (evil-define-key 'normal magit-status-mode-map (kbd "C-c C-l") nil)
+
+  (evil-define-key 'normal magit-stash-mode-map  (kbd "C-c C-h") nil)
+  (evil-define-key 'normal magit-stash-mode-map  (kbd "C-c C-j") nil)
+  (evil-define-key 'normal magit-stash-mode-map  (kbd "C-c C-k") nil)
+  (evil-define-key 'normal magit-stash-mode-map  (kbd "C-c C-l") nil)
+
+  (evil-define-key 'normal magit-stash-section-map  (kbd "C-c C-h") nil)
+  (evil-define-key 'normal magit-stash-section-map  (kbd "C-c C-j") nil)
+  (evil-define-key 'normal magit-stash-section-map  (kbd "C-c C-k") nil)
+  (evil-define-key 'normal magit-stash-section-map  (kbd "C-c C-l") nil)
+
+  (evil-define-key 'normal magit-commit-section-map  (kbd "C-c C-h") nil)
+  (evil-define-key 'normal magit-commit-section-map  (kbd "C-c C-j") nil)
+  (evil-define-key 'normal magit-commit-section-map  (kbd "C-c C-k") nil)
+  (evil-define-key 'normal magit-commit-section-map  (kbd "C-c C-l") nil)
+
+  (evil-define-key 'normal magit-commit-message-section-map  (kbd "C-c C-h") nil)
+  (evil-define-key 'normal magit-commit-message-section-map  (kbd "C-c C-j") nil)
+  (evil-define-key 'normal magit-commit-message-section-map  (kbd "C-c C-k") nil)
+  (evil-define-key 'normal magit-commit-message-section-map  (kbd "C-c C-l") nil)
 
   (defun disable-y-or-n-p (orig-fun &rest args)
     (cl-letf (((symbol-function 'y-or-n-p) (lambda (prompt) t)))
@@ -1506,7 +1552,7 @@
                '(niva--compile-gtest-summary
                  "^[\\t ]+\\(\\(?:\\./\\|\\.\\./\\|~/\\|/\\)[^:[:space:]]*\\):\\([0-9]+\\)\\(?:[: ]\\|$\\)"
                  1 2 nil
-                 1 1))
+                 2 1))
 
 
   (setq compilation-error-regexp-alist nil)
@@ -1524,8 +1570,13 @@
 
   (advice-add 'compilation-filter :around #'niva/advice-compilation-filter))
 
+(setq process-connection-type nil)  ;; use a pipe
+(setq read-process-output-max (* 4 1024 1024))
+(setq process-adaptive-read-buffering nil)
+
 ;;; Org Mode -------------------------------------------------------------------
-(use-package org-bullets :ensure t :defer t)
+;; (use-package org-bullets :ensure t :defer t)
+
 (with-eval-after-load 'org
   (setq org-hide-emphasis-markers t
         org-fontify-quote-and-verse-blocks t
@@ -1705,10 +1756,11 @@
             (setq-local evil-normal-state-cursor '(hollow))))
 
 ;;;; eww -----------------------------------------------------------------------
-(setq-default browse-url-browser-function 'eww-browse-url
-              shr-use-fonts nil
-              shr-use-colors t
-              eww-search-prefix "https://duckduckgo.com/?q=")
+(setq-default
+ browse-url-browser-function 'browse-url-default-macosx-browser
+ shr-use-fonts nil
+ shr-use-colors t
+ eww-search-prefix "https://duckduckgo.com/?q=")
 
 (with-eval-after-load 'eww
   (with-eval-after-load 'evil-maps
@@ -1891,6 +1943,9 @@
 (add-to-list 'safe-local-variable-values '(outline-minor-mode . t))
 (add-to-list 'safe-local-variable-values '(outline-regexp . ";;;+ "))
 (add-to-list 'safe-local-variable-values '(eval progn (require 'outline) (outline-hide-sublevels 1)))
+
+;; (setq markdown-hide-markup nil)
+;; (setq markdown-hide-urls nil)
 
 ;; Local Variables:
 ;; mode: emacs-lisp
