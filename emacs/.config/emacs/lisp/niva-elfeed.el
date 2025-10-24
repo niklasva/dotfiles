@@ -90,7 +90,7 @@
                         end-of-window
                         formatted-tags
                         (propertize "             " 'face '(:underline nil))
-                        (propertize formatted-title 'face (list :inherit (elfeed-search--faces-1 (elfeed-entry-tags entry)) :underline '(:color "red")))
+                        (propertize formatted-title 'face (list :inherit (elfeed-search--faces-1 (elfeed-entry-tags entry)) :underline nil))
                         (propertize "       " 'face '(:underline nil))))
       (insert elem))))
 
@@ -122,7 +122,7 @@
 (defvar-local niva/elfeed-last-feed nil)
 
 (defun niva/elfeed-search-print-entry--single-line-alt (entry)
-  (let* ((date (format "%-15s " (relative-date (elfeed-entry-date entry))))
+  (let* ((date (format "%-13s " (relative-date (elfeed-entry-date entry))))
          (title (or (elfeed-meta entry :title) (elfeed-entry-title entry) ""))
          (title-faces (elfeed-search--faces (elfeed-entry-tags entry)))
          (feed (elfeed-entry-feed entry))
@@ -151,37 +151,50 @@
             (propertize title 'face title-faces 'kbd-help title) " "
             (format " (%s) " tags-str))))
 
+;; (defmacro with-overline-inserts (&rest body)
+;;   "Run BODY, then add :overline to everything inserted by it."
+;;   (declare (indent 0))
+;;   `(let ((beg (point)))
+;;      (prog1 (progn ,@body)
+;;        ;; compose with existing faces rather than clobber
+;;        (add-face-text-property beg (point) '(:overline "gray20") 'append))))
+
+
 (defun niva/elfeed-search-print-entry--single-line-alt-mixed (entry)
   (let* ((date (format "%-9s " (relative-date (elfeed-entry-date entry))))
          (title (or (elfeed-meta entry :title) (elfeed-entry-title entry) ""))
-         (title-faces (elfeed-search--faces (elfeed-entry-tags entry)))
          (feed (elfeed-entry-feed entry))
-         (feed-title
-          (when feed
-            (or (elfeed-meta feed :title) (elfeed-feed-title feed))))
+         (feed-title (when feed (or (elfeed-meta feed :title)
+                                    (elfeed-feed-title feed))))
          (tags (mapcar #'symbol-name (elfeed-entry-tags entry)))
          (tags (delete "star" (delete "unread" tags)))
          (tags-str (mapconcat
                     (lambda (s) (propertize s 'face 'elfeed-search-tag-face))
                     tags ","))
-         (title-width (- (window-width) 25 elfeed-search-trailing-width))
-         (title-column (elfeed-format-column
-                        title (elfeed-clamp
-                               elfeed-search-title-min-width
-                               title-width
-                               elfeed-search-title-max-width)
-                        :left)))
+         (read-p (not (memq 'unread (elfeed-entry-tags entry)))))
 
-    (unless (string= feed-title niva/elfeed-last-feed)
-      (insert (propertize "b" 'display `(space :align-to 0 :height 2.1))))
-    (setq niva/elfeed-last-feed feed-title)
+    (let* ((same-feed (string= feed-title niva/elfeed-last-feed))
+           (beg (point)))
+      (insert (propertize date 'face 'elfeed-search-date-face)
+              "  \t"
+              (propertize feed-title 'face 'elfeed-search-feed-face)
+              ": "
+              (propertize title 'face 'default) " "
+              (format " (%s) " tags-str))
 
-    (insert (propertize date 'face 'elfeed-search-date-face)
-            "  \t"
-            (format "%s: " (propertize feed-title 'face title-faces))
-            (propertize title 'face title-faces 'kbd-help title) " "
-            (format " (%s) " tags-str))))
+      (unless same-feed
+        (add-face-text-property beg (point) '(:overline "gray30" :extend t) nil))
 
+      (when read-p
+        (let ((gray (or (face-foreground 'shadow nil t) "gray55")))
+          (add-face-text-property beg (point) (list :foreground gray) nil))))
+
+    (setq niva/elfeed-last-feed feed-title)))
+
+;; optional: define once if you prefer a face symbol
+(defface niva/elfeed-read-dim
+  '((t :inherit default :foreground "gray55"))
+  "Dim face for read Elfeed rows.")
 
 (setq elfeed-search-print-entry-function #'niva/elfeed-search-print-entry--single-line-alt-mixed)
 
@@ -202,7 +215,8 @@
       (setq-local visual-fill-column-center-text nil
                   visual-fill-column-fringes-outside-margins t
                   visual-fill-column-extra-text-width '(-4 . 0)
-                  visual-fill-column-width 100)
+                  visual-fill-column-width 80
+                  visual-fill-column-center-text nil)
       (adaptive-wrap-prefix-mode 1)
       (visual-fill-column-mode))
     (switch-to-buffer buff))

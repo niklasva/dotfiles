@@ -1729,9 +1729,11 @@
                 ;; variable-pitch-text
                 read-multiple-choice-face
                 help-key-binding
+
                 ;; fixed-pitch
                 ;; fixed-pitch-serif
-                info-menu-header))
+                info-menu-header
+                org-document-title))
   (ignore-errors
     (set-face-attribute face nil
                         :height 'unspecified
@@ -1765,7 +1767,7 @@
 
 (defun niva/elfeed-search-hook ()
   (elfeed-update)
-  (set-window-dedicated-p (selected-window) t)
+  ;; (set-window-dedicated-p (selected-window) t)
   (visual-line-mode 0)
   (setf (cdr (assq 'truncation   fringe-indicator-alist)) '(nil nil)
         (cdr (assq 'continuation fringe-indicator-alist)) '(nil nil))
@@ -1774,6 +1776,7 @@
 (add-hook 'elfeed-search-mode-hook #'niva/elfeed-search-hook)
 (add-hook 'elfeed-show-mode-hook (lambda ()
                                    (blink-cursor-mode 0)))
+
 ;; (setq-local evil-normal-state-cursor '(nil))
 
 (use-package elfeed-summary
@@ -1803,7 +1806,6 @@
 (use-package elfeed-protocol
   :ensure t
   :after elfeed
-  :defer t
   :config
   (require 'niva-elfeed-protocol)
   (setq elfeed-use-curl t
@@ -1881,8 +1883,6 @@
       auto-window-vscroll nil)
 
 ;;; End ------------------------------------------------------------------------
-(setq inhibit-message nil)
-(setq inhibit-redisplay nil)
 
 ;;; Local variables ------------------------------------------------------------
 
