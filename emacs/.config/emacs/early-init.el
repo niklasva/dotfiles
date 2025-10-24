@@ -47,24 +47,26 @@
 
 (my/init-apply-frame-params)
 
+
 ;;; Paths -------------------------------------------------------------------
 (defconst my/init-exec-path-dirs
   '( "/Users/niklas/.pyenv/shims"
-    "/Users/niklas/.pyenv/bin"
-    "/Users/niklas/scripts"
-    "/Users/niklas/.local/bin"
-    "/Users/niklas/.cargo/bin"
-    "/Users/niklas/.go/bin"
-    "/Users/niklas/.bin/mipsel-none-elf/bin"
-    "/Users/niklas/.bin"
-    "/opt/homebrew/opt/gnu-sed/libexec/gnubin"
-    "/opt/homebrew/opt/coreutils/libexec/gnubin"
-    "/Applications/ARM/bin"
-    "/opt/homebrew/bin"
-    "/opt/homebrew/sbin"
-    "/Applications/Xcode.app/Contents/Developer/usr/bin"
-    "/Library/Frameworks/Mono.framework/Versions/Current/Commands"
-    "/usr/local/bin")
+     "/Users/niklas/.pyenv/bin"
+     "/Users/niklas/scripts"
+     "/Users/niklas/.local/bin"
+     "/Users/niklas/.cargo/bin"
+     "/Users/niklas/.go/bin"
+     "/Users/niklas/.bin/mipsel-none-elf/bin"
+     "/Users/niklas/.bin"
+     "/opt/homebrew/opt/gnu-sed/libexec/gnubin"
+     "/opt/homebrew/opt/coreutils/libexec/gnubin"
+     "/opt/arm-gnu-toolchain-13.2.Rel1-darwin-arm64-arm-none-eabi/bin"
+     ;; "/Applications/ARM/bin"
+     "/opt/homebrew/bin"
+     "/opt/homebrew/sbin"
+     "/Applications/Xcode.app/Contents/Developer/usr/bin"
+     "/Library/Frameworks/Mono.framework/Versions/Current/Commands"
+     "/usr/local/bin")
   "Directories pushed into `exec-path` during early init.")
 
 (defun my/init-refresh-exec-path ()
@@ -72,7 +74,7 @@
   (dolist (dir my/init-exec-path-dirs)
     (let ((expanded (expand-file-name dir)))
       (when (file-directory-p expanded)
-        (add-to-list 'exec-path expanded t))))
+        (add-to-list 'exec-path expanded))))
   (setenv "PATH" (mapconcat #'identity exec-path path-separator)))
 
 (my/init-refresh-exec-path)
@@ -104,6 +106,14 @@
 
 ;;; Bootstrap straight.el ---------------------------------------------------
 (load (expand-file-name "lisp/init-elpaca.el" user-emacs-directory))
+(use-package exec-path-from-shell
+  :ensure t
+  :init
+  (setq exec-path-from-shell-check-startup-files nil)
+  (exec-path-from-shell-initialize))
+
+(setq inhibit-redisplay t
+      inhibit-message   t)
 
 ;;; Local variables ---------------------------------------------------------
 ;; Local Variables:
