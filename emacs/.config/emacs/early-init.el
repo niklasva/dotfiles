@@ -4,28 +4,40 @@
 ;;; -------------------------------------------------------------------------
 
 ;;; Startup/window behavior -------------------------------------------------
+(require 'server)
+
+(defun my/redirect-to-running-server ()
+  (when (and (not (daemonp))
+             (server-running-p))
+    (let ((args (append '("-c") command-line-args-left)))
+      (apply #'call-process "/opt/homebrew/bin/emacsclient" nil 0 nil args))
+    (kill-emacs)))
+
+(my/redirect-to-running-server)
+
+(unless (server-running-p)
+  (server-start))
+
 (setq frame-inhibit-implied-resize nil
       frame-resize-pixelwise       t
       window-resize-pixelwise      t)
-
-(setq inhibit-redisplay t
-      inhibit-message   t)
 
 (defconst my/init-frame-params
   '((min-height              . 1)
     (height                  . 40)
     (min-width               . 1)
     (width                   . 120)
-    (internal-border-width   . 1)
+    (internal-border-width   . 20)
     (left-fringe             . 1)
     (right-fringe            . 1)
     (vertical-scroll-bars    . nil)
-    (tool-bar-lines          . 0)
     (undecorated             . nil)
     (visible                 . nil)
     (ns-appearance           . 'dark)
     (ns-transparent-titlebar . t))
   "Initial frame parameters applied both before and after init.")
+
+(tool-bar-mode -1)
 
 (defun my/init-apply-frame-params ()
   "Populate both frame alists with `my/init-frame-params`."
