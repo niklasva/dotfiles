@@ -4,9 +4,11 @@
 
 ;;; General settings
 (setq custom-safe-themes t)
+(custom-set-faces '(fixed-pitch  ((t (:inherit unspecified)))))
+
 (add-to-list 'custom-theme-load-path (concat user-emacs-directory "themes"))
 
-;; Bing Bong (use-package bing-bong-dark-theme  :commands (niva/toggle-bing-bong-dark)  :load-path "themes")
+(use-package bing-bong-dark-theme  :commands (niva/toggle-bing-bong-dark)  :load-path "themes")
 (use-package bing-bong-light-theme :commands (niva/toggle-bing-bong-light) :load-path "themes")
 
 ;;; Kaolin Themes
@@ -53,6 +55,11 @@
 (use-package doric-themes       :ensure (:host github :repo "protesilaos/doric-themes")             :defer t)
 (use-package os1-theme          :ensure (:host github :repo "sashimacs/os1-theme")                  :defer t)
 (use-package colorless-themes   :ensure (:host github :repo "lthms/colorless-themes.el"             :files ("colorless-themes.el" "*.el")))
+(use-package base16-theme
+  :ensure t
+  :config
+  (setq base16-theme-distinct-fringe-background nil))
+
 (use-package alect-themes          :ensure t :defer t)
 (use-package almost-mono-themes    :ensure t :defer t)
 (use-package basic-theme           :ensure t :defer t)
@@ -204,8 +211,6 @@
 
     (when (niva/theme-is-active "south")
       (custom-set-faces
-       ;; '(elfeed-search-feed-face         ((t (:inherit 'fixed-pitch :bold nil :foreground unspecified))))
-       ;; '(elfeed-search-date-face         ((t (:inherit 'fixed-pitch))))
        '(org-block                   ((t (:background nil))))
        '(org-block-begin-line        ((t (:background nil :inherit 'org-block :extend t :overline t   :underline nil))))
        '(org-block-end-line          ((t (:background nil :inherit 'org-block :extend t :overline nil :underline t))))))
@@ -221,8 +226,7 @@
                         '(org-block                   ((t (:inherit 'default :background "black" :extend t))))
                         '(org-block-begin-line        ((t (:inherit 'shadow :foreground "#A06537" :foreground "#471000" :background "black" :overline t :underline nil :extend t))))
                         '(org-block-end-line          ((t (:inherit 'org-block-begin-line :foreground "#471000" :background "black" :overline nil :underline t :extend t)))))
-      (set-face-foreground 'default "#ffe0a0")
-      )
+      (set-face-foreground 'default "#ffe0a0"))
 
     (when (niva/theme-is-active "vegetative")
       (set-face-foreground 'default "#58B22C"))
@@ -230,15 +234,20 @@
     (when (niva/theme-is-active "lambda")
       (custom-set-faces '(vertical-border ((t (:foreground unspecified :inherit corfu-border))))))
 
+    (when (niva/theme-is-active "base16")
+      (custom-set-faces
+       '(elfeed-search-feed-face         ((t (:inherit 'font-lock-function-call-face))))
+       '(elfeed-search-tag-face          ((t (:inherit 'shadow))))))
+
     (custom-set-faces
      `(help-key-binding ((t (:box nil
                                   :background unspecified
                                   :foreground ,(face-attribute 'default :foreground))))))
-    (custom-set-faces '(elfeed-search-unread-title-face ((t :inherit 'default :underline nil :bold nil :foreground unspecified)))
-                      '(elfeed-search-title-face        ((t (:inherit 'shadow :underline nil :foreground unspecified))))
-                      '(elfeed-search-feed-face         ((t (:inherit 'default :underline nil :foreground unspecified))))
-                      '(elfeed-search-tag-face          ((t (:inherit 'shadow :underline nil :foreground unspecified))))
-                      '(elfeed-search-date-face         ((t (:inherit 'org-agenda-date :underline nil :foreground unspecified)))))
+    ;; (custom-set-faces '(elfeed-search-unread-title-face ((t :inherit 'default :underline nil :bold nil :foreground unspecified)))
+    ;;                   '(elfeed-search-title-face        ((t (:inherit 'shadow :underline nil :foreground unspecified))))
+    ;;                   '(elfeed-search-feed-face         ((t (:inherit 'default :underline nil :foreground unspecified))))
+    ;;                   '(elfeed-search-tag-face          ((t (:inherit 'shadow :underline nil :foreground unspecified))))
+    ;;                   '(elfeed-search-date-face         ((t (:inherit 'org-agenda-date :underline nil :foreground unspecified)))))
     (niva/diff-hl-fix)))
 
 (use-package nano-theme
@@ -263,6 +272,10 @@
 
 (with-eval-after-load 'dired
   (custom-set-faces '(dired-directory ((t (:inherit link :underline nil))))))
+
+(custom-set-faces
+ '(flymake-error ((t (:underline (:style wave :color "red")))))
+ '(flymake-warning ((t (:underline (:style wave :color "orange"))))))
 
 (provide 'theme-packages)
 ;;; theme-packages.el ends here
