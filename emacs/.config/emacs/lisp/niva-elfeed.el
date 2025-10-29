@@ -182,13 +182,12 @@
               " "
               (format "%-10s" (propertize feed-title 'face 'elfeed-search-feed-face))
               " "
-              (propertize title 'face 'default) " "
-              (format " (%s) " tags-str))
-
-      ;; (unless same-feed
-      ;;   (add-face-text-property beg (point) '(:overline "gray80" :extend t) nil))
+              (propertize title 'face 'default) " ")
       (unless same-tags
-        (add-face-text-property beg (point) '(:overline "gray65" :extend t) nil))
+        (insert (format " (%s) " tags-str)))
+
+      (unless same-tags
+        (add-face-text-property beg (point) `(:overline ,(face-foreground 'shadow nil t)) nil))
 
       (when read-p
         (let ((gray (or (face-foreground 'shadow nil t) "gray55")))
