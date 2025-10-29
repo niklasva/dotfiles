@@ -167,34 +167,52 @@
          (feed (elfeed-entry-feed entry))
          (feed-title (when feed (or (elfeed-meta feed :title)
                                     (elfeed-feed-title feed))))
-         (tags (mapcar #'symbol-name (elfeed-entry-tags entry)))
-         (tags (delete "star" (delete "unread" tags)))
-         (tags-str (mapconcat
-                    (lambda (s) (propertize s 'face 'elfeed-search-tag-face))
-                    tags ","))
+         (tags-raw (mapcar #'symbol-name (elfeed-entry-tags entry)))
+         (tags-raw (delete "star" (delete "unread" tags-raw)))
+         (tags-key (mapconcat #'identity tags-raw ","))
+         (tags-str (mapconcat (lambda (s) (propertize s 'face 'elfeed-search-tag-face))
+                              tags-raw ","))
          (read-p (not (memq 'unread (elfeed-entry-tags entry)))))
 
-    (let* (
-           (same-feed (string= feed-title niva/elfeed-last-feed))
-           (same-tags (string= tags-str niva/elfeed-last-tags))
+    ;; read previous line's keys at its true bol
+    (let* ((prev-tags-key (save-excursion
+                            (beginning-of-line)
+                            (unless (bobp)
+                              (forward-line -1)
+                              (get-text-property (line-beginning-position)
+                                                 'niva/elfeed-tags-key))))
+           (prev-feed-key (save-excursion
+                            (beginning-of-line)
+                            (unless (bobp)
+                              (forward-line -1)
+                              (get-text-property (line-beginning-position)
+                                                 'niva/elfeed-feed-key))))
+           (same-feed (and feed-title (string= feed-title (or prev-feed-key ""))))
+           (same-tags (string= tags-key (or prev-tags-key "")))
            (beg (point)))
       (insert (propertize date 'face 'elfeed-search-date-face)
-              " "
-              (format "%-10s" (propertize feed-title 'face 'elfeed-search-feed-face))
-              " "
-              (propertize title 'face 'default) " ")
+              ;; " "
+              (format "%-10s " (propertize (or feed-title "") 'face 'elfeed-search-feed-face))
+              ;; " "
+              (propertize title 'face 'elfeed-search-unread-title-face) " ")
+
       (unless same-tags
         (insert (format " (%s) " tags-str)))
 
       (unless same-tags
-        (add-face-text-property beg (point) `(:overline ,(face-foreground 'shadow nil t)) nil))
+        (add-face-text-property beg (point)
+                                `(:overline ,(face-foreground 'shadow nil t))
+                                nil))
 
       (when read-p
         (let ((gray (or (face-foreground 'shadow nil t) "gray55")))
-          (add-face-text-property beg (point) (list :foreground gray) nil))))
+          (add-face-text-property beg (point) (list :foreground gray) nil)))
 
-    (setq niva/elfeed-last-feed feed-title)
-    (setq niva/elfeed-last-tags tags-str)))
+      ;; ensure props cover the WHOLE line, esp. the line-beg
+      (let ((line-beg (save-excursion (beginning-of-line) (point)))
+            (line-end (save-excursion (end-of-line) (point))))
+        (put-text-property line-beg line-end 'niva/elfeed-tags-key tags-key)
+        (put-text-property line-beg line-end 'niva/elfeed-feed-key (or feed-title ""))))))
 
 ;; optional: define once if you prefer a face symbol
 (defface niva/elfeed-read-dim
