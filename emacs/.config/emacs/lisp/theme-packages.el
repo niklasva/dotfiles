@@ -58,6 +58,7 @@
 (use-package base16-theme
   :ensure t
   :config
+  (setq base16-theme-highlight-mode-line 'box)
   (setq base16-theme-distinct-fringe-background nil))
 
 (use-package alect-themes          :ensure t :defer t)
@@ -236,8 +237,30 @@
 
     (when (niva/theme-is-active "base16")
       (custom-set-faces
-       '(elfeed-search-feed-face         ((t (:inherit 'font-lock-function-call-face))))
-       '(elfeed-search-tag-face          ((t (:inherit 'shadow))))))
+       '(elfeed-search-feed-face ((t (:inherit 'font-lock-string-face))))
+       '(elfeed-search-tag-face ((t (:inherit 'font-lock-preprocessor-face))))
+       '(shr-link ((t (:inherit 'link :foreground unspecified))))
+       '(shr-h1 ((t (:inherit 'org-level-1))))
+       '(shr-h2 ((t (:inherit 'org-level-2))))
+       '(shr-h3 ((t (:inherit 'org-level-3))))
+       '(shr-h4 ((t (:inherit 'org-level-4))))
+       '(vertical-border ((t (:foreground unspecified :inherit shadow))))
+       (set-face-background 'flymake-warning 'unspecified)
+       (set-face-background 'flymake-error 'unspecified))
+      ;; (custom-set-faces
+      ;;  ;; '(elfeed-search-date-face         ((t (:font "Arial"))))
+      ;;  '(elfeed-search-feed-face         ((t (:underline nil))))
+      ;;  '(elfeed-search-tag-face         ((t (:font "Arial"))))
+      ;;  '(elfeed-search-title-face         ((t (:underline nil))))
+      ;;  '(elfeed-search-unread-title-face         ((t (:underline nil))))
+      ;;  )
+      )
+
+    ;; (add-hook 'prog-mode-hook
+    ;;           (lambda ()
+    ;;             (font-lock-add-keywords nil
+    ;;                                     '(("\\_<[0-9]+\\(?:\\.[0-9]+\\)?\\_>"  ; integers & floats
+    ;;                                        0 'font-lock-number-face keep)))))
 
     (custom-set-faces
      `(help-key-binding ((t (:box nil

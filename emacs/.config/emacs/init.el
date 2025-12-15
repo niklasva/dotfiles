@@ -278,8 +278,9 @@
   :diminish iscroll-mode
   :hook ((text-mode elfeed-show-mode eww-mode shr-mode) . iscroll-mode)
   :config
-  (evil-define-key 'normal iscroll-mode-map (kbd "k") 'iscroll-previous-line)
-  (evil-define-key 'normal iscroll-mode-map (kbd "j") 'iscroll-next-line))
+  (when niva-enable-evil-mode
+    (evil-define-key 'normal iscroll-mode-map (kbd "k") 'iscroll-previous-line)
+    (evil-define-key 'normal iscroll-mode-map (kbd "j") 'iscroll-next-line)))
 
 ;;; Controls -------------------------------------------------------------------
 ;;;; Evil mode -----------------------------------------------------------------
@@ -365,6 +366,7 @@
 (global-set-key (kbd "C-c bbd")               'niva/toggle-bing-bong-dark)
 (global-set-key (kbd "C-c ct")                'consult-theme)
 (global-set-key (kbd "C-c wu")                'winner-undo)
+(global-set-key (kbd "C-c es")                'eshell)
 (global-set-key (kbd "C-x <escape> <escape>") nil)
 
 (defun niva/new-untitled-frame ()
@@ -604,11 +606,10 @@
 (use-package consult
   :ensure t
   :demand t
-  :bind (("C-s"     . consult-line)
+  :bind (("M-s"     . consult-line)
          ("C-M-l"   . consult-focus-lines)
          ("C-x b"   . consult-buffer)
          ("C-x 4 b" . consult-buffer-other-window)
-         ("M-s" . consult-history)
          ("M-y"     . consult-yank-pop))
   :config
   (setq consult-preview-key '(:debounce 0.0 any))
@@ -654,10 +655,7 @@
   (defun niva/consult-ripgrep-in-directory ()
     (interactive)
     (let ((directory-to-search (read-directory-name "Search in directory: " nil nil t)))
-      (consult-ripgrep (expand-file-name "." directory-to-search))))
-
-  (global-set-key (kbd "C-s") 'consult-line)
-  (global-set-key (kbd "C-c s") 'consult-line-multi))
+      (consult-ripgrep (expand-file-name "." directory-to-search)))))
 
 (use-package affe
   :ensure t
@@ -745,6 +743,10 @@
   :ensure nil
   :defines eshell-prompt-function
   :config
+  (add-hook 'eshell-mode-hook
+            (lambda ()
+              (define-key eshell-mode-map (kbd "C-r") #'consult-history)))
+
   (defalias 'ff 'find-file)
   (add-hook 'shell-mode-hook 'with-editor-export-editor)
   (add-hook 'eshell-mode-hook
@@ -816,10 +818,14 @@
 (add-hook 'vterm-exit-functions #'niva/vterm-handle-exit)
 
 ;;;; Alias ---------------------------------------------------------------------
-(defalias 'ff    "for i in ${eshell-flatten-list $*} {find-file $i}")
-(defalias 'emacs "ff")
-(defalias 'fo    "find-file-other-window $1")
-(defalias 'ts    "ts '[%Y-%m-%d %H:%M:%S]'")
+
+(add-hook 'eshell-first-time-mode-hook
+          (lambda ()
+            (eshell/alias "ff" "for i in ${eshell-flatten-list $*} {find-file $i}")))
+
+(add-hook 'eshell-first-time-mode-hook
+          (lambda ()
+            (eshell/alias "ts" "ts '[%Y-%m-%d %H:%M:%S]'")))
 
 ;;;; vterm ---------------------------------------------------------------------
 (use-package vterm
@@ -924,10 +930,12 @@
 ;;;;; Other file ---------------------------------------------------------------
 (setq cc-other-file-alist
       '(("\\.h\\'" (".cpp" ".c"))
-        ("\\.hpp\\'" (".cpp" ".tpp"))
+        ("\\.hpp\\'" (".cpp" ".tpp" ".inc"))
         ("\\.c\\'" (".h"))
-        ("\\.cpp\\'" (".h" ".hpp" ".tpp"))
-        ("\\.tpp\\'" (".hpp" ".cpp"))))
+        ("\\.cpp\\'" (".h" ".hpp" ".tpp" ".inc" ".cmake"))
+        ("\\.tpp\\'" (".hpp" ".cpp"))
+        ("\\.cmake\\'" (".hpp" ".cpp"))
+        ("\\.inc\\'" (".hpp" ".cpp"))))
 
 ;;;;; Mode extension -----------------------------------------------------------
 (dolist (pair '(("\\.tpp\\'" . c++-mode)
@@ -1012,7 +1020,7 @@
 ;;;;; Eglot --------------------------------------------------------------------
 (run-with-idle-timer 10 nil (lambda () (require 'eglot)))
 (use-package eglot
-  :ensure nil
+  :ensure t
   :defer t
   :hook ((c-mode          . eglot-ensure)
          (c++-mode        . eglot-ensure)
@@ -1043,7 +1051,7 @@
 
   (add-to-list 'eglot-server-programs '((c-mode c++-mode c++-ts-mode) .
                                         ("/opt/homebrew/opt/llvm/bin/clangd"
-                                         "--query-driver=/opt/arm-gnu-toolchain-13.2.Rel1-darwin-arm64-arm-none-eabi/bin/arm-none-eabi-g++"
+                                         "--query-driver=/opt/arm-gnu-toolchain-14.3.rel1-darwin-arm64-arm-none-eabi/bin/arm-none-eabi-g++"
                                          "--clang-tidy"
                                          ;; "--completion-style=detailed"
                                          "--completion-style=bundled"
@@ -1063,9 +1071,9 @@
 
 (advice-add 'eglot--mode-line-format :override (lambda () ""))
 
-(add-hook 'eglot-managed-mode-hook
-          (lambda ()
-            (kill-local-variable 'flymake-indicator-type)))
+;; (add-hook 'eglot-managed-mode-hook
+;;           (lambda ()
+;;             (kill-local-variable 'flymake-indicator-type)))
 
 (with-eval-after-load 'eglot
   (add-hook 'eglot-managed-mode-hook (lambda () (eglot-inlay-hints-mode -1)))
@@ -1107,22 +1115,25 @@
 
 (use-package eglot-inactive-regions
   :ensure t
-  :defer t
+  :demand t
   :after eglot
   :custom
   (eglot-inactive-regions-opacity 0.4)
   :config
   (eglot-inactive-regions-mode 1))
 
+;;;; jsonrpc -------------------------------------------------------------------
+(use-package jsonrpc :ensure t :defer t)
+
 ;;;; Flymake -------------------------------------------------------------------
 (use-package flymake
-  :ensure nil
+  :ensure t
   :defer t
   :config
   (setq flymake-start-on-save-buffer t
         flymake-no-changes-timeout 0.2
-        flymake-fringe-indicator-position nil
-        flymake-indicator-type nil
+        ;; flymake-fringe-indicator-position nil
+        ;; flymake-indicator-type nil
         flymake-mode-line-lighter nil)
 
   (add-hook 'sh-mode-hook 'flymake-mode)
@@ -1163,6 +1174,7 @@
                   ("\\.cpp\\'"          . c++-ts-mode)
                   ("\\.hpp\\'"          . c++-ts-mode)
                   ("\\.tpp\\'"          . c++-ts-mode)
+                  ("\\.inc\\'"          . c++-ts-mode)
                   ("\\.java\\'"         . java-ts-mode)
                   ("\\.js\\'"           . js-ts-mode)
                   ("\\.kts\\'"          . kotlin-ts-mode)
@@ -1371,6 +1383,13 @@
 (defvar niva/run-test-command-history nil)
 
 ;;;; Compilation mode ----------------------------------------------------------
+
+(setq compilation-scroll-output 'next-error
+      process-adaptive-read-buffering nil)
+
+(setq display-buffer-alist
+      '(("\\*compilation\\*" . (display-buffer-reuse-window))))
+
 (use-package xterm-color
   :ensure t
   :config
@@ -1570,9 +1589,9 @@
 
   (advice-add 'compilation-filter :around #'niva/advice-compilation-filter))
 
-(setq process-connection-type nil)  ;; use a pipe
-(setq read-process-output-max (* 4 1024 1024))
-(setq process-adaptive-read-buffering nil)
+;;;;;;;; niva
+;; (setq process-connection-type nil)  ;; use a pipe
+;; (setq read-process-output-max (* 4 1024 1024))
 
 ;;; Org Mode -------------------------------------------------------------------
 ;; (use-package org-bullets :ensure t :defer t)
@@ -1915,6 +1934,9 @@
 ;;;;; Customization ------------------------------------------------------------
 (use-package relative-date :ensure (relative-date :host github :repo "rougier/relative-date"))
 
+(use-package outline
+  :bind ( :map outline-minor-mode-map
+          ("<tab>" . outline-toggle-children)))
 
 (add-hook 'emacs-lisp-mode-hook
           (lambda ()
@@ -1944,8 +1966,16 @@
 (add-to-list 'safe-local-variable-values '(outline-regexp . ";;;+ "))
 (add-to-list 'safe-local-variable-values '(eval progn (require 'outline) (outline-hide-sublevels 1)))
 
+(use-package elastic-indent
+  :ensure (elastic-indent :type git :host github :repo "jyp/elastic-modes"))
+
+(use-package elastic-table
+  :ensure (elastic-table :type git :host github :repo "jyp/elastic-modes"))
+
 ;; (setq markdown-hide-markup nil)
 ;; (setq markdown-hide-urls nil)
+
+(require 'niva-pytest)
 
 ;; Local Variables:
 ;; mode: emacs-lisp

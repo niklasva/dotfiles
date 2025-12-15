@@ -162,7 +162,7 @@
 
 
 (defun niva/elfeed-search-print-entry--single-line-alt-mixed (entry)
-  (let* ((date (format "%-8s " (relative-date (elfeed-entry-date entry))))
+  (let* ((date (format "%-12s " (relative-date (elfeed-entry-date entry))))
          (title (or (elfeed-meta entry :title) (elfeed-entry-title entry) ""))
          (feed (elfeed-entry-feed entry))
          (feed-title (when feed (or (elfeed-meta feed :title)
@@ -170,8 +170,6 @@
          (tags-raw (mapcar #'symbol-name (elfeed-entry-tags entry)))
          (tags-raw (delete "star" (delete "unread" tags-raw)))
          (tags-key (mapconcat #'identity tags-raw ","))
-         (tags-str (mapconcat (lambda (s) (propertize s 'face 'elfeed-search-tag-face))
-                              tags-raw ","))
          (read-p (not (memq 'unread (elfeed-entry-tags entry)))))
 
     ;; read previous line's keys at its true bol
@@ -191,13 +189,13 @@
            (same-tags (string= tags-key (or prev-tags-key "")))
            (beg (point)))
       (insert (propertize date 'face 'elfeed-search-date-face)
-              ;; " "
-              (format "%-10s " (propertize (or feed-title "") 'face 'elfeed-search-feed-face))
-              ;; " "
+              " "
+              (format "%s" (propertize (or feed-title "") 'face 'elfeed-search-feed-face))
+              " "
               (propertize title 'face 'elfeed-search-unread-title-face) " ")
 
       (unless same-tags
-        (insert (format " (%s) " tags-str)))
+        (insert (propertize (format "%s" tags-raw) 'face 'elfeed-search-tag-face)))
 
       (unless same-tags
         (add-face-text-property beg (point)
@@ -262,7 +260,7 @@
       (setq-local visual-fill-column-center-text nil
                   visual-fill-column-fringes-outside-margins t
                   visual-fill-column-extra-text-width '(-4 . 0)
-                  visual-fill-column-width 80
+                  visual-fill-column-width 120
                   visual-fill-column-center-text nil)
       (adaptive-wrap-prefix-mode 1)
       (visual-fill-column-mode))
