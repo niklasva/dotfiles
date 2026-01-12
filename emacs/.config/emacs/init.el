@@ -688,6 +688,9 @@
 ;;;; Corfu ---------------------------------------------------------------------
 (use-package corfu
   :ensure t
+  :bind (:map corfu-map
+              ([remap next-line]     . nil)
+              ([remap previous-line] . nil))
   :init
   (global-corfu-mode)
   :config
@@ -1293,30 +1296,31 @@
           ([file diffbuf] . hide)
           ([file commit stash] . hide)))
 
-  (evil-define-key 'normal magit-status-mode-map (kbd "C-c C-h") nil)
-  (evil-define-key 'normal magit-status-mode-map (kbd "C-c C-j") nil)
-  (evil-define-key 'normal magit-status-mode-map (kbd "C-c C-k") nil)
-  (evil-define-key 'normal magit-status-mode-map (kbd "C-c C-l") nil)
+  (when niva-enable-evil-mode
+    (evil-define-key 'normal magit-status-mode-map (kbd "C-c C-h") nil)
+    (evil-define-key 'normal magit-status-mode-map (kbd "C-c C-j") nil)
+    (evil-define-key 'normal magit-status-mode-map (kbd "C-c C-k") nil)
+    (evil-define-key 'normal magit-status-mode-map (kbd "C-c C-l") nil)
 
-  (evil-define-key 'normal magit-stash-mode-map  (kbd "C-c C-h") nil)
-  (evil-define-key 'normal magit-stash-mode-map  (kbd "C-c C-j") nil)
-  (evil-define-key 'normal magit-stash-mode-map  (kbd "C-c C-k") nil)
-  (evil-define-key 'normal magit-stash-mode-map  (kbd "C-c C-l") nil)
+    (evil-define-key 'normal magit-stash-mode-map  (kbd "C-c C-h") nil)
+    (evil-define-key 'normal magit-stash-mode-map  (kbd "C-c C-j") nil)
+    (evil-define-key 'normal magit-stash-mode-map  (kbd "C-c C-k") nil)
+    (evil-define-key 'normal magit-stash-mode-map  (kbd "C-c C-l") nil)
 
-  (evil-define-key 'normal magit-stash-section-map  (kbd "C-c C-h") nil)
-  (evil-define-key 'normal magit-stash-section-map  (kbd "C-c C-j") nil)
-  (evil-define-key 'normal magit-stash-section-map  (kbd "C-c C-k") nil)
-  (evil-define-key 'normal magit-stash-section-map  (kbd "C-c C-l") nil)
+    (evil-define-key 'normal magit-stash-section-map  (kbd "C-c C-h") nil)
+    (evil-define-key 'normal magit-stash-section-map  (kbd "C-c C-j") nil)
+    (evil-define-key 'normal magit-stash-section-map  (kbd "C-c C-k") nil)
+    (evil-define-key 'normal magit-stash-section-map  (kbd "C-c C-l") nil)
 
-  (evil-define-key 'normal magit-commit-section-map  (kbd "C-c C-h") nil)
-  (evil-define-key 'normal magit-commit-section-map  (kbd "C-c C-j") nil)
-  (evil-define-key 'normal magit-commit-section-map  (kbd "C-c C-k") nil)
-  (evil-define-key 'normal magit-commit-section-map  (kbd "C-c C-l") nil)
+    (evil-define-key 'normal magit-commit-section-map  (kbd "C-c C-h") nil)
+    (evil-define-key 'normal magit-commit-section-map  (kbd "C-c C-j") nil)
+    (evil-define-key 'normal magit-commit-section-map  (kbd "C-c C-k") nil)
+    (evil-define-key 'normal magit-commit-section-map  (kbd "C-c C-l") nil)
 
-  (evil-define-key 'normal magit-commit-message-section-map  (kbd "C-c C-h") nil)
-  (evil-define-key 'normal magit-commit-message-section-map  (kbd "C-c C-j") nil)
-  (evil-define-key 'normal magit-commit-message-section-map  (kbd "C-c C-k") nil)
-  (evil-define-key 'normal magit-commit-message-section-map  (kbd "C-c C-l") nil)
+    (evil-define-key 'normal magit-commit-message-section-map  (kbd "C-c C-h") nil)
+    (evil-define-key 'normal magit-commit-message-section-map  (kbd "C-c C-j") nil)
+    (evil-define-key 'normal magit-commit-message-section-map  (kbd "C-c C-k") nil)
+    (evil-define-key 'normal magit-commit-message-section-map  (kbd "C-c C-l") nil))
 
   (defun disable-y-or-n-p (orig-fun &rest args)
     (cl-letf (((symbol-function 'y-or-n-p) (lambda (prompt) t)))
@@ -1936,7 +1940,7 @@
 
 (use-package outline
   :bind ( :map outline-minor-mode-map
-          ("<tab>" . outline-toggle-children)))
+          ("C-<tab>" . outline-toggle-children)))
 
 (add-hook 'emacs-lisp-mode-hook
           (lambda ()
@@ -1966,14 +1970,22 @@
 (add-to-list 'safe-local-variable-values '(outline-regexp . ";;;+ "))
 (add-to-list 'safe-local-variable-values '(eval progn (require 'outline) (outline-hide-sublevels 1)))
 
-(use-package elastic-indent
-  :ensure (elastic-indent :type git :host github :repo "jyp/elastic-modes"))
+;; Pick your default (1.0 = normal, 1.25 = 125%)
+(defvar my/xwidget-webkit-default-zoom 0.8)
 
-(use-package elastic-table
-  :ensure (elastic-table :type git :host github :repo "jyp/elastic-modes"))
+(defun my/xwidget-webkit--apply-zoom (xw)
+  "Apply default zoom to XW. Uses JS so it works even when native zoom is flaky."
+  (when (and xw (fboundp 'xwidget-webkit-execute-script))
+    (xwidget-webkit-execute-script
+     xw
+     (format "document.documentElement.style.zoom = %s;" my/xwidget-webkit-default-zoom))))
 
-;; (setq markdown-hide-markup nil)
-;; (setq markdown-hide-urls nil)
+(defun my/xwidget-webkit--callback-advice (orig xw event-type)
+  (prog1 (funcall orig xw event-type)
+    (when (eq event-type 'load-changed)
+      (my/xwidget-webkit--apply-zoom xw))))
+
+(advice-add 'xwidget-webkit-callback :around #'my/xwidget-webkit--callback-advice)
 
 (require 'niva-pytest)
 
