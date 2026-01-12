@@ -244,17 +244,9 @@
        '(shr-h2 ((t (:inherit 'org-level-2))))
        '(shr-h3 ((t (:inherit 'org-level-3))))
        '(shr-h4 ((t (:inherit 'org-level-4))))
-       '(vertical-border ((t (:foreground unspecified :inherit shadow))))
-       (set-face-background 'flymake-warning 'unspecified)
-       (set-face-background 'flymake-error 'unspecified))
-      ;; (custom-set-faces
-      ;;  ;; '(elfeed-search-date-face         ((t (:font "Arial"))))
-      ;;  '(elfeed-search-feed-face         ((t (:underline nil))))
-      ;;  '(elfeed-search-tag-face         ((t (:font "Arial"))))
-      ;;  '(elfeed-search-title-face         ((t (:underline nil))))
-      ;;  '(elfeed-search-unread-title-face         ((t (:underline nil))))
-      ;;  )
-      )
+       '(flymake-error ((t (:background unspecified :underline (:style wave :color "Red3")))))
+       '(flymake-warning ((t (:background unspecified :underline (:style wave :color "Orange3")))))
+       '(vertical-border ((t (:foreground unspecified :inherit shadow))))))
 
     ;; (add-hook 'prog-mode-hook
     ;;           (lambda ()
@@ -284,11 +276,11 @@
 (with-eval-after-load 'eglot
   (custom-set-faces
    `(eglot-inlay-hint-face
-     ((t :inherit 'default
-         :font "Arial"
-         :height 0.8
-         :italic nil
-         :inherit 'org-block)))
+     ((t :inherit 'font-lock-comment-face
+         :font unspecified
+         :height 0.85
+         :italic t
+         )))
    '(eglot-highlight-symbol-face
      ((t :underline nil
          :bold t)))))
