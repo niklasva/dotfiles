@@ -70,13 +70,19 @@
 (use-package chocolate-theme       :ensure t :defer t)
 (use-package color-theme-modern    :ensure t :defer t)
 (use-package goose-theme           :ensure t :defer t)
+(use-package humanoid-themes :ensure t :defer t)
 (use-package moe-theme             :ensure t :defer t)
 (use-package naysayer-theme        :ensure t :defer t)
 (use-package paper-theme           :ensure t :defer t)
 (use-package parchment-theme       :ensure t :defer t)
 (use-package professional-theme    :ensure t :defer t)
+(use-package seoul256-theme        :ensure t :defer t)
 (use-package standard-themes       :ensure t :defer t)
 (use-package tomorrow-night-deepblue-theme :ensure t :defer t)
+
+(use-package apropospriate-theme :ensure t :defer t)
+(use-package kanagawa-themes :ensure t :defer t)
+(use-package ample-theme :ensure t :defer t)
 
 (use-package catppuccin-theme :ensure (:host github :repo "catppuccin/emacs")
   :defer t
