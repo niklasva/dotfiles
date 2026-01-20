@@ -37,7 +37,8 @@
               display-line-numbers-width 4
               confirm-kill-emacs 'y-or-n-p
               ring-bell-function 'ignore
-              column-number-mode nil)
+              column-number-mode nil
+              isearch-lazy-count t)
 
 (setq-default backup-directory-alist '(("." . "~/.cache/emacs/backup"))
               auto-save-file-name-transforms '((".*" "~/.cache/emacs/auto-save/" t))
@@ -54,7 +55,7 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 
 ;;(global-display-line-numbers-mode -1)
-;; (global-display-line-numbers-mode 1)
+(global-display-line-numbers-mode 1)
 ;; (global-hl-line-mode 1)
 
 (delete-selection-mode)
@@ -461,6 +462,17 @@
         which-key-separator " → " )
   (which-key-mode))
 
+(defun my/consult-ripgrep-dir ()
+  (interactive)
+  (let ((current-prefix-arg '(4)))
+    (call-interactively #'consult-ripgrep)))
+
+(defun my/consult-ripgrep-project ()
+  (interactive)
+  (let* ((default-directory (project-root (project-current)))
+         (current-prefix-arg '(4)))
+    (call-interactively #'consult-ripgrep)))
+
 (global-set-key (kbd "C-c Ln")     'global-display-line-numbers-mode)
 (global-set-key (kbd "C-c ln")     'display-line-numbers-mode)
 (global-set-key (kbd "C-c early")  (lambda () (interactive) (find-file "~/.config/emacs/early-init.el")))
@@ -472,7 +484,7 @@
 (global-set-key (kbd "C-c elf")    'elfeed)
 (global-set-key (kbd "C-x ph")    'ff-get-other-file)
 (global-set-key (kbd "C-c no")   (lambda () (interactive) (find-file "~/org/notes.org")))
-(global-set-key (kbd "C-c rip") 'niva/consult-ripgrep-in-directory)
+(global-set-key (kbd "C-c rip") 'my/consult-ripgrep-project)
 (global-set-key (kbd "C-c c a")   (lambda () (interactive)
                                     (when (eglot-managed-p)
                                       (call-interactively #'eglot-code-actions))))
@@ -921,14 +933,34 @@
   :ensure t
   :defer t
   :config
-  (setq treemacs-no-png-images nil
-        treemacs-file-follow-delay 0.03
-        treemacs--icon-size 16
-        )
+
+  (add-hook 'treemacs-mode-hook
+            (lambda () (setq-local window-divider-mode -1
+                                   variable-pitch-mode 1
+                                   treemacs-follow-mode 1)))
+  (setq
+   ;;treemacs-no-png-images t
+   treemacs-file-follow-delay 0.02
+   treemacs--icon-size 12
+   ;; treemacs-display-in-side-window nil
+   )
   (set-face-attribute 'treemacs-root-face nil :height 'unspecified :weight 'unspecified)
-  (treemacs-hide-gitignored-files-mode nil))
+  (treemacs-hide-gitignored-files-mode nil)
+  )
+
+(use-package treemacs-all-the-icons
+  :after treemacs all-the-icons
+  :ensure t
+  :config
+  (treemacs-load-theme "all-the-icons"))
+
+(use-package all-the-icons :ensure t)
+(use-package all-the-icons-dired :ensure t
+  :hook (dired-mode . all-the-icons-dired-mode))
 
 ;;; Development ----------------------------------------------------------------
+;;;; Nix -----------------------------------------------------------------------
+(use-package nix-mode :ensure t)
 ;;;; C++ -----------------------------------------------------------------------
 ;;;;; Other file ---------------------------------------------------------------
 (setq cc-other-file-alist
@@ -1033,7 +1065,10 @@
          (python-ts-mode  . eglot-ensure)
          (cmake-ts-mode   . eglot-ensure)
          (yaml-ts-mode    . eglot-ensure))
-
+  :bind ( :map eglot-mode-map
+          ("C-c C-e C-a" . eglot-code-actions)
+          ("C-c C-e C-d" . xref-find-definitions)
+          ("C-c C-e C-r" . xref-find-references))
   :custom
   (eglot-sync-connect 0)
   (eglot-autoshutdown t)
@@ -1207,6 +1242,7 @@
   ;; Turn on apheleia in all programming buffers.
   (add-hook 'prog-mode-hook #'apheleia-mode)
   :config
+  (setq apheleia-remote-algorithm 'local)
   (dolist (fmt '((ruff       . ("ruff" "format" "--silent" "-"))
                  (ruff-isort . ("ruff" "check" "--fix" "--select" "I" "-"))))
     (setf (alist-get (car fmt) apheleia-formatters) (cdr fmt)))
@@ -1219,7 +1255,8 @@
                   (cmake-mode      . (cmake-format))
                   (cmake-ts-mode   . (cmake-format))
                   (c-mode          . nil)
-                  (c-ts-mode       . nil)))
+                  (c-ts-mode       . nil)
+                  (nix-mode        . (nixfmt))))
     (setf (alist-get (car mode) apheleia-mode-alist) (cdr mode))))
 
 
