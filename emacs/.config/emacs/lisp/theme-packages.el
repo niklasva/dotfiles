@@ -54,7 +54,10 @@
 (use-package dark-krystal-theme :ensure (:host github :repo "emacsfodder/emacs-dark-krystal-theme") :defer t)
 (use-package doric-themes       :ensure (:host github :repo "protesilaos/doric-themes")             :defer t)
 (use-package os1-theme          :ensure (:host github :repo "sashimacs/os1-theme")                  :defer t)
+(use-package alabaster-themes   :ensure (:host github :repo "vedang/alabaster-themes")              :defer t)
+
 (use-package colorless-themes   :ensure (:host github :repo "lthms/colorless-themes.el"             :files ("colorless-themes.el" "*.el")))
+
 (use-package base16-theme
   :ensure t
   :config
@@ -234,6 +237,9 @@
 
     (when (niva/theme-is-active "lambda")
       (custom-set-faces '(vertical-border ((t (:foreground unspecified :inherit corfu-border))))))
+
+    (when (niva/theme-is-active "alabaster")
+      (custom-set-faces '(vertical-border ((t (:foreground unspecified :inherit mode-line :inverse-video t))))))
 
     (when (niva/theme-is-active "base16")
       (custom-set-faces
