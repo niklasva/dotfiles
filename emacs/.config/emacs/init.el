@@ -63,6 +63,7 @@
 (setq-default evil-auto-indent t
               indent-tabs-mode nil
               tab-width 4
+              next-screen-context-lines 15
               org-src-tab-acts-natively t
               org-edit-src-content-indentation 0
               org-indent-indentation-per-level 2
