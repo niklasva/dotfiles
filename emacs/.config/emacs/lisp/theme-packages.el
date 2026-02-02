@@ -275,7 +275,7 @@
     ;;                   '(elfeed-search-feed-face         ((t (:inherit 'default :underline nil :foreground unspecified))))
     ;;                   '(elfeed-search-tag-face          ((t (:inherit 'shadow :underline nil :foreground unspecified))))
     ;;                   '(elfeed-search-date-face         ((t (:inherit 'org-agenda-date :underline nil :foreground unspecified)))))
-    (niva/diff-hl-fix)))
+    ))
 
 (use-package nano-theme
   :ensure t
