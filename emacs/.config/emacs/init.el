@@ -54,9 +54,7 @@
 (add-hook 'window-setup-hook 'delete-other-windows)
 (fset 'yes-or-no-p 'y-or-n-p)
 
-;;(global-display-line-numbers-mode -1)
-(global-display-line-numbers-mode 1)
-;; (global-hl-line-mode 1)
+(add-hook 'prog-mode-hook #'display-line-numbers-mode)
 
 (delete-selection-mode)
 (context-menu-mode)
