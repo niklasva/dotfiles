@@ -27,17 +27,10 @@
     (height                  . 40)
     (min-width               . 1)
     (width                   . 120)
-    (internal-border-width   . 20)
-    (left-fringe             . 1)
-    (right-fringe            . 1)
     (vertical-scroll-bars    . nil)
     (undecorated             . nil)
-    (visible                 . nil)
-    (ns-appearance           . 'dark)
-    (ns-transparent-titlebar . t))
+    (visible                 . nil))
   "Initial frame parameters applied both before and after init.")
-
-(tool-bar-mode -1)
 
 (defun my/init-apply-frame-params ()
   "Populate both frame alists with `my/init-frame-params`."
