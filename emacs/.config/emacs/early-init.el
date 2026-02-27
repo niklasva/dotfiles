@@ -91,7 +91,7 @@
       vc-follow-symlinks        t
       gnus-init-inhibit         t)
 
-(unless (eq system-type 'darwin)
+(unless (or (eq system-type 'darwin) (display-graphic-p))
   (menu-bar-mode -1))
 
 (when (boundp 'native-comp-speed)
