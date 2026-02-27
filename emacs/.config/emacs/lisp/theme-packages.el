@@ -260,6 +260,12 @@
        '(flymake-warning ((t (:background unspecified :underline (:style wave :color "Orange3")))))
        '(vertical-border ((t (:foreground unspecified :inherit shadow))))))
 
+    (when (niva/theme-is-active "tango")
+      (custom-set-faces '(elfeed-search-feed-face ((t (:inherit 'font-lock-builtin-face))))
+                        '(elfeed-search-date-face ((t (:inherit 'font-lock-string-face))))
+                        )
+      )
+
     ;; (add-hook 'prog-mode-hook
     ;;           (lambda ()
     ;;             (font-lock-add-keywords nil
@@ -275,7 +281,15 @@
     ;;                   '(elfeed-search-feed-face         ((t (:inherit 'default :underline nil :foreground unspecified))))
     ;;                   '(elfeed-search-tag-face          ((t (:inherit 'shadow :underline nil :foreground unspecified))))
     ;;                   '(elfeed-search-date-face         ((t (:inherit 'org-agenda-date :underline nil :foreground unspecified)))))
-    ))
+    (custom-set-faces
+     '(font-lock-constant-face ((t (:foreground unspecified :inherit 'default))))
+     '(font-lock-type-face ((t (:foreground unspecified :inherit 'font-lock-builtin-face))))
+     '(shr-link ((t (:inherit 'link :foreground unspecified))))
+     '(shr-selected-link ((t (:inherit 'link))))
+     '(textsec-suspicious ((t (:inherit 'link))))
+     )
+    )
+  )
 
 (use-package nano-theme
   :ensure t
