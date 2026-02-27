@@ -19,6 +19,7 @@
     (load local-env-file nil 'nomessage)))
 
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
+(add-to-list 'load-path (expand-file-name "load" user-emacs-directory))
 
 (defconst private-config-file (expand-file-name "private/config.el" user-emacs-directory))
 (when (file-readable-p private-config-file) (load-file private-config-file))
@@ -54,7 +55,7 @@
 (add-hook 'window-setup-hook 'delete-other-windows)
 (fset 'yes-or-no-p 'y-or-n-p)
 
-(add-hook 'prog-mode-hook #'display-line-numbers-mode)
+;; (add-hook 'prog-mode-hook #'display-line-numbers-mode)
 
 (delete-selection-mode)
 (context-menu-mode)
@@ -92,6 +93,11 @@
               scroll-conservatively 5
               compilation-scroll-output t
               scroll-preserve-screen-position t)
+
+;; Redisplay tuning for better GUI responsiveness.
+(setq redisplay-skip-fontification-on-input t
+      fast-but-imprecise-scrolling t
+      inhibit-compacting-font-caches t)
 
 
 (global-visual-line-mode t)
@@ -161,10 +167,39 @@
 
 ;;; Backups --------------------------------------------------------------------
 (use-package async-backup
+  :demand t
   :ensure t
   :hook (after-save-hook . async-backup)
   :config
-  (setq async-backup-location "~/.cache/emacs/async-backup"))
+  (setq async-backup-location "~/.cache/emacs/async-backup")
+
+  (defun niva/show-file-history ()
+    "Open Dired in the async-backup directory for current file and jump to newest backup."
+    (interactive)
+    (unless buffer-file-name
+      (user-error "This buffer is not visiting a file"))
+    (let* ((backup-root (file-name-as-directory (expand-file-name async-backup-location)))
+           (src-file    (expand-file-name buffer-file-name))
+           (src-dir     (file-name-directory src-file))
+           (base        (file-name-base src-file))
+           (ext         (file-name-extension src-file))
+           (backup-dir  (concat (string-remove-suffix "/" backup-root) src-dir))
+           (pattern     (concat "^" (regexp-quote base) "-"))
+           (pattern     (if ext (concat pattern ".*\\." (regexp-quote ext) "$")
+                          (concat pattern ".*$"))))
+      (unless (file-directory-p backup-dir)
+        (user-error "No backup directory exists yet: %s" backup-dir))
+      (dired backup-dir)
+      ;; pick newest by file attributes mtime
+      (let* ((files (directory-files backup-dir t pattern))
+             (newest
+              (car (sort files
+                         (lambda (a b)
+                           (time-less-p
+                            (file-attribute-modification-time (file-attributes b))
+                            (file-attribute-modification-time (file-attributes a))))))))
+        (when newest
+          (dired-goto-file newest))))))
 
 ;;; Customization --------------------------------------------------------------
 ;;;; icons
@@ -621,7 +656,8 @@
          ("C-M-l"   . consult-focus-lines)
          ("C-x b"   . consult-buffer)
          ("C-x 4 b" . consult-buffer-other-window)
-         ("M-y"     . consult-yank-pop))
+         ("M-y"     . consult-yank-pop)
+         ("C-x m"   . consult-global-mark))
   :config
   (setq consult-preview-key '(:debounce 0.0 any))
 
@@ -822,14 +858,14 @@
   "Kill buffer on quit"
   (kill-buffer (current-buffer)))
 
-(defun niva/vterm-handle-exit (process event)
-  "Kill vterm buffer after PROCESS exits with EVENT."
-  (let ((buffer (process-buffer process)))
-    (when (buffer-live-p buffer)
-      (kill-buffer buffer))))
-
-(advice-add 'term-handle-exit :after 'niva/term-handle-exit)
-(add-hook 'vterm-exit-functions #'niva/vterm-handle-exit)
+;; (defun niva/vterm-handle-exit (process event)
+;;   "Kill vterm buffer after PROCESS exits with EVENT."
+;;   (let ((buffer (process-buffer process)))
+;;     (when (buffer-live-p buffer)
+;;       (kill-buffer buffer))))
+;;
+;; (advice-add 'term-handle-exit :after 'niva/term-handle-exit)
+;; (add-hook 'vterm-exit-functions #'niva/vterm-handle-exit)
 
 ;;;; Alias ---------------------------------------------------------------------
 
@@ -846,9 +882,16 @@
   :ensure t
   :defer t
   :bind
+  (("C-c C-t" . vterm))
   (:map vterm-mode-map
-        ("C-c <escape>" . vterm-send-escape))
+        ("C-c <escape>" . vterm-send-escape)
+        ("C-g"          . vterm-copy-mode)
+        ("C-c C-t" . vterm))
+  (:map vterm-copy-mode-map
+        ("C-g" . vterm-copy-mode)
+        ("C-c C-t" . vterm))
   :config
+  (setq vterm-max-scrollback 10000)
   (setq vterm-timer-delay nil))
 
 ;;; File management ------------------------------------------------------------
@@ -1064,12 +1107,14 @@
          (python-ts-mode  . eglot-ensure)
          (cmake-ts-mode   . eglot-ensure)
          (yaml-ts-mode    . eglot-ensure))
-  :bind ( :map eglot-mode-map
-          ("C-c C-e C-a" . eglot-code-actions)
-          ("C-c C-e C-d" . xref-find-definitions)
-          ("C-c C-e C-r" . xref-find-references))
+  :bind (:map eglot-mode-map
+              ("C-c C-e C-a" . eglot-code-actions)
+              ("C-c C-e C-d" . xref-find-definitions)
+              ("C-c C-e C-r" . xref-find-references)
+              ("C-c C-e C-b" . xref-go-back)
+              ("C-c C-e C-f" . xref-go-forward)
+              ("C-c C-e C-s" . xref-find-apropos))
   :custom
-  (eglot-sync-connect 0)
   (eglot-autoshutdown t)
   (eglot-sync-connect nil)
   ;; (eglot-events-buffer-size 0)
@@ -1080,15 +1125,13 @@
   ;; (setq-default eglot-send-changes-idle-time 5.0)
   :config
   (setq-default eglot-workspace-configuration
-                '((:basedpyright . (:typeCheckingMode "basic"
-                                                      :analysis (:diagnosticSeverityOverrides
-                                                                 (:reportUnusedCallResult "none")
-                                                                 :inlayHints (:callArgumentNames :json-false))))))
-  (fset #'jsonrpc--log-event #'ignore)
+                '((:basedpyright . (:typeCheckingMode "basic"))))
 
   (add-to-list 'eglot-server-programs '((c-mode c++-mode c++-ts-mode) .
-                                        ("/opt/homebrew/opt/llvm/bin/clangd"
-                                         "--query-driver=/opt/arm-gnu-toolchain-14.3.rel1-darwin-arm64-arm-none-eabi/bin/arm-none-eabi-g++"
+                                        ("/opt/homebrew/bin/clangd"
+                                         "--log=verbose"
+                                         "--pretty"
+                                         "--query-driver=/opt/arm-gnu-toolchain-14.3.rel1-darwin-arm64-arm-none-eabi/**/*"
                                          "--clang-tidy"
                                          ;; "--completion-style=detailed"
                                          "--completion-style=bundled"
@@ -1099,20 +1142,34 @@
                                          "-j=8")))
 
   (add-to-list 'eglot-server-programs '((python-mode python-ts-mode)
-                                        "basedpyright-langserver"
-                                        "--stdio"))
+                                        "basedpyright-langserver" "--stdio"))
 
   (add-to-list 'eglot-server-programs '((cmake-mode cmake-ts-mode)
-                                        "neocmakelsp"
-                                        "--stdio")))
+                                        "neocmakelsp" "--stdio")))
 
 (advice-add 'eglot--mode-line-format :override (lambda () ""))
 
-;; (add-hook 'eglot-managed-mode-hook
-;;           (lambda ()
-;;             (kill-local-variable 'flymake-indicator-type)))
-
 (with-eval-after-load 'eglot
+  ;; basedpyright can request watcher registrations that Eglot may fail to
+  ;; install; replying with JSON-RPC error makes basedpyright exit.
+  (cl-defmethod eglot-client-capabilities :around ((_server eglot-lsp-server))
+    (let* ((caps (cl-call-next-method))
+           (workspace (plist-get caps :workspace))
+           (watchers (plist-get workspace :didChangeWatchedFiles)))
+      (when watchers
+        (setf (plist-get watchers :relativePatternSupport) :json-false))
+      caps))
+
+  (cl-defmethod eglot-register-capability :around
+    (_server (method (eql workspace/didChangeWatchedFiles)) _id
+             &rest _params &key &allow-other-keys)
+    (condition-case err
+        (cl-call-next-method)
+      (error
+       (message "[eglot] ignoring didChangeWatchedFiles registration failure: %s"
+                (error-message-string err))
+       (list t "ignored watcher registration failure"))))
+
   (add-hook 'eglot-managed-mode-hook (lambda () (eglot-inlay-hints-mode -1)))
   (set-face-attribute 'eglot-mode-line nil :inherit 'unspecified)
 
@@ -1528,8 +1585,8 @@
   :group 'compile
   :set #'niva/compilation--set-hide-info)
 
-(add-hook 'compilation-filter-hook #'niva/compilation-hide-noise)
-(add-hook 'compilation-mode-hook #'niva/compilation-mode-setup)
+;; (add-hook 'compilation-filter-hook #'niva/compilation-hide-noise)
+;; (add-hook 'compilation-mode-hook #'niva/compilation-mode-setup)
 
 (defun niva/advice-compilation-filter (f proc string)
   (funcall f proc (xterm-color-filter string)))
@@ -1632,6 +1689,15 @@
 ;;;;;;;; niva
 ;; (setq process-connection-type nil)  ;; use a pipe
 ;; (setq read-process-output-max (* 4 1024 1024))
+
+(use-package markdown-xwidget
+  :after markdown-mode
+  :ensure (markdown-xwidget
+           :host github
+           :repo "cfclrk/markdown-xwidget"
+           :files (:defaults "resources"))
+  :config
+  (setq markdown-xwidget-github-theme "light"))
 
 ;;; Org Mode -------------------------------------------------------------------
 ;; (use-package org-bullets :ensure t :defer t)
@@ -1996,6 +2062,12 @@
       scroll-step 1
       auto-window-vscroll nil)
 
+(use-package elcity
+  :ensure (elcity :type git :host github :repo "vkazanov/elcity"))
+
+(require 'lolipop-mode)
+(lolipop-mode 1)
+
 ;;; End ------------------------------------------------------------------------
 
 ;;; Local variables ------------------------------------------------------------
@@ -2024,6 +2096,9 @@
 (advice-add 'xwidget-webkit-callback :around #'my/xwidget-webkit--callback-advice)
 
 (require 'niva-pytest)
+
+
+
 
 ;; Local Variables:
 ;; mode: emacs-lisp
