@@ -1219,6 +1219,24 @@
 ;;;; jsonrpc -------------------------------------------------------------------
 (use-package jsonrpc :ensure t :defer t)
 
+(with-eval-after-load 'jsonrpc
+  ;; Compatibility for older jsonrpc builds that don't accept
+  ;; :cancel-on-quit (used by newer eglot).
+  (unless (string-match-p ":cancel-on-quit"
+                          (or (documentation #'jsonrpc-request) ""))
+    (defun niva/jsonrpc-request-compat-cancel-on-quit
+        (orig-fun connection method params &rest args)
+      "Call ORIG-FUN dropping unsupported :cancel-on-quit from ARGS."
+      (let (filtered)
+        (while args
+          (let ((key (pop args))
+                (val (pop args)))
+            (unless (eq key :cancel-on-quit)
+              (setq filtered (append filtered (list key val))))))
+        (apply orig-fun connection method params filtered)))
+    (advice-add 'jsonrpc-request :around
+                #'niva/jsonrpc-request-compat-cancel-on-quit)))
+
 ;;;; Flymake -------------------------------------------------------------------
 (use-package flymake
   :ensure t
