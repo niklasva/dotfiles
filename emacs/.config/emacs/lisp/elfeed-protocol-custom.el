@@ -1,4 +1,4 @@
-;;; niva-elfeed-protocol.el --- Extensions to elfeed-protocol -*- lexical-binding: t -*-
+;;; elfeed-protocol-custom.el --- Extensions to elfeed-protocol -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;; Code:
 
@@ -135,5 +135,5 @@ argument.  Return parsed entries."
                   nil)))
             )
 
-(provide 'niva-elfeed-protocol)
-;;; niva-elfeed-protocol.el ends here
+(provide 'elfeed-protocol-custom)
+;;; elfeed-protocol-custom.el ends here

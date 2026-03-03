@@ -1,4 +1,4 @@
-;;; niva-elfeed.el --- Extensions to elfeed -*- lexical-binding: t -*-
+;;; elfeed-custom.el --- Extensions to elfeed -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;; Code:
 
@@ -314,7 +314,7 @@
             (forward-line 1)))))
 
 
-(provide 'niva-elfeed)
+(provide 'elfeed-custom)
 
 (defun niva/clear-elfeed ()
   "Clear elfeed database"
@@ -357,4 +357,4 @@ then refresh and update the feed list."
     (with-current-buffer "*elfeed-search*"
       (elfeed-search-update :force))))
 
-;;; niva-elfeed.el ends here
+;;; elfeed-custom.el ends here
