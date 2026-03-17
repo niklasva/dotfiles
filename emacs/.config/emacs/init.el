@@ -700,7 +700,59 @@
   (defun niva/consult-ripgrep-in-directory ()
     (interactive)
     (let ((directory-to-search (read-directory-name "Search in directory: " nil nil t)))
-      (consult-ripgrep (expand-file-name "." directory-to-search)))))
+      (consult-ripgrep (expand-file-name "." directory-to-search))))
+
+  (defvar niva-consult-source-dired
+    `(:name "Dired"
+            :narrow ?d
+            :category buffer
+            :face consult-buffer
+            :history buffer-name-history
+            :state ,#'consult--buffer-state
+            :items ,(lambda ()
+                      (mapcar #'buffer-name
+                              (seq-filter
+                               (lambda (buf)
+                                 (with-current-buffer buf
+                                   (derived-mode-p 'dired-mode)))
+                               (buffer-list))))))
+
+  (setq consult-buffer-sources '(consult-source-buffer
+                                 niva-consult-source-dired
+                                 consult-source-hidden-buffer
+                                 consult-source-modified-buffer
+                                 consult-source-other-buffer
+                                 consult-source-recent-file
+                                 consult-source-buffer-register
+                                 consult-source-file-register
+                                 consult-source-bookmark
+                                 consult-source-project-buffer-hidden
+                                 consult-source-project-recent-file-hidden
+                                 consult-source-project-root-hidden))
+
+  (defun my-dired-buffer-name ()
+    (rename-buffer
+     (concat " ❏ "
+             (abbreviate-file-name
+              (directory-file-name default-directory)))
+     t))
+
+  (add-hook 'dired-mode-hook #'my-dired-buffer-name)
+
+  (defun my/vertico-kill-buffer-candidate ()
+    (interactive)
+    (when-let* ((cand (and (fboundp 'vertico--candidate)
+                           (vertico--candidate)))
+                (name (substring-no-properties cand))
+                (buf (get-buffer name)))
+      (kill-buffer buf)
+      (when (fboundp 'vertico--exhibit)
+        (vertico--exhibit))
+      (message "Killed buffer: %s" name)))
+
+  (with-eval-after-load 'vertico
+    (keymap-set vertico-map "M-k" #'my/vertico-kill-buffer-candidate))
+  )
 
 (use-package affe
   :ensure t
