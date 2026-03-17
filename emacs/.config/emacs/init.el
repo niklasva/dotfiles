@@ -896,42 +896,28 @@
 ;;;; Dired ---------------------------------------------------------------------
 (use-package dired
   :ensure nil
-  :defer t
+  :demand t
   :config
-  (setq-default insert-directory-program "gls"
-                dired-use-ls-dired t
-                dired-subtree-use-backgrounds nil
-                dired-listing-switches "-alh --group-directories-first"
-                dired-subtree-line-prefix "  "
-                dired-kill-when-opening-new-dired-buffer t
-                dired-subtree-line-prefix-face 'subtree))
+  (setq insert-directory-program (or (executable-find "/opt/homebrew/bin/gls")
+                                     insert-directory-program)
+        delete-by-moving-to-trash t
+        dired-use-ls-dired t
+        dired-subtree-use-backgrounds nil
+        dired-listing-switches "-alh --group-directories-first"
+        dired-dwim-target t
+        dired-unique-buffer-name-style 'forward
+        dired-kill-when-opening-new-dired-buffer nil)
 
-;; (use-package dirtree
-;;   :ensure t
-;;   :defer t)
+  (add-hook 'dired-mode-hook
+            (lambda ()
+              (font-lock-mode 1)
+              (dired-hide-details-mode +1)))
 
-(use-package dired-subtree
-  :ensure t
-  :after dired
-  :defer t
-  :hook ((dired-mode . dired-hide-details-mode)
-         (dired-mode . hl-line-mode))
-  :bind
-  (:map dired-mode-map
-        ("<tab>" . dired-subtree-toggle)
-        ("TAB" . dired-subtree-toggle)
-        ("<backtab>" . dired-subtree-remove)
-        ("S-TAB" . dired-subtree-remove)))
+  (add-hook 'dired-after-readin-hook
+            (lambda ()
+              (font-lock-flush)
+              (font-lock-ensure))))
 
-(use-package dired-collapse
-  :ensure t
-  :after dired
-  :defer t
-  :config
-  (with-eval-after-load 'evil-maps
-    (evil-define-key 'normal dired-mode-map (kbd "H") 'dired-up-directory)
-    (evil-define-key 'normal dired-mode-map (kbd "L") 'dired-find-file))
-  (add-hook 'dired-mode-hook 'dired-collapse-mode))
 
 (use-package async
   :ensure t
@@ -940,63 +926,6 @@
   (autoload 'dired-async-mode "dired-async.el" nil t)
   (dired-async-mode 1))
 
-(use-package dired-toggle
-  :ensure t
-  :after dired
-  :defer t
-  :bind (("C-c t" . #'dired-toggle)
-         :map dired-mode-map
-         ("q" . #'dired-toggle-quit)
-         ([remap dired-find-file] . #'dired-toggle-find-file)
-         ([remap dired-up-directory] . #'dired-toggle-up-directory)
-         ("C-c C-u" . #'dired-toggle-up-directory))
-  :config
-  (setq dired-toggle-window-size 32)
-  (setq dired-toggle-window-side 'left)
-
-  (with-eval-after-load 'evil (evil-define-key 'normal dired-mode-map (kbd "q") #'dired-toggle-quit))
-
-  (add-hook 'dired-toggle-mode-hook
-            (lambda () (interactive)
-              ;; (variable-pitch-mode 1)
-              (visual-line-mode -1)
-              (setq-local visual-line-fringe-indicators '(nil right-curly-arrow))
-              (setq-local word-wrap nil))))
-
-;; (use-package dired-hacks
-;;   :ensure t
-;;   :defer t)
-
-
-;;;; treemacs ------------------------------------------------------------------
-(use-package treemacs
-  :ensure t
-  :defer t
-  :config
-
-  (add-hook 'treemacs-mode-hook
-            (lambda () (setq-local window-divider-mode -1
-                                   variable-pitch-mode 1
-                                   treemacs-follow-mode 1)))
-  (setq
-   ;;treemacs-no-png-images t
-   treemacs-file-follow-delay 0.02
-   treemacs--icon-size 12
-   ;; treemacs-display-in-side-window nil
-   )
-  (set-face-attribute 'treemacs-root-face nil :height 'unspecified :weight 'unspecified)
-  (treemacs-hide-gitignored-files-mode nil)
-  )
-
-(use-package treemacs-all-the-icons
-  :after treemacs all-the-icons
-  :ensure t
-  :config
-  (treemacs-load-theme "all-the-icons"))
-
-(use-package all-the-icons :ensure t)
-(use-package all-the-icons-dired :ensure t
-  :hook (dired-mode . all-the-icons-dired-mode))
 
 ;;; Development ----------------------------------------------------------------
 ;;;; Nix -----------------------------------------------------------------------
@@ -1027,10 +956,6 @@
 (setq-default python-indent-guess-indent-offset nil)
 (setq-default python-indent-guess-indent-offset-verbose nil)
 (setq-default python-indent-offset 4)
-
-;;;;; zmq ----------------------------------------------------------------------
-(use-package zmq
-  :ensure (zmq :host github :repo "nnicandro/emacs-zmq"))
 
 ;;;;; jupyter ------------------------------------------------------------------
 ;; (use-package jupyter
