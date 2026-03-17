@@ -275,36 +275,6 @@
 (global-set-key (kbd "C-c <backspace>") 'niva/toggle-internal-border-width)
 (global-set-key (kbd "C-c RET") 'niva/toggle-frame-decorations)
 
-;;;; Popper --------------------------------------------------------------------
-(use-package popper
-  :ensure t
-  :defer t
-  :hook (prog-mode . popper-mode)
-  :config
-  (setq popper-reference-buffers
-        '("Output\\*$" "\\*Pp Eval Output\\*$"
-          "\\*Compile-Log\\*"
-          ;; compilation-mode
-          "^\\*eldoc.*\\*.*$" eldoc-mode
-          "\\*Flycheck errors\\*$" " \\*Flycheck checker\\*$"
-          ;; "\\*ChatGPT\\*$"
-          ;; "\\*gptel\\*$" gptel-mode
-          ))
-
-  (popper-echo-mode +1)
-  (popper-mode +1)
-
-  ;; HACK: close popper window with `C-g'
-  (defun +popper-close-window-hack (&rest _)
-    "Close popper window via `C-g'."
-    (when (and (called-interactively-p 'interactive)
-               (not (region-active-p))
-               popper-open-popup-alist)
-      (let ((window (caar popper-open-popup-alist)))
-        (when (window-live-p window)
-          (delete-window window)))))
-  (advice-add #'keyboard-quit :before #'+popper-close-window-hack))
-
 ;;;; iscroll -------------------------------------------------------------------
 (use-package iscroll
   :ensure t
@@ -623,7 +593,15 @@
          :map minibuffer-local-map
          ("C-d" . embark-act)
          :map embark-region-map
-         ("D" . denote-region)))
+         ("D" . denote-region))
+  :config
+  (setq embark-quit-after-action nil)
+  (setq confirm-kill-processes nil)
+
+  (defun my/embark-kill-buffer (buffer)
+    (kill-buffer buffer))
+
+  (define-key embark-buffer-map (kbd "k") #'my/embark-kill-buffer))
 
 (use-package embark-consult
   :ensure t
@@ -658,6 +636,8 @@
          ("C-x m"   . consult-global-mark))
   :config
   (setq consult-preview-key '(:debounce 0.0 any))
+  (setq xref-show-xrefs-function #'consult-xref
+        xref-show-definitions-function #'consult-xref)
 
   (consult-customize
    consult--source-buffer
@@ -1089,11 +1069,6 @@
   (global-set-key (kbd "C-c f m")   'consult-flymake))
 
 ;;;; Tree-sitter ---------------------------------------------------------------
-(use-package kotlin-ts-mode
-  :ensure t
-  :defer t
-  :after treesit)
-
 (use-package treesit
   :ensure nil
   :config
@@ -1107,7 +1082,6 @@
                                                 (cmake        "https://github.com/uyha/tree-sitter-cmake")
                                                 (js           "https://github.com/tree-sitter/tree-sitter-javascript")
                                                 (json         "https://github.com/tree-sitter/tree-sitter-json")
-                                                (kotlin       "https://github.com/fwcd/tree-sitter-kotlin")
                                                 (python       "https://github.com/tree-sitter/tree-sitter-python")
                                                 (tsx          "https://github.com/tree-sitter/tree-sitter-typescript")
                                                 (typescript   "https://github.com/tree-sitter/tree-sitter-typescript")
@@ -1123,7 +1097,6 @@
                   ("\\.inc\\'"          . c++-ts-mode)
                   ("\\.java\\'"         . java-ts-mode)
                   ("\\.js\\'"           . js-ts-mode)
-                  ("\\.kts\\'"          . kotlin-ts-mode)
                   ("\\.md\\'"           . json-ts-mode)
                   ("\\.json\\'"         . json-ts-mode)
                   ("\\.ts\\'"           . typescript-ts-mode)
