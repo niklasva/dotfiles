@@ -596,6 +596,7 @@
          ("D" . denote-region))
   :config
   (setq embark-quit-after-action nil)
+  (setq embark-mixed-indicator-delay 0)
   (setq confirm-kill-processes nil)
 
   (defun my/embark-kill-buffer (buffer)
@@ -803,7 +804,8 @@
   :config
   (setq completion-styles '(orderless basic)
         completion-category-defaults nil
-        completion-category-overrides '((file (styles . (partial-completion))))))
+        completion-category-overrides '((file (styles . (partial-completion)))
+                                        (command (styles . (basic partial-completion))))))
 
 (use-package cape
   :ensure t
