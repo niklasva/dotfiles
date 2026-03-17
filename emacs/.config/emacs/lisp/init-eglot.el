@@ -26,7 +26,7 @@
   (eglot-autoshutdown t)
   (eglot-sync-connect nil)
   ;; (eglot-events-buffer-size 0)
-  ;; (eglot-extend-to-xref t)
+  (eglot-extend-to-xref t)
   ;; (eglot-report-progress 'messages)
   (eglot-code-action-indications '(eldoc-hint))
   (eglot-code-action-indicator "?")
@@ -77,7 +77,12 @@
                 (error-message-string err))
        (list t "ignored watcher registration failure"))))
 
-  (add-hook 'eglot-managed-mode-hook (lambda () (eglot-inlay-hints-mode -1)))
+  (add-hook 'eglot-managed-mode-hook
+            (lambda ()
+              (when (fboundp 'eglot-inlay-hints-mode)
+                (eglot-inlay-hints-mode -1))
+              (when (fboundp 'eglot-semantic-tokens-mode)
+                (eglot-semantic-tokens-mode -1))))
   (set-face-attribute 'eglot-mode-line nil :inherit 'unspecified)
 
   (defun eglot--format-markup (markup)
@@ -122,6 +127,11 @@
   (eglot-inactive-regions-opacity 0.4)
   :config
   (eglot-inactive-regions-mode 1))
+
+(use-package consult-eglot
+  :ensure t
+  :after eglot
+  :commands (consult-eglot-symbols))
 
 ;;;; jsonrpc -------------------------------------------------------------------
 (use-package jsonrpc :ensure t :defer t)
