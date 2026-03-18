@@ -827,6 +827,9 @@
   :config
   (add-hook 'eshell-mode-hook
             (lambda ()
+              ;; `auto-window-vscroll` must stay enabled here or the prompt can
+              ;; render underneath the mode line when it lands on the last line.
+              (setq-local auto-window-vscroll t)
               (define-key eshell-mode-map (kbd "C-r") #'consult-history)))
 
   (defalias 'ff 'find-file)
