@@ -11,6 +11,12 @@
       niva-inhibit-eww-images    t)
 
 (use-package pinentry :ensure t :defer t :config (pinentry-start))
+(use-package exec-path-from-shell
+  :ensure t
+  :init
+  (setq exec-path-from-shell-check-startup-files nil)
+  :config
+  (exec-path-from-shell-initialize))
 
 (load (expand-file-name "lisp/theme-packages.el" user-emacs-directory))
 (let ((local-env-file (expand-file-name "local-env.el" user-emacs-directory)))
@@ -244,12 +250,6 @@
          (now   (frame-parameter frame 'internal-border-width)))
     (set-frame-parameter frame 'internal-border-width
                          (if (= now 60) 5 60))))
-
-(defun niva/toggle-frame-decorations (&optional frame)
-  (interactive)
-  (let* ((frame (or frame (selected-frame)))
-         (now   (frame-parameter frame 'undecorated)))
-    (set-frame-parameter frame 'undecorated (not now))))
 
 (defun niva/toggle-frame-decorations (&optional frame)
   (interactive)
@@ -641,15 +641,15 @@
         xref-show-definitions-function #'consult-xref)
 
   (consult-customize
-   consult--source-buffer
-   consult--source-hidden-buffer
-   consult--source-project-buffer
+   consult-source-buffer
+   consult-source-hidden-buffer
+   consult-source-project-buffer
    consult-line
    :preview-key 'any)
 
   (consult-customize
-   consult--source-recent-file
-   consult--source-bookmark
+   consult-source-recent-file
+   consult-source-bookmark
    :preview-key '("M-." "C-SPC" :debounce 0.5 any))
 
   (consult-customize

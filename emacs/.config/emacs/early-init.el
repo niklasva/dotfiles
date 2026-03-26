@@ -99,11 +99,6 @@
 
 ;;; Bootstrap straight.el ---------------------------------------------------
 (load (expand-file-name "lisp/init-elpaca.el" user-emacs-directory))
-(use-package exec-path-from-shell
-  :ensure t
-  :init
-  (setq exec-path-from-shell-check-startup-files nil)
-  (exec-path-from-shell-initialize))
 
 (setq inhibit-redisplay t
       inhibit-message   t)
