@@ -82,6 +82,8 @@
 (use-package paper-theme           :ensure t :defer t)
 (use-package parchment-theme       :ensure t :defer t)
 (use-package professional-theme    :ensure t :defer t)
+(use-package monokai-theme         :ensure t :defer t)
+(use-package darktooth-theme       :ensure t :defer t)
 ;; (use-package batppuccin-theme      :ensure (:host github :repo "bbatsov/batppuccin-emacs"))
 
 
