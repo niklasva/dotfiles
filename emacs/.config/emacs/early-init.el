@@ -32,7 +32,7 @@
     (width                   . 120)
     (vertical-scroll-bars    . nil)
     (undecorated             . nil)
-    ;; (visibility              . nil)
+    (visibility              . nil)
     (left-margin . 0)
     (right-margin . 0))
   "Initial frame parameters applied both before and after init.")
