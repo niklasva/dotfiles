@@ -6,6 +6,9 @@
 ;;; Startup/window behavior -------------------------------------------------
 (require 'server)
 
+;; (setq inhibit-redisplay t
+;;       inhibit-message   t)
+
 (defun my/redirect-to-running-server ()
   (when (and (not (daemonp))
              (server-running-p))
@@ -29,7 +32,9 @@
     (width                   . 120)
     (vertical-scroll-bars    . nil)
     (undecorated             . nil)
-    (visible                 . nil))
+    ;; (visibility              . nil)
+    (left-margin . 0)
+    (right-margin . 0))
   "Initial frame parameters applied both before and after init.")
 
 (defun my/init-apply-frame-params ()
@@ -70,7 +75,15 @@
         (add-to-list 'exec-path expanded))))
   (setenv "PATH" (mapconcat #'identity exec-path path-separator)))
 
+(defun my/init-set-ls-colors ()
+  "Populate `LS_COLORS` for GUI Emacs."
+  (unless (getenv "LS_COLORS")
+    (setenv
+     "LS_COLORS"
+     "rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=00:tw=30;42:ow=34;42:st=37;44:ex=01;32")))
+
 (my/init-refresh-exec-path)
+(my/init-set-ls-colors)
 
 ;;; General behavior --------------------------------------------------------
 (setq gc-cons-threshold         most-positive-fixnum
@@ -100,8 +113,6 @@
 ;;; Bootstrap straight.el ---------------------------------------------------
 (load (expand-file-name "lisp/init-elpaca.el" user-emacs-directory))
 
-(setq inhibit-redisplay t
-      inhibit-message   t)
 
 ;;; Local variables ---------------------------------------------------------
 ;; Local Variables:

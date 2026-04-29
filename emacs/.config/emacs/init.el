@@ -40,7 +40,6 @@
 (setq-default warning-minimum-level :error)
 (setq-default c-basic-offset 4
               c-default-style "user"
-              display-line-numbers-width 4
               confirm-kill-emacs 'y-or-n-p
               ring-bell-function 'ignore
               column-number-mode nil
@@ -59,8 +58,6 @@
 
 (add-hook 'window-setup-hook 'delete-other-windows)
 (fset 'yes-or-no-p 'y-or-n-p)
-
-;; (add-hook 'prog-mode-hook #'display-line-numbers-mode)
 
 (delete-selection-mode)
 (context-menu-mode)
@@ -105,7 +102,8 @@
       inhibit-compacting-font-caches t)
 
 
-(global-visual-line-mode t)
+;; (global-visual-line-mode t)
+(global-visual-line-mode nil)
 (setq fringes-outside-margins t)
 
 (setq-default left-fringe-width 8
@@ -121,6 +119,12 @@
 ;;             (add-hook 'before-save-hook #'indent-region nil t)))
 
 (save-place-mode +1)
+(global-auto-revert-mode +1)
+
+(add-hook 'lisp-interaction-mode-hook
+          (lambda ()
+            (when (string= (buffer-name) "*scratch*")
+              (flymake-mode -1))))
 
 ;;;; OS defaults ---------------------------------------------------------------
 (setq-default mac-escape-modifier nil
@@ -178,33 +182,34 @@
   :config
   (setq async-backup-location "~/.cache/emacs/async-backup")
 
-  (defun niva/show-file-history ()
-    "Open Dired in the async-backup directory for current file and jump to newest backup."
-    (interactive)
-    (unless buffer-file-name
-      (user-error "This buffer is not visiting a file"))
-    (let* ((backup-root (file-name-as-directory (expand-file-name async-backup-location)))
-           (src-file    (expand-file-name buffer-file-name))
-           (src-dir     (file-name-directory src-file))
-           (base        (file-name-base src-file))
-           (ext         (file-name-extension src-file))
-           (backup-dir  (concat (string-remove-suffix "/" backup-root) src-dir))
-           (pattern     (concat "^" (regexp-quote base) "-"))
-           (pattern     (if ext (concat pattern ".*\\." (regexp-quote ext) "$")
-                          (concat pattern ".*$"))))
-      (unless (file-directory-p backup-dir)
-        (user-error "No backup directory exists yet: %s" backup-dir))
-      (dired backup-dir)
-      ;; pick newest by file attributes mtime
-      (let* ((files (directory-files backup-dir t pattern))
-             (newest
-              (car (sort files
-                         (lambda (a b)
-                           (time-less-p
-                            (file-attribute-modification-time (file-attributes b))
-                            (file-attribute-modification-time (file-attributes a))))))))
-        (when newest
-          (dired-goto-file newest))))))
+  ;; (defun niva/show-file-history ()
+  ;;   "Open Dired in the async-backup directory for current file and jump to newest backup."
+  ;;   (interactive)
+  ;;   (unless buffer-file-name
+  ;;     (user-error "This buffer is not visiting a file"))
+  ;;   (let* ((backup-root (file-name-as-directory (expand-file-name async-backup-location)))
+  ;;          (src-file    (expand-file-name buffer-file-name))
+  ;;          (src-dir     (file-name-directory src-file))
+  ;;          (base        (file-name-base src-file))
+  ;;          (ext         (file-name-extension src-file))
+  ;;          (backup-dir  (concat (string-remove-suffix "/" backup-root) src-dir))
+  ;;          (pattern     (concat "^" (regexp-quote base) "-"))
+  ;;          (pattern     (if ext (concat pattern ".*\\." (regexp-quote ext) "$")
+  ;;                         (concat pattern ".*$"))))
+  ;;     (unless (file-directory-p backup-dir)
+  ;;       (user-error "No backup directory exists yet: %s" backup-dir))
+  ;;     (dired backup-dir)
+  ;;     ;; pick newest by file attributes mtime
+  ;;     (let* ((files (directory-files backup-dir t pattern))
+  ;;            (newest
+  ;;             (car (sort files
+  ;;                        (lambda (a b)
+  ;;                          (time-less-p
+  ;;                           (file-attribute-modification-time (file-attributes b))
+  ;;                           (file-attribute-modification-time (file-attributes a))))))))
+  ;;       (when newest
+  ;;         (dired-goto-file newest)))))
+  )
 
 ;;; Customization --------------------------------------------------------------
 ;;;; icons
@@ -371,6 +376,8 @@
 (global-set-key (kbd "C-c ct")                'consult-theme)
 (global-set-key (kbd "C-c wu")                'winner-undo)
 (global-set-key (kbd "C-c es")                'eshell)
+(global-set-key (kbd "C-c fll")               'font-lock-mode)
+(global-set-key (kbd "C-c gfll")              'global-font-lock-mode)
 (global-set-key (kbd "C-x <escape> <escape>") nil)
 
 (defun niva/new-untitled-frame ()
@@ -572,7 +579,26 @@
         ("C-j" (lambda () (interactive) (evil-window-decrease-height 4)))
         ("C-k" (lambda () (interactive) (evil-window-increase-height 4)))
         ("C-h" (lambda () (interactive) (evil-window-decrease-width 8)))
-        ("C-l" (lambda () (interactive) (evil-window-increase-width 8)))))))
+        ("C-l" (lambda () (interactive) (evil-window-increase-width 8))))))
+
+  (defvar my/font-size-step 10)
+
+  (defun my/set-global-font-size (height)
+    (set-face-attribute 'default nil :height height)
+    (dolist (frame (frame-list))
+      (set-face-attribute 'default frame :height height)))
+
+  (defun my/change-global-font-size (delta)
+    (let ((new-height (+ (face-attribute 'default :height) delta)))
+      (my/set-global-font-size new-height)))
+
+  (defhydra my/hydra-font (:hint nil)
+    ("+" (my/change-global-font-size my/font-size-step))
+    ("-" (my/change-global-font-size (- my/font-size-step)))
+    ("0" (my/set-global-font-size 140))
+    ("q" nil :exit t))
+
+  (global-set-key (kbd "C-c =") #'my/hydra-font/body))
 
 
 ;;;; imenu ---------------------------------------------------------------------
@@ -678,42 +704,116 @@
 
   (setq consult-preview-max-count 50)
 
+  (defcustom niva/consult-buffer-file-max-width 72
+    "Maximum width for file candidates shown by `consult-buffer'."
+    :type 'integer
+    :group 'consult)
+
+  (defun niva/consult-buffer-format-file (file)
+    (let* ((display (consult--fast-abbreviate-file-name file))
+           (max-width niva/consult-buffer-file-max-width))
+      (if (<= (string-width display) max-width)
+          display
+        (let* ((name (file-name-nondirectory display))
+               (dir (file-name-directory display))
+               (parts (reverse (split-string (directory-file-name (or dir "")) "/" t)))
+               (result name))
+          (while (and parts
+                      (<= (string-width (concat (car parts) "/" result)) max-width))
+            (setq result (concat (pop parts) "/" result)))
+          (when parts
+            (setq result (concat "…/" result)))
+          (if (> (string-width result) max-width)
+              (string-truncate-left result max-width)
+            result)))))
+
+  (defun niva/consult-buffer-file-items ()
+    (let ((ht (consult--buffer-file-hash))
+          items)
+      (dolist (file (bound-and-true-p recentf-list) (nreverse items))
+        (unless (eq (aref file 0) ?/)
+          (let (file-name-handler-alist)
+            (setq file (expand-file-name file))))
+        (unless (gethash file ht)
+          (push (cons (niva/consult-buffer-format-file file) file) items)))))
+
+  (defun niva/consult-buffer-project-file-items ()
+    (when-let* ((root (consult--project-root)))
+      (let ((len (length root))
+            (ht (consult--buffer-file-hash))
+            items)
+        (dolist (file (bound-and-true-p recentf-list) (nreverse items))
+          (unless (eq (aref file 0) ?/)
+            (let (file-name-handler-alist)
+              (setq file (expand-file-name file))))
+          (when (and (not (gethash file ht)) (string-prefix-p root file))
+            (let ((part (substring file len)))
+              (when (equal part "") (setq part "./"))
+              (push (cons (niva/consult-buffer-format-file part) file) items)))))))
+
   (defun niva/consult-ripgrep-in-directory ()
     (interactive)
     (let ((directory-to-search (read-directory-name "Search in directory: " nil nil t)))
       (consult-ripgrep (expand-file-name "." directory-to-search))))
 
-  (defvar niva-consult-source-dired
-    `(:name "Dired"
-            :narrow ?d
-            :category buffer
-            :face consult-buffer
-            :history buffer-name-history
-            :state ,#'consult--buffer-state
-            :items ,(lambda ()
-                      (mapcar #'buffer-name
-                              (seq-filter
-                               (lambda (buf)
-                                 (with-current-buffer buf
-                                   (derived-mode-p 'dired-mode)))
-                               (buffer-list))))))
+  ;; (defvar niva-consult-source-dired
+  ;;   `(:name "Dired"
+  ;;           :narrow ?d
+  ;;           :category buffer
+  ;;           :face consult-buffer
+  ;;           :history buffer-name-history
+  ;;           :state ,#'consult--buffer-state
+  ;;           :items ,(lambda ()
+  ;;                     (mapcar #'buffer-name
+  ;;                             (seq-filter
+  ;;                              (lambda (buf)
+  ;;                                (with-current-buffer buf
+  ;;                                  (derived-mode-p 'dired-mode)))
+  ;;                              (buffer-list))))))
 
-  (setq consult-buffer-sources '(consult-source-buffer
-                                 niva-consult-source-dired
-                                 consult-source-hidden-buffer
-                                 consult-source-modified-buffer
-                                 consult-source-other-buffer
-                                 consult-source-recent-file
-                                 consult-source-buffer-register
-                                 consult-source-file-register
-                                 consult-source-bookmark
-                                 consult-source-project-buffer-hidden
-                                 consult-source-project-recent-file-hidden
-                                 consult-source-project-root-hidden))
+  ;; (defvar niva-consult-source-recent-file
+  ;;   `(:name "File"
+  ;;           :narrow ?f
+  ;;           :category file
+  ;;           :face consult-file
+  ;;           :history file-name-history
+  ;;           :state ,#'consult--file-state
+  ;;           :new ,#'consult--file-action
+  ;;           :enabled ,(lambda () recentf-mode)
+  ;;           :items ,#'niva/consult-buffer-file-items))
+
+  ;; (defvar niva-consult-source-project-recent-file-hidden
+  ;;   `(:hidden t
+  ;;             :name "Project File"
+  ;;             :narrow ((?p . "Project") (?F . "Project File"))
+  ;;             :category file
+  ;;             :face consult-file
+  ;;             :history file-name-history
+  ;;             :state ,#'consult--file-state
+  ;;             :new ,(lambda (file)
+  ;;                     (consult--file-action
+  ;;                      (expand-file-name file (consult--project-root))))
+  ;;             :enabled ,(lambda ()
+  ;;                         (and consult-project-function
+  ;;                              recentf-mode))
+  ;;             :items ,#'niva/consult-buffer-project-file-items))
+
+  ;; (setq consult-buffer-sources '(consult-source-buffer
+  ;;                                niva-consult-source-dired
+  ;;                                consult-source-hidden-buffer
+  ;;                                consult-source-modified-buffer
+  ;;                                consult-source-other-buffer
+  ;;                                niva-consult-source-recent-file
+  ;;                                consult-source-buffer-register
+  ;;                                consult-source-file-register
+  ;;                                consult-source-bookmark
+  ;;                                consult-source-project-buffer-hidden
+  ;;                                niva-consult-source-project-recent-file-hidden
+  ;;                                consult-source-project-root-hidden))
 
   (defun my-dired-buffer-name ()
     (rename-buffer
-     (concat " ❏ "
+     (concat "❏ "
              (abbreviate-file-name
               (directory-file-name default-directory)))
      t))
@@ -825,6 +925,14 @@
   :ensure nil
   :defines eshell-prompt-function
   :config
+  (require 'em-alias)
+
+  (defun niva/eshell-set-alias (name command)
+    "Register or replace Eshell alias NAME with COMMAND."
+    (setq eshell-command-aliases-list
+          (cons (list name command)
+                (assoc-delete-all name eshell-command-aliases-list))))
+
   (add-hook 'eshell-mode-hook
             (lambda ()
               ;; `auto-window-vscroll` must stay enabled here or the prompt can
@@ -858,6 +966,10 @@
         eshell-scroll-to-bottom-on-output 'all)
 
   (setq pcomplete-cycle-completions nil)
+
+  (niva/eshell-set-alias "ff" "for i in ${eshell-flatten-list $*} {find-file $i}")
+  (niva/eshell-set-alias "ts" "ts '[%Y-%m-%d %H:%M:%S]'")
+  (niva/eshell-set-alias "ls" "gls --human-readable --literal --classify --color=always --group-directories-first $*")
 
   (setq system-name (car (split-string system-name "\\.")))
   (setq eshell-prompt-regexp "^.+@.+:.+> ")
@@ -902,16 +1014,6 @@
 ;; (advice-add 'term-handle-exit :after 'niva/term-handle-exit)
 ;; (add-hook 'vterm-exit-functions #'niva/vterm-handle-exit)
 
-;;;; Alias ---------------------------------------------------------------------
-
-(add-hook 'eshell-first-time-mode-hook
-          (lambda ()
-            (eshell/alias "ff" "for i in ${eshell-flatten-list $*} {find-file $i}")))
-
-(add-hook 'eshell-first-time-mode-hook
-          (lambda ()
-            (eshell/alias "ts" "ts '[%Y-%m-%d %H:%M:%S]'")))
-
 ;;;; vterm ---------------------------------------------------------------------
 (use-package vterm
   :ensure t
@@ -926,6 +1028,7 @@
         ("C-g" . vterm-copy-mode)
         ("C-c C-t" . vterm))
   :config
+  (setq-default vterm-min-window-width 40)
   (setq vterm-max-scrollback 10000)
   (setq vterm-timer-delay nil))
 
@@ -1061,10 +1164,12 @@
   :ensure t
   :defer t
   :config
+
+  (define-fringe-bitmap 'flymake-double-exclamation-mark (vector #b00000000))
+  (define-fringe-bitmap 'exclamation-mark                (vector #b00000000))
+
   (setq flymake-start-on-save-buffer t
         flymake-no-changes-timeout 0.2
-        ;; flymake-fringe-indicator-position nil
-        ;; flymake-indicator-type nil
         flymake-mode-line-lighter nil)
 
   (add-hook 'sh-mode-hook 'flymake-mode)
@@ -1128,7 +1233,8 @@
   ;; Turn on apheleia in all programming buffers.
   (add-hook 'prog-mode-hook #'apheleia-mode)
   :config
-  (setq apheleia-remote-algorithm 'local)
+  (setq apheleia-remote-algorithm 'local
+        apheleia-mode-lighter nil)
   (dolist (fmt '((ruff       . ("ruff" "format" "--silent" "-"))
                  (ruff-isort . ("ruff" "check" "--fix" "--select" "I" "-"))))
     (setf (alist-get (car fmt) apheleia-formatters) (cdr fmt)))
@@ -1530,7 +1636,31 @@
   (setq markdown-xwidget-github-theme "light"))
 
 ;;; Org Mode -------------------------------------------------------------------
-;; (use-package org-bullets :ensure t :defer t)
+
+(use-package mixed-pitch
+  :ensure t
+  :hook
+  (org-mode . mixed-pitch-mode))
+
+(use-package org-modern
+  :ensure t
+  :hook (org-mode . org-modern-mode)
+  :custom
+  (org-modern-star '("◉" "○" "✸" "✿" "✤" "✜" "◆" "▶"))
+  (org-modern-table-vertical 1)
+  (org-modern-table-horizontal 0.2)
+  (org-modern-list '((43 . "➤") (45 . "–") (42 . "•")))
+  (org-modern-todo-faces
+   '(("TODO" :inverse-video t :inherit org-todo)
+     ("PROG" :inverse-video t :inherit +org-todo-active)
+     ("WAIT" :inverse-video t :inherit +org-todo-onhold)
+     ("DONE" :inverse-video t :inherit org-done)))
+  (org-modern-footnote (cons nil (cadr org-script-display)))
+  (org-modern-block-fringe nil)
+  (org-modern-block-name '("" . ""))
+  (org-modern-keyword nil)
+  (org-modern-timestamp t)
+  (org-modern-priority t))
 
 (with-eval-after-load 'org
   (setq org-hide-emphasis-markers t
@@ -1703,7 +1833,7 @@
                   visual-fill-column-fringes-outside-margins t
                   visual-fill-column-extra-text-width '(-4 . 0)
                   visual-fill-column-width 100)
-            (adaptive-wrap-prefix-mode 1)
+            ;; (adaptive-wrap-prefix-mode 1)
             (visual-fill-column-mode)))
 
 (add-hook 'eww-mode-hook
@@ -1722,31 +1852,31 @@
     (define-key eww-mode-map (kbd "ö")     (lambda () (interactive) (evil-forward-paragraph) (forward-line 1) (evil-scroll-line-to-center nil)))
     (define-key eww-mode-map (kbd "ä")     (lambda () (interactive) (evil-backward-paragraph 2) (forward-line 1) (evil-scroll-line-to-center nil)))))
 
-(dolist (face '(;; shr-h1
-                ;; shr-text
-                ;; shr-code
-                ;; variable-pitch-text
-                gnus-header
-                info-title-1
-                info-title-2
-                info-title-3
-                info-title-4
-                help-for-help-header
-                ;; variable-pitch
-                ;; variable-pitch-text
-                read-multiple-choice-face
-                help-key-binding
-
-                ;; fixed-pitch
-                ;; fixed-pitch-serif
-                info-menu-header
-                org-document-title))
-  (ignore-errors
-    (set-face-attribute face nil
-                        :height 'unspecified
-                        :inherit 'default
-                        ;; :family 'unspecified
-                        :weight 'unspecified)))
+;; (dolist (face '(;; shr-h1
+;;                 ;; shr-text
+;;                 ;; shr-code
+;;                 ;; variable-pitch-text
+;;                 gnus-header
+;;                 info-title-1
+;;                 info-title-2
+;;                 info-title-3
+;;                 info-title-4
+;;                 help-for-help-header
+;;                 ;; variable-pitch
+;;                 ;; variable-pitch-text
+;;                 read-multiple-choice-face
+;;                 help-key-binding
+;;
+;;                 ;; fixed-pitch
+;;                 ;; fixed-pitch-serif
+;;                 info-menu-header
+;;                 org-document-title))
+;;   (ignore-errors
+;;     (set-face-attribute face nil
+;;                         ;; :height 'unspecified
+;;                         :inherit 'default
+;;                         ;; :family 'unspecified
+;;                         :weight 'unspecified)))
 
 (defun niva/eww-toggle-images ()
   (interactive)

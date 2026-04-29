@@ -272,6 +272,13 @@
                       '(flymake-warning              ((t (:inherit unspecified :underline (:style wave :color "Orange3")))))
                       '(vertical-border              ((t (:foreground unspecified :inherit shadow))))))
 
+  (when (niva/theme-is-active "darktooth")
+    (custom-set-faces '(markdown-header-face   ((t (:height unspecified))))
+                      '(markdown-header-face-1 ((t (:inherit 'markdown-header-face :height unspecified))))
+                      '(markdown-header-face-2 ((t (:inherit 'markdown-header-face :height unspecified))))
+                      '(markdown-header-face-3 ((t (:inherit 'markdown-header-face :height unspecified))))
+                      '(markdown-header-face-4 ((t (:inherit 'markdown-header-face :height unspecified))))))
+
   (when (niva/theme-is-active "tango")
     (custom-set-faces '(elfeed-search-feed-face ((t (:inherit 'font-lock-builtin-face))))
                       '(elfeed-search-date-face ((t (:inherit 'font-lock-string-face))))))
@@ -316,6 +323,18 @@
 
 (custom-set-faces '(flymake-error   ((t (:underline (:style wave :color "red")))))
                   '(flymake-warning ((t (:underline (:style wave :color "orange"))))))
+
+(defun my/normalize-face-heights (&rest _)
+  "Force all faces to inherit height from `default`."
+  (mapc (lambda (face)
+          (unless (eq face 'default)
+            (when (face-attribute face :height nil nil)
+              (set-face-attribute face nil :height 'unspecified))))
+        (face-list)))
+
+;; Run after theme loads or new faces are defined:
+(advice-add 'load-theme :after #'my/normalize-face-heights)
+(advice-add 'enable-theme :after #'my/normalize-face-heights)
 
 (provide 'theme-packages)
 ;;; theme-packages.el ends here
