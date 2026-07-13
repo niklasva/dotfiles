@@ -114,10 +114,16 @@
                                elfeed-search-title-min-width
                                title-width
                                elfeed-search-title-max-width)
-                        :left)))
+                        :left))
+         (read-p (not (memq 'unread (elfeed-entry-tags entry))))
+         (beg (point)))
     (insert (propertize date 'face 'elfeed-search-date-face) " "
             (propertize title-column 'face title-faces 'kbd-help title) " "
-            (format "%-30s" (format "%s (%s)" (propertize feed-title 'face 'elfeed-search-feed-face) tags-str)))))
+            (format "%-30s" (format "%s (%s)" (propertize feed-title 'face 'elfeed-search-feed-face) tags-str)))
+    (when read-p
+      (add-face-text-property beg (point)
+                              (list :foreground (or (face-foreground 'shadow nil t) "gray55"))
+                              nil))))
 
 (defvar-local niva/elfeed-last-feed nil)
 (defvar-local niva/elfeed-last-tags nil)
@@ -217,7 +223,7 @@
   '((t :inherit default :foreground "gray55"))
   "Dim face for read Elfeed rows.")
 
-;; (setq elfeed-search-print-entry-function #'niva/elfeed-search-print-entry--single-line-alt-mixed)
+(setq elfeed-search-print-entry-function #'niva/elfeed-search-print-entry--single-line)
 
 (setq elfeed-search-sort-function
       (lambda (a b)
