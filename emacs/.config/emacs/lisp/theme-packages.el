@@ -11,6 +11,8 @@
 (use-package bing-bong-dark-theme  :commands (niva/toggle-bing-bong-dark)  :load-path "themes")
 (use-package bing-bong-light-theme :commands (niva/toggle-bing-bong-light) :load-path "themes")
 
+(setq ansi-color-bold-is-bright t)
+
 ;;; Kaolin Themes
 (use-package kaolin-themes
   :ensure (:host github :repo "ogdenwebb/emacs-kaolin-themes")
@@ -29,7 +31,7 @@
   :ensure t
   :defer t
   :config
-  (setq doom-themes-enable-italic              t
+  (setq doom-themes-enable-italic              nil
         doom-miramare-brighter-comments        t
         doom-tomorrow-night-brighter-comments  t
         doom-tokyo-night-brighter-comments     t
@@ -50,15 +52,21 @@
   :config
   (setq ef-themes-variable-pitch-ui t))
 
-(use-package orangey-bits-theme :ensure (:host github :repo "emacsfodder/emacs-theme-orangey-bits") :defer t)
-(use-package cyanometric-theme  :ensure (:host github :repo "emacsfodder/emacs-theme-cyanometric")  :defer t)
-(use-package vegetative-theme   :ensure (:host github :repo "emacsfodder/emacs-theme-vegetative")   :defer t)
-(use-package dark-krystal-theme :ensure (:host github :repo "emacsfodder/emacs-dark-krystal-theme") :defer t)
-(use-package doric-themes       :ensure (:host github :repo "protesilaos/doric-themes")             :defer t)
-(use-package os1-theme          :ensure (:host github :repo "sashimacs/os1-theme")                  :defer t)
-(use-package alabaster-themes   :ensure (:host github :repo "vedang/alabaster-themes")              :defer t)
-(use-package colorless-themes   :ensure (:host github :repo "lthms/colorless-themes.el"             :files ("colorless-themes.el" "*.el")))
-(use-package batppuccin         :ensure (:host github :repo "bbatsov/batppuccin-emacs"              :branch "main" :main "batppuccin.el"))
+(use-package chelsea-yellow-theme :ensure (:host github :repo "Saurav-S-Purushothaman/chelsea-yellow" :defer t :branch "main" :main "chelsea-yellow-theme.el"))
+(use-package real-mono-themes   :ensure (:host github :repo "NestorLiao/real-mono-theme")            :defer t)
+(use-package monotropic-theme   :ensure (:host github :repo "caffo/monotropic-theme")                :defer t)
+(use-package orangey-bits-theme :ensure (:host github :repo "emacsfodder/emacs-theme-orangey-bits")  :defer t)
+(use-package cyanometric-theme  :ensure (:host github :repo "emacsfodder/emacs-theme-cyanometric")   :defer t)
+(use-package vegetative-theme   :ensure (:host github :repo "emacsfodder/emacs-theme-vegetative")    :defer t)
+(use-package dark-krystal-theme :ensure (:host github :repo "emacsfodder/emacs-dark-krystal-theme")  :defer t)
+(use-package doric-themes       :ensure (:host github :repo "protesilaos/doric-themes")              :defer t)
+(use-package os1-theme          :ensure (:host github :repo "sashimacs/os1-theme")                   :defer t)
+(use-package alabaster-themes   :ensure (:host github :repo "vedang/alabaster-themes")               :defer t)
+(use-package colorless-themes   :ensure (:host github :repo "lthms/colorless-themes.el"              :defer t :files ("colorless-themes.el" "*.el")))
+(use-package batppuccin         :ensure (:host github :repo "bbatsov/batppuccin-emacs"               :defer t :branch "main" :main "batppuccin.el"))
+;; (use-package modus-flexoki      :ensure (:host github :repo "dpassen/modus-flexoki"                 :defer t))
+(use-package tennis-theme   :ensure (:host github :repo "campmara/tennis-theme")            :defer t)
+(use-package everforest   :ensure (:host github :repo "theorytoe/everforest-emacs")            :defer t)
 
 (use-package color-theme-sanityinc-tomorrow :ensure (:host github :repo "purcell/color-theme-sanityinc-tomorrow") :defer t)
 
@@ -73,26 +81,29 @@
 (use-package basic-theme           :ensure t :defer t)
 (use-package chocolate-theme       :ensure t :defer t)
 (use-package color-theme-modern    :ensure t :defer t)
+(use-package constant-theme        :ensure t :defer t)
+(use-package darktooth-theme       :ensure t :defer t)
 (use-package faff-theme            :ensure t :defer t)
 (use-package goose-theme           :ensure t :defer t)
 (use-package humanoid-themes       :ensure t :defer t)
 (use-package moe-theme             :ensure t :defer t)
+(use-package monokai-theme         :ensure t :defer t)
 (use-package naysayer-theme        :ensure t :defer t)
 (use-package nordic-night-theme    :ensure t :defer t)
 (use-package paper-theme           :ensure t :defer t)
 (use-package parchment-theme       :ensure t :defer t)
 (use-package professional-theme    :ensure t :defer t)
-(use-package monokai-theme         :ensure t :defer t)
-(use-package darktooth-theme       :ensure t :defer t)
+(use-package stimmung-themes       :ensure t :defer t)
 ;; (use-package batppuccin-theme      :ensure (:host github :repo "bbatsov/batppuccin-emacs"))
 
 
-(use-package tokyo-night-theme     :ensure (:host github :repo "bbatsov/tokyo-night-emacs"))
-(use-package seoul256-theme        :ensure t :defer t)
-(use-package standard-themes       :ensure t :defer t)
-(use-package apropospriate-theme   :ensure t :defer t)
-(use-package kanagawa-themes       :ensure t :defer t)
-(use-package ample-theme           :ensure t :defer t)
+(use-package tokyo-night-theme      :ensure (:host github :repo "bbatsov/tokyo-night-emacs"))
+(use-package seoul256-theme         :ensure t :defer t)
+(use-package standard-themes        :ensure t :defer t)
+(use-package apropospriate-theme    :ensure t :defer t)
+(use-package kanagawa-themes        :ensure t :defer t)
+(use-package ample-theme            :ensure t :defer t)
+(use-package quasi-monochrome-theme :ensure t :defer t)
 
 (use-package tomorrow-night-deepblue-theme :ensure t :defer t)
 
@@ -130,7 +141,7 @@
         modus-themes-org-blocks nil
         modus-themes-region '(bg-only)
         modus-themes-tabs-accented t
-        modus-themes-variable-pitch-ui t)
+        modus-themes-variable-pitch-ui nil)
 
   (setq modus-themes-common-palette-overrides
         '((fringe unspecified)))
@@ -138,6 +149,13 @@
   (setq modus-themes-completions '((matches . (background minimal))
                                    (selection . (background minimal))
                                    (popup . (background minimal)))))
+
+(use-package solaire-mode
+  :ensure t
+  :defer t
+  :hook ((vterm-mode    . solaire-mode)
+         (eshell-mode   . solaire-mode)
+         (ghostel-mode  . solaire-mode)))
 
 ;;; Helpers
 (defun niva/theme-is-active (theme-name)
@@ -147,7 +165,7 @@
            custom-enabled-themes))
 
 ;;; Custom face updates per theme
-(defun niva/update-theme-faces ()
+(defun niva/fix-theme-faces ()
   "Adjust certain face settings depending on the active theme."
   (interactive)
   (when (or (null custom-enabled-themes) (niva/theme-is-active "bing-bong-light"))
@@ -235,22 +253,59 @@
                       '(org-block-end-line   ((t (:background nil :inherit 'org-block :extend t :overline nil :underline t))))))
 
   (when (niva/theme-is-active "orangey-bits")
-    (custom-set-faces '(line-number          ((t (:foreground unspecified :inherit font-lock-comment-face))))
-                      '(shadow               ((t (:foreground unspecified :inherit link-visited))))
-                      '(org-level-1          ((t (:foreground unspecified :inherit outline-1))))
-                      '(org-level-2          ((t (:foreground unspecified :inherit outline-2))))
-                      '(org-level-3          ((t (:foreground unspecified :inherit outline-3))))
-                      '(org-level-4          ((t (:foreground unspecified :inherit outline-4))))
-                      '(org-table            ((t (:foreground unspecified :inherit unspecified))))
-                      '(org-block            ((t (:inherit 'default :background "black" :extend t))))
-                      '(vertical-border      ((t (:inherit unspecified :foreground "#471000"))))
-                      '(org-block-begin-line ((t (:inherit 'shadow :foreground "#A06537" :foreground "#471000" :background "black" :overline t :underline nil :extend t))))
-                      '(org-block-end-line   ((t (:inherit 'org-block-begin-line :foreground "#471000" :background "black" :overline nil :underline t :extend t)))))
+    (custom-set-faces
+     '(line-number               ((t (:foreground unspecified :inherit font-lock-comment-face))))
+     '(shadow                    ((t (:foreground unspecified :inherit link-visited))))
+     '(markdown-header-face      ((t (:height unspecified))))
+     '(markdown-header-face-1    ((t (:inherit 'markdown-header-face :height unspecified))))
+     '(markdown-header-face-2    ((t (:inherit 'markdown-header-face :height unspecified))))
+     '(markdown-header-face-3    ((t (:inherit 'markdown-header-face :height unspecified))))
+     '(markdown-header-face-4    ((t (:inherit 'markdown-header-face :height unspecified))))
+     '(markdown-header-face-5    ((t (:inherit 'markdown-header-face :height unspecified))))
+     '(markdown-header-face-6    ((t (:inherit 'markdown-header-face :height unspecified))))
+     '(markdown-code-face        ((t (:height unspecified))))
+     '(markdown-inline-code-face ((t (:height unspecified))))
+     '(org-level-1               ((t (:foreground unspecified :inherit outline-1))))
+     '(org-level-2               ((t (:foreground unspecified :inherit outline-2))))
+     '(org-level-3               ((t (:foreground unspecified :inherit outline-3))))
+     '(org-level-4               ((t (:foreground unspecified :inherit outline-4))))
+     '(org-table                 ((t (:foreground unspecified :inherit unspecified))))
+     '(org-block                 ((t (:inherit 'default :background "black" :extend t))))
+     '(vertical-border           ((t (:inherit unspecified :foreground "#471000"))))
+     '(org-block-begin-line      ((t (:inherit 'shadow :foreground "#A06537" :foreground "#471000" :background "black" :overline t :underline nil :extend t))))
+     '(org-block-end-line        ((t (:inherit 'org-block-begin-line :foreground "#471000" :background "black" :overline nil :underline t :extend t)))))
     (set-face-foreground 'default "#ffe0a0"))
 
   (when (niva/theme-is-active "vegetative")
-    (custom-set-faces '(font-lock-comment-face ((t (:foreground "#234e00" :inherit unspecified)))))
+    (custom-set-faces '(font-lock-comment-face ((t (:foreground "#234e00" :inherit unspecified))))
+                      '(markdown-header-face      ((t (:height unspecified))))
+                      '(markdown-header-face-1    ((t (:inherit 'markdown-header-face :height unspecified))))
+                      '(markdown-header-face-2    ((t (:inherit 'markdown-header-face :height unspecified))))
+                      '(markdown-header-face-3    ((t (:inherit 'markdown-header-face :height unspecified))))
+                      '(markdown-header-face-4    ((t (:inherit 'markdown-header-face :height unspecified))))
+                      '(markdown-header-face-5    ((t (:inherit 'markdown-header-face :height unspecified))))
+                      '(markdown-header-face-6    ((t (:inherit 'markdown-header-face :height unspecified))))
+                      '(markdown-code-face        ((t (:height unspecified))))
+                      '(markdown-inline-code-face ((t (:height unspecified)))))
     (set-face-foreground 'default "#58B22C"))
+
+  (when (niva/theme-is-active "cyanometric")
+    (custom-set-faces
+     '(line-number               ((t (:foreground unspecified :inherit shadow))))
+     '(shadow                    ((t (:foreground unspecified :inherit window-divider))))
+     '(markdown-header-face      ((t (:height unspecified))))
+     '(markdown-header-face-1    ((t (:inherit 'markdown-header-face :height unspecified))))
+     '(markdown-header-face-2    ((t (:inherit 'markdown-header-face :height unspecified))))
+     '(markdown-header-face-3    ((t (:inherit 'markdown-header-face :height unspecified))))
+     '(markdown-header-face-4    ((t (:inherit 'markdown-header-face :height unspecified))))
+     '(markdown-header-face-5    ((t (:inherit 'markdown-header-face :height unspecified))))
+     '(markdown-header-face-6    ((t (:inherit 'markdown-header-face :height unspecified))))
+     '(markdown-code-face        ((t (:height unspecified))))
+     '(markdown-inline-code-face ((t (:height unspecified))))
+     '(org-level-1               ((t (:foreground unspecified :inherit outline-1))))
+     '(org-level-2               ((t (:foreground unspecified :inherit outline-2))))
+     '(org-level-3               ((t (:foreground unspecified :inherit outline-3))))
+     '(org-level-4               ((t (:foreground unspecified :inherit outline-4))))))
 
   (when (niva/theme-is-active "lambda")
     (custom-set-faces '(vertical-border ((t (:foreground unspecified :inherit corfu-border))))))
@@ -282,6 +337,12 @@
   (when (niva/theme-is-active "tango")
     (custom-set-faces '(elfeed-search-feed-face ((t (:inherit 'font-lock-builtin-face))))
                       '(elfeed-search-date-face ((t (:inherit 'font-lock-string-face))))))
+
+  (when (or (niva/theme-is-active "alabaster-themes-light-mono"))
+    (custom-set-faces '(default                ((t (:background    "#FAEC93"))))
+                      '(font-lock-comment-face ((t (:foreground    "#897B23"))))
+                      '(vertical-border        ((t (:background    unspecified))))
+                      '(fringe                 ((t (:background    unspecified))))))
 
   (custom-set-faces `(help-key-binding ((t (:box nil :background unspecified :foreground ,(face-attribute 'default :foreground))))))
 
@@ -324,17 +385,14 @@
 (custom-set-faces '(flymake-error   ((t (:underline (:style wave :color "red")))))
                   '(flymake-warning ((t (:underline (:style wave :color "orange"))))))
 
-(defun my/normalize-face-heights (&rest _)
-  "Force all faces to inherit height from `default`."
-  (mapc (lambda (face)
-          (unless (eq face 'default)
-            (when (face-attribute face :height nil nil)
-              (set-face-attribute face nil :height 'unspecified))))
-        (face-list)))
-
-;; Run after theme loads or new faces are defined:
-(advice-add 'load-theme :after #'my/normalize-face-heights)
-(advice-add 'enable-theme :after #'my/normalize-face-heights)
+(defun my/disable-bold-fonts ()
+  (interactive)
+  (mapc
+   (lambda (face)
+     (when (memq (face-attribute face :weight) '(bold semi-bold extra-bold ultra-bold))
+       (set-face-attribute face nil :weight 'normal)))
+   (face-list)))
 
 (provide 'theme-packages)
+
 ;;; theme-packages.el ends here
