@@ -217,7 +217,7 @@
   '((t :inherit default :foreground "gray55"))
   "Dim face for read Elfeed rows.")
 
-(setq elfeed-search-print-entry-function #'niva/elfeed-search-print-entry--single-line-alt-mixed)
+;; (setq elfeed-search-print-entry-function #'niva/elfeed-search-print-entry--single-line-alt-mixed)
 
 (setq elfeed-search-sort-function
       (lambda (a b)
@@ -356,5 +356,8 @@ then refresh and update the feed list."
   (when (get-buffer "*elfeed-search*")
     (with-current-buffer "*elfeed-search*"
       (elfeed-search-update :force))))
+
+;; SINCE ELFEED 4.0.0
+(setq elfeed-search-sort-function #'elfeed-search-group-by-feed)
 
 ;;; elfeed-custom.el ends here

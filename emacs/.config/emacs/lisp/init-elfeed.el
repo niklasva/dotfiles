@@ -63,9 +63,9 @@
         elfeed-protocol-fever-update-unread-only nil
         elfeed-protocol-fever-maxsize 120
         elfeed-protocol-fever-fetch-category-as-tag t
-        elfeed-protocol-feeds (list (list niva/elfeed-fever-url
-                                          :api-url niva/elfeed-api-url
-                                          :password (niva/lookup-password :host "fever"))))
+        elfeed-feeds (list (list niva/elfeed-fever-url
+                                 :api-url niva/elfeed-api-url
+                                 :password (niva/lookup-password :host "fever"))))
 
   (unless niva-enable-evil-mode
     (define-key elfeed-search-mode-map (kbd "x") #'(lambda () (interactive) (elfeed-search-untag-all-unread) (next-line)))
