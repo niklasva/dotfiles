@@ -70,6 +70,7 @@
 (delete-selection-mode)
 (context-menu-mode)
 (repeat-mode)
+(blink-cursor-mode -1)
 
 (setq-default evil-auto-indent t
               indent-tabs-mode nil
@@ -85,6 +86,8 @@
         indent-tabs-mode t
         evil-auto-indent t
         c-basic-offset tab-width))
+
+(add-hook 'prog-mode-hook 'display-line-numbers-mode)
 
 (dolist (hook '(c++-mode-hook c-mode-hook c++-ts-mode-hook c-ts-mode-hook cmake-ts-mode-hook)) (add-hook hook 'indent-tabs-hook))
 
@@ -145,10 +148,10 @@
 (global-set-key (kbd "s-,") 'menu-set-font)
 (global-set-key (kbd "M-,") 'menu-set-font)
 
-(use-package ultra-scroll
-  :ensure (ultra-scroll :type git :host github :repo "jdtsmith/ultra-scroll")
-  :config
-  (ultra-scroll-mode))
+;; (use-package ultra-scroll
+;;   :ensure (ultra-scroll :type git :host github :repo "jdtsmith/ultra-scroll")
+;;   :config
+;;   (ultra-scroll-mode))
 
 (use-package simpleclip
   :ensure t
@@ -256,7 +259,7 @@
   (let* ((frame (or frame (selected-frame)))
          (now   (frame-parameter frame 'internal-border-width)))
     (set-frame-parameter frame 'internal-border-width
-                         (if (= now 60) 5 60))))
+                         (if (= now 100) 5 100))))
 
 (defun niva/toggle-frame-decorations (&optional frame)
   (interactive)
@@ -577,6 +580,7 @@
 #+begin_src emacs-lisp
 (use-package hydra
   :ensure t
+  :demand t
   :custom
   (hydra-is-helpful t)
   :config
@@ -601,27 +605,27 @@
     ("SPC" transpose-frame "transpose" :exit t))
   (bind-key* "C-c C-w" #'hydra-win-resize/body)
 
-  (with-eval-after-load 'org
-    (define-key org-mode-map (kbd "C-c C-w") nil))
+  ;; (with-eval-after-load 'org
+  ;;   (define-key org-mode-map (kbd "C-c C-w") nil))
 
-  (with-eval-after-load 'evil-maps
-    (setq hydra-is-helpful nil)
-    (defhydra hydra-win-resize (evil-normal-state-map "C-w")
-      "Resize window"
-      ("C-j" (lambda () (interactive) (evil-window-decrease-height 4)))
-      ("C-k" (lambda () (interactive) (evil-window-increase-height 4)))
-      ("C-h" (lambda () (interactive) (evil-window-decrease-width 8)))
-      ("C-l" (lambda () (interactive) (evil-window-increase-width 8)))))
+  ;; (with-eval-after-load 'evil-maps
+  ;;   (setq hydra-is-helpful nil)
+  ;;   (defhydra hydra-win-resize (evil-normal-state-map "C-w")
+  ;;     "Resize window"
+  ;;     ("C-j" (lambda () (interactive) (evil-window-decrease-height 4)))
+  ;;     ("C-k" (lambda () (interactive) (evil-window-increase-height 4)))
+  ;;     ("C-h" (lambda () (interactive) (evil-window-decrease-width 8)))
+  ;;     ("C-l" (lambda () (interactive) (evil-window-increase-width 8)))))
 
-  (with-eval-after-load 'evil-maps
-    (with-eval-after-load 'magit
-      (setq hydra-is-helpful nil)
-      (defhydra hydra-win-resize (magit-file-section-map "C-w")
-        "Resize window"
-        ("C-j" (lambda () (interactive) (evil-window-decrease-height 4)))
-        ("C-k" (lambda () (interactive) (evil-window-increase-height 4)))
-        ("C-h" (lambda () (interactive) (evil-window-decrease-width 8)))
-        ("C-l" (lambda () (interactive) (evil-window-increase-width 8))))))
+  ;; (with-eval-after-load 'evil-maps
+  ;;   (with-eval-after-load 'magit
+  ;;     (setq hydra-is-helpful nil)
+  ;;     (defhydra hydra-win-resize (magit-file-section-map "C-w")
+  ;;       "Resize window"
+  ;;       ("C-j" (lambda () (interactive) (evil-window-decrease-height 4)))
+  ;;       ("C-k" (lambda () (interactive) (evil-window-increase-height 4)))
+  ;;       ("C-h" (lambda () (interactive) (evil-window-decrease-width 8)))
+  ;;       ("C-l" (lambda () (interactive) (evil-window-increase-width 8))))))
 
   (defvar my/font-size-step 10)
 
@@ -1107,7 +1111,7 @@
   :config
   (setq-default vterm-min-window-width 40)
   (setq vterm-max-scrollback 10000)
-  (setq vterm-timer-delay nil))
+  (setq vterm-timer-delay 0.01))
 #+end_src
 
 * File management
@@ -1126,18 +1130,7 @@
         dired-listing-switches "-alh --group-directories-first"
         dired-dwim-target t
         dired-unique-buffer-name-style 'forward
-        dired-kill-when-opening-new-dired-buffer nil)
-
-  (add-hook 'dired-mode-hook
-            (lambda ()
-              (font-lock-mode 1)
-              (dired-hide-details-mode +1)))
-
-  (add-hook 'dired-after-readin-hook
-            (lambda ()
-              (font-lock-flush)
-              (font-lock-ensure))))
-
+        dired-kill-when-opening-new-dired-buffer nil))
 
 (use-package async
   :ensure t
@@ -1272,12 +1265,30 @@
   :defer t
   :config
 
-  (define-fringe-bitmap 'flymake-double-exclamation-mark (vector #b00000000))
-  (define-fringe-bitmap 'exclamation-mark                (vector #b00000000))
-
   (setq flymake-start-on-save-buffer t
         flymake-no-changes-timeout 0.2
-        flymake-mode-line-lighter nil)
+        flymake-mode-line-lighter nil
+        flymake-indicator-type nil
+        flymake-fringe-indicator-position nil
+        flymake-margin-indicator-position nil
+        flymake-error-bitmap nil
+        flymake-warning-bitmap nil
+        flymake-note-bitmap nil)
+
+  (defun my-flymake-hide-indicator (type)
+    (let ((controls (assq-delete-all
+                     'before-string
+                     (copy-sequence (get type 'flymake-overlay-control)))))
+      (put type 'flymake-overlay-control
+           (cons '(before-string . nil) controls))))
+
+  (dolist (type '(:error :warning :note flymake-error flymake-warning flymake-note))
+    (my-flymake-hide-indicator type))
+
+  (with-eval-after-load 'eglot
+    (dolist (type '(eglot-error eglot-warning eglot-note))
+      (my-flymake-hide-indicator type)))
+
 
   (add-hook 'sh-mode-hook 'flymake-mode)
   (add-hook 'prog-mode-hook 'flymake-mode)
