@@ -107,9 +107,6 @@
   (message "Elfeed database cleared. Restart Elfeed to initialize a new database."))
 (niva/clear-elfeed)
 
-(with-eval-after-load 'elfeed
-  (setq-default niva-elfeed-unread-count 0))
-
 ;; SINCE ELFEED 4.0.0
 (setq elfeed-search-sort-function #'elfeed-search-group-by-feed)
 
