@@ -110,6 +110,16 @@
 (when (boundp 'native-comp-speed)
   (setq native-comp-speed 2))
 
+;; Homebrew's gcc/libgccjit needs libemutls_w.a on the linker search path,
+;; but Homebrew doesn't symlink an unversioned `gcc`, so native-comp's
+;; driver falls back to Apple's clang-based /usr/bin/gcc, which can't find
+;; it ("ld: library 'emutls_w' not found"). Point LIBRARY_PATH at it.
+(when (eq system-type 'darwin)
+  (let ((gcc-libdir (car (file-expand-wildcards
+                          "/opt/homebrew/Cellar/gcc/*/lib/gcc/current/gcc/*/*"))))
+    (when (and gcc-libdir (file-directory-p gcc-libdir))
+      (setenv "LIBRARY_PATH" gcc-libdir))))
+
 ;;; Bootstrap straight.el ---------------------------------------------------
 (load (expand-file-name "lisp/init-elpaca.el" user-emacs-directory))
 
