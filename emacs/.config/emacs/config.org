@@ -601,33 +601,6 @@
 (global-set-key (kbd "s-O") 'global-text-scale-adjust)
 #+end_src
 
-** embark
-
-#+begin_src emacs-lisp
-(use-package embark
-  :ensure t
-  :bind (("C-." . embark-act)
-         ("M-." . embark-dwim)
-         :map minibuffer-local-map
-         ("C-d" . embark-act)
-         :map embark-region-map
-         ("D" . denote-region))
-  :config
-  (setq embark-quit-after-action nil)
-  (setq embark-mixed-indicator-delay 0)
-  (setq confirm-kill-processes nil)
-
-  (defun my/embark-kill-buffer (buffer)
-    (kill-buffer buffer))
-
-  (define-key embark-buffer-map (kbd "k") #'my/embark-kill-buffer))
-
-(use-package embark-consult
-  :ensure t
-  :hook
-  (embark-collect-mode . consult-preview-at-point-mode))
-#+end_src
-
 * Completion
 ** Vertico
 
