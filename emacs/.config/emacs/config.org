@@ -58,7 +58,7 @@
               backup-by-copying t
               version-control t
               delete-old-versions t
-              kept-new-versions 256
+              kept-new-versions 16
               kept-old-versions 0
               create-lockfiles nil)
 
@@ -195,36 +195,12 @@
 * Backups
 
 #+begin_src emacs-lisp
-(use-package async-backup
-  :demand t
-  :ensure t
-  :hook (after-save-hook . async-backup)
-  :config
-  (setq async-backup-location "~/.cache/emacs/async-backup"))
-#+end_src
-
-* Customization
-** Icons
-
-#+begin_src emacs-lisp
-(use-package nerd-icons
-  :ensure t
-  :defer t
-  :config
-  (setq nerd-icons-color-icons t))
-
-(use-package nerd-icons-completion
-  :ensure t
-  :defer t
-  :config
-  (nerd-icons-completion-mode))
-
-(use-package nerd-icons-corfu
-  :ensure t
-  :defer t
-  :after corfu
-  :config
-  (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
+;; (use-package async-backup
+;;   :demand t
+;;   :ensure t
+;;   :hook (after-save-hook . async-backup)
+;;   :config
+;;   (setq async-backup-location "~/.cache/emacs/async-backup"))
 #+end_src
 
 * Window management
@@ -557,18 +533,6 @@
   (global-undo-fu-session-mode))
 #+end_src
 
-*** vundo
-
-#+begin_src emacs-lisp
-(use-package vundo
-  :ensure t
-  :defer t
-  :custom
-  ;; (vundo-glyph-alist vundo-unicode-symbols)
-  (vundo-window-max-height 5)
-  (vundo-compact-display t))
-#+end_src
-
 ** buffer-move
 
 #+begin_src emacs-lisp
@@ -594,38 +558,12 @@
     ("j" windmove-down     "↓ move"    :exit t)
     ("k" windmove-up       "↑ move"    :exit t)
     ("l" windmove-right    "→ move"    :exit t)
-    ;; ("h" (lambda () (message "use C-x o")) "← move"    :exit t)
-    ;; ("j" (lambda () (message "use C-x o")) "↓ move"    :exit t)
-    ;; ("k" (lambda () (message "use C-x o")) "↑ move"    :exit t)
-    ;; ("l" (lambda () (message "use C-x o")) "→ move"    :exit t)
     ("H" buf-move-left     "← swap"    :exit t)
     ("J" buf-move-down     "↓ swap"    :exit t)
     ("K" buf-move-up       "↑ swap"    :exit t)
     ("L" buf-move-right    "→ swap"    :exit t)
     ("SPC" transpose-frame "transpose" :exit t))
   (bind-key* "C-c C-w" #'hydra-win-resize/body)
-
-  ;; (with-eval-after-load 'org
-  ;;   (define-key org-mode-map (kbd "C-c C-w") nil))
-
-  ;; (with-eval-after-load 'evil-maps
-  ;;   (setq hydra-is-helpful nil)
-  ;;   (defhydra hydra-win-resize (evil-normal-state-map "C-w")
-  ;;     "Resize window"
-  ;;     ("C-j" (lambda () (interactive) (evil-window-decrease-height 4)))
-  ;;     ("C-k" (lambda () (interactive) (evil-window-increase-height 4)))
-  ;;     ("C-h" (lambda () (interactive) (evil-window-decrease-width 8)))
-  ;;     ("C-l" (lambda () (interactive) (evil-window-increase-width 8)))))
-
-  ;; (with-eval-after-load 'evil-maps
-  ;;   (with-eval-after-load 'magit
-  ;;     (setq hydra-is-helpful nil)
-  ;;     (defhydra hydra-win-resize (magit-file-section-map "C-w")
-  ;;       "Resize window"
-  ;;       ("C-j" (lambda () (interactive) (evil-window-decrease-height 4)))
-  ;;       ("C-k" (lambda () (interactive) (evil-window-increase-height 4)))
-  ;;       ("C-h" (lambda () (interactive) (evil-window-decrease-width 8)))
-  ;;       ("C-l" (lambda () (interactive) (evil-window-increase-width 8))))))
 
   (defvar my/font-size-step 10)
 
@@ -816,61 +754,6 @@
     (let ((directory-to-search (read-directory-name "Search in directory: " nil nil t)))
       (consult-ripgrep (expand-file-name "." directory-to-search))))
 
-  ;; (defvar niva-consult-source-dired
-  ;;   `(:name "Dired"
-  ;;           :narrow ?d
-  ;;           :category buffer
-  ;;           :face consult-buffer
-  ;;           :history buffer-name-history
-  ;;           :state ,#'consult--buffer-state
-  ;;           :items ,(lambda ()
-  ;;                     (mapcar #'buffer-name
-  ;;                             (seq-filter
-  ;;                              (lambda (buf)
-  ;;                                (with-current-buffer buf
-  ;;                                  (derived-mode-p 'dired-mode)))
-  ;;                              (buffer-list))))))
-
-  ;; (defvar niva-consult-source-recent-file
-  ;;   `(:name "File"
-  ;;           :narrow ?f
-  ;;           :category file
-  ;;           :face consult-file
-  ;;           :history file-name-history
-  ;;           :state ,#'consult--file-state
-  ;;           :new ,#'consult--file-action
-  ;;           :enabled ,(lambda () recentf-mode)
-  ;;           :items ,#'niva/consult-buffer-file-items))
-
-  ;; (defvar niva-consult-source-project-recent-file-hidden
-  ;;   `(:hidden t
-  ;;             :name "Project File"
-  ;;             :narrow ((?p . "Project") (?F . "Project File"))
-  ;;             :category file
-  ;;             :face consult-file
-  ;;             :history file-name-history
-  ;;             :state ,#'consult--file-state
-  ;;             :new ,(lambda (file)
-  ;;                     (consult--file-action
-  ;;                      (expand-file-name file (consult--project-root))))
-  ;;             :enabled ,(lambda ()
-  ;;                         (and consult-project-function
-  ;;                              recentf-mode))
-  ;;             :items ,#'niva/consult-buffer-project-file-items))
-
-  ;; (setq consult-buffer-sources '(consult-source-buffer
-  ;;                                niva-consult-source-dired
-  ;;                                consult-source-hidden-buffer
-  ;;                                consult-source-modified-buffer
-  ;;                                consult-source-other-buffer
-  ;;                                niva-consult-source-recent-file
-  ;;                                consult-source-buffer-register
-  ;;                                consult-source-file-register
-  ;;                                consult-source-bookmark
-  ;;                                consult-source-project-buffer-hidden
-  ;;                                niva-consult-source-project-recent-file-hidden
-  ;;                                consult-source-project-root-hidden))
-
   (defun my-dired-buffer-name ()
     (rename-buffer
      (concat "❏ "
@@ -892,18 +775,7 @@
       (message "Killed buffer: %s" name)))
 
   (with-eval-after-load 'vertico
-    (keymap-set vertico-map "M-k" #'my/vertico-kill-buffer-candidate))
-  )
-
-(use-package affe
-  :ensure t
-  :config
-  (consult-customize affe-grep :preview-key 'any)
-  (defun affe-orderless-regexp-compiler (input _type _ignorecase)
-    (setq input (cdr (orderless-compile input)))
-    (cons input (apply-partially #'orderless--highlight input t)))
-  (setq affe-regexp-compiler #'affe-orderless-regexp-compiler)
-  (setq affe-count 10))
+    (keymap-set vertico-map "M-k" #'my/vertico-kill-buffer-candidate)))
 #+end_src
 
 ** Marginalia
@@ -1070,74 +942,37 @@
 ** eshell-syntax-highlighting
 
 #+begin_src emacs-lisp
-(use-package eshell-syntax-highlighting
-  :defer t
-  :ensure t
-  :hook (eshell-mode . eshell-syntax-highlighting-mode))
+;; (use-package eshell-syntax-highlighting
+;;   :defer t
+;;   :ensure t
+;;   :hook (eshell-mode . eshell-syntax-highlighting-mode))
 #+end_src
 
-** Kill buffer on quit
-
-#+begin_src emacs-lisp
-(defun niva/term-handle-exit (&optional process-name msg)
-  "Kill buffer on quit"
-  (kill-buffer (current-buffer)))
-
-;; (defun niva/vterm-handle-exit (process event)
-;;   "Kill vterm buffer after PROCESS exits with EVENT."
-;;   (let ((buffer (process-buffer process)))
-;;     (when (buffer-live-p buffer)
-;;       (kill-buffer buffer))))
-;;
-;; (advice-add 'term-handle-exit :after 'niva/term-handle-exit)
-;; (add-hook 'vterm-exit-functions #'niva/vterm-handle-exit)
-#+end_src
-
-** vterm
-
-#+begin_src emacs-lisp
-(use-package vterm
-  :ensure t
-  :defer t
-  :bind
-  (("C-c C-t" . vterm))
-  (:map vterm-mode-map
-        ("C-c <escape>" . vterm-send-escape)
-        ("C-g"          . vterm-copy-mode)
-        ("C-c C-t" . vterm))
-  (:map vterm-copy-mode-map
-        ("C-g" . vterm-copy-mode)
-        ("C-c C-t" . vterm))
-  :config
-  (setq-default vterm-min-window-width 40)
-  (setq vterm-max-scrollback 10000)
-  (setq vterm-timer-delay 0.01))
-#+end_src
 
 * File management
 ** Dired
 
 #+begin_src emacs-lisp
-(use-package dired
-  :ensure nil
-  :demand t
-  :config
-  (setq insert-directory-program (or (executable-find "/opt/homebrew/bin/gls")
-                                     insert-directory-program)
-        delete-by-moving-to-trash t
-        dired-use-ls-dired t
-        dired-subtree-use-backgrounds nil
-        dired-listing-switches "-alh --group-directories-first"
-        dired-dwim-target t
-        dired-unique-buffer-name-style 'forward
-        dired-kill-when-opening-new-dired-buffer nil))
-
-(use-package async
-  :ensure t
-  :defer t
-  :config
-  (autoload 'dired-async-mode "dired-async.el" nil t)
-  (dired-async-mode 1))
+;; (use-package dired
+;;   :ensure nil
+;;   :demand t
+;;   :config
+;;   (setq insert-directory-program (or (executable-find "/opt/homebrew/bin/gls")
+;;                                      insert-directory-program)
+;;         delete-by-moving-to-trash t
+;;         dired-use-ls-dired t
+;;         dired-subtree-use-backgrounds nil
+;;         dired-listing-switches "-alh --group-directories-first"
+;;         dired-dwim-target t
+;;         dired-unique-buffer-name-style 'forward
+;;         dired-kill-when-opening-new-dired-buffer nil))
+;;
+;; (use-package async
+;;   :ensure t
+;;   :defer t
+;;   :config
+;;   (autoload 'dired-async-mode "dired-async.el" nil t)
+;;   (dired-async-mode 1))
 #+end_src
 
 * Development
@@ -1456,6 +1291,11 @@
           ([file diffbuf] . hide)
           ([file commit stash] . hide)))
 
+  ;; Add a "--no-merges" switch to the log transient (bound to -m).
+  ;; Toggle it with `-m` in the `l` menu to hide merge commits.
+  (transient-append-suffix 'magit-log "-D"
+    '("-m" "Omit merges" "--no-merges"))
+
   (when niva-enable-evil-mode
     (evil-define-key 'normal magit-status-mode-map (kbd "C-c C-h") nil)
     (evil-define-key 'normal magit-status-mode-map (kbd "C-c C-j") nil)
@@ -1501,19 +1341,6 @@
   (set-face-attribute 'markdown-code-face nil :background 'unspecified)
   (set-face-attribute 'markdown-line-break-face nil :underline 'unspecified)
   (setq markdown-hr-display-char nil))
-#+end_src
-
-*** helpful
-
-#+begin_src emacs-lisp
-(use-package helpful
-  :ensure (:host github :repo "wilfred/helpful")
-  :bind (("C-h f" . helpful-callable)
-		 ("C-h v" . helpful-variable)
-		 ("C-h k" . helpful-key)
-		 ("C-h F" . helpful-function)
-		 ("C-h C" . helpful-command)
-		 ("C-c C-d" . helpful-at-point)))
 #+end_src
 
 *** devdocs
@@ -1767,18 +1594,6 @@
 
   (advice-add 'compilation-filter :around #'niva/advice-compilation-filter))
 
-;;;;;;;; niva
-;; (setq process-connection-type nil)  ;; use a pipe
-;; (setq read-process-output-max (* 4 1024 1024))
-
-(use-package markdown-xwidget
-  :after markdown-mode
-  :ensure (markdown-xwidget
-           :host github
-           :repo "cfclrk/markdown-xwidget"
-           :files (:defaults "resources"))
-  :config
-  (setq markdown-xwidget-github-theme "light"))
 #+end_src
 
 * Org Mode
@@ -1792,26 +1607,6 @@
   (dolist (face '(org-level-1 org-level-2 org-level-3 org-level-4
                               org-level-5 org-level-6 org-level-7 org-level-8))
     (add-to-list 'mixed-pitch-fixed-pitch-faces face)))
-
-(use-package org-modern
-  :ensure t
-  :hook (org-mode . org-modern-mode)
-  :custom
-  (org-modern-star '("◉" "○" "✸" "✿" "✤" "✜" "◆" "▶"))
-  (org-modern-table-vertical 1)
-  (org-modern-table-horizontal 0.2)
-  (org-modern-list '((43 . "➤") (45 . "–") (42 . "•")))
-  (org-modern-todo-faces
-   '(("TODO" :inverse-video t :inherit org-todo)
-     ("PROG" :inverse-video t :inherit +org-todo-active)
-     ("WAIT" :inverse-video t :inherit +org-todo-onhold)
-     ("DONE" :inverse-video t :inherit org-done)))
-  (org-modern-footnote (cons nil (cadr org-script-display)))
-  (org-modern-block-fringe nil)
-  (org-modern-block-name '("" . ""))
-  (org-modern-keyword nil)
-  (org-modern-timestamp t)
-  (org-modern-priority t))
 
 (with-eval-after-load 'org
   (setq org-hide-emphasis-markers t
@@ -1860,17 +1655,6 @@
     (add-to-list 'org-structure-template-alist pair)))
 #+end_src
 
-** ob-async
-
-#+begin_src emacs-lisp
-(with-eval-after-load 'org
-  (use-package ob-async
-    :ensure t
-    :defer t
-    :config
-    (setq ob-async-no-async-languages-alist '("jupyter"))))
-#+end_src
-
 ** org code blocks
 
 #+begin_src emacs-lisp
@@ -1881,45 +1665,6 @@
   (modify-syntax-entry ?> "." org-mode-syntax-table))
 
 (add-hook 'org-mode-hook #'niva/org-syntax-remove-angle-bracket-match)
-#+end_src
-
-** org-roam
-
-#+begin_src emacs-lisp
-(use-package org-roam
-  :ensure t
-  :defer t
-  :after org
-  :config
-  (when (fboundp 'niva/setup-org-roam)
-    (niva/setup-org-roam))
-  (org-roam-db-autosync-enable)
-  (global-set-key (kbd "C-c z z") 'org-roam-capture)
-  (setq-default org-roam-ui-browser-function #'xwidget-webkit-browse-url))
-#+end_src
-
-*** websocket
-
-#+begin_src emacs-lisp
-(use-package websocket
-  :ensure t
-  :defer t
-  :after org-roam)
-#+end_src
-
-*** org-roam-ui
-
-#+begin_src emacs-lisp
-(use-package org-roam-ui
-  :ensure t
-  :defer t
-  :after org-roam
-  ;; :hook (after-init . org-roam-ui-mode)
-  :config
-  (setq org-roam-ui-sync-theme t
-        org-roam-ui-follow t
-        org-roam-ui-open-on-start nil
-        org-roam-ui-update-on-save t))
 #+end_src
 
 ** visual-fill-column
@@ -1939,87 +1684,6 @@
 #+end_src
 
 * Web
-** shr
-
-#+begin_src emacs-lisp
-(use-package shr
-  :ensure nil
-  :defer t
-  :config
-  (setq shr-use-fonts nil)
-  (setq shr-max-width nil)
-  (setq shr-fill-text nil)
-  (setq shr-use-colors nil))
-#+end_src
-
-** shr-face
-
-#+begin_src emacs-lisp
-(use-package shr-tag-pre-highlight
-  :ensure t
-  :after shr
-  :defer t
-  :config
-  (defun shrface-shr-tag-pre-highlight (pre)
-    "Highlighting code in PRE."
-    (let* ((shr-folding-mode 'none)
-           (shr-current-font 'default)
-           (code (with-temp-buffer
-                   (shr-generic pre)
-                   (buffer-string)))
-           (lang (or (shr-tag-pre-highlight-guess-language-attr pre)
-                     (let ((sym (language-detection-string code)))
-                       (and sym (symbol-name sym)))))
-           (mode (and lang
-                      (shr-tag-pre-highlight--get-lang-mode lang))))
-      (shr-ensure-newline)
-      (shr-ensure-newline)
-      (setq start (point))
-      (insert
-       (propertize (concat "#+begin_src " lang "\n") 'face 'org-block-begin-line)
-       (or (and (fboundp mode)
-                (with-demoted-errors "Error while fontifying: %S"
-                  (shr-tag-pre-highlight-fontify code mode)))
-           code)
-       (propertize "\n#+end_src" 'face 'org-block-end-line ))
-      (shr-ensure-newline)
-      (setq end (point))
-      (add-face-text-property start end 'org-block)
-      (shr-ensure-newline)
-      (insert "\n")))
-  :config
-  (add-to-list 'shr-external-rendering-functions
-               '(pre . shrface-shr-tag-pre-highlight))
-
-  (add-to-list 'shr-tag-pre-highlight-lang-modes '("console" . sh))
-  (add-to-list 'shr-tag-pre-highlight-lang-modes '("groovy"  . java))
-  (add-to-list 'shr-tag-pre-highlight-lang-modes '("json"    . js-json))
-  (add-to-list 'shr-tag-pre-highlight-lang-modes '("systemd" . conf))
-  (add-to-list 'shr-tag-pre-highlight-lang-modes '("rust"    . rust-ts)))
-
-(use-package shrface
-  :ensure t
-  :defer t
-  :config
-  (shrface-basic)
-  (shrface-trial)
-  (shrface-default-keybindings)
-  (setq shrface-href-versatile t))
-
-(add-hook 'eww-mode-hook
-          (lambda ()
-            (setq visual-fill-column-center-text nil
-                  visual-fill-column-fringes-outside-margins t
-                  visual-fill-column-extra-text-width '(-4 . 0)
-                  visual-fill-column-width 100)
-            ;; (adaptive-wrap-prefix-mode 1)
-            (visual-fill-column-mode)))
-
-(add-hook 'eww-mode-hook
-          (lambda ()
-            (setq-local evil-normal-state-cursor '(hollow))))
-#+end_src
-
 ** eww
 
 #+begin_src emacs-lisp

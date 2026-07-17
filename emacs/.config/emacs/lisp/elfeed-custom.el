@@ -37,13 +37,12 @@
 (with-eval-after-load 'elfeed
 
   (defun niva/elfeed-switch (buff)
-    ;; (popper--bury-all)
     (with-current-buffer buff
       (setq-local evil-respect-visual-line-mode nil)
       (setq-local visual-fill-column-center-text nil
                   visual-fill-column-fringes-outside-margins t
                   visual-fill-column-extra-text-width '(-4 . 0)
-                  visual-fill-column-width 90
+                  visual-fill-column-width 80
                   visual-fill-column-center-text nil)
       (adaptive-wrap-prefix-mode 1)
       (visual-fill-column-mode))
@@ -51,25 +50,6 @@
 
   (setq elfeed-show-entry-switch 'niva/elfeed-switch)
   (setq elfeed-search-remain-on-entry t)
-
-  ;; (advice-add 'elfeed-show-next :override
-  ;;             (defun niva/elfeed-show-next ()
-  ;;               (interactive)
-  ;;               (if (get-buffer-window "*elfeed-search*")
-  ;;                   (pop-to-buffer (elfeed-search-buffer)))
-  ;;               (with-current-buffer (elfeed-search-buffer)
-  ;;                 (when elfeed-search-remain-on-entry (forward-line 1))
-  ;;                 (call-interactively #'elfeed-search-show-entry))))
-
-  ;; (advice-add 'elfeed-show-prev :override
-  ;;             (defun niva/elfeed-show-prev ()
-  ;;               (interactive)
-  ;;               (if (get-buffer-window "*elfeed-search*")
-  ;;                   (pop-to-buffer (elfeed-search-buffer)))
-  ;;               (with-current-buffer (elfeed-search-buffer)
-  ;;                 (when elfeed-search-remain-on-entry (forward-line 1))
-  ;;                 (forward-line -2)
-  ;;                 (call-interactively #'elfeed-search-show-entry))))
 
   (add-hook 'elfeed-search-update-hook (lambda () (setq word-wrap nil))))
 

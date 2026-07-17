@@ -9,7 +9,6 @@
 (use-package elfeed
   :ensure t
   :defer t
-  ;; :hook (elfeed-search-mode . elfeed-update)
   :config
   (setq elfeed-search-title-max-width 120)
   (setq elfeed-search-filter "+unread")
@@ -19,7 +18,6 @@
 
 (defun niva/elfeed-search-hook ()
   (elfeed-update)
-  ;; (set-window-dedicated-p (selected-window) t)
   (visual-line-mode 0)
   (setf (cdr (assq 'truncation   fringe-indicator-alist)) '(nil nil)
         (cdr (assq 'continuation fringe-indicator-alist)) '(nil nil))
@@ -28,29 +26,6 @@
 (add-hook 'elfeed-search-mode-hook #'niva/elfeed-search-hook)
 (add-hook 'elfeed-show-mode-hook (lambda ()
                                    (blink-cursor-mode 0)))
-
-(use-package elfeed-summary
-  :ensure t
-  :defer t
-  :after elfeed
-  :config
-  (setopt elfeed-summary-settings
-          '((group
-             (:title . "Tags")
-             (:elements
-              (search (:title . "alt/games")   (:filter . "+alt/games"))
-              (search (:title . "jp/lang")     (:filter . "+jp/lang"))
-              (search (:title . "mail/gnu")    (:filter . "+mail/gnu"))
-              (search (:title . "alt/music")   (:filter . "+alt/music"))
-              (search (:title . "news/bummer") (:filter . "+news/bummer"))
-              (search (:title . "tech/news")   (:filter . "+tech/news"))
-              (search (:title . "tech/blogs")  (:filter . "+tech/blogs"))
-              (search (:title . "tech/sec")    (:filter . "+tech/sec"))
-              (search (:title . "")            (:filter . "+none"))
-              (search (:title . "stallman")    (:filter . "RMS"))
-              (search (:title . "slashdot")    (:filter . "Slashdot"))
-              (search (:title . "pluralistic") (:filter . "pluralistic"))
-              (search (:title . "unread")      (:filter . "+unread")))))))
 
 (use-package elfeed-protocol
   :ensure t
@@ -82,6 +57,8 @@
     (evil-define-key 'normal elfeed-search-mode-map (kbd "X") #'(lambda () (interactive) (elfeed-search-untag-all-unread) (previous-line)))
     (evil-define-key 'normal elfeed-show-mode-map   (kbd "'") #'niva/elfeed--move-paragraph-up)
     (evil-define-key 'normal elfeed-show-mode-map   (kbd ";") #'niva/elfeed--move-paragraph-down)
+    (evil-define-key 'normal elfeed-show-mode-map   (kbd "C-j") #'elfeed-show-next)
+    (evil-define-key 'normal elfeed-show-mode-map   (kbd "C-k") #'elfeed-show-prev)
     (evil-define-key 'normal elfeed-search-mode-map "r" 'elfeed-update)
 
     (defun niva/eww--move-paragraph-up ()

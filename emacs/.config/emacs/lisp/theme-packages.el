@@ -94,6 +94,7 @@
 (use-package parchment-theme       :ensure t :defer t)
 (use-package professional-theme    :ensure t :defer t)
 (use-package stimmung-themes       :ensure t :defer t)
+(use-package borland-blue-theme       :ensure t :defer t)
 ;; (use-package batppuccin-theme      :ensure (:host github :repo "bbatsov/batppuccin-emacs"))
 
 
@@ -153,8 +154,7 @@
 (use-package solaire-mode
   :ensure t
   :defer t
-  :hook ((vterm-mode    . solaire-mode)
-         (eshell-mode   . solaire-mode)
+  :hook ((eshell-mode   . solaire-mode)
          (ghostel-mode  . solaire-mode)))
 
 ;;; Helpers
@@ -188,6 +188,11 @@
                       '(elfeed-search-feed-face         ((t (:inherit 'shadow :foreground "darkgray"))))
                       '(elfeed-search-tag-face          ((t (:inherit 'shadow :foreground "darkgray"))))))
 
+  (when (niva/theme-is-active "modus")
+    (custom-set-faces '(link ((t (:inherit unspecified :underline nil))))
+                      '(shr-link ((t (:inherit 'link :foreground unspecified :underline nil))))
+                      '(underline ((t (:underline nil :foreground unspecified))))))
+
   (when (niva/theme-is-active "naysayer")
     (custom-set-faces '(mode-line-inactive   ((t (:box t))))
                       '(mode-line            ((t (:box t))))
@@ -212,8 +217,19 @@
                       '(highlight                    ((t (:inherit region :bold t :underline nil))))))
 
   (when (niva/theme-is-active "ryerson")
-    (custom-set-faces '(font-lock-comment-face ((t (:inherit 'unspecified :foreground "lightblue"))))
-                      '(org-block              ((t (:inherit 'default :foreground 'unspecified))))))
+    (custom-set-faces
+     '(default ((t (:background "blue4"))))
+     '(font-lock-comment-face ((t (:inherit unspecified :foreground "lightblue"))))
+     '(org-block              ((t (:inherit 'default :foreground unspecified))))))
+
+  (when (niva/theme-is-active "word-perfect")
+    (custom-set-faces
+
+     '(font-lock-keyword-face ((t (:foreground "cyan"))))
+     '(font-lock-preprocessor-face ((t (:foreground "cyan"))))
+     ;;'(font-lock-comment-face ((t (:inherit unspecified :foreground "orange"))))
+     '(org-block              ((t (:inherit 'default :foreground unspecified))))))
+  ;;testing
 
   (when (niva/theme-is-active "sitaramv-solaris")
     (custom-set-faces '(org-block                       ((t (:inherit 'default :background "black"))))
