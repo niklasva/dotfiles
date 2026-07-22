@@ -155,7 +155,18 @@
   :ensure t
   :defer t
   :hook ((eshell-mode   . solaire-mode)
-         (ghostel-mode  . solaire-mode)))
+         (ghostel-mode  . solaire-mode))
+  :config
+  ;; Ghostel paints its terminal grid in the native module, using the
+  ;; background of the `ghostel-default' face (read via `face-attribute',
+  ;; which ignores buffer-local `face-remapping-alist').  Solaire, however,
+  ;; only *remaps* `default' buffer-locally -- so ghostel never sees it and
+  ;; repaints on every redraw with the theme's plain default background,
+  ;; clobbering solaire.  Point `ghostel-default' at `solaire-default-face'
+  ;; so redraws keep solaire's background.
+  (with-eval-after-load 'ghostel
+    (when (facep 'solaire-default-face)
+      (set-face-attribute 'ghostel-default nil :inherit 'solaire-default-face))))
 
 ;;; Helpers
 (defun niva/theme-is-active (theme-name)

@@ -872,6 +872,18 @@
   :hook (eshell-mode . eshell-syntax-highlighting-mode))
 #+end_src
 
+** ghostel
+#+begin_src emacs-lisp
+(use-package web-server :straight (:type git :host github :repo "eschulte/emacs-web-server"))
+
+(use-package ghostel :ensure t
+  :bind
+  (:map ghostel-mode-map
+        ("C-c C-g" . #'ghostel-send-C-g)
+        ("C-g" . nil))
+  :config
+  (setq ghostel-ignore-cursor-change t))
+#+end_src
 
 * File management
 ** Dired
