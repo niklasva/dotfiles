@@ -24,8 +24,12 @@
   (setq-local truncate-lines t))
 
 (add-hook 'elfeed-search-mode-hook #'niva/elfeed-search-hook)
-(add-hook 'elfeed-show-mode-hook (lambda ()
-                                   (blink-cursor-mode 0)))
+(add-hook 'elfeed-show-mode-hook
+          (lambda ()
+            ;; Let visual-line-mode wrap the rendered article instead of
+            ;; having SHR insert newlines using the window's full width.
+            (setq-local shr-fill-text nil)
+            (blink-cursor-mode 0)))
 
 (use-package elfeed-protocol
   :ensure t

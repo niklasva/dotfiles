@@ -42,10 +42,10 @@
       (setq-local visual-fill-column-center-text nil
                   visual-fill-column-fringes-outside-margins t
                   visual-fill-column-extra-text-width '(-4 . 0)
-                  visual-fill-column-width 80
+                  visual-fill-column-width 90
                   visual-fill-column-center-text nil)
-      (adaptive-wrap-prefix-mode 1)
-      (visual-fill-column-mode))
+      (visual-line-mode 1)
+      (visual-fill-column-mode 1))
     (switch-to-buffer buff))
 
   (setq elfeed-show-entry-switch 'niva/elfeed-switch)
