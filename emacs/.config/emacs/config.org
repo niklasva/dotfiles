@@ -24,6 +24,15 @@
   :config
   (exec-path-from-shell-initialize))
 
+(defun niva/set-font (font &optional antialias weight)
+  (let ((weight (or weight 'regular)))
+    (setq ns-antialias-text (and antialias t))
+    (setq default-frame-alist
+          (append `((font . ,font) (font-weight . ,weight))
+                  (assq-delete-all 'font-weight
+                                   (assq-delete-all 'font default-frame-alist))))
+    (set-face-attribute 'default nil :font font :weight weight)))
+
 (load (expand-file-name "lisp/theme-packages.el" user-emacs-directory))
 (let ((local-env-file (expand-file-name "local-env.el" user-emacs-directory)))
   (when (file-readable-p local-env-file)
@@ -72,6 +81,8 @@
 (repeat-mode)
 (blink-cursor-mode -1)
 
+(setq-default display-line-numbers-width 3)
+
 (setq-default evil-auto-indent t
               indent-tabs-mode nil
               tab-width 4
@@ -86,6 +97,7 @@
         indent-tabs-mode t
         evil-auto-indent t
         c-basic-offset tab-width))
+
 
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
 
@@ -235,7 +247,7 @@
   (let* ((frame (or frame (selected-frame)))
          (now   (frame-parameter frame 'internal-border-width)))
     (set-frame-parameter frame 'internal-border-width
-                         (if (= now 100) 5 100))))
+                         (if (= now 50) 20 50))))
 
 (defun niva/toggle-frame-decorations (&optional frame)
   (interactive)
@@ -1213,31 +1225,16 @@
   (transient-append-suffix 'magit-log "-D"
     '("-m" "Omit merges" "--no-merges"))
 
-  (when niva-enable-evil-mode
-    (evil-define-key 'normal magit-status-mode-map (kbd "C-c C-h") nil)
-    (evil-define-key 'normal magit-status-mode-map (kbd "C-c C-j") nil)
-    (evil-define-key 'normal magit-status-mode-map (kbd "C-c C-k") nil)
-    (evil-define-key 'normal magit-status-mode-map (kbd "C-c C-l") nil)
-
-    (evil-define-key 'normal magit-stash-mode-map  (kbd "C-c C-h") nil)
-    (evil-define-key 'normal magit-stash-mode-map  (kbd "C-c C-j") nil)
-    (evil-define-key 'normal magit-stash-mode-map  (kbd "C-c C-k") nil)
-    (evil-define-key 'normal magit-stash-mode-map  (kbd "C-c C-l") nil)
-
-    (evil-define-key 'normal magit-stash-section-map  (kbd "C-c C-h") nil)
-    (evil-define-key 'normal magit-stash-section-map  (kbd "C-c C-j") nil)
-    (evil-define-key 'normal magit-stash-section-map  (kbd "C-c C-k") nil)
-    (evil-define-key 'normal magit-stash-section-map  (kbd "C-c C-l") nil)
-
-    (evil-define-key 'normal magit-commit-section-map  (kbd "C-c C-h") nil)
-    (evil-define-key 'normal magit-commit-section-map  (kbd "C-c C-j") nil)
-    (evil-define-key 'normal magit-commit-section-map  (kbd "C-c C-k") nil)
-    (evil-define-key 'normal magit-commit-section-map  (kbd "C-c C-l") nil)
-
-    (evil-define-key 'normal magit-commit-message-section-map  (kbd "C-c C-h") nil)
-    (evil-define-key 'normal magit-commit-message-section-map  (kbd "C-c C-j") nil)
-    (evil-define-key 'normal magit-commit-message-section-map  (kbd "C-c C-k") nil)
-    (evil-define-key 'normal magit-commit-message-section-map  (kbd "C-c C-l") nil))
+  ;; Free `C-c C-w' for the global `hydra-win-resize' (bound via `bind-key*').
+  ;; `magit-mode-map' binds it to `magit-copy-thing', and `evil-collection' calls
+  ;; `evil-make-overriding-map' on the magit maps, which lifts them into
+  ;; `emulation-mode-map-alists' *ahead* of `bind-key*''s `override-global-map'.
+  ;; Shadowing with an `evil-define-key' nil does not work: `lookup-key' returns
+  ;; nil and the search simply falls through to the overriding map.  The binding
+  ;; has to be removed outright (hence the REMOVE argument).  All the derived
+  ;; maps (status, log, diff, revision, refs) inherit from `magit-mode-map', so
+  ;; this one unset covers them.  `magit-copy-thing' stays available on `ys'.
+  (keymap-unset magit-mode-map "C-c C-w" t)
 
   (defun disable-y-or-n-p (orig-fun &rest args)
     (cl-letf (((symbol-function 'y-or-n-p) (lambda (prompt) t)))

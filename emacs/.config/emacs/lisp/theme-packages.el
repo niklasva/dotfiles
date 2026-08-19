@@ -64,7 +64,6 @@
 (use-package alabaster-themes   :ensure (:host github :repo "vedang/alabaster-themes")               :defer t)
 (use-package colorless-themes   :ensure (:host github :repo "lthms/colorless-themes.el"              :defer t :files ("colorless-themes.el" "*.el")))
 (use-package batppuccin         :ensure (:host github :repo "bbatsov/batppuccin-emacs"               :defer t :branch "main" :main "batppuccin.el"))
-;; (use-package modus-flexoki      :ensure (:host github :repo "dpassen/modus-flexoki"                 :defer t))
 (use-package tennis-theme   :ensure (:host github :repo "campmara/tennis-theme")            :defer t)
 (use-package everforest   :ensure (:host github :repo "theorytoe/everforest-emacs")            :defer t)
 
@@ -151,19 +150,20 @@
                                    (selection . (background minimal))
                                    (popup . (background minimal)))))
 
+
+(defun niva/ghostel-solaire-setup ()
+  (solaire-mode 1)
+  (setq-local left-margin-width 0))
+
 (use-package solaire-mode
   :ensure t
   :defer t
-  :hook ((eshell-mode   . solaire-mode)
-         (ghostel-mode  . solaire-mode))
-  :config
-  (with-eval-after-load 'ghostel
-    (when (facep 'solaire-default-face)
-      (set-face-attribute 'ghostel-default nil :inherit 'solaire-default-face)))
-
-  (custom-theme-set-faces 'modus-operandi        '(solaire-default-face ((t (:background "#F0F0F0")))))
-  (custom-theme-set-faces 'modus-operandi-tinted '(solaire-default-face ((t (:background "#efe9dd")))))
-  )
+  :init
+  (setq solaire-mode-supported-themes :all)
+  :hook ((eshell-mode . solaire-mode)
+         (ghostel-mode . niva/ghostel-solaire-setup)
+         (compilation-mode . solaire-mode)
+         (pyx-mode . solaire-mode)))
 
 ;;; Helpers
 (defun niva/theme-is-active (theme-name)
@@ -196,7 +196,10 @@
                       '(elfeed-search-feed-face         ((t (:inherit 'shadow :foreground "darkgray"))))
                       '(elfeed-search-tag-face          ((t (:inherit 'shadow :foreground "darkgray"))))))
 
+
   (when (niva/theme-is-active "modus")
+    (custom-theme-set-faces 'modus-operandi        '(solaire-default-face ((t (:background "#F0F0F0")))))
+    (custom-theme-set-faces 'modus-operandi-tinted '(solaire-default-face ((t (:background "#efe9dd")))))
     (custom-set-faces '(link ((t (:inherit unspecified :underline nil))))
                       '(shr-link ((t (:inherit 'link :foreground unspecified :underline nil))))
                       '(underline ((t (:underline nil :foreground unspecified))))))
@@ -416,6 +419,16 @@
      (when (memq (face-attribute face :weight) '(bold semi-bold extra-bold ultra-bold))
        (set-face-attribute face nil :weight 'normal)))
    (face-list)))
+
+(defun niva/line-number-padding ()
+  (let ((padding
+         (when display-line-numbers-mode
+           (propertize "  " 'face 'line-number))))
+    (setq-local line-prefix padding)
+    (setq-local wrap-prefix padding)))
+
+;; (add-hook 'display-line-numbers-mode-hook
+;;           #'niva/line-number-padding)
 
 (provide 'theme-packages)
 
