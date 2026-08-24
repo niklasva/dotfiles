@@ -1215,7 +1215,9 @@
         ediff-window-setup-function 'ediff-setup-windows-plain
         magit-no-confirm nil
         magit-git-executable "/opt/homebrew/bin/git"
-        magit-auto-revert-immediately t)
+        magit-auto-revert-immediately t
+        magit-display-buffer-function
+        #'magit-display-buffer-same-window-except-diff-v1)
 
   (setq magit-section-initial-visibility-alist
         '((stashes . hide) (untracked . hide) (unpushed . hide) ([unpulled status] . show)
