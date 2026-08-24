@@ -874,7 +874,10 @@
   (:map ghostel-mode-map
         ("C-c C-g" . #'ghostel-send-C-g)
         ("C-g" . nil))
+  :custom-face
+  (ghostel-default ((t (:inherit solaire-default-face))))
   :config
+  (setq ghostel-adaptive-fps nil)
   (setq ghostel-ignore-cursor-change t))
 #+end_src
 
