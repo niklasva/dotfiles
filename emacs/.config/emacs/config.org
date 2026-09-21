@@ -874,8 +874,6 @@
   (:map ghostel-mode-map
         ("C-c C-g" . #'ghostel-send-C-g)
         ("C-g" . nil))
-  :custom-face
-  ;; (ghostel-default ((t (:inherit solaire-default-face))))
   :config
   (setq ghostel-adaptive-fps nil)
   (setq ghostel-timer-delay 0.025)
@@ -884,7 +882,9 @@
 (use-package evil-ghostel
   :ensure t
   :after (ghostel evil)
-  :hook (ghostel-mode . evil-ghostel-mode))
+  :hook (ghostel-mode . evil-ghostel-mode)
+  :config
+  (setq evil-ghostel-escape 'evil))
 #+end_src
 
 * File management
