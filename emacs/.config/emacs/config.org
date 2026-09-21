@@ -875,10 +875,16 @@
         ("C-c C-g" . #'ghostel-send-C-g)
         ("C-g" . nil))
   :custom-face
-  (ghostel-default ((t (:inherit solaire-default-face))))
+  ;; (ghostel-default ((t (:inherit solaire-default-face))))
   :config
   (setq ghostel-adaptive-fps nil)
+  (setq ghostel-timer-delay 0.025)
   (setq ghostel-ignore-cursor-change t))
+
+(use-package evil-ghostel
+  :ensure t
+  :after (ghostel evil)
+  :hook (ghostel-mode . evil-ghostel-mode))
 #+end_src
 
 * File management
